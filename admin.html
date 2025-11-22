@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel Admin</title>
+<style>
+body { font-family: Arial; padding:20px; }
+#loginBox, #adminBox { max-width:400px; margin:auto; }
+input, button, textarea { width:100%; padding:10px; margin:5px 0; }
+#adminBox { display:none; }
+.product-item { border:1px solid #ccc; padding:10px; margin:10px 0; }
+</style>
+</head>
+<body>
+
+<h1>Painel Administrativo</h1>
+
+<div id="loginBox">
+    <h3>Login</h3>
+    <input id="user" placeholder="Usuário">
+    <input id="pass" placeholder="Senha" type="password">
+    <button onclick="login()">Entrar</button>
+</div>
+
+<div id="adminBox">
+    <h2>Editar Produtos</h2>
+    <p>Selecione um item para editar:</p>
+    <div id="products"></div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
