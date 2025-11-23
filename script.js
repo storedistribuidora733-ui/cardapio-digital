@@ -10,8 +10,8 @@ const footerBar = document.querySelector("footer");
 const closedAlert = document.getElementById("closed-alert");
 const closedAlertBtn = document.getElementById("closed-alert-btn");
 
-const openingHour = 18;
-const closingHour = 22;
+const openingHour = 5;
+const closingHour = 6;
 
 const dateSpan = document.getElementById("date-span");
 
@@ -174,5 +174,6 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
 
     window.open(url, "_blank");
 });
+
 
 
