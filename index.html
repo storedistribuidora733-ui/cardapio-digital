@@ -37,8 +37,7 @@
     <!-- LISTA DE PRODUTOS -->
     <main id="menu" class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-24">
 
-              <!-- PRODUTO MODELO -->
-
+        <!-- PRODUTO MODELO -->
         <div class="flex gap-2">
             <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Foto do produto">
             <div>
@@ -54,8 +53,7 @@
             </div>
         </div>
 
-                 <!-- PRODUTO 2 -->
-        
+        <!-- PRODUTO 2 -->
         <div class="flex gap-2">
             <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Foto do produto 2">
             <div>
@@ -71,8 +69,7 @@
             </div>
         </div>
 
-                  <!-- PRODUTO 3 -->
-        
+        <!-- PRODUTO 3 -->
         <div class="flex gap-2">
             <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Foto do produto 2">
             <div>
@@ -87,9 +84,8 @@
                 </div>
             </div>
         </div>
- 
-                    <!-- PRODUTO 4 -->
-        
+
+        <!-- PRODUTO 4 -->
         <div class="flex gap-2">
             <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Foto do produto 2">
             <div>
@@ -105,13 +101,10 @@
             </div>
         </div>
 
-
-                   <!-- BEBIDAS -->
-        
+        <!-- BEBIDAS -->
         <h2 class="font-bold text-3xl text-center my-6 col-span-full">BEBIDAS</h2>
 
-                   <!-- BEBIDAS 1 -->
-                                    
+        <!-- BEBIDA 1 -->
         <div class="flex gap-2">
             <img src="./assets/refri-1.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Imagem da bebida">
             <div>
@@ -126,9 +119,9 @@
                 </div>
             </div>
         </div>
-                          <!-- BEBIDAS 2 -->
-                                
-             <div class="flex gap-2">
+
+        <!-- BEBIDA 2 -->
+        <div class="flex gap-2">
             <img src="./assets/refri-2.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Imagem da bebida">
             <div>
                 <p class="font-bold">Nome da bebida 1</p>
@@ -145,15 +138,19 @@
 
     </main>
 
-                 <!-- MODAL DO CARRINHO -->
-    
+    <!-- MODAL DO CARRINHO -->
     <div id="cart-modal" class="bg-black/60 w-full h-full fixed inset-0 z-[99] items-center justify-center hidden">
         <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px] max-h-[90%] overflow-y-auto cart-content">
             <h2 class="text-center font-bold text-2xl">Meu Carrinho</h2>
 
             <div id="cart-items" class="flex flex-col gap-2 my-4"></div>
 
-            <p class="font-bold">Total: R$ <span id="cart-total">0.00</span></p>
+            <!-- 🔥 TAXA DE ENTREGA ADICIONADA AQUI -->
+            <p class="font-bold">Total dos itens: R$ <span id="cart-total">0.00</span></p>
+
+            <p class="font-bold mt-1">Entrega: R$ <span id="delivery-fee">5.00</span></p>
+
+            <p class="font-bold mt-1">Total final: R$ <span id="cart-total-final">0.00</span></p>
 
             <div class="mt-4">
                 <p class="font-bold">Nome:</p>
@@ -184,8 +181,7 @@
         </div>
     </div>
 
-               <!-- MODAL BONITO DE LOJA FECHADA -->
-    
+    <!-- MODAL BONITO DE LOJA FECHADA -->
     <div id="closed-alert" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
         <div class="bg-white p-6 rounded-xl shadow-2xl max-w-[90%] w-[380px] text-center animate-fade">
             <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
@@ -214,8 +210,7 @@
         }
     </style>
 
-                  <!-- BOTÃO FIXO DO CARRINHO -->
-    
+    <!-- BOTÃO FIXO DO CARRINHO -->
     <footer class="w-full bg-red-600 py-3 fixed bottom-0 z-[100] flex items-center justify-center">
         <button id="cart-btn" class="flex items-center gap-2 text-white font-bold">
             <span id="cart-count">0</span> Carrinho
@@ -229,10 +224,3 @@
 </body>
 
 </html>
- 
-   
-
-
-
-
-
