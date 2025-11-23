@@ -15,8 +15,7 @@ const closingHour = 22;
 
 const dateSpan = document.getElementById("date-span");
 
-function checkStoreStatus(showWarning = 
-false) {
+function checkStoreStatus(showWarning = false) {
     const now = new Date();
     const hour = now.getHours();
     const minutes = now.getMinutes();
@@ -27,14 +26,18 @@ false) {
 
     if (isOpen) {
         if (totalMinutesClose - totalMinutesNow <= 20) {
-            dateSpan.className = "bg-yellow-500 px-4 py-1 rounded-lg";
+            // 🔥 ALERTA DE 20 MINUTOS (CORRIGIDO)
+            dateSpan.className = "px-4 py-1 rounded-lg text-black font-bold";
+            dateSpan.style.backgroundColor = "#FFD54F"; 
             dateSpan.textContent = "⚠ 20 minutos para fechar!";
         } else {
-            dateSpan.className = "bg-green-500 px-4 py-1 rounded-lg";
+            dateSpan.className = "bg-green-500 px-4 py-1 rounded-lg text-white font-bold";
+            dateSpan.style.backgroundColor = "";
             dateSpan.textContent = "Aberto agora";
         }
     } else {
-        dateSpan.className = "bg-red-500 px-4 py-1 rounded-lg";
+        dateSpan.className = "bg-red-500 px-4 py-1 rounded-lg text-white font-bold";
+        dateSpan.style.backgroundColor = "";
         dateSpan.textContent = "Fechado agora";
         if (showWarning) showClosedAlert();
     }
@@ -153,35 +156,21 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
         return;
     }
 
-    let message = `📦 *Novo pedido:*
+    let message = `📦 *Novo pedido:*\n`;
+    message += `👤 *Cliente*: ${name}\n`;
+    message += `🏠 *Endereço*: ${address}\n`;
+    message += `💳 *Pagamento*: ${payment}\n\n`;
 
-`;
-    message += `👤 *Cliente*: ${name}
-`;
-    message += `🏠 *Endereço*: ${address}
-`;
-    message += `💳 *Pagamento*: ${payment}
-
-`;
-
-    message += `🛒 *Itens*: 
-`;
+    message += `🛒 *Itens*: \n`;
     cart.forEach(item => {
-        message += `• ${item.name} - Qtd: ${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}
-`;
+        message += `• ${item.name} - Qtd: ${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
     });
 
-    message += `
-💬 *Observações*: ${obs || "Nenhuma"}
-`;
-    message += `
-💰 *Total:* R$ ${cartTotal.innerText}`;
+    message += `\n💬 *Observações*: ${obs || "Nenhuma"}\n`;
+    message += `💰 *Total:* R$ ${cartTotal.innerText}`;
 
     const whatsappNumber = ""; // coloque seu número
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
 });
-
-
-
