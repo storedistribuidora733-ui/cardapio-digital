@@ -13,6 +13,8 @@ const closedAlertBtn = document.getElementById("closed-alert-btn");
 const openingHour = 7;
 const closingHour = 22;
 
+const deliveryFee = 5.00; // TAXA DE ENTREGA
+
 const dateSpan = document.getElementById("date-span");
 
 function checkStoreStatus(showWarning = false) {
@@ -26,7 +28,6 @@ function checkStoreStatus(showWarning = false) {
 
     if (isOpen) {
         if (totalMinutesClose - totalMinutesNow <= 20) {
-            // 🔥 ALERTA DE 20 MINUTOS (CORRIGIDO)
             dateSpan.className = "px-4 py-1 rounded-lg text-black font-bold";
             dateSpan.style.backgroundColor = "#FFD54F"; 
             dateSpan.textContent = "⚠ 20 minutos para fechar!";
@@ -112,7 +113,14 @@ function updateCart() {
         cartItemsContainer.appendChild(cartItemElement);
     });
 
-    cartTotal.innerText = total.toFixed(2);
+    // Subtotal
+    document.getElementById("cart-subtotal").innerText = total.toFixed(2);
+
+    // Total final com taxa
+    const finalTotal = total + deliveryFee;
+    cartTotal.innerText = finalTotal.toFixed(2);
+
+    // Quantidade no ícone
     cartCount.innerText = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     addQuantityEvents();
@@ -166,15 +174,12 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
         message += `• ${item.name} - Qtd: ${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
     });
 
-    message += `\n💬 *Observações*: ${obs || "Nenhuma"}\n`;
-    message += `💰 *Total:* R$ ${cartTotal.innerText}`;
+    message += `\n🚚 *Taxa de entrega:* R$ 5,00`;
+    message += `\n💰 *Total:* R$ ${cartTotal.innerText}\n`;
+    message += `💬 *Observações*: ${obs || "Nenhuma"}\n`;
 
-    const whatsappNumber = ""; // coloque seu número
+    const whatsappNumber = ""; 
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
 });
-
-
-
-
