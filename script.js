@@ -116,11 +116,11 @@ function updateCart() {
     // Subtotal
     document.getElementById("cart-subtotal").innerText = total.toFixed(2);
 
-    // Total final com taxa
+    // Total final COM TAXA
     const finalTotal = total + deliveryFee;
     cartTotal.innerText = finalTotal.toFixed(2);
 
-    // Quantidade no ícone
+    // Contador no ícone
     cartCount.innerText = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     addQuantityEvents();
@@ -183,3 +183,4 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
 
     window.open(url, "_blank");
 });
+
