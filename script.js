@@ -15,7 +15,8 @@ const closingHour = 22;
 
 const dateSpan = document.getElementById("date-span");
 
-function checkStoreStatus(showWarning = false) {
+function checkStoreStatus(showWarning = 
+false) {
     const now = new Date();
     const hour = now.getHours();
     const minutes = now.getMinutes();
@@ -181,5 +182,6 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
 
     window.open(url, "_blank");
 });
+
 
 
