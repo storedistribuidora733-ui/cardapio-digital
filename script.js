@@ -28,16 +28,16 @@ function checkStoreStatus(showWarning = false) {
 
     if (isOpen) {
         if (totalMinutesClose - totalMinutesNow <= 20) {
-            dateSpan.className = "px-4 py-1 rounded-lg text-black font-bold";
+            dateSpan.className = "px-3 py-1 rounded-lg text-black font-bold";
             dateSpan.style.backgroundColor = "#FFD54F";
             dateSpan.textContent = "⚠ 20 minutos para fechar!";
         } else {
-            dateSpan.className = "bg-green-500 px-4 py-1 rounded-lg text-white font-bold";
+            dateSpan.className = "bg-green-500 px-3 py-1 rounded-lg text-white font-bold";
             dateSpan.style.backgroundColor = "";
             dateSpan.textContent = "Aberto agora";
         }
     } else {
-        dateSpan.className = "bg-red-500 px-4 py-1 rounded-lg text-white font-bold";
+        dateSpan.className = "bg-red-500 px-3 py-1 rounded-lg text-white font-bold";
         dateSpan.style.backgroundColor = "";
         dateSpan.textContent = "Fechado agora";
         if (showWarning) showClosedAlert();
@@ -176,5 +176,6 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
 
     window.open(url, "_blank");
 });
+
 
 
