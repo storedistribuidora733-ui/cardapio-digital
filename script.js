@@ -1,5 +1,4 @@
 
-
 const cart = [];
 const cartBtn = document.getElementById("cart-btn");
 const cartModal = document.getElementById("cart-modal");
@@ -12,22 +11,23 @@ const footerBar = document.querySelector("footer");
 const closedAlert = document.getElementById("closed-alert");
 const closedAlertBtn = document.getElementById("closed-alert-btn");
 
-const openingHour = 11:30;
-const closingHour = 23;
+// 🔥 HORÁRIOS CORRIGIDOS
+const openingHour = 11 * 60 + 30; // abre 11:30
+const closingHour = 23 * 60;      // fecha 23:00
 
 const dateSpan = document.getElementById("date-span");
 
+// 🔥 Função corrigida para controlar o status da loja
 function checkStoreStatus(showWarning = false) {
     const now = new Date();
-    const hour = now.getHours();
-    const minutes = now.getMinutes();
-    const totalMinutesNow = hour * 60 + minutes;
-    const totalMinutesClose = closingHour * 60;
+    const totalMinutesNow = now.getHours() * 60 + now.getMinutes();
 
-    let isOpen = hour >= openingHour && hour < closingHour;
+    let isOpen = totalMinutesNow >= openingHour && totalMinutesNow < closingHour;
 
     if (isOpen) {
-        if (totalMinutesClose - totalMinutesNow <= 20) {
+        const minutesToClose = closingHour - totalMinutesNow;
+
+        if (minutesToClose <= 20) {
             dateSpan.className = "px-3 py-1 rounded-lg text-black font-bold";
             dateSpan.style.backgroundColor = "#FFD54F";
             dateSpan.textContent = "⚠ 20 minutos para fechar!";
@@ -40,6 +40,7 @@ function checkStoreStatus(showWarning = false) {
         dateSpan.className = "bg-red-500 px-3 py-1 rounded-lg text-white font-bold";
         dateSpan.style.backgroundColor = "";
         dateSpan.textContent = "Fechado agora";
+
         if (showWarning) showClosedAlert();
     }
 
@@ -49,6 +50,7 @@ function checkStoreStatus(showWarning = false) {
 setInterval(checkStoreStatus, 10000);
 checkStoreStatus();
 
+// ALERTA LOJA FECHADA
 function showClosedAlert() {
     closedAlert.classList.remove("hidden");
 }
@@ -57,6 +59,7 @@ closedAlertBtn.addEventListener("click", () => {
     closedAlert.classList.add("hidden");
 });
 
+// MODAL DO CARRINHO
 cartBtn.addEventListener("click", () => {
     if (!checkStoreStatus(true)) return;
     cartModal.classList.remove("hidden");
@@ -69,6 +72,7 @@ closeModalBtn.addEventListener("click", () => {
     footerBar.classList.remove("hidden");
 });
 
+// ADICIONAR AO CARRINHO
 document.querySelectorAll(".add-to-cart-btn").forEach(button => {
     button.addEventListener("click", () => {
         if (!checkStoreStatus(true)) return;
@@ -87,6 +91,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
     });
 });
 
+// ATUALIZAR CARRINHO
 function updateCart() {
     cartItemsContainer.innerHTML = "";
     let total = 0;
@@ -114,7 +119,6 @@ function updateCart() {
     });
 
     cartTotal.innerText = total.toFixed(2);
-
     cartCount.innerText = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     addQuantityEvents();
@@ -142,6 +146,7 @@ function addQuantityEvents() {
     });
 }
 
+// FINALIZAR PEDIDO
 document.getElementById("checkout-btn").addEventListener("click", () => {
     const name = document.getElementById("customer-name").value.trim();
     const address = document.getElementById("address").value.trim();
@@ -176,7 +181,5 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
 
     window.open(url, "_blank");
 });
-
-
 
 
