@@ -13,8 +13,8 @@
 
     <title>Cardápio Digital</title>
 
-    <!-- 🚀 SCRIPT ADICIONADO PARA IMPRESSÃO AUTOMÁTICA -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.3/qz-tray.js"></script>
+    <!-- SCRIPT ADICIONADO: QZ Tray (necessário para impressão automática) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.6/qz-tray.js"></script>
 </head>
 <body class="bg-zinc-100">
 
@@ -158,6 +158,7 @@
 </main>
 
 <!-- MODAL DO CARRINHO -->
+<!-- ADICIONEI `flex` AQUI PARA CENTRAR O CONTEÚDO CORRETAMENTE -->
 <div id="cart-modal" class="bg-black/60 w-full h-full fixed inset-0 z-[99] flex items-center justify-center hidden">
     <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px] max-h-[90%] overflow-y-auto cart-content">
         <h2 class="text-center font-bold text-2xl">Meu Carrinho</h2>
@@ -193,6 +194,28 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL DE LOJA FECHADA -->
+<div id="closed-alert" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+    <div class="bg-white p-6 rounded-xl shadow-2xl max-w-[90%] w-[380px] text-center animate-fade">
+        <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
+        <p class="text-gray-700">Nosso horário de atendimento é das <b>07:00 às 00:00</b>.</p>
+        <p class="text-gray-700 mt-1">Volte mais tarde! 😊</p>
+
+        <button id="closed-alert-btn"
+                class="mt-5 bg-red-600 hover:bg-red-700 duration-200 text-white px-5 py-2 rounded-lg font-bold">
+            Entendi
+        </button>
+    </div>
+</div>
+
+<style>
+@keyframes fade {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.animate-fade { animation: fade 0.25s ease-out; }
+</style>
 
 <!-- BOTÃO FIXO DO CARRINHO -->
 <footer class="w-full bg-red-600 py-3 fixed bottom-0 z-[100] flex items-center justify-center">
