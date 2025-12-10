@@ -20,37 +20,139 @@ const closedAlert = document.getElementById("closed-alert");
 const closedAlertBtn = document.getElementById("closed-alert-btn");
 
 // HORÁRIOS (em minutos desde meia-noite)
+// Exemplo: abre 11:30, fecha 01:00 do dia seguinte -> 25 * 60
 const openingHour = 11 * 60 + 30; // abre 11:30
-const closingHour = 25 * 60;      // fecha 24:00 (meia-noite - você pode ajustar)
+const closingHour = 25 * 60;      // fecha 25:00 (01:00 do dia seguinte)
 
 // elemento de status
 const dateSpan = document.getElementById("date-span");
 
 // -----------------------------
-// Funções: verificação de horário
+// Funções utilitárias de horário
+// -----------------------------
+function minutesNow() {
+    const now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+}
+
+/**
+ * Retorna um objeto com:
+ *  - isOpen: boolean
+ *  - minutesToClose: número (se aberto), null caso contrário
+ *  - minutesToOpen: número (se fechado), null caso contrário
+ */
+function computeStoreStatus(totalMinutesNow, open, close) {
+    // normaliza valores
+    const MINUTES_PER_DAY = 24 * 60;
+    let isOpen = false;
+    let minutesToClose = null;
+    let minutesToOpen = null;
+
+    // Se close >= 1440 => fecha depois da meia-noite do próximo dia (ex: 1500 = 25:00)
+    const crossesMidnight = close >= MINUTES_PER_DAY;
+
+    // Para calcular "absolute" quando necessário:
+    // Se estamos após a meia-noite (ex: 00:30) e close está além de 1440,
+    // devemos considerar currentAbsolute = totalMinutesNow + 1440 quando compararmos com close.
+    let currentAbsolute = totalMinutesNow;
+
+    if (crossesMidnight && totalMinutesNow < open) {
+        // estamos depois da meia-noite (ex: 00:30) e ainda antes da hora de abertura do dia "anterior"
+        currentAbsolute = totalMinutesNow + MINUTES_PER_DAY;
+    }
+
+    if (crossesMidnight) {
+        // aberto se:
+        // - estamos entre open e 23:59 (no mesmo dia), ou
+        // - estamos entre 00:00 e adjustedClosing (no dia seguinte)
+        const adjustedClosing = close - MINUTES_PER_DAY;
+        isOpen = (totalMinutesNow >= open && totalMinutesNow < MINUTES_PER_DAY) ||
+                 (totalMinutesNow >= 0 && totalMinutesNow < adjustedClosing);
+
+        if (isOpen) {
+            // usa currentAbsolute para subtrair de close (close está na escala >1440)
+            if (totalMinutesNow >= open) {
+                // ainda no "lado antes da meia-noite" do período aberto
+                minutesToClose = close - totalMinutesNow;
+            } else {
+                // já passou meia-noite, precisamos considerar +1440 ao agora
+                minutesToClose = close - (totalMinutesNow + MINUTES_PER_DAY);
+            }
+        } else {
+            // fechado -> calcular minutos até a próxima abertura
+            if (totalMinutesNow < open) {
+                // abre hoje (ainda antes de abrir no mesmo dia)
+                minutesToOpen = open - totalMinutesNow;
+            } else {
+                // passou da abertura hoje (mas fechou porque horário não está no intervalo),
+                // próxima abertura será no próximo dia: open + 1440 - totalMinutesNow
+                minutesToOpen = open + MINUTES_PER_DAY - totalMinutesNow;
+            }
+        }
+    } else {
+        // não cruza meia-noite (close dentro do mesmo dia)
+        isOpen = totalMinutesNow >= open && totalMinutesNow < close;
+
+        if (isOpen) {
+            minutesToClose = close - totalMinutesNow;
+        } else {
+            if (totalMinutesNow < open) {
+                minutesToOpen = open - totalMinutesNow;
+            } else {
+                // já passou o horário de fechamento hoje -> próxima abertura no próximo dia
+                minutesToOpen = open + MINUTES_PER_DAY - totalMinutesNow;
+            }
+        }
+    }
+
+    // garantir inteiros e não-negativos
+    if (minutesToClose != null) minutesToClose = Math.max(0, Math.floor(minutesToClose));
+    if (minutesToOpen != null) minutesToOpen = Math.max(0, Math.floor(minutesToOpen));
+
+    return { isOpen, minutesToClose, minutesToOpen };
+}
+
+// -----------------------------
+// Função: verificação de horário (com UI)
 // -----------------------------
 function checkStoreStatus(showWarning = false) {
-    const now = new Date();
-    const totalMinutesNow = now.getHours() * 60 + now.getMinutes();
+    const totalMinutesNow = minutesNow();
 
-    let isOpen = totalMinutesNow >= openingHour && totalMinutesNow < closingHour;
+    const { isOpen, minutesToClose, minutesToOpen } = computeStoreStatus(totalMinutesNow, openingHour, closingHour);
 
     if (isOpen) {
-        const minutesToClose = closingHour - totalMinutesNow;
-
-        if (minutesToClose <= 20) {
+        // Loja aberta
+        if (minutesToClose !== null && minutesToClose <= 20) {
             dateSpan.className = "px-3 py-1 rounded-lg text-black font-bold";
             dateSpan.style.backgroundColor = "#FFD54F";
-            dateSpan.textContent = "⚠ 20 minutos para fechar!";
+            dateSpan.textContent = `⚠ ${minutesToClose} minuto${minutesToClose === 1 ? "" : "s"} para fechar!`;
+        } else if (minutesToClose !== null) {
+            dateSpan.className = "bg-green-500 px-3 py-1 rounded-lg text-white font-bold";
+            dateSpan.style.backgroundColor = "";
+            dateSpan.textContent = "Aberto agora";
         } else {
             dateSpan.className = "bg-green-500 px-3 py-1 rounded-lg text-white font-bold";
             dateSpan.style.backgroundColor = "";
             dateSpan.textContent = "Aberto agora";
         }
     } else {
+        // Loja fechada
+        // Mostrar "Abre em X minutos" quando for perto da abertura (ex: < 12 horas) ou sempre se quisermos
+        if (minutesToOpen !== null && minutesToOpen <= 24 * 60) {
+            // para mensagens legíveis, convertendo em horas/minutos quando for longo
+            if (minutesToOpen < 60) {
+                dateSpan.textContent = `⏰ Abre em ${minutesToOpen} minuto${minutesToOpen === 1 ? "" : "s"}`;
+            } else {
+                const h = Math.floor(minutesToOpen / 60);
+                const m = minutesToOpen % 60;
+                dateSpan.textContent = `⏰ Abre em ${h}h${m > 0 ? ` ${m}m` : ""}`;
+            }
+        } else {
+            dateSpan.textContent = "Fechado agora";
+        }
+
         dateSpan.className = "bg-red-500 px-3 py-1 rounded-lg text-white font-bold";
         dateSpan.style.backgroundColor = "";
-        dateSpan.textContent = "Fechado agora";
 
         if (showWarning) showClosedAlert();
     }
@@ -58,9 +160,13 @@ function checkStoreStatus(showWarning = false) {
     return isOpen;
 }
 
-setInterval(checkStoreStatus, 10000);
-checkStoreStatus();
+// atualizar a cada 10s (ou ajuste conforme desejar)
+setInterval(() => checkStoreStatus(false), 10000);
+checkStoreStatus(false);
 
+// -----------------------------
+// Alertas
+// -----------------------------
 function showClosedAlert() {
     closedAlert.classList.remove("hidden");
 }
@@ -336,7 +442,3 @@ window.addEventListener("beforeunload", () => {
         // ignore
     }
 });
-
-
-
-
