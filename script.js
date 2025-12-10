@@ -21,7 +21,7 @@ const closedAlertBtn = document.getElementById("closed-alert-btn");
 
 // HORÁRIOS (em minutos desde meia-noite)
 const openingHour = 11 * 60 + 30; // abre 11:30
-const closingHour = 5 * 60;      // fecha 24:00 (meia-noite - você pode ajustar)
+const closingHour = 25 * 60;      // fecha 24:00 (meia-noite - você pode ajustar)
 
 // elemento de status
 const dateSpan = document.getElementById("date-span");
@@ -336,6 +336,7 @@ window.addEventListener("beforeunload", () => {
         // ignore
     }
 });
+
 
 
 
