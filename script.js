@@ -9,7 +9,7 @@
 const WHATSAPP_NUMBER = "19989021323";
 const TIME_CHECK_INTERVAL_MS = 1000; // 1s para contagem em tempo real
 const defaultOpening = 11 * 60 + 30; // 11:30
-const defaultClosing = (24 + 1) * 60; // 25:00 -> 01:00 next day
+const defaultClosing = (26 + 1) * 60; // 25:00 -> 01:00 next day
 
 // -----------------------------
 // DOM e estado (usando seus IDs)
@@ -361,3 +361,4 @@ function buildThermalReceipt({ name, address, payment, obs, items, total }){
 window.addEventListener('beforeunload', ()=>{
     try { if (window.qz && qz.websocket && qz.websocket.isActive()) qz.websocket.disconnect(); } catch(e){}
 });
+
