@@ -2,116 +2,168 @@
 @tailwind components;
 @tailwind utilities;
 
-/* base */
-:root{
-  --accent: #ef4444; /* vermelho principal */
-  --muted: #6b7280;
-  --card: #ffffff;
-  --bg: #e8e7ec;
-  --glass: rgba(255,255,255,0.06);
-}
+/* ----------- ESTILO PREMIUM MODERNO ----------- */
 
-html,body{height:100%}
 body {
-  background-color: var(--bg);
-  font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  color:#111827;
+    background-color: #f3f3f5;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* header overlay to get AnotaAí-like effect */
+/* HEADER PREMIUM */
 header {
-  min-height: 360px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-}
-header::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55));
-  pointer-events:none;
+    position: relative;
 }
 
-/* logo */
+header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+/* Logo */
 header img {
-  border: 4px solid rgba(255,255,255,0.08);
-  transform: translateZ(0);
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
+    transition: 0.25s;
+}
+header img:hover {
+    transform: scale(1.12) rotate(-1deg);
 }
 
-/* status pill */
-#date-span{
-  display:inline-flex;
-  gap:8px;
-  align-items:center;
-  padding:0.45rem 0.9rem;
-  border-radius:12px;
-  font-weight:600;
-  transition:all .22s ease;
-  box-shadow:0 8px 22px rgba(2,6,23,0.08);
+/* Texto no header */
+header h1 {
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.7);
+}
+header span {
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.7);
 }
 
-/* status states */
-.status-open { background:#ecfdf5; color:#065f46; }
-.status-open-warn { background:#fff7ed; color:#7a4a00; }
-.status-closed { background:#fff1f2; color:#7f1d1d; }
-.status-closed-warn { background:#fff7f6; color:#7a2a2a; }
-
-/* product cards */
-.product-card {
-  background:var(--card);
-  border-radius:14px;
-  padding:14px;
-  display:flex;
-  gap:14px;
-  align-items:flex-start;
-  transition:box-shadow .18s ease, transform .18s ease;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+/* STATUS DE HORÁRIO */
+#date-span {
+    background: linear-gradient(90deg, #ff3d3d, #bf0000);
+    box-shadow: 0px 3px 10px rgba(255, 0, 0, 0.4);
+    padding: 6px 14px;
+    border-radius: 8px;
 }
-.product-card:hover{ transform:translateY(-4px); box-shadow:0 12px 30px rgba(15,23,42,0.08); }
 
-/* product image */
-.product-card img { width:112px; height:112px; object-fit:cover; border-radius:10px; }
+/* ----------- CARDS DE PRODUTOS ----------- */
 
-/* add button */
-.add-btn {
-  background:var(--accent);
-  color:white;
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:700;
-  transition:transform .12s ease, opacity .12s ease;
+#menu > div {
+    background: white;
+    padding: 12px;
+    border-radius: 14px;
+    display: flex;
+    gap: 10px;
+    box-shadow: 0px 4px 14px rgba(0,0,0,0.1);
+    transition: 0.25s;
 }
-.add-btn:hover{ transform:translateY(-3px); }
 
-/* footer cart button */
-footer { border-top-left-radius: 8px; border-top-right-radius: 8px; }
-#cart-btn { display:flex; align-items:center; gap:10px; padding:10px 14px; }
+#menu > div:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 6px 22px rgba(0,0,0,0.15);
+}
 
-/* modal */
+/* foto do produto */
+#menu img {
+    border-radius: 12px;
+    transition: 0.25s;
+}
+#menu img:hover {
+    transform: scale(1.1) rotate(-2deg);
+}
+
+/* nome */
+#menu p.font-bold {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* preço */
+#menu p.font-bold.text-lg {
+    font-size: 1.25rem;
+    color: #d60000;
+}
+
+/* botão de adicionar */
+.add-to-cart-btn {
+    background: linear-gradient(90deg, #d60000, #ff3d3d);
+    padding: 10px 14px;
+    border-radius: 10px;
+    transition: 0.25s;
+    box-shadow: 0px 4px 12px rgba(255, 0, 0, 0.35);
+}
+.add-to-cart-btn:hover {
+    transform: scale(1.1);
+}
+
+/* ----------- MODAL DO CARRINHO ----------- */
+
 #cart-modal .cart-content {
-  max-height:70vh;
-  overflow:auto;
-}
-#cart-modal .rounded-md{ border-radius:14px; }
-
-/* toasts */
-#toast-root { position:fixed; right:16px; bottom:16px; z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
-.toast { pointer-events:auto; transform:translateY(10px) scale(.98); opacity:0; background:#0f172a; color:white; padding:10px 14px; border-radius:10px; box-shadow:0 8px 24px rgba(2,6,23,0.3); transition:all .28s ease; font-size:14px; }
-
-/* cart item row */
-.cart-item-row { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:8px 0; border-bottom:1px dashed rgba(15,23,42,0.04); }
-.cart-item-info p.muted { color:var(--muted); font-size:13px; }
-
-/* responsive tweaks */
-@media (max-width:640px){
-  header { min-height:300px; padding:28px 10px; }
-  .product-card img { width:88px; height:88px; }
+    border-radius: 16px;
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.3);
 }
 
-/* small helpers */
-.hidden { display:none !important; }
+/* itens do carrinho */
+#cart-items > div {
+    background: #fafafa;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
 
+/* inputs */
+#cart-modal input, 
+#cart-modal select,
+#cart-modal textarea {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+#cart-modal input:focus, 
+#cart-modal select:focus,
+#cart-modal textarea:focus {
+    border-color: #ff3d3d;
+    box-shadow: 0px 0px 6px rgba(255, 0, 0, 0.5);
+}
+
+/* botão checkout */
+#checkout-btn {
+    background: linear-gradient(90deg, #009c34, #00d452);
+    box-shadow: 0px 4px 14px rgba(0, 255, 100, 0.35);
+    transition: 0.25s;
+}
+#checkout-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ----------- MODAL DE LOJA FECHADA ----------- */
+
+#closed-alert div {
+    border-radius: 20px;
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.3);
+}
+
+/* ----------- BOTÃO FIXO CARRINHO ----------- */
+
+footer {
+    background: linear-gradient(90deg, #d60000, #ff3d3d);
+    box-shadow: 0px -4px 12px rgba(255, 0, 0, 0.35);
+}
+
+#cart-btn {
+    transition: 0.25s;
+    padding: 8px 14px;
+}
+#cart-btn:hover {
+    transform: scale(1.05);
+}
+
+/* contador carrinho */
+#cart-count {
+    background: white;
+    color: #d60000;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: 700;
+}
