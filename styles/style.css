@@ -2,168 +2,157 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ----------- ESTILO PREMIUM MODERNO ----------- */
+/* ======== LAYOUT DARK PREMIUM DA IMAGEM ======== */
 
 body {
-    background-color: #f3f3f5;
+    background: #0c0c0c;
+    color: #ffffff;
     font-family: 'Poppins', sans-serif;
 }
 
-/* HEADER PREMIUM */
+/* ------ HEADER (igual ao modelo) ------ */
+
 header {
-    position: relative;
+    background: #111;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #222;
 }
 
-header::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-}
-
-/* Logo */
 header img {
-    border: 3px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
-    transition: 0.25s;
-}
-header img:hover {
-    transform: scale(1.12) rotate(-1deg);
-}
-
-/* Texto no header */
-header h1 {
-    text-shadow: 0px 2px 4px rgba(0,0,0,0.7);
-}
-header span {
-    text-shadow: 0px 2px 4px rgba(0,0,0,0.7);
-}
-
-/* STATUS DE HORÁRIO */
-#date-span {
-    background: linear-gradient(90deg, #ff3d3d, #bf0000);
-    box-shadow: 0px 3px 10px rgba(255, 0, 0, 0.4);
-    padding: 6px 14px;
-    border-radius: 8px;
-}
-
-/* ----------- CARDS DE PRODUTOS ----------- */
-
-#menu > div {
-    background: white;
-    padding: 12px;
-    border-radius: 14px;
-    display: flex;
-    gap: 10px;
-    box-shadow: 0px 4px 14px rgba(0,0,0,0.1);
-    transition: 0.25s;
-}
-
-#menu > div:hover {
-    transform: scale(1.02);
-    box-shadow: 0px 6px 22px rgba(0,0,0,0.15);
-}
-
-/* foto do produto */
-#menu img {
+    width: 110px;
+    height: 110px;
     border-radius: 12px;
-    transition: 0.25s;
-}
-#menu img:hover {
-    transform: scale(1.1) rotate(-2deg);
+    object-fit: cover;
+    border: 3px solid #ffffff25;
 }
 
-/* nome */
-#menu p.font-bold {
-    font-size: 1.1rem;
+header h1 {
+    font-size: 1.6rem;
     font-weight: 700;
 }
 
+header p {
+    color: #cccccc;
+}
+
+/* HORÁRIO */
+#date-span {
+    background: #e53935;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* ------ CATEGORIAS ------ */
+
+.category-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    padding: 20px 10px 10px 10px;
+    color: white;
+}
+
+/* ------ CARDS DE PRODUTOS (igual ao modelo) ------ */
+
+.product-card {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    padding: 14px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.product-card:hover {
+    transform: scale(1.02);
+    border-color: #2a2a2a;
+}
+
+/* texto do card */
+.product-info {
+    max-width: 70%;
+}
+
+.product-info h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.product-info p {
+    color: #c9c9c9;
+    margin-top: 4px;
+}
+
 /* preço */
-#menu p.font-bold.text-lg {
-    font-size: 1.25rem;
-    color: #d60000;
+.product-price {
+    margin-top: 8px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #e53935;
+}
+
+/* imagem à direita — igual à imagem enviada */
+.product-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 14px;
+    object-fit: cover;
+    margin-left: 14px;
 }
 
 /* botão de adicionar */
 .add-to-cart-btn {
-    background: linear-gradient(90deg, #d60000, #ff3d3d);
-    padding: 10px 14px;
+    margin-top: 10px;
+    background: #e53935;
+    padding: 8px 12px;
     border-radius: 10px;
-    transition: 0.25s;
-    box-shadow: 0px 4px 12px rgba(255, 0, 0, 0.35);
-}
-.add-to-cart-btn:hover {
-    transform: scale(1.1);
-}
-
-/* ----------- MODAL DO CARRINHO ----------- */
-
-#cart-modal .cart-content {
-    border-radius: 16px;
-    box-shadow: 0px 8px 30px rgba(0,0,0,0.3);
-}
-
-/* itens do carrinho */
-#cart-items > div {
-    background: #fafafa;
-    padding: 10px;
-    border-radius: 12px;
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-}
-
-/* inputs */
-#cart-modal input, 
-#cart-modal select,
-#cart-modal textarea {
-    border: 2px solid #ddd;
-    border-radius: 10px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
     transition: 0.2s;
 }
-#cart-modal input:focus, 
-#cart-modal select:focus,
-#cart-modal textarea:focus {
-    border-color: #ff3d3d;
-    box-shadow: 0px 0px 6px rgba(255, 0, 0, 0.5);
+
+.add-to-cart-btn:hover {
+    background: #ff4747;
+}
+
+/* ------ CARRINHO ----- */
+
+#cart-modal .cart-content {
+    background: #121212;
+    color: white;
+    border-radius: 20px;
+}
+
+#cart-items > div {
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 12px;
 }
 
 /* botão checkout */
 #checkout-btn {
-    background: linear-gradient(90deg, #009c34, #00d452);
-    box-shadow: 0px 4px 14px rgba(0, 255, 100, 0.35);
-    transition: 0.25s;
+    background: #00c853;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
+
 #checkout-btn:hover {
-    transform: scale(1.05);
+    background: #00e063;
 }
 
-/* ----------- MODAL DE LOJA FECHADA ----------- */
-
-#closed-alert div {
-    border-radius: 20px;
-    box-shadow: 0px 8px 30px rgba(0,0,0,0.3);
-}
-
-/* ----------- BOTÃO FIXO CARRINHO ----------- */
-
+/* footer carrinho fixo igual ao modelo */
 footer {
-    background: linear-gradient(90deg, #d60000, #ff3d3d);
-    box-shadow: 0px -4px 12px rgba(255, 0, 0, 0.35);
+    background: #e53935;
+    padding: 14px;
 }
 
 #cart-btn {
-    transition: 0.25s;
-    padding: 8px 14px;
-}
-#cart-btn:hover {
-    transform: scale(1.05);
-}
-
-/* contador carrinho */
-#cart-count {
-    background: white;
-    color: #d60000;
-    padding: 2px 8px;
-    border-radius: 8px;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
