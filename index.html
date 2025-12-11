@@ -1,283 +1,62 @@
-            <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<!DOCTYPE html><html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <!-- Se tiver output.css, mantenha a referência; o style abaixo já aplica o tema se output.css não existir -->
-    <link rel="stylesheet" href="./styles/output.css" />
-
     <title>Cardápio Digital</title>
-
-    <style>
-        /* ====== Tema Dark Premium (aplica mesmo sem Tailwind) ====== */
-        :root {
-            --bg: #0b0b0c;
-            --card: #111114;
-            --muted: #9ca3af;
-            --accent: #ff2d4b;
-            --accent-2: #ff5a6b;
-            --glass: rgba(255,255,255,0.04);
-        }
-        html,body{height:100%;margin:0;padding:0;font-family:'Poppins',sans-serif;background:var(--bg);color:#fff;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-
-        /* Header */
-        header.w-full { position: relative; min-height: 380px; display:flex; align-items:center; justify-content:center; background-image: url('./assets/back.jpg'); background-size: cover; background-position:center; }
-        header .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(3,3,4,0.45), rgba(3,3,4,0.75)); }
-        header > .container { position:relative; z-index:2; text-align:center; padding:36px 12px; }
-        header img { width:130px; height:130px; border-radius:999px; border: 3px solid rgba(255,255,255,0.08); box-shadow:0 10px 30px rgba(0,0,0,0.6); transition: transform .2s ease; }
-        header img:hover { transform: scale(1.06) rotate(-3deg); }
-        header h1 { margin:12px 0 6px; font-size:28px; letter-spacing: -0.5px; }
-        header span { opacity: .85; color:var(--muted); }
-
-        /* status pill (preserva #date-span) */
-        #date-span { display:inline-block; margin-top:14px; padding:8px 14px; border-radius:10px; font-weight:600; background: linear-gradient(90deg,var(--accent),var(--accent-2)); box-shadow:0 8px 30px rgba(255,45,75,0.16); color:white; }
-
-        /* Section title */
-        h2.text-2xl { text-align:center; margin:36px 0 18px; font-size:2rem; color:#fff; }
-
-        /* Grid */
-        main#menu { max-width:1100px; margin:0 auto; padding:0 16px 120px; display:grid; gap:18px; grid-template-columns: 1fr; }
-        @media(min-width:768px){ main#menu{ grid-template-columns:1fr 1fr; } }
-
-        /* Product card (preserva sua estrutura DOM) */
-        .product-card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:12px; display:flex; gap:12px; align-items:flex-start; box-shadow: 0 10px 30px rgba(2,6,23,0.6); transition: transform .18s ease, box-shadow .18s ease; border: 1px solid rgba(255,255,255,0.02); }
-        .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.7); }
-        .product-card img { width:100px; height:100px; object-fit:cover; border-radius:12px; flex-shrink:0; }
-        .product-card .info { flex:1; display:flex; flex-direction:column; gap:6px; }
-        .product-card .info p.name { font-weight:700; font-size:1.05rem; color:#fff; margin:0; }
-        .product-card .info p.desc { margin:0; color:var(--muted); font-size:0.92rem; }
-        .product-card .meta { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
-        .product-card .price { font-weight:800; color:var(--accent); font-size:1.15rem; }
-        .add-to-cart-btn { background: linear-gradient(90deg, var(--accent), var(--accent-2)); padding:10px 12px; border-radius:10px; border:none; color:#fff; font-weight:700; cursor:pointer; box-shadow:0 8px 26px rgba(255,45,75,0.18); transition: transform .12s ease; }
-        .add-to-cart-btn:hover { transform: translateY(-3px) scale(1.02); }
-
-        /* Section Bebidas title preserving col-span-full */
-        h2.font-bold.text-3xl.col-span-full { grid-column: 1 / -1; text-align:center; font-size:1.6rem; margin-top:28px; }
-
-        /* Modal (preserve your modal structure) */
-        #cart-modal { background: rgba(0,0,0,0.6); position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:99; }
-        #cart-modal .box { background: #0f0f10; width:92%; max-width:700px; border-radius:14px; padding:18px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.03); color:#fff; max-height:86vh; overflow:auto; }
-        #cart-modal h2 { margin-top:0; text-align:center; }
-        #cart-items .cart-row { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); margin-bottom:8px; }
-        #cart-modal input, #cart-modal select, #cart-modal textarea { background: #0a0a0b; border:1px solid rgba(255,255,255,0.04); color:#fff; padding:10px; border-radius:8px; }
-
-        /* closed alert */
-        #closed-alert { display:none; position:fixed; inset:0; z-index:120; align-items:center; justify-content:center; background:rgba(0,0,0,0.65); }
-        #closed-alert .card { background:#0f0f10; padding:20px; border-radius:12px; width:90%; max-width:380px; text-align:center; border:1px solid rgba(255,255,255,0.03); }
-
-        /* Footer cart */
-        footer { position:fixed; bottom:0; left:0; right:0; height:68px; display:flex; align-items:center; justify-content:center; background: linear-gradient(90deg, #c90f2f, #ff3b55); box-shadow: 0 -10px 40px rgba(0,0,0,0.6); z-index:100; }
-        #cart-btn { background: rgba(255,255,255,0.06); padding:10px 16px; border-radius:12px; display:flex; gap:10px; align-items:center; color:#fff; font-weight:700; border:1px solid rgba(255,255,255,0.04); }
-        #cart-count { background:#fff; color:#c90f2f; padding:4px 8px; border-radius:8px; font-weight:800; }
-
-        /* small screens */
-        @media(max-width:600px) {
-            .product-card img { width:88px; height:88px; }
-            header { min-height:300px; padding:28px 12px; }
-        }
-
-        /* helper visible classes */
-        .hidden { display:none !important; }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-black text-white"><!-- HEADER -->
+<header class="w-full flex flex-col items-center pt-8 pb-6 border-b border-zinc-800">
+    <img src="img/logo.png" alt="Logo" class="w-28 h-28 rounded-xl object-cover shadow-lg">
 
-<!-- HEADER (mantive IDs e conteúdo original) -->
-<header class="w-full h-[410px] bg-zinc-900 bg-[url('./assets/back.jpg')] bg-cover bg-center">
-    <div class="overlay"></div>
-    <div class="container">
-        <img src="./assets/hamb-1.png" alt="Logo da loja" class="w-32 h-32 rounded-full shadow-lg" />
+    <h1 class="text-2xl font-bold mt-4">Store Distribuidora</h1>
+    <p class="text-zinc-400 text-sm mt-1">Rua Exemplo, 123 - Centro</p>
 
-        <h1 class="text-2xl mt-4 mb-2 font-bold">NOME DA LOJA</h1>
-        <span class="text-white font-xs">NOME DA RUA</span>
-
-        <div id="date-span" class="">Seg à Dom • 07:00 às 00:00</div>
-    </div>
+    <span id="date-span" class="mt-3 text-white text-sm font-semibold">Carregando...</span>
 </header>
 
-<!-- TÍTULO -->
-<h2 class="text-2xl md:text-5xl font-bold text-center mt-9 mb-6">MENU</h2>
+<!-- CATEGORIAS E PRODUTOS -->
+<main class="px-4 pb-32 mt-6" id="menu">
 
-<!-- LISTA DE PRODUTOS -->
-<main id="menu" class="menu-grid mx-auto max-w-7xl px-2 mb-24">
+    <!-- Exemplo de categoria -->
+    <h2 class="category-title">Combos</h2>
+    <div id="combos-container" class="space-y-4"></div>
 
-    <!-- PRODUTO 1 -->
-    <div class="product-card">
-        <img src="./assets/hamb-8.png" alt="Produto 1">
-        <div class="info">
-            <p class="name">Nome do produto 1</p>
-            <p class="desc">Descrição do produto</p>
+    <h2 class="category-title">Burgers</h2>
+    <div id="burgers-container" class="space-y-4"></div>
 
-            <div class="meta">
-                <p class="price">R$ 10,00</p>
+    <h2 class="category-title">Hot Dogs</h2>
+    <div id="dogs-container" class="space-y-4"></div>
 
-                <button class="add-to-cart-btn" data-name="Nome do produto 1" data-price="10.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
+    <h2 class="category-title">Bebidas</h2>
+    <div id="bebidas-container" class="space-y-4"></div>
 
-    <!-- PRODUTO 2 -->
-    <div class="product-card">
-        <img src="./assets/hamb-8.png" alt="Produto 2">
-        <div class="info">
-            <p class="name">Nome do produto 2</p>
-            <p class="desc">Descrição do produto</p>
-
-            <div class="meta">
-                <p class="price">R$ 12,00</p>
-
-                <button class="add-to-cart-btn" data-name="Nome do produto 2" data-price="12.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRODUTO 3 -->
-    <div class="product-card">
-        <img src="./assets/hamb-8.png" alt="Produto 3">
-        <div class="info">
-            <p class="name">Nome do produto 3</p>
-            <p class="desc">Descrição do produto</p>
-
-            <div class="meta">
-                <p class="price">R$ 12,00</p>
-
-                <button class="add-to-cart-btn" data-name="Nome do produto 3" data-price="12.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRODUTO 4 -->
-    <div class="product-card">
-        <img src="./assets/hamb-8.png" alt="Produto 4">
-        <div class="info">
-            <p class="name">Nome do produto 4</p>
-            <p class="desc">Descrição do produto</p>
-
-            <div class="meta">
-                <p class="price">R$ 12,00</p>
-
-                <button class="add-to-cart-btn" data-name="Nome do produto 4" data-price="12.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- BEBIDAS TÍTULO -->
-    <h2 class="font-bold text-3xl my-6 col-span-full">BEBIDAS</h2>
-
-    <!-- BEBIDA 1 -->
-    <div class="product-card">
-        <img src="./assets/refri-1.png" alt="Bebida 1">
-        <div class="info">
-            <p class="name">Nome da bebida 1</p>
-            <p class="desc">Descrição da bebida</p>
-
-            <div class="meta">
-                <p class="price">R$ 5,00</p>
-
-                <button class="add-to-cart-btn" data-name="Nome da bebida 1" data-price="5.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- BEBIDA 2 -->
-    <div class="product-card">
-        <img src="./assets/refri-2.png" alt="Bebida 2">
-        <div class="info">
-            <p class="name">Nome da bebida 2</p>
-            <p class="desc">Descrição da bebida</p>
-
-            <div class="meta">
-                <p class="price">R$ 5,00</p>
-
-                <button class="add-to-cart-btn" data-name="Nome da bebida 2" data-price="5.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
+    <h2 class="category-title">Doces</h2>
+    <div id="doces-container" class="space-y-4"></div>
 
 </main>
 
-<!-- MODAL DO CARRINHO -->
-<div id="cart-modal" class="hidden">
-    <div class="box cart-content">
-        <h2 class="text-center font-bold text-2xl">Meu Carrinho</h2>
-
-        <div id="cart-items" class="flex flex-col gap-2 my-4"></div>
-
-        <p class="font-bold">Total: R$ <span id="cart-total">0.00</span></p>
-
-        <div class="mt-4">
-            <p class="font-bold">Nome:</p>
-            <input type="text" id="customer-name" class="w-full border-2 p-1 rounded my-1">
-
-            <p class="font-bold mt-4">Endereço:</p>
-            <input type="text" id="address" class="w-full border-2 p-1 rounded my-1">
-            <p class="text-red-500 hidden" id="address-warn">Digite seu endereço completo!</p>
-
-            <p class="font-bold mt-4">Pagamento:</p>
-            <select id="payment-method" class="w-full border-2 p-1 rounded my-1">
-                <option value="Cartão">Cartão</option>
-                <option value="Pix">Pix</option>
-                <option value="Dinheiro">Dinheiro</option>
-            </select>
-
-            <p class="font-bold mt-4">Observações:</p>
-            <textarea id="observations" class="w-full border-2 p-1 rounded my-1"></textarea>
-        </div>
-
-        <div class="flex items-center justify-between mt-5">
-            <button id="close-modal-btn" class="font-bold">Fechar</button>
-            <button id="checkout-btn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold text-lg">
-                Finalizar pedido
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL DE LOJA FECHADA -->
-<div id="closed-alert" class="hidden">
-    <div class="card">
-        <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
-        <p class="text-gray-300">Nosso horário de atendimento é das <b>07:00 às 00:00</b>.</p>
-        <p class="text-gray-300 mt-1">Volte mais tarde! 😊</p>
-
-        <button id="closed-alert-btn" class="mt-5" style="background:#c92c3e;color:white;padding:10px 14px;border-radius:8px;border:none;font-weight:700;">
-            Entendi
-        </button>
-    </div>
-</div>
-
-<style>
-@keyframes fade { from{opacity:0;transform:scale(.98)} to{opacity:1;transform:scale(1)} }
-.animate-fade{ animation: fade .2s ease-out; }
-</style>
-
-<!-- BOTÃO FIXO DO CARRINHO -->
-<footer>
-    <button id="cart-btn">
-        <span id="cart-count">0</span> Carrinho
-        <i class="fa fa-cart-plus" style="margin-left:6px;"></i>
-    </button>
+<!-- FOOTER FIXO (CARRINHO) -->
+<footer class="fixed bottom-0 left-0 w-full text-center">
+    <button id="cart-btn" class="w-full py-4 font-bold">Carrinho (<span id="cart-count">0</span>)</button>
 </footer>
 
-<!-- JS -->
+<!-- MODAL DO CARRINHO -->
+<div id="cart-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4">
+    <div class="cart-content w-full max-w-md p-5">
+        <h3 class="text-xl font-bold mb-3">Seu Carrinho</h3>
+        <div id="cart-items" class="space-y-3"></div>
+
+        <label class="block mt-4 text-sm">Endereço:</label>
+        <input id="address" class="w-full p-2 text-black" type="text" placeholder="Digite seu endereço" />
+
+        <button id="checkout-btn" class="w-full mt-4">Finalizar Pedido</button>
+
+        <button id="close-cart" class="mt-4 w-full bg-zinc-700 py-2 rounded">Fechar</button>
+    </div>
+</div>
+
 <script src="script.js"></script>
 
 </body>
