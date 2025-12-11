@@ -273,3 +273,4 @@ if (closeModalBtn)
         cartModal.classList.add('hidden');
         footerBar.classList.remove('hidden');
     });
+
