@@ -7,6 +7,11 @@ WhatsApp: 55 19 98902-1323
 */
 
 // ===============================
+// MODO TESTE (FORÇAR LOJA ABERTA)
+// ===============================
+const FORCE_OPEN = true; // <<< MUDE PARA false QUANDO FOR USAR DE VERDADE
+
+// ===============================
 // VARIÁVEIS / DOM
 // ===============================
 const cart = [];
@@ -62,20 +67,32 @@ function computeStoreStatus(now, open, close) {
 }
 
 function checkStoreStatus(showWarning = false) {
+
+  // 🔓 LOJA SEMPRE ABERTA (TESTE)
+  if (FORCE_OPEN) {
+    dateSpan.className =
+      "bg-green-500 px-3 py-1 rounded-lg text-white font-bold";
+    dateSpan.textContent = "Aberto agora (teste)";
+    return true;
+  }
+
   const { isOpen, minutesToClose, minutesToOpen } =
     computeStoreStatus(minutesNow(), openingHour, closingHour);
 
   if (isOpen) {
     if (minutesToClose <= 20) {
-      dateSpan.className = "px-3 py-1 rounded-lg font-bold text-black";
+      dateSpan.className =
+        "px-3 py-1 rounded-lg font-bold text-black";
       dateSpan.style.backgroundColor = "#FFD54F";
       dateSpan.textContent = `⚠ ${minutesToClose} min para fechar`;
     } else {
-      dateSpan.className = "bg-green-500 px-3 py-1 rounded-lg text-white font-bold";
+      dateSpan.className =
+        "bg-green-500 px-3 py-1 rounded-lg text-white font-bold";
       dateSpan.textContent = "Aberto agora";
     }
   } else {
-    dateSpan.className = "bg-red-500 px-3 py-1 rounded-lg text-white font-bold";
+    dateSpan.className =
+      "bg-red-500 px-3 py-1 rounded-lg text-white font-bold";
     dateSpan.textContent =
       minutesToOpen < 60
         ? `⏰ Abre em ${minutesToOpen} min`
@@ -141,7 +158,7 @@ function updateCart() {
           <p class="font-bold">${item.name}</p>
           <p>Qtd: ${item.quantity}</p>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 items-center">
           <button onclick="changeQty(${i},-1)">−</button>
           <button onclick="changeQty(${i},1)">+</button>
           <strong>R$ ${(item.price * item.quantity).toFixed(2)}</strong>
@@ -223,11 +240,8 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
   const total = cart.reduce((s, i) => s + i.price * i.quantity, 0).toFixed(2);
   msg += `\n💰 TOTAL: R$ ${total}\n📝 ${obs || ""}`;
 
-  // IMPRIMIR
-  const receipt = buildReceipt({ name, address, payment, items: cart, total });
-  printQZ(receipt);
+  printQZ(buildReceipt({ name, address, payment, items: cart, total }));
 
-  // WHATSAPP
   window.open(
     `https://wa.me/5519989021323?text=${encodeURIComponent(msg)}`,
     "_blank"
