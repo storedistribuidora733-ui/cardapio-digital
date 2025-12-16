@@ -2,53 +2,89 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<title>Cardápio Digital</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Painel da Loja</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <style>
-body{font-family:Poppins;background:#18181b;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
-.box{background:#27272a;padding:30px;border-radius:10px;width:300px}
-input,button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:6px}
-button{background:#22c55e;color:#000;font-weight:600}
+body{font-family:Poppins;background:#f4f4f5;margin:0}
+header{background:#18181b;color:#fff;padding:20px;text-align:center}
+.produto{background:#fff;margin:10px;padding:10px;border-radius:10px}
+button{padding:8px 12px;border:none;border-radius:6px;background:#22c55e;font-weight:600}
+#cart{position:fixed;bottom:0;width:100%;background:#18181b;color:#fff;padding:10px}
 </style>
 </head>
 
 <body>
 
-<div class="box">
-<h2>Login da Loja</h2>
+<header>
+<h2>Nome da Loja</h2>
+<p>Faça seu pedido</p>
+</header>
 
-<input id="email" placeholder="Email">
-<input id="senha" type="password" placeholder="Senha">
+<div class="produto">
+<b>X-Burger</b><br>
+R$ 10,00<br><br>
+<button onclick="add('X-Burger',10)">Adicionar</button>
+</div>
 
-<button onclick="login()">Entrar</button>
+<div class="produto">
+<b>X-Salada</b><br>
+R$ 12,00<br><br>
+<button onclick="add('X-Salada',12)">Adicionar</button>
+</div>
+
+<div id="cart">
+<b>Total: R$ <span id="total">0</span></b>
+<button onclick="finalizar()">Finalizar Pedido</button>
 </div>
 
 <script>
-// 🔥 CONFIG FIREBASE (VOU TE ENSINAR A PEGAR)
+// 🔥 FIREBASE
 const firebaseConfig = {
   apiKey: "SUA_API_KEY",
   authDomain: "SEU_DOMINIO.firebaseapp.com",
+  databaseURL: "https://SEU_DOMINIO.firebaseio.com",
   projectId: "SEU_PROJECT_ID",
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const db = firebase.database();
 
-function login(){
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+let carrinho = [];
+let total = 0;
 
-  auth.signInWithEmailAndPassword(email, senha)
-    .then(() => {
-      window.location.href = "painel.html";
-    })
-    .catch(err => alert("Erro: " + err.message));
+function add(nome,preco){
+  carrinho.push({nome,preco,qtd:1});
+  total += preco;
+  document.getElementById("total").innerText = total.toFixed(2);
+}
+
+function finalizar(){
+  const nome = prompt("Seu nome:");
+  const endereco = prompt("Endereço:");
+  const pagamento = prompt("Pagamento (Pix / Cartão / Dinheiro)");
+
+  if(!nome || !endereco) return alert("Preencha tudo!");
+
+  db.ref("pedidos").push({
+    nome,
+    endereco,
+    pagamento,
+    itens: carrinho,
+    total: total.toFixed(2),
+    status: "novo",
+    data: Date.now()
+  });
+
+  alert("Pedido enviado!");
+  carrinho=[];
+  total=0;
+  document.getElementById("total").innerText="0";
 }
 </script>
 
