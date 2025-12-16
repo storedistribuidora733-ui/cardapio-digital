@@ -3,142 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cardápio Digital</title>
+<title>Login - Painel da Loja</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
 <style>
-*{font-family:Poppins}
-body{margin:0;background:#f4f4f5}
-header{background:#18181b;color:#fff;padding:30px;text-align:center}
-.produto{display:flex;gap:12px;background:#fff;padding:12px;border-radius:8px}
-.produto img{width:90px;border-radius:8px}
-button{cursor:pointer}
-#menu{display:grid;grid-template-columns:1fr;gap:15px;padding:15px}
-footer{position:fixed;bottom:0;width:100%;background:#dc2626;color:#fff;padding:12px;text-align:center}
-#cart-modal{position:fixed;inset:0;background:#00000080;display:none;align-items:center;justify-content:center}
-.cart-box{background:#fff;padding:20px;border-radius:10px;width:90%;max-width:400px}
+body{font-family:Poppins;background:#18181b;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
+.box{background:#27272a;padding:30px;border-radius:10px;width:300px}
+input,button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:6px}
+button{background:#22c55e;color:#000;font-weight:600}
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>NOME DA LOJA</h1>
-<p>NOME DA RUA</p>
-<p>Seg à Dom • 07:00 às 00:00</p>
-</header>
+<div class="box">
+<h2>Login da Loja</h2>
 
-<main id="menu">
+<input id="email" placeholder="Email">
+<input id="senha" type="password" placeholder="Senha">
 
-<div class="produto">
-<img src="https://via.placeholder.com/100">
-<div>
-<b>X-Burger</b>
-<p>Hambúrguer artesanal</p>
-<b>R$ 10,00</b><br>
-<button onclick="add('X-Burger',10)">🛒 Adicionar</button>
-</div>
-</div>
-
-<div class="produto">
-<img src="https://via.placeholder.com/100">
-<div>
-<b>Refrigerante</b>
-<p>Lata 350ml</p>
-<b>R$ 5,00</b><br>
-<button onclick="add('Refrigerante',5)">🛒 Adicionar</button>
-</div>
-</div>
-
-</main>
-
-<footer>
-<button onclick="openCart()">
-🛒 Carrinho (<span id="count">0</span>)
-</button>
-</footer>
-
-<!-- MODAL -->
-<div id="cart-modal">
-<div class="cart-box">
-<h3>Meu Carrinho</h3>
-<div id="items"></div>
-<p><b>Total: R$ <span id="total">0.00</span></b></p>
-
-<input id="nome" placeholder="Seu nome" style="width:100%;margin:5px 0">
-<input id="endereco" placeholder="Endereço" style="width:100%;margin:5px 0">
-
-<select id="pagamento" style="width:100%;margin:5px 0">
-<option>Pix</option>
-<option>Cartão</option>
-<option>Dinheiro</option>
-</select>
-
-<button onclick="finalizar()" style="background:#16a34a;color:#fff;width:100%;padding:10px;border:none;border-radius:6px">
-Finalizar Pedido
-</button>
-
-<button onclick="closeCart()" style="width:100%;margin-top:8px">Fechar</button>
-</div>
+<button onclick="login()">Entrar</button>
 </div>
 
 <script>
-const { jsPDF } = window.jspdf;
-let cart=[];
+// 🔥 CONFIG FIREBASE (VOU TE ENSINAR A PEGAR)
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_DOMINIO.firebaseapp.com",
+  projectId: "SEU_PROJECT_ID",
+};
 
-function add(nome,preco){
-let item=cart.find(i=>i.nome==nome);
-item?item.qtd++:cart.push({nome,preco,qtd:1});
-update();
-}
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-function update(){
-document.getElementById("items").innerHTML="";
-let total=0,count=0;
-cart.forEach(i=>{
-total+=i.preco*i.qtd;
-count+=i.qtd;
-document.getElementById("items").innerHTML+=
-`<p>${i.qtd}x ${i.nome} - R$ ${(i.preco*i.qtd).toFixed(2)}</p>`;
-});
-document.getElementById("total").innerText=total.toFixed(2);
-document.getElementById("count").innerText=count;
-}
+function login(){
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
 
-function openCart(){document.getElementById("cart-modal").style.display="flex"}
-function closeCart(){document.getElementById("cart-modal").style.display="none"}
-
-function finalizar(){
-let nome=document.getElementById("nome").value||"Cliente";
-let end=document.getElementById("endereco").value;
-let pag=document.getElementById("pagamento").value;
-if(!end){alert("Digite o endereço");return}
-
-let doc=new jsPDF();
-let y=10;
-doc.text("NOME DA LOJA",105,y,{align:"center"});
-y+=8;
-doc.text(`Cliente: ${nome}`,10,y); y+=6;
-doc.text(`Endereço: ${end}`,10,y); y+=6;
-doc.text(`Pagamento: ${pag}`,10,y); y+=8;
-
-cart.forEach(i=>{
-doc.text(`${i.qtd}x ${i.nome} - R$ ${(i.preco*i.qtd).toFixed(2)}`,10,y);
-y+=6;
-});
-
-doc.text(`TOTAL: R$ ${document.getElementById("total").innerText}`,10,y+5);
-doc.save("cupom-fiscal.pdf");
-
-let msg=`Pedido%n%0A`;
-cart.forEach(i=>msg+=`${i.qtd}x ${i.nome}%0A`);
-msg+=`Total: R$ ${document.getElementById("total").innerText}`;
-window.open(`https://wa.me/5599999999999?text=${msg}`);
+  auth.signInWithEmailAndPassword(email, senha)
+    .then(() => {
+      window.location.href = "painel.html";
+    })
+    .catch(err => alert("Erro: " + err.message));
 }
 </script>
 
