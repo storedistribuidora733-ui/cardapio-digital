@@ -4,47 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="./styles/output.css" />
-
     <title>Cardápio Digital</title>
+
+    <!-- FONTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- ÍCONES -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/output.css">
+
+    <!-- QZ TRAY (IMPRESSÃO) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.6/qz-tray.js"></script>
 </head>
 
-<body class="bg-zinc-100">
+<body class="bg-zinc-100 font-[Poppins]">
 
 <!-- HEADER -->
 <header class="w-full h-[410px] bg-zinc-900 bg-[url('./assets/back.jpg')] bg-cover bg-center">
-    <div class="w-full h-full flex flex-col justify-center items-center">
-        <img src="./assets/hamb-1.png" class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200" />
+    <div class="w-full h-full flex flex-col items-center justify-center">
+        <img src="./assets/hamb-1.png" alt="Logo da loja"
+             class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200">
 
         <h1 class="text-2xl mt-4 mb-2 font-bold text-white">NOME DA LOJA</h1>
-        <span class="text-white font-xs">NOME DA RUA</span>
+        <span class="text-white text-sm">NOME DA RUA</span>
 
-        <!-- STATUS DA LOJA -->
         <div id="date-span" class="px-4 py-1 rounded-lg mt-5">
-            <span id="store-status" class="text-white font-bold"></span>
+            <span class="text-white">Seg à Dom • 07:00 às 00:00</span>
         </div>
     </div>
 </header>
 
+<!-- TÍTULO -->
 <h2 class="text-2xl md:text-5xl font-bold text-center mt-9 mb-6">MENU</h2>
 
-<main id="menu" class="grid grid-cols-1 md:grid-cols-2 gap-7 mx-auto max-w-7xl px-2 mb-24">
+<!-- MENU -->
+<main id="menu"
+      class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-24">
 
     <!-- PRODUTO -->
     <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 duration-300">
-        <div>
-            <p class="font-bold">Hambúrguer</p>
-            <p class="text-sm">Descrição</p>
+        <img src="./assets/hamb-8.png" alt="Produto"
+             class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
+
+        <div class="flex flex-col justify-between">
+            <div>
+                <p class="font-bold">Nome do produto</p>
+                <p class="text-sm">Descrição do produto</p>
+            </div>
+
             <div class="flex items-center justify-between mt-3">
                 <p class="font-bold text-lg">R$ 10,00</p>
-                <button class="bg-gray-900 px-3 rounded add-to-cart-btn" data-name="Hambúrguer" data-price="10">
-                    <i class="fa fa-cart-plus text-white"></i>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome do produto"
+                        data-price="10.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TÍTULO BEBIDAS -->
+    <h2 class="font-bold text-3xl text-center my-6 col-span-full">BEBIDAS</h2>
+
+    <!-- BEBIDA -->
+    <div class="flex gap-2">
+        <img src="./assets/refri-1.png" alt="Bebida"
+             class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
+
+        <div class="flex flex-col justify-between">
+            <div>
+                <p class="font-bold">Nome da bebida</p>
+                <p class="text-sm">Descrição da bebida</p>
+            </div>
+
+            <div class="flex items-center justify-between mt-3">
+                <p class="font-bold text-lg">R$ 5,00</p>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome da bebida"
+                        data-price="5.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
                 </button>
             </div>
         </div>
@@ -53,97 +97,84 @@
 </main>
 
 <!-- MODAL CARRINHO -->
-<div id="cart-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[99]">
-    <div class="bg-white p-5 rounded-md w-[90%] max-w-[500px]">
+<div id="cart-modal"
+     class="hidden fixed inset-0 bg-black/60 z-[99] flex items-center justify-center">
+
+    <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px] max-h-[90%] overflow-y-auto">
         <h2 class="text-center font-bold text-2xl">Meu Carrinho</h2>
-        <div id="cart-items" class="my-4"></div>
+
+        <div id="cart-items" class="flex flex-col gap-2 my-4"></div>
+
         <p class="font-bold">Total: R$ <span id="cart-total">0.00</span></p>
 
-        <div class="flex justify-between mt-5">
-            <button id="close-modal-btn">Fechar</button>
-            <button id="checkout-btn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold">
+        <div class="mt-4">
+            <label class="font-bold">Nome:</label>
+            <input id="customer-name" type="text" class="w-full border-2 p-1 rounded my-1">
+
+            <label class="font-bold mt-4 block">Endereço:</label>
+            <input id="address" type="text" class="w-full border-2 p-1 rounded my-1">
+            <p id="address-warn" class="text-red-500 hidden">
+                Digite seu endereço completo!
+            </p>
+
+            <label class="font-bold mt-4 block">Pagamento:</label>
+            <select id="payment-method" class="w-full border-2 p-1 rounded my-1">
+                <option>Cartão</option>
+                <option>Pix</option>
+                <option>Dinheiro</option>
+            </select>
+
+            <label class="font-bold mt-4 block">Observações:</label>
+            <textarea id="observations" class="w-full border-2 p-1 rounded my-1"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between mt-5">
+            <button id="close-modal-btn" class="font-bold">Fechar</button>
+
+            <button id="checkout-btn"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold text-lg">
                 Finalizar pedido
             </button>
         </div>
     </div>
 </div>
 
-<!-- MODAL FECHADO -->
-<div id="closed-alert" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
-    <div class="bg-white p-6 rounded-xl text-center">
+<!-- ALERTA LOJA FECHADA -->
+<div id="closed-alert"
+     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+
+    <div class="bg-white p-6 rounded-xl shadow-2xl text-center animate-fade w-[380px] max-w-[90%]">
         <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
-        <p>Funcionamos das <b>07:00 às 00:00</b></p>
-        <button id="closed-alert-btn" class="mt-4 bg-red-600 text-white px-4 py-2 rounded">
+        <p>Atendimento das <b>07:00 às 00:00</b></p>
+
+        <button id="closed-alert-btn"
+                class="mt-5 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-bold">
             Entendi
         </button>
     </div>
 </div>
 
-<footer class="w-full bg-red-600 py-3 fixed bottom-0 flex justify-center">
-    <button id="cart-btn" class="text-white font-bold">
+<!-- ANIMAÇÃO -->
+<style>
+@keyframes fade {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+.animate-fade {
+    animation: fade 0.25s ease-out;
+}
+</style>
+
+<!-- CARRINHO FIXO -->
+<footer class="fixed bottom-0 w-full bg-red-600 py-3 z-[100] flex justify-center">
+    <button id="cart-btn" class="flex items-center gap-2 text-white font-bold">
         <span id="cart-count">0</span> Carrinho
+        <i class="fa fa-cart-plus"></i>
     </button>
 </footer>
 
-<script>
-// ===== STATUS DA LOJA =====
-function checkStoreStatus() {
-    const status = document.getElementById("store-status");
-    const box = document.getElementById("date-span");
-
-    const hour = new Date().getHours();
-    const openHour = 7;
-    const closeHour = 0;
-
-    const isOpen = openHour < closeHour
-        ? hour >= openHour && hour < closeHour
-        : hour >= openHour || hour < closeHour;
-
-    if (isOpen) {
-        status.innerText = "🟢 ABERTO AGORA";
-        box.className = "px-4 py-1 rounded-lg mt-5 bg-green-600";
-    } else {
-        status.innerText = "🔴 FECHADO NO MOMENTO";
-        box.className = "px-4 py-1 rounded-lg mt-5 bg-red-600";
-    }
-
-    return isOpen;
-}
-
-checkStoreStatus();
-setInterval(checkStoreStatus, 60000);
-
-// ===== CARRINHO =====
-let cart = [];
-let total = 0;
-
-document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
-    btn.onclick = () => {
-        cart.push(btn.dataset.name);
-        total += Number(btn.dataset.price);
-        document.getElementById("cart-count").innerText = cart.length;
-        document.getElementById("cart-total").innerText = total.toFixed(2);
-    };
-});
-
-document.getElementById("cart-btn").onclick = () =>
-    document.getElementById("cart-modal").classList.remove("hidden");
-
-document.getElementById("close-modal-btn").onclick = () =>
-    document.getElementById("cart-modal").classList.add("hidden");
-
-// ===== BLOQUEIO =====
-document.getElementById("checkout-btn").onclick = () => {
-    if (!checkStoreStatus()) {
-        document.getElementById("closed-alert").classList.remove("hidden");
-        return;
-    }
-    alert("Pedido enviado!");
-};
-
-document.getElementById("closed-alert-btn").onclick = () =>
-    document.getElementById("closed-alert").classList.add("hidden");
-</script>
+<!-- JS -->
+<script src="script.js"></script>
 
 </body>
 </html>
