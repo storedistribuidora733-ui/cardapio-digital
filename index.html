@@ -3,83 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cardápio Digital</title>
+<title>Sacola</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="./styles/output.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body { margin:0; font-family:Poppins, sans-serif; background:#f4f4f4; }
+header {
+  padding:16px;
+  background:#fff;
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #ddd;
+}
+.item {
+  background:#fff;
+  margin:12px;
+  padding:12px;
+  border-radius:12px;
+  display:flex;
+  gap:12px;
+}
+.item img { width:80px; height:80px; border-radius:10px; object-fit:cover; }
+footer {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#e50914;
+  padding:16px;
+  color:#fff;
+  font-weight:700;
+  display:flex;
+  justify-content:space-between;
+}
+button {
+  background:none;
+  border:none;
+  color:red;
+  font-size:18px;
+}
+</style>
 </head>
 
-<body class="bg-zinc-100 font-[Poppins]">
+<body>
 
-<!-- HEADER -->
-<header class="bg-zinc-900 py-8 flex flex-col items-center">
-  <img src="./assets/hamb-1.png" class="w-24 h-24 rounded-full mb-3">
-  <h1 class="text-white font-bold text-xl">NOME DA LOJA</h1>
+<header>
+  <strong>SACOLA</strong>
+  <button onclick="clearCart()">Limpar</button>
 </header>
 
-<!-- PRODUTO -->
-<main class="p-4">
+<div id="items"></div>
 
-  <div class="bg-white rounded-xl shadow overflow-hidden relative">
-
-    <img src="./assets/hamb-8.png"
-         class="w-full h-56 object-cover">
-
-    <!-- BOTÃO + -->
-    <button
-      class="add-btn absolute right-4 top-48 bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg"
-      data-name="Hambúrguer"
-      data-price="20"
-      data-image="./assets/hamb-8.png">
-      +
-    </button>
-
-    <div class="p-4">
-      <p class="font-bold text-lg">Hambúrguer</p>
-      <p class="text-sm text-gray-500">Delicioso</p>
-      <p class="font-bold text-lg mt-2">R$ 20,00</p>
-    </div>
-
-  </div>
-
-</main>
-
-<!-- SACOLA -->
-<footer class="fixed bottom-0 w-full bg-red-600 py-3 text-center">
-  <button id="open-cart" class="text-white font-bold text-lg">
-    Sacola (<span id="cart-count">0</span>)
-  </button>
+<footer>
+  <span>Total</span>
+  <span>R$ <span id="total">0.00</span></span>
 </footer>
 
-<!-- MODAL SACOLA -->
-<div id="cart-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-end">
-  <div class="bg-white w-full h-[90%] rounded-t-2xl flex flex-col">
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const container = document.getElementById("items");
+const totalEl = document.getElementById("total");
 
-    <div class="flex justify-between items-center p-4 border-b">
-      <h2 class="font-bold text-lg">SACOLA</h2>
-      <button id="clear-cart" class="text-red-500 font-semibold">Limpar</button>
-    </div>
+function render() {
+  container.innerHTML = "";
+  let total = 0;
 
-    <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+  cart.forEach((item, index) => {
+    total += item.price * item.qty;
 
-    <div class="border-t p-4">
-      <div class="flex justify-between font-bold mb-3">
-        <span>Total</span>
-        <span>R$ <span id="cart-total">0.00</span></span>
+    container.innerHTML += `
+      <div class="item">
+        <img src="${item.image}">
+        <div style="flex:1">
+          <strong>${item.name}</strong><br>
+          Qtd: ${item.qty}<br>
+          R$ ${(item.price * item.qty).toFixed(2)}
+        </div>
+        <button onclick="removeItem(${index})">
+          <i class="fa fa-trash"></i>
+        </button>
       </div>
+    `;
+  });
 
-      <button class="w-full bg-red-600 text-white py-3 rounded-xl font-bold text-lg">
-        Continuar
-      </button>
-    </div>
+  totalEl.textContent = total.toFixed(2);
+}
 
-  </div>
-</div>
+function removeItem(i) {
+  cart.splice(i, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  render();
+}
 
-<script src="script.js"></script>
+function clearCart() {
+  localStorage.removeItem("cart");
+  cart = [];
+  render();
+}
+
+render();
+</script>
+
 </body>
 </html>
