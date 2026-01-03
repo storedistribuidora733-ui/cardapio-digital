@@ -1,21 +1,30 @@
 let cart = [];
 
-function addToCart(name, price, image) {
-  const item = cart.find(p => p.name === name);
-  if (item) {
-    item.qty++;
-  } else {
-    cart.push({ name, price, image, qty: 1 });
-  }
-  updateCart();
-}
+const cartModal = document.getElementById("cart-modal");
+const cartItems = document.getElementById("cart-items");
+const cartTotal = document.getElementById("cart-total");
+const cartCount = document.getElementById("cart-count");
+
+document.querySelectorAll(".add-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const name = btn.dataset.name;
+    const price = Number(btn.dataset.price);
+    const image = btn.dataset.image;
+
+    const item = cart.find(p => p.name === name);
+    if (item) {
+      item.qty++;
+    } else {
+      cart.push({ name, price, image, qty: 1 });
+    }
+
+    updateCart();
+    openCart();
+  });
+});
 
 function updateCart() {
-  const container = document.getElementById("cart-items");
-  const totalEl = document.getElementById("cart-total");
-  const countEl = document.getElementById("cart-count");
-
-  container.innerHTML = "";
+  cartItems.innerHTML = "";
   let total = 0;
   let count = 0;
 
@@ -23,7 +32,7 @@ function updateCart() {
     total += item.price * item.qty;
     count += item.qty;
 
-    container.innerHTML += `
+    cartItems.innerHTML += `
       <div class="flex gap-3 items-center border-b pb-3">
         <img src="${item.image}" class="w-20 h-20 rounded">
         <div class="flex-1">
@@ -38,8 +47,8 @@ function updateCart() {
     `;
   });
 
-  totalEl.textContent = total.toFixed(2);
-  countEl.textContent = count;
+  cartTotal.textContent = total.toFixed(2);
+  cartCount.textContent = count;
 }
 
 function removeItem(name) {
@@ -47,11 +56,12 @@ function removeItem(name) {
   updateCart();
 }
 
-function clearCart() {
-  cart = [];
-  updateCart();
+function openCart() {
+  cartModal.classList.remove("hidden");
 }
 
-function openCart() {
-  document.getElementById("cart-modal").classList.remove("hidden");
-}
+document.getElementById("open-cart").addEventListener("click", openCart);
+document.getElementById("clear-cart").addEventListener("click", () => {
+  cart = [];
+  updateCart();
+});
