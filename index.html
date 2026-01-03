@@ -9,9 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="./styles/output.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-zinc-100 font-[Poppins]">
@@ -22,6 +21,8 @@
 </header>
 
 <main class="p-4 space-y-4">
+
+  <!-- PRODUTO -->
   <div class="flex gap-3 bg-white p-3 rounded-lg shadow">
     <img src="./assets/hamb-8.png" class="w-20 h-20 rounded">
     <div class="flex-1">
@@ -29,27 +30,30 @@
       <p class="text-sm text-gray-500">Delicioso</p>
       <p class="font-bold mt-1">R$ 20,00</p>
     </div>
-    <button onclick="addToCart('Hambúrguer',20,'./assets/hamb-8.png')"
-      class="bg-red-600 text-white px-3 rounded">
+    <button class="bg-red-600 text-white px-3 rounded add-btn"
+      data-name="Hambúrguer"
+      data-price="20"
+      data-image="./assets/hamb-8.png">
       <i class="fa fa-plus"></i>
     </button>
   </div>
+
 </main>
 
 <!-- BOTÃO SACOLA -->
 <footer class="fixed bottom-0 w-full bg-red-600 py-3 text-center">
-  <button onclick="openCart()" class="text-white font-bold">
+  <button id="open-cart" class="text-white font-bold">
     Sacola (<span id="cart-count">0</span>)
   </button>
 </footer>
 
-<!-- MODAL SACOLA -->
+<!-- MODAL -->
 <div id="cart-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-end">
   <div class="bg-white w-full h-[90%] rounded-t-2xl flex flex-col">
 
     <div class="flex justify-between items-center p-4 border-b">
       <h2 class="font-bold text-lg">SACOLA</h2>
-      <button onclick="clearCart()" class="text-red-500">Limpar</button>
+      <button id="clear-cart" class="text-red-500">Limpar</button>
     </div>
 
     <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
