@@ -15,45 +15,53 @@
 
 <body class="bg-zinc-100 font-[Poppins]">
 
-<header class="h-56 bg-zinc-900 flex flex-col items-center justify-center">
-  <img src="./assets/hamb-1.png" class="w-24 h-24 rounded-full">
-  <h1 class="text-white font-bold text-xl mt-3">NOME DA LOJA</h1>
+<!-- HEADER -->
+<header class="bg-zinc-900 py-8 flex flex-col items-center">
+  <img src="./assets/hamb-1.png" class="w-24 h-24 rounded-full mb-3">
+  <h1 class="text-white font-bold text-xl">NOME DA LOJA</h1>
 </header>
 
-<main class="p-4 space-y-4">
+<!-- PRODUTO -->
+<main class="p-4">
 
-  <!-- PRODUTO -->
-  <div class="flex gap-3 bg-white p-3 rounded-lg shadow">
-    <img src="./assets/hamb-8.png" class="w-20 h-20 rounded">
-    <div class="flex-1">
-      <p class="font-bold">Hambúrguer</p>
-      <p class="text-sm text-gray-500">Delicioso</p>
-      <p class="font-bold mt-1">R$ 20,00</p>
-    </div>
-    <button class="bg-red-600 text-white px-3 rounded add-btn"
+  <div class="bg-white rounded-xl shadow overflow-hidden relative">
+
+    <img src="./assets/hamb-8.png"
+         class="w-full h-56 object-cover">
+
+    <!-- BOTÃO + -->
+    <button
+      class="add-btn absolute right-4 top-48 bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg"
       data-name="Hambúrguer"
       data-price="20"
       data-image="./assets/hamb-8.png">
-      <i class="fa fa-plus"></i>
+      +
     </button>
+
+    <div class="p-4">
+      <p class="font-bold text-lg">Hambúrguer</p>
+      <p class="text-sm text-gray-500">Delicioso</p>
+      <p class="font-bold text-lg mt-2">R$ 20,00</p>
+    </div>
+
   </div>
 
 </main>
 
-<!-- BOTÃO SACOLA -->
+<!-- SACOLA -->
 <footer class="fixed bottom-0 w-full bg-red-600 py-3 text-center">
-  <button id="open-cart" class="text-white font-bold">
+  <button id="open-cart" class="text-white font-bold text-lg">
     Sacola (<span id="cart-count">0</span>)
   </button>
 </footer>
 
-<!-- MODAL -->
+<!-- MODAL SACOLA -->
 <div id="cart-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-end">
   <div class="bg-white w-full h-[90%] rounded-t-2xl flex flex-col">
 
     <div class="flex justify-between items-center p-4 border-b">
       <h2 class="font-bold text-lg">SACOLA</h2>
-      <button id="clear-cart" class="text-red-500">Limpar</button>
+      <button id="clear-cart" class="text-red-500 font-semibold">Limpar</button>
     </div>
 
     <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
@@ -64,7 +72,7 @@
         <span>R$ <span id="cart-total">0.00</span></span>
       </div>
 
-      <button class="w-full bg-red-600 text-white py-3 rounded-xl font-bold">
+      <button class="w-full bg-red-600 text-white py-3 rounded-xl font-bold text-lg">
         Continuar
       </button>
     </div>
