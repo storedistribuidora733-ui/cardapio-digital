@@ -34,13 +34,13 @@ function updateCart() {
 
     cartItems.innerHTML += `
       <div class="flex gap-3 items-center border-b pb-3">
-        <img src="${item.image}" class="w-20 h-20 rounded">
+        <img src="${item.image}" class="w-20 h-20 rounded-lg object-cover">
         <div class="flex-1">
           <p class="font-bold">${item.name}</p>
           <p class="text-sm">Qtd: ${item.qty}</p>
           <p class="font-bold">R$ ${(item.price * item.qty).toFixed(2)}</p>
         </div>
-        <button onclick="removeItem('${item.name}')" class="text-red-500">
+        <button onclick="removeItem('${item.name}')" class="text-red-500 text-xl">
           <i class="fa fa-trash"></i>
         </button>
       </div>
