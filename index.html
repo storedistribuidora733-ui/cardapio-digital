@@ -1,109 +1,124 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sacola</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cardápio Digital</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<style>
-body { margin:0; font-family:Poppins, sans-serif; background:#f4f4f4; }
-header {
-  padding:16px;
-  background:#fff;
-  display:flex;
-  justify-content:space-between;
-  border-bottom:1px solid #ddd;
-}
-.item {
-  background:#fff;
-  margin:12px;
-  padding:12px;
-  border-radius:12px;
-  display:flex;
-  gap:12px;
-}
-.item img { width:80px; height:80px; border-radius:10px; object-fit:cover; }
-footer {
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:#e50914;
-  padding:16px;
-  color:#fff;
-  font-weight:700;
-  display:flex;
-  justify-content:space-between;
-}
-button {
-  background:none;
-  border:none;
-  color:red;
-  font-size:18px;
-}
-</style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            greenbtn: '#1db954'
+          }
+        }
+      }
+    }
+  </script>
 </head>
 
-<body>
+<body class="bg-black text-white">
 
-<header>
-  <strong>SACOLA</strong>
-  <button onclick="clearCart()">Limpar</button>
+<header class="p-4 border-b border-zinc-800">
+  <h1 class="text-xl font-bold">San Esfihas Pizzaria</h1>
+  <p class="text-sm text-zinc-400">Aberto até 01:30 • Entrega 15–25min</p>
 </header>
 
-<div id="items"></div>
+<!-- MAIS PEDIDOS -->
+<section class="p-4">
+  <h2 class="text-lg font-semibold mb-3">Mais pedidos</h2>
 
-<footer>
-  <span>Total</span>
-  <span>R$ <span id="total">0.00</span></span>
-</footer>
+  <div class="flex gap-3 overflow-x-auto">
+    <div class="min-w-[160px] bg-zinc-900 rounded-xl overflow-hidden">
+      <img src="https://via.placeholder.com/300x200" class="h-28 w-full object-cover">
+      <div class="p-2 text-sm">Duas pizzas premium<br><b>R$ 99,90</b></div>
+    </div>
 
-<script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-const container = document.getElementById("items");
-const totalEl = document.getElementById("total");
+    <div class="min-w-[160px] bg-zinc-900 rounded-xl overflow-hidden">
+      <img src="https://via.placeholder.com/300x200" class="h-28 w-full object-cover">
+      <div class="p-2 text-sm">Esfihas<br><b>A partir R$ 2,91</b></div>
+    </div>
+  </div>
+</section>
 
-function render() {
-  container.innerHTML = "";
-  let total = 0;
+<!-- LISTA -->
+<section class="p-4">
+  <h2 class="text-lg font-semibold mb-3">Combos pizzas grandes</h2>
 
-  cart.forEach((item, index) => {
-    total += item.price * item.qty;
+  <div onclick="openProduct()" class="flex justify-between bg-zinc-900 p-3 rounded-xl cursor-pointer">
+    <div>
+      <h3 class="font-semibold">Coca grátis</h3>
+      <p class="text-sm text-zinc-400">Escolha duas pizzas e ganhe coca 2L</p>
+      <div class="font-bold mt-1">R$ 98,90</div>
+    </div>
+    <img src="https://via.placeholder.com/200" class="w-24 h-24 rounded-lg object-cover">
+  </div>
+</section>
 
-    container.innerHTML += `
-      <div class="item">
-        <img src="${item.image}">
-        <div style="flex:1">
-          <strong>${item.name}</strong><br>
-          Qtd: ${item.qty}<br>
-          R$ ${(item.price * item.qty).toFixed(2)}
-        </div>
-        <button onclick="removeItem(${index})">
-          <i class="fa fa-trash"></i>
-        </button>
-      </div>
-    `;
-  });
+<!-- BARRA CARRINHO -->
+<div onclick="openCart()" class="fixed bottom-0 left-0 right-0 bg-greenbtn text-black p-4 flex justify-between font-bold">
+  <span>Ver sacola</span>
+  <span id="total">R$ 0,00</span>
+</div>
 
-  totalEl.textContent = total.toFixed(2);
-}
+<!-- MODAL PRODUTO -->
+<div id="product" class="fixed inset-0 bg-black hidden flex-col">
+  <header class="p-4 border-b border-zinc-800 flex items-center gap-3">
+    <span onclick="closeAll()" class="text-xl cursor-pointer">←</span>
+    <h2 class="font-semibold">Coca grátis</h2>
+  </header>
 
-function removeItem(i) {
-  cart.splice(i, 1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  render();
-}
+  <div class="p-4 space-y-4">
+    <h3 class="font-semibold">Escolha os sabores (2)</h3>
 
-function clearCart() {
-  localStorage.removeItem("cart");
-  cart = [];
-  render();
-}
+    <div class="flex justify-between border-b border-zinc-800 pb-2">
+      Pizza mussarela
+      <button onclick="add(0)" class="bg-greenbtn text-black w-8 h-8 rounded-full">+</button>
+    </div>
 
-render();
-</script>
+    <div class="flex justify-between border-b border-zinc-800 pb-2">
+      Pizza calabresa
+      <button onclick="add(0)" class="bg-greenbtn text-black w-8 h-8 rounded-full">+</button>
+    </div>
 
+    <h3 class="font-semibold mt-4">Adicione borda</h3>
+
+    <div class="flex justify-between border-b border-zinc-800 pb-2">
+      Borda catupiry (+11,90)
+      <button onclick="add(11.9)" class="bg-greenbtn text-black w-8 h-8 rounded-full">+</button>
+    </div>
+  </div>
+
+  <footer class="p-4 border-t border-zinc-800">
+    <button onclick="addToCart()" class="w-full bg-greenbtn text-black py-4 rounded-xl font-bold">
+      Adicionar R$ <span id="pPrice">98,90</span>
+    </button>
+  </footer>
+</div>
+
+<!-- MODAL CARRINHO -->
+<div id="cart" class="fixed inset-0 bg-black hidden flex-col">
+  <header class="p-4 border-b border-zinc-800 flex items-center gap-3">
+    <span onclick="closeAll()" class="text-xl cursor-pointer">←</span>
+    <h2 class="font-semibold">Sua sacola</h2>
+  </header>
+
+  <div class="p-4">
+    <p>Coca grátis</p>
+    <b id="cartTotal">R$ 98,90</b>
+  </div>
+
+  <footer class="p-4 border-t border-zinc-800">
+    <button class="w-full bg-greenbtn text-black py-4 rounded-xl font-bold">
+      Próximo
+    </button>
+  </footer>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
