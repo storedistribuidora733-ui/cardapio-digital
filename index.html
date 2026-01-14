@@ -1,24 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Cardápio Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            greenbtn: '#1db954'
-          }
-        }
-      }
-    }
-  </script>
 </head>
 
 <body class="bg-black text-white">
@@ -28,39 +15,23 @@
   <p class="text-sm text-zinc-400">Aberto até 01:30 • Entrega 15–25min</p>
 </header>
 
-<!-- MAIS PEDIDOS -->
 <section class="p-4">
-  <h2 class="text-lg font-semibold mb-3">Mais pedidos</h2>
+  <h2 class="text-lg font-semibold mb-3">Combos</h2>
 
-  <div class="flex gap-3 overflow-x-auto">
-    <div class="min-w-[160px] bg-zinc-900 rounded-xl overflow-hidden">
-      <img src="https://via.placeholder.com/300x200" class="h-28 w-full object-cover">
-      <div class="p-2 text-sm">Duas pizzas premium<br><b>R$ 99,90</b></div>
-    </div>
-
-    <div class="min-w-[160px] bg-zinc-900 rounded-xl overflow-hidden">
-      <img src="https://via.placeholder.com/300x200" class="h-28 w-full object-cover">
-      <div class="p-2 text-sm">Esfihas<br><b>A partir R$ 2,91</b></div>
-    </div>
-  </div>
-</section>
-
-<!-- LISTA -->
-<section class="p-4">
-  <h2 class="text-lg font-semibold mb-3">Combos pizzas grandes</h2>
-
-  <div onclick="openProduct()" class="flex justify-between bg-zinc-900 p-3 rounded-xl cursor-pointer">
+  <div onclick="openProduct()"
+    class="bg-zinc-900 rounded-xl p-4 flex justify-between cursor-pointer">
     <div>
-      <h3 class="font-semibold">Coca grátis</h3>
-      <p class="text-sm text-zinc-400">Escolha duas pizzas e ganhe coca 2L</p>
-      <div class="font-bold mt-1">R$ 98,90</div>
+      <h3 class="font-semibold">2 Pizzas + Coca 2L</h3>
+      <p class="text-sm text-zinc-400">Escolha 2 sabores</p>
+      <p class="font-bold mt-1">R$ 98,90</p>
     </div>
-    <img src="https://via.placeholder.com/200" class="w-24 h-24 rounded-lg object-cover">
+    <img src="https://via.placeholder.com/120" class="rounded-lg">
   </div>
 </section>
 
-<!-- BARRA CARRINHO -->
-<div onclick="openCart()" class="fixed bottom-0 left-0 right-0 bg-greenbtn text-black p-4 flex justify-between font-bold">
+<!-- BOTÃO SACOLA -->
+<div onclick="openCart()"
+  class="fixed bottom-0 left-0 right-0 bg-green-500 text-black p-4 font-bold flex justify-between">
   <span>Ver sacola</span>
   <span id="total">R$ 0,00</span>
 </div>
@@ -68,34 +39,33 @@
 <!-- MODAL PRODUTO -->
 <div id="product" class="fixed inset-0 bg-black hidden flex-col">
   <header class="p-4 border-b border-zinc-800 flex items-center gap-3">
-    <span onclick="closeAll()" class="text-xl cursor-pointer">←</span>
-    <h2 class="font-semibold">Coca grátis</h2>
+    <button onclick="closeAll()">←</button>
+    <h2 class="font-semibold">2 Pizzas + Coca</h2>
   </header>
 
   <div class="p-4 space-y-4">
-    <h3 class="font-semibold">Escolha os sabores (2)</h3>
+    <h3 class="font-semibold">Sabores</h3>
 
-    <div class="flex justify-between border-b border-zinc-800 pb-2">
-      Pizza mussarela
-      <button onclick="add(0)" class="bg-greenbtn text-black w-8 h-8 rounded-full">+</button>
-    </div>
+    <button onclick="addFlavor('Mussarela')" class="w-full text-left border-b border-zinc-800 py-2">
+      Mussarela
+    </button>
 
-    <div class="flex justify-between border-b border-zinc-800 pb-2">
-      Pizza calabresa
-      <button onclick="add(0)" class="bg-greenbtn text-black w-8 h-8 rounded-full">+</button>
-    </div>
+    <button onclick="addFlavor('Calabresa')" class="w-full text-left border-b border-zinc-800 py-2">
+      Calabresa
+    </button>
 
-    <h3 class="font-semibold mt-4">Adicione borda</h3>
+    <h3 class="font-semibold mt-4">Borda</h3>
 
-    <div class="flex justify-between border-b border-zinc-800 pb-2">
-      Borda catupiry (+11,90)
-      <button onclick="add(11.9)" class="bg-greenbtn text-black w-8 h-8 rounded-full">+</button>
-    </div>
+    <button onclick="addExtra('Borda Catupiry', 11.9)"
+      class="w-full text-left border-b border-zinc-800 py-2">
+      Borda Catupiry (+11,90)
+    </button>
   </div>
 
   <footer class="p-4 border-t border-zinc-800">
-    <button onclick="addToCart()" class="w-full bg-greenbtn text-black py-4 rounded-xl font-bold">
-      Adicionar R$ <span id="pPrice">98,90</span>
+    <button onclick="addToCart()"
+      class="w-full bg-green-500 text-black py-4 rounded-xl font-bold">
+      Adicionar R$ <span id="pPrice">98.90</span>
     </button>
   </footer>
 </div>
@@ -103,18 +73,19 @@
 <!-- MODAL CARRINHO -->
 <div id="cart" class="fixed inset-0 bg-black hidden flex-col">
   <header class="p-4 border-b border-zinc-800 flex items-center gap-3">
-    <span onclick="closeAll()" class="text-xl cursor-pointer">←</span>
-    <h2 class="font-semibold">Sua sacola</h2>
+    <button onclick="closeAll()">←</button>
+    <h2 class="font-semibold">Sacola</h2>
   </header>
 
-  <div class="p-4">
-    <p>Coca grátis</p>
-    <b id="cartTotal">R$ 98,90</b>
+  <div class="p-4 space-y-2 text-sm">
+    <div id="cartItems"></div>
+    <p class="font-bold mt-3">Total: <span id="cartTotal"></span></p>
   </div>
 
   <footer class="p-4 border-t border-zinc-800">
-    <button class="w-full bg-greenbtn text-black py-4 rounded-xl font-bold">
-      Próximo
+    <button onclick="sendWhatsApp()"
+      class="w-full bg-green-500 text-black py-4 rounded-xl font-bold">
+      Enviar pedido no WhatsApp
     </button>
   </footer>
 </div>
