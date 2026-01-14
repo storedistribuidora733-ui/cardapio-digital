@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cardápio Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black text-white">
+
+<div class="p-4 border-b border-zinc-800">
+  <h1 class="text-xl font-bold">San Esfihas Pizzaria</h1>
+</div>
+
+<!-- PRODUTO -->
+<div class="p-4">
+  <button onclick="abrirProduto()"
+    class="w-full bg-zinc-900 p-4 rounded-xl flex justify-between">
+    <div>
+      <p class="font-bold">2 Pizzas + Coca</p>
+      <p class="text-sm text-zinc-400">Escolha 2 sabores</p>
+      <p class="mt-1 font-bold">R$ 98,90</p>
+    </div>
+  </button>
+</div>
+
+<!-- BOTÃO SACOLA -->
+<div onclick="abrirCarrinho()"
+  class="fixed bottom-0 left-0 right-0 bg-green-500 text-black p-4 font-bold flex justify-between">
+  <span>Sacola</span>
+  <span id="total">R$ 0,00</span>
+</div>
+
+<!-- MODAL PRODUTO -->
+<div id="produto" class="hidden fixed inset-0 bg-black p-4">
+  <button onclick="fechar()" class="mb-4">← Voltar</button>
+
+  <h2 class="font-bold mb-2">Escolha 2 sabores</h2>
+
+  <button onclick="addSabor('Mussarela')" class="block w-full text-left border-b py-2">
+    Mussarela
+  </button>
+
+  <button onclick="addSabor('Calabresa')" class="block w-full text-left border-b py-2">
+    Calabresa
+  </button>
+
+  <h2 class="font-bold mt-4">Extras</h2>
+
+  <button onclick="addExtra('Borda Catupiry',11.9)"
+    class="block w-full text-left border-b py-2">
+    Borda Catupiry (+11,90)
+  </button>
+
+  <button onclick="adicionarCarrinho()"
+    class="w-full bg-green-500 text-black p-4 mt-6 rounded-xl font-bold">
+    Adicionar R$ <span id="preco">98.90</span>
+  </button>
+</div>
+
+<!-- MODAL CARRINHO -->
+<div id="carrinho" class="hidden fixed inset-0 bg-black p-4">
+  <button onclick="fechar()" class="mb-4">← Voltar</button>
+
+  <div id="resumo" class="text-sm"></div>
+
+  <button onclick="enviarWhats()"
+    class="w-full bg-green-500 text-black p-4 mt-6 rounded-xl font-bold">
+    Enviar para WhatsApp
+  </button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
 
