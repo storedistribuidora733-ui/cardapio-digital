@@ -1,77 +1,30 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Convite de Aniversário</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// 👉 DEFINA A DATA DO ANIVERSÁRIO AQUI
+// Ano, Mês (0-11), Dia, Hora, Minuto
+const dataEvento = new Date(2026, 1, 15, 14, 0, 0);
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+function atualizarCronometro() {
+  const agora = new Date();
+  const diferenca = dataEvento - agora;
 
-<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen flex items-center justify-center">
+  if (diferenca <= 0) {
+    document.getElementById("dias").innerText = 0;
+    document.getElementById("horas").innerText = 0;
+    document.getElementById("minutos").innerText = 0;
+    document.getElementById("segundos").innerText = 0;
+    return;
+  }
 
-  <div class="bg-white max-w-md w-full rounded-2xl shadow-2xl p-6 text-center">
+  const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
+  const minutos = Math.floor((diferenca / (1000 * 60)) % 60);
+  const segundos = Math.floor((diferenca / 1000) % 60);
 
-    <h1 class="text-3xl font-bold text-purple-700 mb-2">
-      🎉 Convite de Aniversário 🎉
-    </h1>
+  document.getElementById("dias").innerText = dias;
+  document.getElementById("horas").innerText = horas;
+  document.getElementById("minutos").innerText = minutos;
+  document.getElementById("segundos").innerText = segundos;
+}
 
-    <p class="text-gray-600 mb-4">
-      Você está convidado para comemorar esse dia especial!
-    </p>
-
-    <!-- INFORMAÇÕES -->
-    <div class="bg-gray-100 rounded-xl p-4 text-left space-y-1 mb-4">
-      <p><strong>📍 Local:</strong> Chácara Recanto Feliz</p>
-      <p><strong>📌 Endereço:</strong> Estrada das Palmeiras, 123</p>
-      <p><strong>📅 Data:</strong> 15/02/2026</p>
-      <p><strong>⏰ Horário:</strong> A partir das 14:00</p>
-    </div>
-
-    <!-- IMAGEM -->
-    <img
-      src="img/aniversario.jpg"
-      alt="Imagem da chácara"
-      class="w-full h-52 object-cover rounded-xl shadow mb-4"
-    >
-
-    <!-- CRONÔMETRO -->
-    <h2 class="text-xl font-semibold text-gray-700 mb-2">
-      ⏳ Contagem regressiva
-    </h2>
-
-    <div class="grid grid-cols-4 gap-2 text-white mb-4">
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="dias" class="text-2xl font-bold">0</p>
-        <span class="text-sm">Dias</span>
-      </div>
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="horas" class="text-2xl font-bold">0</p>
-        <span class="text-sm">Horas</span>
-      </div>
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="minutos" class="text-2xl font-bold">0</p>
-        <span class="text-sm">Min</span>
-      </div>
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="segundos" class="text-2xl font-bold">0</p>
-        <span class="text-sm">Seg</span>
-      </div>
-    </div>
-
-    <!-- BOTÃO -->
-    <a
-      href="https://wa.me/5519999999999"
-      target="_blank"
-      class="block bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition"
-    >
-      Confirmar presença no WhatsApp 📲
-    </a>
-
-  </div>
-
-  <!-- JavaScript separado -->
-  <script src="js/countdown.js"></script>
-</body>
-</html>
+// Atualiza a cada segundo
+setInterval(atualizarCronometro, 1000);
+atualizarCronometro();
