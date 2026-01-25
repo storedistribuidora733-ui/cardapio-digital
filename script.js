@@ -1,40 +1,29 @@
-window.onload = function () {
-  const diasEl = document.getElementById("dias");
-  const horasEl = document.getElementById("horas");
-  const minutosEl = document.getElementById("minutos");
-  const segundosEl = document.getElementById("segundos");
+window.addEventListener("load", function () {
+  const dias = document.getElementById("dias");
+  const horas = document.getElementById("horas");
+  const minutos = document.getElementById("minutos");
+  const segundos = document.getElementById("segundos");
 
-  // Se algum elemento não existir, para tudo
-  if (!diasEl || !horasEl || !minutosEl || !segundosEl) {
-    return;
-  }
+  const dataEvento = new Date(2026, 1, 17, 14, 0, 0); // 17/02/2026 14:00
 
-  // Data do evento: 17/02/2026 às 14:00 (horário Brasil)
-  const dataEvento = new Date(2026, 1, 17, 14, 0, 0);
-
-  function atualizarCronometro() {
+  function atualizar() {
     const agora = new Date().getTime();
-    const diferenca = dataEvento.getTime() - agora;
+    const diff = dataEvento.getTime() - agora;
 
-    if (diferenca <= 0) {
-      diasEl.textContent = "0";
-      horasEl.textContent = "0";
-      minutosEl.textContent = "0";
-      segundosEl.textContent = "0";
+    if (diff <= 0) {
+      dias.textContent = "0";
+      horas.textContent = "0";
+      minutos.textContent = "0";
+      segundos.textContent = "0";
       return;
     }
 
-    const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-    const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
-    const minutos = Math.floor((diferenca / (1000 * 60)) % 60);
-    const segundos = Math.floor((diferenca / 1000) % 60);
-
-    diasEl.textContent = dias;
-    horasEl.textContent = horas;
-    minutosEl.textContent = minutos;
-    segundosEl.textContent = segundos;
+    dias.textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
+    horas.textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    minutos.textContent = Math.floor((diff / (1000 * 60)) % 60);
+    segundos.textContent = Math.floor((diff / 1000) % 60);
   }
 
-  atualizarCronometro();
-  setInterval(atualizarCronometro, 1000);
-};
+  atualizar();
+  setInterval(atualizar, 1000);
+});
