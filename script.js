@@ -1,8 +1,8 @@
-// DATA DO ANIVERSÁRIO
-// Ano, Mês (0 = Janeiro), Dia, Hora, Minuto
+// Data do evento: 17/02/2026 às 14:00
+// (Mês começa em 0 → Fevereiro = 1)
 const dataEvento = new Date(2026, 1, 17, 14, 0, 0);
 
-function atualizarContagem() {
+function atualizarCronometro() {
   const agora = new Date();
   const diferenca = dataEvento - agora;
 
@@ -25,6 +25,6 @@ function atualizarContagem() {
   document.getElementById("segundos").innerText = segundos;
 }
 
-// Atualiza a cada 1 segundo
-setInterval(atualizarContagem, 1000);
-atualizarContagem();
+// Atualiza a cada segundo
+setInterval(atualizarCronometro, 1000);
+atualizarCronometro();
