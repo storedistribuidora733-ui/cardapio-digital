@@ -2,47 +2,76 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Piscina Moderna</title>
+  <title>Convite de Aniversário</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen flex items-center justify-center">
 
-  <!-- SEÇÃO DA IMAGEM -->
-  <section class="max-w-6xl mx-auto p-4">
-    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">
-      Piscina em Alvenaria – Projeto Premium
+  <div class="bg-white max-w-md w-full rounded-2xl shadow-2xl p-6 text-center">
+
+    <h1 class="text-3xl font-bold text-purple-700 mb-2">
+      🎉 Convite de Aniversário 🎉
     </h1>
 
-    <div class="relative rounded-2xl overflow-hidden shadow-xl">
-      <img
-        src="img/piscina.jpg"
-        alt="Piscina moderna"
-        class="w-full h-[420px] object-cover hover:scale-105 transition duration-500 cursor-pointer"
-        onclick="abrirImagem()"
-      >
+    <p class="text-gray-600 mb-4">
+      Você está convidado para comemorar esse dia especial!
+    </p>
 
-      <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-4">
-        <p class="text-lg font-semibold">
-          Design moderno • Acabamento de alto padrão
-        </p>
+    <!-- INFORMAÇÕES -->
+    <div class="bg-gray-100 rounded-xl p-4 text-left space-y-1 mb-4">
+      <p><strong>📍 Local:</strong> Chácara Recanto Feliz</p>
+      <p><strong>📌 Endereço:</strong> Estrada das Palmeiras, 123</p>
+      <p><strong>📅 Data:</strong> 15/02/2026</p>
+      <p><strong>⏰ Horário:</strong> A partir das 14:00</p>
+    </div>
+
+    <!-- IMAGEM -->
+    <img
+      src="img/aniversario.jpg"
+      alt="Imagem da chácara"
+      class="w-full h-52 object-cover rounded-xl shadow mb-4"
+    >
+
+    <!-- CRONÔMETRO -->
+    <h2 class="text-xl font-semibold text-gray-700 mb-2">
+      ⏳ Contagem regressiva
+    </h2>
+
+    <div class="grid grid-cols-4 gap-2 text-white mb-4">
+      <div class="bg-purple-600 rounded-lg p-2">
+        <p id="dias" class="text-2xl font-bold">0</p>
+        <span class="text-sm">Dias</span>
+      </div>
+      <div class="bg-purple-600 rounded-lg p-2">
+        <p id="horas" class="text-2xl font-bold">0</p>
+        <span class="text-sm">Horas</span>
+      </div>
+      <div class="bg-purple-600 rounded-lg p-2">
+        <p id="minutos" class="text-2xl font-bold">0</p>
+        <span class="text-sm">Min</span>
+      </div>
+      <div class="bg-purple-600 rounded-lg p-2">
+        <p id="segundos" class="text-2xl font-bold">0</p>
+        <span class="text-sm">Seg</span>
       </div>
     </div>
-  </section>
 
-  <!-- BOTÃO -->
-  <div class="flex justify-center mb-10">
-    <button
-      onclick="abrirImagem()"
-      class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl shadow-lg transition">
-      Ver imagem em tela cheia
-    </button>
+    <!-- BOTÃO -->
+    <a
+      href="https://wa.me/5519999999999"
+      target="_blank"
+      class="block bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition"
+    >
+      Confirmar presença no WhatsApp 📲
+    </a>
+
   </div>
 
-  <!-- JavaScript externo -->
-  <script src="js/script.js"></script>
+  <!-- JavaScript separado -->
+  <script src="js/countdown.js"></script>
 </body>
 </html>
