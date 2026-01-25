@@ -1,8 +1,8 @@
-// 👉 DEFINA A DATA DO ANIVERSÁRIO AQUI
-// Ano, Mês (0-11), Dia, Hora, Minuto
-const dataEvento = new Date(2026, 1, 15, 14, 0, 0);
+// DATA DO ANIVERSÁRIO
+// Ano, Mês (0 = Janeiro), Dia, Hora, Minuto
+const dataEvento = new Date(2026, 1, 17, 14, 0, 0);
 
-function atualizarCronometro() {
+function atualizarContagem() {
   const agora = new Date();
   const diferenca = dataEvento - agora;
 
@@ -25,6 +25,6 @@ function atualizarCronometro() {
   document.getElementById("segundos").innerText = segundos;
 }
 
-// Atualiza a cada segundo
-setInterval(atualizarCronometro, 1000);
-atualizarCronometro();
+// Atualiza a cada 1 segundo
+setInterval(atualizarContagem, 1000);
+atualizarContagem();
