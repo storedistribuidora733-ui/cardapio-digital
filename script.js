@@ -12,7 +12,7 @@ const addressWarn = document.getElementById("address-warn");
 
 let cart = [];
 
-/* abrir / fechar carrinho */
+/* abrir / fechar */
 cartBtn.addEventListener("click", () => {
     cartModal.classList.remove("hidden");
 });
@@ -32,7 +32,7 @@ document.addEventListener("click", (e) => {
     addItem(name, price);
 });
 
-/* adicionar item */
+/* adicionar */
 function addItem(name, price) {
     const item = cart.find(i => i.name === name);
 
@@ -45,13 +45,13 @@ function addItem(name, price) {
     updateCart();
 }
 
-/* mudar quantidade (+ / -) */
-function changeQty(name, type) {
+/* mudar quantidade */
+function changeQty(name, action) {
     const item = cart.find(i => i.name === name);
     if (!item) return;
 
-    if (type === "plus") item.quantity++;
-    if (type === "minus") item.quantity--;
+    if (action === "plus") item.quantity++;
+    if (action === "minus") item.quantity--;
 
     if (item.quantity <= 0) {
         cart = cart.filter(i => i.name !== name);
@@ -60,7 +60,7 @@ function changeQty(name, type) {
     updateCart();
 }
 
-/* atualizar carrinho */
+/* render carrinho */
 function updateCart() {
     cartItems.innerHTML = "";
 
@@ -72,21 +72,35 @@ function updateCart() {
         const div = document.createElement("div");
         div.className = "flex justify-between items-center border-b py-2";
 
+        const controls = document.createElement("div");
+        controls.className = "flex items-center gap-2 mt-1";
+
+        const minus = document.createElement("button");
+        minus.textContent = "-";
+        minus.className = "px-2 bg-gray-200 rounded";
+        minus.addEventListener("click", () => changeQty(item.name, "minus"));
+
+        const qty = document.createElement("span");
+        qty.textContent = item.quantity;
+
+        const plus = document.createElement("button");
+        plus.textContent = "+";
+        plus.className = "px-2 bg-gray-200 rounded";
+        plus.addEventListener("click", () => changeQty(item.name, "plus"));
+
+        controls.appendChild(minus);
+        controls.appendChild(qty);
+        controls.appendChild(plus);
+
         div.innerHTML = `
             <div>
                 <p class="font-bold">${item.name}</p>
-
-                <div class="flex items-center gap-2 mt-1">
-                    <button onclick="changeQty('${item.name}','minus')" class="px-2 bg-gray-200 rounded">-</button>
-
-                    <span>${item.quantity}</span>
-
-                    <button onclick="changeQty('${item.name}','plus')" class="px-2 bg-gray-200 rounded">+</button>
-                </div>
             </div>
 
             <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
         `;
+
+        div.querySelector("div").appendChild(controls);
 
         cartItems.appendChild(div);
     });
@@ -98,7 +112,7 @@ function updateCart() {
     cartCount.textContent = cart.reduce((a, b) => a + b.quantity, 0);
 }
 
-/* finalizar pedido */
+/* finalizar */
 checkoutBtn.addEventListener("click", () => {
     if (!addressInput.value) {
         addressWarn.classList.remove("hidden");
