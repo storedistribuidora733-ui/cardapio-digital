@@ -15,7 +15,6 @@ let cart = [];
 /* abrir carrinho */
 cartBtn.addEventListener("click", () => {
     cartModal.classList.remove("hidden");
-    cartModal.classList.add("flex");
 });
 
 /* fechar carrinho */
@@ -32,10 +31,6 @@ document.addEventListener("click", (e) => {
     const name = button.dataset.name;
     const price = parseFloat(button.dataset.price);
 
-    addToCart(name, price);
-});
-
-function addToCart(name, price) {
     const item = cart.find(i => i.name === name);
 
     if (item) {
@@ -45,7 +40,7 @@ function addToCart(name, price) {
     }
 
     updateCart();
-}
+});
 
 /* atualizar carrinho */
 function updateCart() {
