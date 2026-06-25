@@ -15,49 +15,50 @@ let discount = 0;
 
 /* ABRIR / FECHAR */
 cartBtn.addEventListener("click", () => {
-    cartModal.classList.remove("hidden");
+    cartModal.style.display = "flex";
 });
 
 closeModalBtn.addEventListener("click", () => {
-    cartModal.classList.add("hidden");
-});
-
-/* ADICIONAR ITEM */
-document.addEventListener("click", (e) => {
-    if (e.target.closest(".add-to-cart-btn")) {
-        const button = e.target.closest(".add-to-cart-btn");
-
-        const name = button.getAttribute("data-name");
-        const price = parseFloat(button.getAttribute("data-price"));
-
-        addItem(name, price);
-    }
+    cartModal.style.display = "none";
 });
 
 /* ADICIONAR */
+document.addEventListener("click", (e) => {
+    const button = e.target.closest(".add-to-cart-btn");
+
+    if (!button) return;
+
+    const name = button.dataset.name;
+    const price = parseFloat(button.dataset.price);
+
+    addItem(name, price);
+});
+
+/* ADD ITEM */
 function addItem(name, price) {
-    const item = cart.find(i => i.name === name);
+    let item = cart.find(i => i.name === name);
 
     if (item) {
         item.quantity++;
     } else {
-        cart.push({ name, price, quantity: 1 });
+        cart.push({
+            name,
+            price,
+            quantity: 1
+        });
     }
 
     updateCart();
 }
 
-/* AUMENTAR / DIMINUIR */
+/* MUDAR QTD */
 function changeQty(name, type) {
-    const item = cart.find(i => i.name === name);
+    let item = cart.find(i => i.name === name);
 
     if (!item) return;
 
-    if (type === "plus") {
-        item.quantity++;
-    } else {
-        item.quantity--;
-    }
+    if (type === "plus") item.quantity++;
+    if (type === "minus") item.quantity--;
 
     if (item.quantity <= 0) {
         cart = cart.filter(i => i.name !== name);
@@ -76,11 +77,12 @@ function updateCart() {
         subtotal += item.price * item.quantity;
 
         const div = document.createElement("div");
-        div.classList.add("flex", "justify-between", "items-center", "border-b", "py-2");
+        div.className = "flex justify-between items-center border-b py-2";
 
         div.innerHTML = `
             <div>
                 <p class="font-bold">${item.name}</p>
+
                 <div class="flex items-center gap-2 mt-1">
                     <button onclick="changeQty('${item.name}','minus')" class="px-2 bg-gray-200 rounded">-</button>
                     <span>${item.quantity}</span>
@@ -94,30 +96,16 @@ function updateCart() {
         cartItemsContainer.appendChild(div);
     });
 
-    let delivery = subtotal > 0 ? 5 : 0;
-    let total = subtotal + delivery - discount;
+    const delivery = cart.length > 0 ? 5 : 0;
+    const total = subtotal + delivery - discount;
 
-    cartTotal.innerHTML = total.toFixed(2);
-    cartCount.innerHTML = cart.reduce((acc, item) => acc + item.quantity, 0);
+    cartTotal.textContent = total.toFixed(2);
+    cartCount.textContent = cart.reduce((a, b) => a + b.quantity, 0);
 }
-
-/* CUPOM SIMPLES */
-window.applyCoupon = function () {
-    const code = prompt("Digite o cupom:");
-
-    if (code === "DESCONTO10") {
-        discount = 10;
-        alert("Cupom aplicado! R$10 de desconto");
-    } else {
-        alert("Cupom inválido");
-    }
-
-    updateCart();
-};
 
 /* FINALIZAR */
 checkoutBtn.addEventListener("click", () => {
-    if (addressInput.value === "") {
+    if (!addressInput.value) {
         addressWarn.classList.remove("hidden");
         return;
     }
@@ -130,9 +118,9 @@ checkoutBtn.addEventListener("click", () => {
         itemsText += `${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
     });
 
-    let subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    let delivery = subtotal > 0 ? 5 : 0;
-    let total = subtotal + delivery - discount;
+    const subtotal = cart.reduce((a, b) => a + b.price * b.quantity, 0);
+    const delivery = cart.length > 0 ? 5 : 0;
+    const total = subtotal + delivery - discount;
 
     const message = `
 🛒 NOVO PEDIDO
@@ -145,7 +133,7 @@ ${itemsText}
 📍 Endereço: ${addressInput.value}
 `;
 
-    const phone = "5500000000000"; // TROCAR
+    const phone = "5500000000000";
 
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, "_blank");
 });
