@@ -3,230 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="./styles/output.css" />
-
     <title>Cardápio Digital</title>
 
-    <!-- SCRIPT ADICIONADO: QZ Tray (necessário para impressão automática) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.6/qz-tray.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: scale(.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade {
+            animation: fade .25s ease-out;
+        }
+    </style>
 </head>
+
 <body class="bg-zinc-100">
 
-<!-- HEADER -->
-<header class="w-full h-[410px] bg-zinc-900 bg-[url('./assets/back.jpg')] bg-cover bg-center">
-    <div class="w-full h-full flex flex-col justify-center items-center">
-        <img src="./assets/hamb-1.png" alt="Logo da loja" class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200" />
+    <!-- CABEÇALHO -->
+    <header class="w-full h-[350px] bg-zinc-900 flex flex-col items-center justify-center">
 
-        <h1 class="text-2xl mt-4 mb-2 font-bold text-white">NOME DA LOJA</h1>
-        <span class="text-white font-xs">NOME DA RUA</span>
+        <img src="https://via.placeholder.com/150"
+             alt="Logo"
+             class="w-32 h-32 rounded-full shadow-lg">
 
-        <div class="px-4 py-1 rounded-lg mt-5" id="date-span">
-            <span class="text-white font-base">Seg à Dom • 07:00 às 00:00</span>
-        </div>
-    </div>
-</header>
+        <h1 class="text-white text-3xl font-bold mt-4">
+            NOME DA LOJA
+        </h1>
 
-<!-- TÍTULO -->
-<h2 class="text-2xl md:text-5xl font-bold text-center mt-9 mb-6">MENU</h2>
+        <p class="text-white mt-2">
+            Rua Exemplo, 123
+        </p>
 
-<!-- LISTA DE PRODUTOS -->
-<main id="menu" class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-24">
+        <span class="bg-green-600 text-white px-4 py-1 rounded mt-4">
+            Seg à Dom • 07:00 às 00:00
+        </span>
 
-    <!-- PRODUTO 1 -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 1">
+    </header>
 
-        <div>
-            <p class="font-bold">Nome do produto 1</p>
-            <p class="text-sm">Descrição do produto</p>
+    <!-- TÍTULO -->
+    <h2 class="text-center text-4xl font-bold mt-10 mb-10">
+        MENU
+    </h2>
 
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg">R$ 10,00</p>
+    <!-- PRODUTOS -->
+    <main id="menu"
+          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 mb-28">
 
-                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
-                        data-name="Nome do produto 1" data-price="10.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
+        <!-- PRODUTO -->
+        <div class="flex gap-4 bg-white p-4 rounded shadow">
+
+            <img src="https://via.placeholder.com/120"
+                 class="w-28 h-28 rounded">
+
+            <div class="w-full">
+
+                <h3 class="font-bold">
+                    X-Burger
+                </h3>
+
+                <p class="text-sm text-gray-600">
+                    Hambúrguer artesanal com queijo.
+                </p>
+
+                <div class="flex justify-between items-center mt-4">
+
+                    <span class="font-bold text-lg">
+                        R$ 18,00
+                    </span>
+
+                    <button class="bg-gray-900 px-3 py-2 rounded add-to-cart-btn"
+                            data-name="X-Burger"
+                            data-price="18">
+
+                        <i class="fa fa-cart-plus text-white"></i>
+
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
-    </div>
 
-    <!-- PRODUTO 2 -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 2">
+        <!-- PRODUTO -->
+        <div class="flex gap-4 bg-white p-4 rounded shadow">
 
-        <div>
-            <p class="font-bold">Nome do produto 2</p>
-            <p class="text-sm">Descrição do produto</p>
+            <img src="https://via.placeholder.com/120"
+                 class="w-28 h-28 rounded">
 
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg">R$ 12,00</p>
+            <div class="w-full">
 
-                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
-                        data-name="Nome do produto 2" data-price="12.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
+                <h3 class="font-bold">
+                    X-Salada
+                </h3>
+
+                <p class="text-sm text-gray-600">
+                    Hambúrguer com salada e queijo.
+                </p>
+
+                <div class="flex justify-between items-center mt-4">
+
+                    <span class="font-bold text-lg">
+                        R$ 22,00
+                    </span>
+
+                    <button class="bg-gray-900 px-3 py-2 rounded add-to-cart-btn"
+                            data-name="X-Salada"
+                            data-price="22">
+
+                        <i class="fa fa-cart-plus text-white"></i>
+
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
-    </div>
 
-    <!-- PRODUTO 3 -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 3">
+        <!-- TÍTULO BEBIDAS -->
+        <h2 class="col-span-full text-center text-3xl font-bold mt-8">
+            BEBIDAS
+        </h2>
 
-        <div>
-            <p class="font-bold">Nome do produto 3</p>
-            <p class="text-sm">Descrição do produto</p>
+        <!-- BEBIDA -->
+        <div class="flex gap-4 bg-white p-4 rounded shadow">
 
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg">R$ 12,00</p>
+            <img src="https://via.placeholder.com/120"
+                 class="w-28 h-28 rounded">
 
-                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
-                        data-name="Nome do produto 3" data-price="12.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
+            <div class="w-full">
+
+                <h3 class="font-bold">
+                    Coca-Cola Lata
+                </h3>
+
+                <p class="text-sm text-gray-600">
+                    350ml gelada.
+                </p>
+
+                <div class="flex justify-between items-center mt-4">
+
+                    <span class="font-bold text-lg">
+                        R$ 6,00
+                    </span>
+
+                    <button class="bg-gray-900 px-3 py-2 rounded add-to-cart-btn"
+                            data-name="Coca-Cola Lata"
+                            data-price="6">
+
+                        <i class="fa fa-cart-plus text-white"></i>
+
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
-    </div>
 
-    <!-- PRODUTO 4 -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 4">
+    </main>
 
-        <div>
-            <p class="font-bold">Nome do produto 4</p>
-            <p class="text-sm">Descrição do produto</p>
+    <!-- MODAL CARRINHO -->
+    <div id="cart-modal"
+         class="hidden fixed inset-0 bg-black/60 z-50 items-center justify-center">
 
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg">R$ 12,00</p>
+        <div class="bg-white p-6 rounded w-[95%] md:w-[600px] max-h-[90%] overflow-y-auto animate-fade">
 
-                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
-                        data-name="Nome do produto 4" data-price="12.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
+            <h2 class="text-center text-2xl font-bold">
+                Meu Carrinho
+            </h2>
+
+            <div id="cart-items"
+                 class="my-5 flex flex-col gap-3">
             </div>
-        </div>
-    </div>
 
-    <!-- BEBIDAS TÍTULO -->
-    <h2 class="font-bold text-3xl text-center my-6 col-span-full">BEBIDAS</h2>
+            <p class="font-bold">
+                Total: R$ <span id="cart-total">0.00</span>
+            </p>
 
-    <!-- BEBIDA 1 -->
-    <div class="flex gap-2">
-        <img src="./assets/refri-1.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Bebida 1">
+            <div class="mt-4">
 
-        <div>
-            <p class="font-bold">Nome da bebida 1</p>
-            <p class="text-sm">Descrição da bebida</p>
+                <label class="font-bold">
+                    Nome:
+                </label>
 
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg">R$ 5,00</p>
+                <input id="customer-name"
+                       type="text"
+                       class="w-full border p-2 rounded mt-1">
 
-                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
-                        data-name="Nome da bebida 1" data-price="5.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
+                <label class="font-bold mt-4 block">
+                    Endereço:
+                </label>
+
+                <input id="address"
+                       type="text"
+                       class="w-full border p-2 rounded mt-1">
+
+                <p id="address-warn"
+                   class="text-red-500 hidden">
+                    Digite seu endereço completo!
+                </p>
+
+                <label class="font-bold mt-4 block">
+                    Forma de pagamento:
+                </label>
+
+                <select id="payment-method"
+                        class="w-full border p-2 rounded">
+
+                    <option>Cartão</option>
+                    <option>Pix</option>
+                    <option>Dinheiro</option>
+
+                </select>
+
+                <label class="font-bold mt-4 block">
+                    Observações:
+                </label>
+
+                <textarea id="observations"
+                          class="w-full border p-2 rounded">
+                </textarea>
+
             </div>
-        </div>
-    </div>
 
-    <!-- BEBIDA 2 -->
-    <div class="flex gap-2">
-        <img src="./assets/refri-2.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Bebida 2">
+            <div class="flex justify-between mt-6">
 
-        <div>
-            <p class="font-bold">Nome da bebida 2</p>
-            <p class="text-sm">Descrição da bebida</p>
-
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg">R$ 5,00</p>
-
-                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
-                        data-name="Nome da bebida 2" data-price="5.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                <button id="close-modal-btn"
+                        class="font-bold">
+                    Fechar
                 </button>
+
+                <button id="checkout-btn"
+                        class="bg-green-600 text-white px-4 py-2 rounded">
+                    Finalizar Pedido
+                </button>
+
             </div>
+
         </div>
+
     </div>
 
-</main>
+    <!-- MODAL LOJA FECHADA -->
+    <div id="closed-alert"
+         class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-<!-- MODAL DO CARRINHO -->
-<!-- ADICIONEI `flex` AQUI PARA CENTRAR O CONTEÚDO CORRETAMENTE -->
-<div id="cart-modal" class="bg-black/60 w-full h-full fixed inset-0 z-[99] flex items-center justify-center hidden">
-    <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px] max-h-[90%] overflow-y-auto cart-content">
-        <h2 class="text-center font-bold text-2xl">Meu Carrinho</h2>
+        <div class="bg-white p-6 rounded text-center animate-fade">
 
-        <div id="cart-items" class="flex flex-col gap-2 my-4"></div>
+            <h2 class="text-2xl font-bold text-red-600">
+                Loja Fechada
+            </h2>
 
-        <p class="font-bold">Total: R$ <span id="cart-total">0.00</span></p>
+            <p class="mt-2">
+                Horário de funcionamento: 07:00 às 00:00
+            </p>
 
-        <div class="mt-4">
-            <p class="font-bold">Nome:</p>
-            <input type="text" id="customer-name" class="w-full border-2 p-1 rounded my-1">
+            <button id="closed-alert-btn"
+                    class="bg-red-600 text-white px-4 py-2 rounded mt-4">
 
-            <p class="font-bold mt-4">Endereço:</p>
-            <input type="text" id="address" class="w-full border-2 p-1 rounded my-1">
-            <p class="text-red-500 hidden" id="address-warn">Digite seu endereço completo!</p>
+                Entendi
 
-            <p class="font-bold mt-4">Pagamento:</p>
-            <select id="payment-method" class="w-full border-2 p-1 rounded my-1">
-                <option value="Cartão">Cartão</option>
-                <option value="Pix">Pix</option>
-                <option value="Dinheiro">Dinheiro</option>
-            </select>
-
-            <p class="font-bold mt-4">Observações:</p>
-            <textarea id="observations" class="w-full border-2 p-1 rounded my-1"></textarea>
-        </div>
-
-        <div class="flex items-center justify-between mt-5">
-            <button id="close-modal-btn" class="font-bold">Fechar</button>
-            <button id="checkout-btn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold text-lg">
-                Finalizar pedido
             </button>
+
         </div>
+
     </div>
-</div>
 
-<!-- MODAL DE LOJA FECHADA -->
-<div id="closed-alert" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
-    <div class="bg-white p-6 rounded-xl shadow-2xl max-w-[90%] w-[380px] text-center animate-fade">
-        <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
-        <p class="text-gray-700">Nosso horário de atendimento é das <b>07:00 às 00:00</b>.</p>
-        <p class="text-gray-700 mt-1">Volte mais tarde! 😊</p>
+    <!-- BOTÃO CARRINHO -->
+    <footer class="fixed bottom-0 w-full bg-red-600 py-4 flex justify-center">
 
-        <button id="closed-alert-btn"
-                class="mt-5 bg-red-600 hover:bg-red-700 duration-200 text-white px-5 py-2 rounded-lg font-bold">
-            Entendi
+        <button id="cart-btn"
+                class="text-white font-bold flex gap-2 items-center">
+
+            <span id="cart-count">0</span>
+
+            Carrinho
+
+            <i class="fa fa-cart-plus"></i>
+
         </button>
-    </div>
-</div>
 
-<style>
-@keyframes fade {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-.animate-fade { animation: fade 0.25s ease-out; }
-</style>
+    </footer>
 
-<!-- BOTÃO FIXO DO CARRINHO -->
-<footer class="w-full bg-red-600 py-3 fixed bottom-0 z-[100] flex items-center justify-center">
-    <button id="cart-btn" class="flex items-center gap-2 text-white font-bold">
-        <span id="cart-count">0</span> Carrinho
-        <i class="fa fa-cart-plus text-lg text-white"></i>
-    </button>
-</footer>
-
-<!-- JS -->
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
