@@ -11,18 +11,18 @@ const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
 
 let cart = [];
-let discount = 0;
 
-/* ABRIR / FECHAR */
+/* ABRIR CARRINHO */
 cartBtn.addEventListener("click", () => {
-    cartModal.style.display = "flex";
+    cartModal.classList.remove("hidden");
 });
 
+/* FECHAR CARRINHO */
 closeModalBtn.addEventListener("click", () => {
-    cartModal.style.display = "none";
+    cartModal.classList.add("hidden");
 });
 
-/* ADICIONAR */
+/* ADICIONAR PRODUTOS */
 document.addEventListener("click", (e) => {
     const button = e.target.closest(".add-to-cart-btn");
 
@@ -31,15 +31,15 @@ document.addEventListener("click", (e) => {
     const name = button.dataset.name;
     const price = parseFloat(button.dataset.price);
 
-    addItem(name, price);
+    addToCart(name, price);
 });
 
-/* ADD ITEM */
-function addItem(name, price) {
-    let item = cart.find(i => i.name === name);
+/* ADICIONAR AO CARRINHO */
+function addToCart(name, price) {
+    const item = cart.find(i => i.name === name);
 
     if (item) {
-        item.quantity++;
+        item.quantity += 1;
     } else {
         cart.push({
             name,
@@ -51,23 +51,7 @@ function addItem(name, price) {
     updateCart();
 }
 
-/* MUDAR QTD */
-function changeQty(name, type) {
-    let item = cart.find(i => i.name === name);
-
-    if (!item) return;
-
-    if (type === "plus") item.quantity++;
-    if (type === "minus") item.quantity--;
-
-    if (item.quantity <= 0) {
-        cart = cart.filter(i => i.name !== name);
-    }
-
-    updateCart();
-}
-
-/* ATUALIZAR */
+/* ATUALIZAR CARRINHO */
 function updateCart() {
     cartItemsContainer.innerHTML = "";
 
@@ -82,12 +66,7 @@ function updateCart() {
         div.innerHTML = `
             <div>
                 <p class="font-bold">${item.name}</p>
-
-                <div class="flex items-center gap-2 mt-1">
-                    <button onclick="changeQty('${item.name}','minus')" class="px-2 bg-gray-200 rounded">-</button>
-                    <span>${item.quantity}</span>
-                    <button onclick="changeQty('${item.name}','plus')" class="px-2 bg-gray-200 rounded">+</button>
-                </div>
+                <p class="text-sm">Qtd: ${item.quantity}</p>
             </div>
 
             <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
@@ -97,13 +76,13 @@ function updateCart() {
     });
 
     const delivery = cart.length > 0 ? 5 : 0;
-    const total = subtotal + delivery - discount;
+    const total = subtotal + delivery;
 
     cartTotal.textContent = total.toFixed(2);
-    cartCount.textContent = cart.reduce((a, b) => a + b.quantity, 0);
+    cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
 }
 
-/* FINALIZAR */
+/* FINALIZAR PEDIDO */
 checkoutBtn.addEventListener("click", () => {
     if (!addressInput.value) {
         addressWarn.classList.remove("hidden");
@@ -118,9 +97,9 @@ checkoutBtn.addEventListener("click", () => {
         itemsText += `${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
     });
 
-    const subtotal = cart.reduce((a, b) => a + b.price * b.quantity, 0);
+    const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const delivery = cart.length > 0 ? 5 : 0;
-    const total = subtotal + delivery - discount;
+    const total = subtotal + delivery;
 
     const message = `
 🛒 NOVO PEDIDO
@@ -133,7 +112,7 @@ ${itemsText}
 📍 Endereço: ${addressInput.value}
 `;
 
-    const phone = "5500000000000";
+    const phone = "5500000000000"; // TROQUE PELO SEU NÚMERO
 
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, "_blank");
 });
