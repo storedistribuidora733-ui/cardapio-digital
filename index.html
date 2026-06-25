@@ -1,74 +1,232 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Convite de Aniversário</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="./styles/output.css" />
+
+    <title>Cardápio Digital</title>
+
+    <!-- SCRIPT ADICIONADO: QZ Tray (necessário para impressão automática) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.6/qz-tray.js"></script>
 </head>
+<body class="bg-zinc-100">
 
-<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen flex items-center justify-center px-4">
+<!-- HEADER -->
+<header class="w-full h-[410px] bg-zinc-900 bg-[url('./assets/back.jpg')] bg-cover bg-center">
+    <div class="w-full h-full flex flex-col justify-center items-center">
+        <img src="./assets/hamb-1.png" alt="Logo da loja" class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200" />
 
-  <div class="bg-white max-w-md w-full rounded-2xl shadow-2xl p-6 text-center">
+        <h1 class="text-2xl mt-4 mb-2 font-bold text-white">NOME DA LOJA</h1>
+        <span class="text-white font-xs">NOME DA RUA</span>
 
-    <h1 class="text-3xl font-bold text-purple-700 mb-2">
-      🎉 Convite de Aniversário 🎉
-    </h1>
+        <div class="px-4 py-1 rounded-lg mt-5" id="date-span">
+            <span class="text-white font-base">Seg à Dom • 07:00 às 00:00</span>
+        </div>
+    </div>
+</header>
 
-    <p class="text-gray-600 mb-4">
-      Você está convidado para a revogada do Lh10, 1.0 !
-    </p>
+<!-- TÍTULO -->
+<h2 class="text-2xl md:text-5xl font-bold text-center mt-9 mb-6">MENU</h2>
 
-    <div class="bg-gray-100 rounded-xl p-4 text-left space-y-2 mb-4 text-sm">
-      <p>📍 <strong>Local:</strong> chacara esperança</p>
-      <p>📌 <strong>Endereço:</strong> dona chiquinha</p>
-      <p>📅 <strong>Data:</strong> 17/02/2026</p>
-      <p>⏰ <strong>Horário:</strong> A partir das 10:00</p>
+<!-- LISTA DE PRODUTOS -->
+<main id="menu" class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-24">
+
+    <!-- PRODUTO 1 -->
+    <div class="flex gap-2">
+        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 1">
+
+        <div>
+            <p class="font-bold">Nome do produto 1</p>
+            <p class="text-sm">Descrição do produto</p>
+
+            <div class="flex items-center justify-between mt-3">
+                <p class="font-bold text-lg">R$ 10,00</p>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome do produto 1" data-price="10.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <img
-      src="/img/chacara.jpg"
-      alt="Imagem da chácara"
-      class="w-full h-56 object-cover rounded-xl shadow mb-4"
-    >
+    <!-- PRODUTO 2 -->
+    <div class="flex gap-2">
+        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 2">
 
-    <h2 class="text-xl font-semibold text-gray-700 mb-2">
-      ⏳ Contagem regressiva
-    </h2>
+        <div>
+            <p class="font-bold">Nome do produto 2</p>
+            <p class="text-sm">Descrição do produto</p>
 
-    <div class="grid grid-cols-4 gap-2 text-white mb-4">
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="dias" class="text-2xl font-bold">0</p>
-        <span class="text-xs">Dias</span>
-      </div>
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="horas" class="text-2xl font-bold">0</p>
-        <span class="text-xs">Horas</span>
-      </div>
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="minutos" class="text-2xl font-bold">0</p>
-        <span class="text-xs">Min</span>
-      </div>
-      <div class="bg-purple-600 rounded-lg p-2">
-        <p id="segundos" class="text-2xl font-bold">0</p>
-        <span class="text-xs">Seg</span>
-      </div>
+            <div class="flex items-center justify-between mt-3">
+                <p class="font-bold text-lg">R$ 12,00</p>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome do produto 2" data-price="12.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <a
-      href="https://wa.me/5519982438476?text=Olá!%20Estou%20confirmando%20minha%20presença%20no%20aniversário%20do%20dia%2017/02/2026.%0AResposta:%20SIM%20ou%20NÃO"
-      target="_blank"
-      class="block bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition"
-    >
-      Confirmar presença no WhatsApp 📲
-    </a>
+    <!-- PRODUTO 3 -->
+    <div class="flex gap-2">
+        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 3">
 
-  </div>
+        <div>
+            <p class="font-bold">Nome do produto 3</p>
+            <p class="text-sm">Descrição do produto</p>
 
-  <!-- JavaScript separado -->
-  <script src="/js/countdown.js"></script>
+            <div class="flex items-center justify-between mt-3">
+                <p class="font-bold text-lg">R$ 12,00</p>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome do produto 3" data-price="12.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUTO 4 -->
+    <div class="flex gap-2">
+        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Produto 4">
+
+        <div>
+            <p class="font-bold">Nome do produto 4</p>
+            <p class="text-sm">Descrição do produto</p>
+
+            <div class="flex items-center justify-between mt-3">
+                <p class="font-bold text-lg">R$ 12,00</p>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome do produto 4" data-price="12.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BEBIDAS TÍTULO -->
+    <h2 class="font-bold text-3xl text-center my-6 col-span-full">BEBIDAS</h2>
+
+    <!-- BEBIDA 1 -->
+    <div class="flex gap-2">
+        <img src="./assets/refri-1.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Bebida 1">
+
+        <div>
+            <p class="font-bold">Nome da bebida 1</p>
+            <p class="text-sm">Descrição da bebida</p>
+
+            <div class="flex items-center justify-between mt-3">
+                <p class="font-bold text-lg">R$ 5,00</p>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome da bebida 1" data-price="5.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BEBIDA 2 -->
+    <div class="flex gap-2">
+        <img src="./assets/refri-2.png" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" alt="Bebida 2">
+
+        <div>
+            <p class="font-bold">Nome da bebida 2</p>
+            <p class="text-sm">Descrição da bebida</p>
+
+            <div class="flex items-center justify-between mt-3">
+                <p class="font-bold text-lg">R$ 5,00</p>
+
+                <button class="bg-gray-900 px-3 rounded add-to-cart-btn"
+                        data-name="Nome da bebida 2" data-price="5.00">
+                    <i class="fa fa-cart-plus text-lg text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- MODAL DO CARRINHO -->
+<!-- ADICIONEI `flex` AQUI PARA CENTRAR O CONTEÚDO CORRETAMENTE -->
+<div id="cart-modal" class="bg-black/60 w-full h-full fixed inset-0 z-[99] flex items-center justify-center hidden">
+    <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px] max-h-[90%] overflow-y-auto cart-content">
+        <h2 class="text-center font-bold text-2xl">Meu Carrinho</h2>
+
+        <div id="cart-items" class="flex flex-col gap-2 my-4"></div>
+
+        <p class="font-bold">Total: R$ <span id="cart-total">0.00</span></p>
+
+        <div class="mt-4">
+            <p class="font-bold">Nome:</p>
+            <input type="text" id="customer-name" class="w-full border-2 p-1 rounded my-1">
+
+            <p class="font-bold mt-4">Endereço:</p>
+            <input type="text" id="address" class="w-full border-2 p-1 rounded my-1">
+            <p class="text-red-500 hidden" id="address-warn">Digite seu endereço completo!</p>
+
+            <p class="font-bold mt-4">Pagamento:</p>
+            <select id="payment-method" class="w-full border-2 p-1 rounded my-1">
+                <option value="Cartão">Cartão</option>
+                <option value="Pix">Pix</option>
+                <option value="Dinheiro">Dinheiro</option>
+            </select>
+
+            <p class="font-bold mt-4">Observações:</p>
+            <textarea id="observations" class="w-full border-2 p-1 rounded my-1"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between mt-5">
+            <button id="close-modal-btn" class="font-bold">Fechar</button>
+            <button id="checkout-btn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold text-lg">
+                Finalizar pedido
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE LOJA FECHADA -->
+<div id="closed-alert" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+    <div class="bg-white p-6 rounded-xl shadow-2xl max-w-[90%] w-[380px] text-center animate-fade">
+        <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
+        <p class="text-gray-700">Nosso horário de atendimento é das <b>07:00 às 00:00</b>.</p>
+        <p class="text-gray-700 mt-1">Volte mais tarde! 😊</p>
+
+        <button id="closed-alert-btn"
+                class="mt-5 bg-red-600 hover:bg-red-700 duration-200 text-white px-5 py-2 rounded-lg font-bold">
+            Entendi
+        </button>
+    </div>
+</div>
+
+<style>
+@keyframes fade {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.animate-fade { animation: fade 0.25s ease-out; }
+</style>
+
+<!-- BOTÃO FIXO DO CARRINHO -->
+<footer class="w-full bg-red-600 py-3 fixed bottom-0 z-[100] flex items-center justify-center">
+    <button id="cart-btn" class="flex items-center gap-2 text-white font-bold">
+        <span id="cart-count">0</span> Carrinho
+        <i class="fa fa-cart-plus text-lg text-white"></i>
+    </button>
+</footer>
+
+<!-- JS -->
+<script src="script.js"></script>
+
 </body>
 </html>
-
