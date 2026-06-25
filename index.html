@@ -8,115 +8,7 @@
 
 <title>Sua Loja</title>
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  background: #f5f5f5;
-}
-
-/* ===== TOPO COM IMAGEM ===== */
-.topo {
-  background-image: url("https://images.unsplash.com/photo-1568901346375-23c9450c58cd");
-  background-size: cover;
-  background-position: center;
-  height: 260px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  text-align: center;
-  color: white;
-  position: relative;
-}
-
-/* escurecer imagem */
-.topo::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.55);
-}
-
-/* conteúdo acima da camada */
-.topo * {
-  position: relative;
-  z-index: 1;
-}
-
-.status {
-  margin-top: 10px;
-  background: #1db954;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-}
-
-/* ===== CONTEÚDO ===== */
-.container {
-  padding: 20px;
-}
-
-h2 {
-  margin: 20px 0;
-}
-
-.produto {
-  display: flex;
-  background: white;
-  margin-bottom: 15px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.produto img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-}
-
-.info {
-  padding: 10px;
-}
-
-.preco {
-  font-weight: bold;
-  margin-top: 8px;
-}
-
-.botao {
-  margin-top: 10px;
-  background: #111;
-  color: white;
-  padding: 8px;
-  border-radius: 8px;
-  display: inline-block;
-  font-size: 12px;
-}
-
-.carrinho {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: red;
-  color: white;
-  text-align: center;
-  padding: 15px;
-  font-weight: bold;
-}
-</style>
-
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -128,17 +20,17 @@ h2 {
   <div class="status">Seg à Dom 18:00 às 22:00</div>
 </div>
 
-<!-- MENU -->
+<!-- CONTEÚDO -->
 <div class="container">
 
-  <h2>conheça nosso menu</h2>
+  <h2>🍔 Lanches</h2>
 
   <div class="produto">
     <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
     <div class="info">
-      <h3>nome do produto 1</h3>
-      <p>descrição do produto</p>
-      <div class="preco">R$ 10,00</div>
+      <h3>Hambúrguer Clássico</h3>
+      <p>Delicioso hambúrguer artesanal</p>
+      <div class="preco">10.00</div>
       <div class="botao">🛒 adicionar</div>
     </div>
   </div>
@@ -146,9 +38,31 @@ h2 {
   <div class="produto">
     <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
     <div class="info">
-      <h3>nome do produto 2</h3>
-      <p>descrição do produto</p>
-      <div class="preco">R$ 12,00</div>
+      <h3>Cheeseburguer Duplo</h3>
+      <p>Dois hambúrgueres com queijo</p>
+      <div class="preco">15.00</div>
+      <div class="botao">🛒 adicionar</div>
+    </div>
+  </div>
+
+  <h2>🥤 Bebidas</h2>
+
+  <div class="produto">
+    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b">
+    <div class="info">
+      <h3>Refrigerante Lata</h3>
+      <p>Gelado 350ml</p>
+      <div class="preco">5.00</div>
+      <div class="botao">🛒 adicionar</div>
+    </div>
+  </div>
+
+  <div class="produto">
+    <img src="https://images.unsplash.com/photo-1604908811984-5b0d0b3a0c3c">
+    <div class="info">
+      <h3>Suco Natural</h3>
+      <p>Fruta natural 300ml</p>
+      <div class="preco">7.00</div>
       <div class="botao">🛒 adicionar</div>
     </div>
   </div>
@@ -157,8 +71,10 @@ h2 {
 
 <!-- CARRINHO -->
 <div class="carrinho">
-  (8) veja meu carrinho 🛒
+  <button id="finalizar">Finalizar Pedido 🛒</button>
 </div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
