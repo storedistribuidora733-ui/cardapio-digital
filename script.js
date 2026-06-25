@@ -6,6 +6,10 @@ const cartItems = document.getElementById("cart-items");
 const cartTotal = document.getElementById("cart-total");
 const cartCount = document.getElementById("cart-count");
 
+const checkoutBtn = document.getElementById("checkout-btn");
+const addressInput = document.getElementById("address");
+const addressWarn = document.getElementById("address-warn");
+
 let cart = [];
 
 /* abrir carrinho */
@@ -19,7 +23,7 @@ closeModalBtn.addEventListener("click", () => {
     cartModal.classList.add("hidden");
 });
 
-/* adicionar item */
+/* adicionar produto */
 document.addEventListener("click", (e) => {
     const btn = e.target.closest(".add-to-cart-btn");
     if (!btn) return;
@@ -38,22 +42,7 @@ document.addEventListener("click", (e) => {
     renderCart();
 });
 
-/* mudar quantidade */
-function changeQty(name, type) {
-    const item = cart.find(i => i.name === name);
-    if (!item) return;
-
-    if (type === "plus") item.quantity++;
-    if (type === "minus") item.quantity--;
-
-    if (item.quantity <= 0) {
-        cart = cart.filter(i => i.name !== name);
-    }
-
-    renderCart();
-}
-
-/* renderizar carrinho */
+/* render carrinho */
 function renderCart() {
     cartItems.innerHTML = "";
 
@@ -106,3 +95,48 @@ function renderCart() {
     cartTotal.textContent = total.toFixed(2);
     cartCount.textContent = cart.reduce((a, b) => a + b.quantity, 0);
 }
+
+/* mudar quantidade */
+function changeQty(name, type) {
+    const item = cart.find(i => i.name === name);
+    if (!item) return;
+
+    if (type === "plus") item.quantity++;
+    if (type === "minus") item.quantity--;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(i => i.name !== name);
+    }
+
+    renderCart();
+}
+
+/* finalizar pedido */
+checkoutBtn.addEventListener("click", () => {
+    if (!addressInput.value) {
+        addressWarn.classList.remove("hidden");
+        return;
+    }
+
+    let itemsText = "";
+
+    cart.forEach(item => {
+        itemsText += `${item.name} x${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+    });
+
+    const total = cart.reduce((a, b) => a + b.price * b.quantity, 0);
+
+    const message = `
+🛒 NOVO PEDIDO
+
+${itemsText}
+
+💰 Total: R$ ${total}
+
+📍 Endereço: ${addressInput.value}
+`;
+
+    const phone = "5500000000000";
+
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, "_blank");
+});
