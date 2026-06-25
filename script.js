@@ -8,17 +8,18 @@ const cartCount = document.getElementById("cart-count");
 
 let cart = [];
 
-/* abrir / fechar */
+/* abrir carrinho */
 cartBtn.addEventListener("click", () => {
     cartModal.classList.remove("hidden");
     cartModal.classList.add("flex");
 });
 
+/* fechar carrinho */
 closeModalBtn.addEventListener("click", () => {
     cartModal.classList.add("hidden");
 });
 
-/* adicionar produto */
+/* adicionar item */
 document.addEventListener("click", (e) => {
     const btn = e.target.closest(".add-to-cart-btn");
     if (!btn) return;
@@ -26,10 +27,6 @@ document.addEventListener("click", (e) => {
     const name = btn.dataset.name;
     const price = parseFloat(btn.dataset.price);
 
-    addItem(name, price);
-});
-
-function addItem(name, price) {
     const item = cart.find(i => i.name === name);
 
     if (item) {
@@ -39,7 +36,7 @@ function addItem(name, price) {
     }
 
     renderCart();
-}
+});
 
 /* mudar quantidade */
 function changeQty(name, type) {
@@ -56,7 +53,7 @@ function changeQty(name, type) {
     renderCart();
 }
 
-/* render carrinho (AQUI ESTÁ O FIX REAL DOS BOTÕES) */
+/* renderizar carrinho */
 function renderCart() {
     cartItems.innerHTML = "";
 
@@ -65,45 +62,45 @@ function renderCart() {
     cart.forEach(item => {
         total += item.price * item.quantity;
 
-        const row = document.createElement("div");
-        row.className = "flex justify-between items-center border-b pb-2";
+        const div = document.createElement("div");
+        div.className = "flex justify-between items-center border-b pb-2";
 
         const left = document.createElement("div");
 
-        const title = document.createElement("p");
-        title.textContent = item.name;
-        title.className = "font-bold";
+        const name = document.createElement("p");
+        name.textContent = item.name;
+        name.className = "font-bold";
 
         const controls = document.createElement("div");
         controls.className = "flex items-center gap-2 mt-1";
 
-        const btnMinus = document.createElement("button");
-        btnMinus.textContent = "-";
-        btnMinus.className = "px-2 bg-gray-200 rounded";
-        btnMinus.onclick = () => changeQty(item.name, "minus");
+        const minus = document.createElement("button");
+        minus.textContent = "-";
+        minus.className = "px-2 bg-gray-200 rounded";
+        minus.onclick = () => changeQty(item.name, "minus");
 
         const qty = document.createElement("span");
         qty.textContent = item.quantity;
 
-        const btnPlus = document.createElement("button");
-        btnPlus.textContent = "+";
-        btnPlus.className = "px-2 bg-gray-200 rounded";
-        btnPlus.onclick = () => changeQty(item.name, "plus");
+        const plus = document.createElement("button");
+        plus.textContent = "+";
+        plus.className = "px-2 bg-gray-200 rounded";
+        plus.onclick = () => changeQty(item.name, "plus");
 
-        controls.appendChild(btnMinus);
+        controls.appendChild(minus);
         controls.appendChild(qty);
-        controls.appendChild(btnPlus);
+        controls.appendChild(plus);
 
-        left.appendChild(title);
+        left.appendChild(name);
         left.appendChild(controls);
 
         const price = document.createElement("p");
         price.textContent = `R$ ${(item.price * item.quantity).toFixed(2)}`;
 
-        row.appendChild(left);
-        row.appendChild(price);
+        div.appendChild(left);
+        div.appendChild(price);
 
-        cartItems.appendChild(row);
+        cartItems.appendChild(div);
     });
 
     cartTotal.textContent = total.toFixed(2);
