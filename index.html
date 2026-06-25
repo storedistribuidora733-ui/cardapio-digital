@@ -16,12 +16,11 @@
 
 <body class="bg-zinc-100">
 
-<!-- HEADER -->
 <header class="w-full h-[420px] bg-zinc-900 bg-home bg-cover bg-center">
     <div class="w-full h-full flex flex-col justify-center items-center">
 
         <img src="./assets/hamb-1.png"
-             class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200"/>
+             class="w-32 h-32 rounded-full shadow-lg"/>
 
         <h1 class="text-3xl mt-4 mb-2 font-bold text-white">SUA LOJA</h1>
         <span class="text-white font-medium">SEU ENDEREÇO</span>
@@ -37,18 +36,19 @@
     conheça nosso menu
 </h2>
 
-<!-- MENU -->
-<main id="menu" class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-20">
+<main class="grid grid-cols-1 md:grid-cols-2 gap-7 max-w-7xl mx-auto px-2 mb-20">
 
     <!-- PRODUTO -->
     <div class="flex gap-2">
         <img src="./assets/hamb-1.png" class="w-28 h-28 rounded-md"/>
+
         <div>
             <p class="font-bold">X-Burguer</p>
             <p class="text-sm">Hambúrguer, queijo e molho.</p>
 
             <div class="flex justify-between mt-3">
-                <p class="font-bold text-lg">R$ 22,00</p>
+                <p class="font-bold">R$ 22,00</p>
+
                 <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
                     data-name="X-Burguer"
                     data-price="22.00">
@@ -58,16 +58,18 @@
         </div>
     </div>
 
-    <!-- BEBIDA -->
-    <h2 class="font-bold text-3xl text-center col-span-full mt-6">BEBIDAS</h2>
+    <h2 class="col-span-full text-center font-bold text-3xl mt-6">BEBIDAS</h2>
 
+    <!-- BEBIDA -->
     <div class="flex gap-2">
         <img src="./assets/refri-1.png" class="w-28 h-28 rounded-md"/>
+
         <div>
             <p class="font-bold">Coca-Cola</p>
 
             <div class="flex justify-between mt-3">
-                <p class="font-bold text-lg">R$ 6,00</p>
+                <p class="font-bold">R$ 6,00</p>
+
                 <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
                     data-name="Coca-Cola"
                     data-price="6.00">
@@ -79,10 +81,11 @@
 
 </main>
 
-<!-- MODAL CARRINHO -->
-<div class="bg-black/60 w-full h-full fixed top-0 left-0 z-[99] hidden items-center justify-center" id="cart-modal">
+<!-- CARRINHO -->
+<div id="cart-modal"
+     class="hidden fixed top-0 left-0 w-full h-full bg-black/60 items-center justify-center z-[99]">
 
-    <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px]">
+    <div class="bg-white p-5 rounded-md w-[90%] md:w-[600px]">
 
         <h2 class="text-center font-bold text-2xl">Meu Carrinho</h2>
 
@@ -93,16 +96,13 @@
         <p class="text-sm text-gray-600 mt-2">Taxa de entrega: R$ 5,00</p>
 
         <p class="font-bold mt-4">Endereço:</p>
-        <input type="text" id="address"
-            class="w-full border-2 p-1 rounded"
-            placeholder="Digite seu endereço"/>
+        <input id="address" class="w-full border p-1 rounded" placeholder="Digite seu endereço"/>
 
-        <p class="text-red-500 hidden" id="address-warn">Digite seu endereço!</p>
+        <p id="address-warn" class="text-red-500 hidden">Digite seu endereço!</p>
 
         <div class="flex justify-between mt-5">
             <button id="close-modal-btn">Fechar</button>
-            <button id="checkout-btn"
-                class="bg-green-500 text-white px-4 py-2 rounded">
+            <button id="checkout-btn" class="bg-green-500 text-white px-4 py-2 rounded">
                 Finalizar no WhatsApp
             </button>
         </div>
@@ -111,46 +111,13 @@
 </div>
 
 <!-- BOTÃO CARRINHO -->
-<footer class="w-full bg-red-500 py-3 fixed bottom-0 flex justify-center">
-    <button id="cart-btn" class="text-white font-bold flex gap-2">
+<footer class="fixed bottom-0 w-full bg-red-500 py-3 flex justify-center">
+    <button id="cart-btn" class="text-white font-bold">
         (<span id="cart-count">0</span>) Ver carrinho
-        <i class="fa fa-cart-plus"></i>
     </button>
 </footer>
-
-<!-- SCRIPT WHATSAPP + CARRINHO -->
-<script>
-const checkoutBtn = document.getElementById("checkout-btn");
-
-checkoutBtn.addEventListener("click", () => {
-    const address = document.getElementById("address").value;
-
-    if (!address) {
-        document.getElementById("address-warn").classList.remove("hidden");
-        return;
-    }
-
-    const items = document.getElementById("cart-items").innerText;
-    const total = document.getElementById("cart-total").innerText;
-
-    const message =
-`🛒 NOVO PEDIDO
-
-${items}
-
-💰 Total: R$ ${total}
-🚚 Taxa de entrega: R$ 5,00
-
-📍 Endereço: ${address}`;
-
-    const phone = "5500000000000"; // TROCAR DEPOIS
-    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
-    window.open(url, "_blank");
-});
-</script>
 
 <script src="script.js"></script>
 
 </body>
-</html> 
+</html>
