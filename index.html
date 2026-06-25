@@ -8,181 +8,167 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-<link rel="stylesheet" href="./styles/output.css"/>
+<title>Sua Loja</title>
 
-<title>Cardápio Digital</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ===== TOPO (HERO) COM IMAGEM ===== */
+header {
+  background-image: url("https://images.unsplash.com/photo-1568901346375-23c9450c58cd");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+/* camada escura */
+header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+}
+
+/* texto por cima */
+header * {
+  position: relative;
+  z-index: 1;
+}
+
+header h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+header p {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.status {
+  margin-top: 10px;
+  background: #1db954;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* ===== MENU ===== */
+body {
+  background: #f5f5f5;
+}
+
+.container {
+  padding: 20px;
+}
+
+h2 {
+  margin: 20px 0;
+  font-size: 22px;
+}
+
+.produto {
+  display: flex;
+  background: #fff;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.produto img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.info {
+  padding: 10px;
+  flex: 1;
+}
+
+.preco {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.botao {
+  margin-top: 10px;
+  background: #111;
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.carrinho {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: red;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+}
+</style>
+
 </head>
 
-<body class="bg-zinc-100">
+<body>
 
-<!-- HEADER (SÓ AQUI FOI MEXIDO) -->
-<header class="w-full h-[260px] bg-zinc-900 bg-home bg-cover bg-center">
-    <div class="w-full h-full flex flex-col justify-center items-center">
-
-        <!-- IMAGEM DENTRO DO HEADER -->
-        <img 
-            src="./assets/hamb-1.png"
-            alt="logo"
-            class="w-24 h-24 rounded-full shadow-lg hover:scale-110 duration-200"
-        />
-
-        <h1 class="text-3xl mt-3 mb-1 font-bold text-white">SUA LOJA</h1>
-        <span class="text-white font-medium">SEU ENDEREÇO</span>
-
-        <div class="bg-green-600 px-4 py-1 rounded-lg mt-2">
-            <span class="text-white font-medium">Seg à Dom 18:00 às 22:00</span>
-        </div>
-
-    </div>
+<header>
+  <h1>SUA LOJA</h1>
+  <p>SEU ENDEREÇO</p>
+  <div class="status">Seg à Dom 18:00 às 22:00</div>
 </header>
 
-<h2 class="text-2xl md:text-5xl font-bold text-center mt-9 mb-6">
-    conheça nosso menu
-</h2>
+<div class="container">
 
-<!-- MENU -->
-<main id="menu" class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-20">
+  <h2>conheça nosso menu</h2>
 
-    <!-- PRODUTO -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md"/>
-        <div>
-            <p class="font-bold">nome do produto 1</p>
-            <p class="text-sm">descrição do produto</p>
-
-            <div class="flex items-center gap-2 justify-between mt-3">
-                <p class="font-bold text-lg">R$ 10,00</p>
-                <button 
-                    class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                    data-name="nome do produto 1"
-                    data-price="10.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
+  <div class="produto">
+    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+    <div class="info">
+      <h3>nome do produto 1</h3>
+      <p>descrição do produto</p>
+      <div class="preco">R$ 10,00</div>
+      <div class="botao">🛒 adicionar</div>
     </div>
+  </div>
 
-    <!-- PRODUTO 2 -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md"/>
-        <div>
-            <p class="font-bold">nome do produto 2</p>
-            <p class="text-sm">descrição do produto</p>
-
-            <div class="flex items-center gap-2 justify-between mt-3">
-                <p class="font-bold text-lg">R$ 12,00</p>
-                <button 
-                    class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                    data-name="nome do produto 2"
-                    data-price="12.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
+  <div class="produto">
+    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+    <div class="info">
+      <h3>nome do produto 2</h3>
+      <p>descrição do produto</p>
+      <div class="preco">R$ 12,00</div>
+      <div class="botao">🛒 adicionar</div>
     </div>
+  </div>
 
-    <!-- PRODUTO 3 -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md"/>
-        <div>
-            <p class="font-bold">nome do produto 3</p>
-            <p class="text-sm">descrição do produto</p>
-
-            <div class="flex items-center gap-2 justify-between mt-3">
-                <p class="font-bold text-lg">R$ 15,00</p>
-                <button 
-                    class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                    data-name="nome do produto 3"
-                    data-price="15.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRODUTO 4 -->
-    <div class="flex gap-2">
-        <img src="./assets/hamb-8.png" class="w-28 h-28 rounded-md"/>
-        <div>
-            <p class="font-bold">nome do produto 4</p>
-            <p class="text-sm">descrição do produto</p>
-
-            <div class="flex items-center gap-2 justify-between mt-3">
-                <p class="font-bold text-lg">R$ 20,00</p>
-                <button 
-                    class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                    data-name="nome do produto 4"
-                    data-price="20.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- BEBIDAS -->
-    <h2 class="font-bold text-3xl text-center mb-6 col-span-full">BEBIDAS</h2>
-
-    <!-- BEBIDA 1 -->
-    <div class="flex gap-2">
-        <img src="./assets/refri-2.png" class="w-28 h-28 rounded-md"/>
-        <div>
-            <p class="font-bold">nome da bebida 1</p>
-
-            <div class="flex items-center gap-2 justify-between mt-3">
-                <p class="font-bold text-lg">R$ 5,00</p>
-                <button 
-                    class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                    data-name="nome da bebida 1"
-                    data-price="5.00">
-                    <i class="fa fa-cart-plus text-lg text-white"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-</main>
-
-<!-- MODAL CARRINHO -->
-<div class="bg-black/60 w-full h-full fixed top-0 left-0 z-[99] items-center justify-center hidden" id="cart-modal">
-
-    <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px]">
-
-        <h2 class="text-center font-bold text-2xl">meu carrinho</h2>
-
-        <div id="cart-items" class="flex flex-col gap-2 my-4"></div>
-
-        <p class="font-bold">total: <span id="cart-total">0.00</span></p>
-
-        <p class="font-bold mt-4">Endereço de entrega:</p>
-        <input
-            type="text"
-            placeholder="Digite seu endereço completo..."
-            id="address"
-            class="w-full border-2 p-1 rounded my-1"
-        />
-
-        <p class="text-red-500 hidden" id="address-warn">Digite seu Endereço completo!</p> 
-
-        <div class="flex items-center justify-between mt-5 w-full">
-            <button id="close-modal-btn">Fechar</button>
-            <button id="checkout-btn" class="bg-green-500 text-white px-4 py-1 rounded">
-                Finalizar pedido
-            </button>
-        </div>
-    </div>
 </div>
 
-<!-- BOTÃO CARRINHO -->
-<footer class="w-full bg-red-500 py-3 fixed bottom-0 z-[100] flex items-center justify-center">
-    <button class="flex items-center gap-2 text-white font-bold" id="cart-btn">
-        (<span id="cart-count">0</span>)
-        veja meu carrinho
-        <i class="fa fa-cart-plus text-lg text-white"></i>
-    </button>
-</footer>
-
-<script src="script.js"></script>
+<div class="carrinho">
+  (8) veja meu carrinho 🛒
+</div>
 
 </body>
 </html>
