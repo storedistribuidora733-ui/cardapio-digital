@@ -1,205 +1,141 @@
-// ===== ELEMENTOS =====
-const cart = [];
-
-const menu = document.getElementById("menu");
 const cartBtn = document.getElementById("cart-btn");
 const cartModal = document.getElementById("cart-modal");
 const cartItemsContainer = document.getElementById("cart-items");
 const cartTotal = document.getElementById("cart-total");
-const cartCount = document.getElementById("cart-count");
-
-const closeModalBtn = document.getElementById("close-modal-btn");
 const checkoutBtn = document.getElementById("checkout-btn");
-
-const customerName = document.getElementById("customer-name");
-const address = document.getElementById("address");
+const cartCount = document.getElementById("cart-count");
+const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
-const paymentMethod = document.getElementById("payment-method");
-const observations = document.getElementById("observations");
+const closeModalBtn = document.getElementById("close-modal-btn");
 
-const closedAlert = document.getElementById("closed-alert");
-const closedAlertBtn = document.getElementById("closed-alert-btn");
+// NOVOS CAMPOS PARA DADOS DO CLIENTE
+const customerNameInput = document.getElementById("customer-name");
+const paymentMethodInput = document.getElementById("payment-method");
+const observationsInput = document.getElementById("observations");
 
-// ===== TROQUE PELO WHATSAPP DA SUA LOJA =====
-const STORE_PHONE = "5511999999999";
+let cart = [];
 
-// ===== ADICIONAR AO CARRINHO =====
-menu.addEventListener("click", (event) => {
-
-    const button = event.target.closest(".add-to-cart-btn");
-
-    if (!button) return;
-
-    const name = button.getAttribute("data-name");
-    const price = parseFloat(button.getAttribute("data-price"));
-
-    addToCart(name, price);
+// Abre o modal do carrinho
+cartBtn.addEventListener("click", function () {
+  updateCartModal();
+  cartModal.style.display = "flex";
 });
 
-function addToCart(name, price) {
+// Fecha o modal ao clicar fora dele
+cartModal.addEventListener("click", function (event) {
+  if (event.target === cartModal) {
+    cartModal.style.display = "none";
+  }
+});
 
-    const existingItem = cart.find(item => item.name === name);
+// Fecha o modal clicando no botão de fechar
+closeModalBtn.addEventListener("click", function () {
+  cartModal.style.display = "none";
+});
 
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push({
-            name,
-            price,
-            quantity: 1
-        });
-    }
+// Função para adicionar itens ao carrinho
+document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+  button.addEventListener('click', function () {
+    const name = this.getAttribute("data-name");
+    const price = parseFloat(this.getAttribute("data-price"));
+    addCart(name, price);
+  });
+});
 
-    updateCart();
+// Adiciona ou atualiza item no carrinho
+function addCart(name, price) {
+  const existingItem = cart.find(item => item.name === name);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({ name, price, quantity: 1 });
+  }
+
+  updateCartModal();
 }
 
-// ===== ATUALIZAR CARRINHO =====
-function updateCart() {
+// Atualiza o modal do carrinho
+function updateCartModal() {
+  cartItemsContainer.innerHTML = "";
+  let total = 0;
 
-    cartItemsContainer.innerHTML = "";
-    let total = 0;
-    let totalItems = 0;
+  cart.forEach((item, index) => {
+    total += item.price * item.quantity;
 
-    cart.forEach((item, index) => {
+    const cartItemElement = document.createElement("div");
+    cartItemElement.classList.add("cart-item");
 
-        total += item.price * item.quantity;
-        totalItems += item.quantity;
+    cartItemElement.innerHTML = `
+      <div class="item-info flex justify-between items-center">
+        <div>
+          <p><strong>${item.name}</strong></p>
+          <p>Preço unitário: R$ ${item.price.toFixed(2)}</p>
+          <p>Quantidade: ${item.quantity}</p>
+        </div>
+        <div class="flex gap-2 items-center">
+          <button class="decrease-btn text-red-500 font-bold" data-index="${index}">-</button>
+          <button class="increase-btn text-green-500 font-bold" data-index="${index}">+</button>
+        </div>
+      </div>
+    `;
 
-        const itemElement = document.createElement("div");
+    cartItemsContainer.appendChild(cartItemElement);
+  });
 
-        itemElement.className =
-            "flex justify-between items-center border-b py-3";
+  cartTotal.textContent = "R$ " + total.toFixed(2);
+  cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-        itemElement.innerHTML = `
-            <div>
-                <p class="font-bold">${item.name}</p>
-                <p>Quantidade: ${item.quantity}</p>
-                <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
-            </div>
+  addQuantityEvents();
+}
 
-            <button
-                class="remove-btn bg-red-500 text-white px-3 py-1 rounded"
-                data-index="${index}">
-                Remover
-            </button>
-        `;
-
-        cartItemsContainer.appendChild(itemElement);
+// Eventos de aumentar/diminuir quantidade
+function addQuantityEvents() {
+  document.querySelectorAll(".increase-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const index = this.getAttribute("data-index");
+      cart[index].quantity += 1;
+      updateCartModal();
     });
+  });
 
-    cartTotal.textContent = total.toFixed(2);
-    cartCount.textContent = totalItems;
-}
-
-// ===== REMOVER ITEM =====
-cartItemsContainer.addEventListener("click", (event) => {
-
-    if (!event.target.classList.contains("remove-btn")) return;
-
-    const index = event.target.getAttribute("data-index");
-
-    cart.splice(index, 1);
-
-    updateCart();
-});
-
-// ===== ABRIR MODAL =====
-cartBtn.addEventListener("click", () => {
-    cartModal.classList.remove("hidden");
-    cartModal.classList.add("flex");
-});
-
-// ===== FECHAR MODAL =====
-closeModalBtn.addEventListener("click", closeModal);
-
-cartModal.addEventListener("click", (event) => {
-
-    if (event.target === cartModal) {
-        closeModal();
-    }
-});
-
-function closeModal() {
-    cartModal.classList.add("hidden");
-    cartModal.classList.remove("flex");
-}
-
-// ===== ESCONDER AVISO DE ENDEREÇO =====
-address.addEventListener("input", () => {
-
-    if (address.value.trim() !== "") {
-        addressWarn.classList.add("hidden");
-    }
-});
-
-// ===== HORÁRIO DA LOJA =====
-function isStoreOpen() {
-
-    const currentHour = new Date().getHours();
-
-    // Loja abre às 07:00 e fecha à meia-noite
-    return currentHour >= 7 && currentHour < 24;
-}
-
-// ===== FINALIZAR PEDIDO =====
-checkoutBtn.addEventListener("click", () => {
-
-    if (!isStoreOpen()) {
-        closedAlert.classList.remove("hidden");
-        return;
-    }
-
-    if (cart.length === 0) {
-        alert("Seu carrinho está vazio!");
-        return;
-    }
-
-    if (customerName.value.trim() === "") {
-        alert("Digite seu nome.");
-        return;
-    }
-
-    if (address.value.trim() === "") {
-        addressWarn.classList.remove("hidden");
-        return;
-    }
-
-    let message = "🍔 *NOVO PEDIDO*%0A%0A";
-
-    message += `👤 *Nome:* ${customerName.value}%0A`;
-    message += `📍 *Endereço:* ${address.value}%0A`;
-    message += `💳 *Pagamento:* ${paymentMethod.value}%0A`;
-
-    if (observations.value.trim() !== "") {
-        message += `📝 *Observações:* ${observations.value}%0A`;
-    }
-
-    message += `%0A📦 *Itens do Pedido:*%0A`;
-
-    cart.forEach(item => {
-
-        message += `• ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}%0A`;
+  document.querySelectorAll(".decrease-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const index = this.getAttribute("data-index");
+      cart[index].quantity -= 1;
+      if (cart[index].quantity <= 0) cart.splice(index, 1);
+      updateCartModal();
     });
+  });
+}
 
-    message += `%0A💰 *Total:* R$ ${cartTotal.textContent}`;
+// Finalizar pedido
+checkoutBtn.addEventListener("click", function () {
+  if (!addressInput.value.trim()) {
+    addressWarn.style.display = "block";
+    return;
+  } else {
+    addressWarn.style.display = "none";
+  }
 
-    window.open(
-        `https://wa.me/${STORE_PHONE}?text=${message}`,
-        "_blank"
-    );
+  const orderData = {
+    name: customerNameInput.value.trim(),
+    address: addressInput.value.trim(),
+    paymentMethod: paymentMethodInput.value,
+    observations: observationsInput.value.trim(),
+    cart,
+    total: cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
+  };
 
-    // Limpar carrinho
-    cart.length = 0;
+  console.log("Pedido finalizado:", orderData);
+  alert("Pedido finalizado! Veja o console para detalhes.");
 
-    customerName.value = "";
-    address.value = "";
-    observations.value = "";
+  cart = [];
+  updateCartModal();
+  cartModal.style.display = "none";
 
-    updateCart();
-    closeModal();
-});
-
-// ===== FECHAR AVISO DE LOJA FECHADA =====
-closedAlertBtn.addEventListener("click", () => {
-    closedAlert.classList.add("hidden");
+  customerNameInput.value = "";
+  addressInput.value = "";
+  observationsInput.value = "";
+  paymentMethodInput.value = "cartao";
 });
