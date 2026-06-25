@@ -13,24 +13,36 @@ const customerNameInput = document.getElementById("customer-name");
 const paymentMethodInput = document.getElementById("payment-method");
 const observationsInput = document.getElementById("observations");
 
+// FOOTER
+const footerBar = document.querySelector("footer");
+
 let cart = [];
 
 // Abre o modal do carrinho
 cartBtn.addEventListener("click", function () {
   updateCartModal();
   cartModal.style.display = "flex";
+
+  // 🔥 Esconde footer
+  footerBar.classList.add("hidden");
 });
 
-// Fecha o modal ao clicar fora dele
+// Fecha ao clicar fora do modal
 cartModal.addEventListener("click", function (event) {
   if (event.target === cartModal) {
     cartModal.style.display = "none";
+
+    // 🔥 Mostra footer novamente
+    footerBar.classList.remove("hidden");
   }
 });
 
-// Fecha o modal clicando no botão de fechar
+// Fecha clicando no botão fechar
 closeModalBtn.addEventListener("click", function () {
   cartModal.style.display = "none";
+
+  // 🔥 Mostra footer novamente
+  footerBar.classList.remove("hidden");
 });
 
 // Função para adicionar itens ao carrinho
@@ -42,7 +54,7 @@ document.querySelectorAll('.add-to-cart-btn').forEach(button => {
   });
 });
 
-// Adiciona ou atualiza item no carrinho
+// Adiciona item
 function addCart(name, price) {
   const existingItem = cart.find(item => item.name === name);
 
@@ -55,7 +67,7 @@ function addCart(name, price) {
   updateCartModal();
 }
 
-// Atualiza o modal do carrinho
+// Atualiza carrinho
 function updateCartModal() {
   cartItemsContainer.innerHTML = "";
   let total = 0;
@@ -73,9 +85,10 @@ function updateCartModal() {
           <p>Preço unitário: R$ ${item.price.toFixed(2)}</p>
           <p>Quantidade: ${item.quantity}</p>
         </div>
+
         <div class="flex gap-2 items-center">
-          <button class="decrease-btn text-red-500 font-bold" data-index="${index}">-</button>
-          <button class="increase-btn text-green-500 font-bold" data-index="${index}">+</button>
+          <button class="decrease-btn text-black text-3xl font-bold" data-index="${index}">−</button>
+          <button class="increase-btn text-black text-3xl font-bold" data-index="${index}">+</button>
         </div>
       </div>
     `;
@@ -89,7 +102,7 @@ function updateCartModal() {
   addQuantityEvents();
 }
 
-// Eventos de aumentar/diminuir quantidade
+// Eventos quantidade
 function addQuantityEvents() {
   document.querySelectorAll(".increase-btn").forEach(btn => {
     btn.addEventListener("click", function () {
@@ -133,6 +146,9 @@ checkoutBtn.addEventListener("click", function () {
   cart = [];
   updateCartModal();
   cartModal.style.display = "none";
+
+  // 🔥 Mostra footer novamente
+  footerBar.classList.remove("hidden");
 
   customerNameInput.value = "";
   addressInput.value = "";
