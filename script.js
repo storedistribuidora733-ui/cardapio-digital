@@ -10,29 +10,28 @@ const closeModalBtn = document.getElementById("close-modal-btn");
 
 let cart = [];
 
-// ABRIR CARRINHO
+// Abrir carrinho
 cartBtn.addEventListener("click", () => {
     updateCartModal();
     cartModal.classList.remove("hidden");
     cartModal.classList.add("flex");
 });
 
-// FECHAR CARRINHO CLICANDO FORA
+// Fechar clicando fora
 cartModal.addEventListener("click", (event) => {
     if (event.target === cartModal) {
-        closeCartModal();
+        cartModal.classList.add("hidden");
+        cartModal.classList.remove("flex");
     }
 });
 
-// FECHAR CARRINHO PELO BOTÃO
-closeModalBtn.addEventListener("click", closeCartModal);
-
-function closeCartModal() {
+// Fechar pelo botão
+closeModalBtn.addEventListener("click", () => {
     cartModal.classList.add("hidden");
     cartModal.classList.remove("flex");
-}
+});
 
-// ADICIONAR PRODUTO
+// Adicionar produtos ao carrinho
 document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 
     button.addEventListener("click", () => {
@@ -45,7 +44,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 
 });
 
-// ADICIONAR AO CARRINHO
+// Função adicionar item
 function addToCart(name, price) {
 
     const existingItem = cart.find(item => item.name === name);
@@ -63,73 +62,77 @@ function addToCart(name, price) {
     updateCartModal();
 }
 
-// ATUALIZAR CARRINHO
+// Atualizar carrinho
 function updateCartModal() {
 
     cartItemsContainer.innerHTML = "";
+
     let total = 0;
 
     cart.forEach((item, index) => {
 
         total += item.price * item.quantity;
 
-        const cartItem = document.createElement("div");
+        const itemElement = document.createElement("div");
 
-        cartItem.className =
-            "flex justify-between items-center border-b py-3";
+        itemElement.classList.add(
+            "flex",
+            "justify-between",
+            "items-center",
+            "border-b",
+            "pb-2",
+            "mb-2"
+        );
 
-        cartItem.innerHTML = `
+        itemElement.innerHTML = `
             <div>
                 <p class="font-bold">${item.name}</p>
-                <p>Quantidade: ${item.quantity}</p>
+                <p>Qtd: ${item.quantity}</p>
                 <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
             </div>
 
             <div class="flex gap-2">
-                <button class="decrease-btn bg-red-500 text-white px-2 rounded"
-                    data-index="${index}">
-                    -
-                </button>
-
-                <button class="increase-btn bg-green-500 text-white px-2 rounded"
-                    data-index="${index}">
-                    +
-                </button>
+                <button class="decrease-btn bg-red-500 text-white px-2 rounded" data-index="${index}">-</button>
+                <button class="increase-btn bg-green-500 text-white px-2 rounded" data-index="${index}">+</button>
             </div>
         `;
 
-        cartItemsContainer.appendChild(cartItem);
+        cartItemsContainer.appendChild(itemElement);
+
     });
 
-    cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+    cartTotal.textContent = total.toFixed(2);
 
     cartCount.textContent = cart.reduce(
-        (acc, item) => acc + item.quantity,
+        (total, item) => total + item.quantity,
         0
     );
 
-    addCartEvents();
+    addQuantityEvents();
 }
 
-// EVENTOS + E -
-function addCartEvents() {
+// Eventos dos botões + e -
+function addQuantityEvents() {
 
-    document.querySelectorAll(".increase-btn").forEach(button => {
+    document.querySelectorAll(".increase-btn").forEach(btn => {
 
-        button.onclick = () => {
+        btn.addEventListener("click", () => {
 
-            const index = button.dataset.index;
+            const index = btn.getAttribute("data-index");
+
             cart[index].quantity++;
 
             updateCartModal();
-        };
+
+        });
+
     });
 
-    document.querySelectorAll(".decrease-btn").forEach(button => {
+    document.querySelectorAll(".decrease-btn").forEach(btn => {
 
-        button.onclick = () => {
+        btn.addEventListener("click", () => {
 
-            const index = button.dataset.index;
+            const index = btn.getAttribute("data-index");
 
             cart[index].quantity--;
 
@@ -138,11 +141,14 @@ function addCartEvents() {
             }
 
             updateCartModal();
-        };
+
+        });
+
     });
+
 }
 
-// FINALIZAR PEDIDO
+// Finalizar pedido
 checkoutBtn.addEventListener("click", () => {
 
     if (cart.length === 0) {
@@ -153,33 +159,36 @@ checkoutBtn.addEventListener("click", () => {
     if (addressInput.value.trim() === "") {
 
         addressWarn.classList.remove("hidden");
+
         return;
     }
 
     addressWarn.classList.add("hidden");
 
-    let message = "🍔 *NOVO PEDIDO*%0A%0A";
+    const pedido = `
+Pedido:
 
-    cart.forEach(item => {
+${cart.map(item =>
+`${item.name} - ${item.quantity}x - R$ ${(item.price * item.quantity).toFixed(2)}`
+).join("\n")}
 
-        message += `• ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}%0A`;
-    });
+Total: R$ ${cart.reduce((total, item) =>
+total + (item.price * item.quantity), 0).toFixed(2)}
 
-    message += `%0A📍 Endereço: ${addressInput.value}`;
-    message += `%0A💰 Total: ${cartTotal.textContent}`;
+Endereço:
+${addressInput.value}
+`;
 
-    // TROQUE PELO NÚMERO DA SUA LOJA
-    const phone = "5511999999999";
+    alert("Pedido finalizado!");
 
-    window.open(
-        `https://wa.me/${phone}?text=${message}`,
-        "_blank"
-    );
+    console.log(pedido);
 
     cart = [];
-    updateCartModal();
 
     addressInput.value = "";
 
-    closeCartModal();
+    updateCartModal();
+
+    cartModal.classList.add("hidden");
+    cartModal.classList.remove("flex");
 });
