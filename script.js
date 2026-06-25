@@ -8,134 +8,178 @@ const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
 const closeModalBtn = document.getElementById("close-modal-btn");
 
-// NOVOS CAMPOS PARA DADOS DO CLIENTE
-const customerNameInput = document.getElementById("customer-name");
-const paymentMethodInput = document.getElementById("payment-method");
-const observationsInput = document.getElementById("observations");
-
 let cart = [];
 
-// Abre o modal do carrinho
-cartBtn.addEventListener("click", function () {
-  updateCartModal();
-  cartModal.style.display = "flex";
+// ABRIR CARRINHO
+cartBtn.addEventListener("click", () => {
+    updateCartModal();
+    cartModal.classList.remove("hidden");
+    cartModal.classList.add("flex");
 });
 
-// Fecha o modal ao clicar fora dele
-cartModal.addEventListener("click", function (event) {
-  if (event.target === cartModal) {
-    cartModal.style.display = "none";
-  }
+// FECHAR CARRINHO CLICANDO FORA
+cartModal.addEventListener("click", (event) => {
+    if (event.target === cartModal) {
+        closeCartModal();
+    }
 });
 
-// Fecha o modal clicando no botão de fechar
-closeModalBtn.addEventListener("click", function () {
-  cartModal.style.display = "none";
-});
+// FECHAR CARRINHO PELO BOTÃO
+closeModalBtn.addEventListener("click", closeCartModal);
 
-// Função para adicionar itens ao carrinho
-document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-  button.addEventListener('click', function () {
-    const name = this.getAttribute("data-name");
-    const price = parseFloat(this.getAttribute("data-price"));
-    addCart(name, price);
-  });
-});
-
-// Adiciona ou atualiza item no carrinho
-function addCart(name, price) {
-  const existingItem = cart.find(item => item.name === name);
-
-  if (existingItem) {
-    existingItem.quantity += 1;
-  } else {
-    cart.push({ name, price, quantity: 1 });
-  }
-
-  updateCartModal();
+function closeCartModal() {
+    cartModal.classList.add("hidden");
+    cartModal.classList.remove("flex");
 }
 
-// Atualiza o modal do carrinho
+// ADICIONAR PRODUTO
+document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const name = button.getAttribute("data-name");
+        const price = parseFloat(button.getAttribute("data-price"));
+
+        addToCart(name, price);
+    });
+
+});
+
+// ADICIONAR AO CARRINHO
+function addToCart(name, price) {
+
+    const existingItem = cart.find(item => item.name === name);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            name,
+            price,
+            quantity: 1
+        });
+    }
+
+    updateCartModal();
+}
+
+// ATUALIZAR CARRINHO
 function updateCartModal() {
-  cartItemsContainer.innerHTML = "";
-  let total = 0;
 
-  cart.forEach((item, index) => {
-    total += item.price * item.quantity;
+    cartItemsContainer.innerHTML = "";
+    let total = 0;
 
-    const cartItemElement = document.createElement("div");
-    cartItemElement.classList.add("cart-item");
+    cart.forEach((item, index) => {
 
-    cartItemElement.innerHTML = `
-      <div class="item-info flex justify-between items-center">
-        <div>
-          <p><strong>${item.name}</strong></p>
-          <p>Preço unitário: R$ ${item.price.toFixed(2)}</p>
-          <p>Quantidade: ${item.quantity}</p>
-        </div>
-        <div class="flex gap-2 items-center">
-          <button class="decrease-btn text-red-500 font-bold" data-index="${index}">-</button>
-          <button class="increase-btn text-green-500 font-bold" data-index="${index}">+</button>
-        </div>
-      </div>
-    `;
+        total += item.price * item.quantity;
 
-    cartItemsContainer.appendChild(cartItemElement);
-  });
+        const cartItem = document.createElement("div");
 
-  cartTotal.textContent = "R$ " + total.toFixed(2);
-  cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
+        cartItem.className =
+            "flex justify-between items-center border-b py-3";
 
-  addQuantityEvents();
+        cartItem.innerHTML = `
+            <div>
+                <p class="font-bold">${item.name}</p>
+                <p>Quantidade: ${item.quantity}</p>
+                <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
+            </div>
+
+            <div class="flex gap-2">
+                <button class="decrease-btn bg-red-500 text-white px-2 rounded"
+                    data-index="${index}">
+                    -
+                </button>
+
+                <button class="increase-btn bg-green-500 text-white px-2 rounded"
+                    data-index="${index}">
+                    +
+                </button>
+            </div>
+        `;
+
+        cartItemsContainer.appendChild(cartItem);
+    });
+
+    cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+
+    cartCount.textContent = cart.reduce(
+        (acc, item) => acc + item.quantity,
+        0
+    );
+
+    addCartEvents();
 }
 
-// Eventos de aumentar/diminuir quantidade
-function addQuantityEvents() {
-  document.querySelectorAll(".increase-btn").forEach(btn => {
-    btn.addEventListener("click", function () {
-      const index = this.getAttribute("data-index");
-      cart[index].quantity += 1;
-      updateCartModal();
-    });
-  });
+// EVENTOS + E -
+function addCartEvents() {
 
-  document.querySelectorAll(".decrease-btn").forEach(btn => {
-    btn.addEventListener("click", function () {
-      const index = this.getAttribute("data-index");
-      cart[index].quantity -= 1;
-      if (cart[index].quantity <= 0) cart.splice(index, 1);
-      updateCartModal();
+    document.querySelectorAll(".increase-btn").forEach(button => {
+
+        button.onclick = () => {
+
+            const index = button.dataset.index;
+            cart[index].quantity++;
+
+            updateCartModal();
+        };
     });
-  });
+
+    document.querySelectorAll(".decrease-btn").forEach(button => {
+
+        button.onclick = () => {
+
+            const index = button.dataset.index;
+
+            cart[index].quantity--;
+
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+
+            updateCartModal();
+        };
+    });
 }
 
-// Finalizar pedido
-checkoutBtn.addEventListener("click", function () {
-  if (!addressInput.value.trim()) {
-    addressWarn.style.display = "block";
-    return;
-  } else {
-    addressWarn.style.display = "none";
-  }
+// FINALIZAR PEDIDO
+checkoutBtn.addEventListener("click", () => {
 
-  const orderData = {
-    name: customerNameInput.value.trim(),
-    address: addressInput.value.trim(),
-    paymentMethod: paymentMethodInput.value,
-    observations: observationsInput.value.trim(),
-    cart,
-    total: cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
-  };
+    if (cart.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+    }
 
-  console.log("Pedido finalizado:", orderData);
-  alert("Pedido finalizado! Veja o console para detalhes.");
+    if (addressInput.value.trim() === "") {
 
-  cart = [];
-  updateCartModal();
-  cartModal.style.display = "none";
+        addressWarn.classList.remove("hidden");
+        return;
+    }
 
-  customerNameInput.value = "";
-  addressInput.value = "";
-  observationsInput.value = "";
-  paymentMethodInput.value = "cartao";
+    addressWarn.classList.add("hidden");
+
+    let message = "🍔 *NOVO PEDIDO*%0A%0A";
+
+    cart.forEach(item => {
+
+        message += `• ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}%0A`;
+    });
+
+    message += `%0A📍 Endereço: ${addressInput.value}`;
+    message += `%0A💰 Total: ${cartTotal.textContent}`;
+
+    // TROQUE PELO NÚMERO DA SUA LOJA
+    const phone = "5511999999999";
+
+    window.open(
+        `https://wa.me/${phone}?text=${message}`,
+        "_blank"
+    );
+
+    cart = [];
+    updateCartModal();
+
+    addressInput.value = "";
+
+    closeCartModal();
 });
