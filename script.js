@@ -10,56 +10,58 @@ const closeModalBtn = document.getElementById("close-modal-btn");
 
 let cart = [];
 
-// ABRIR CARRINHO (CORRIGIDO)
+/* ABRIR CARRINHO */
 cartBtn.addEventListener("click", () => {
   cartModal.classList.remove("hidden");
-  cartModal.classList.add("flex");
-  updateCartModal();
+  updateCart();
 });
 
-// FECHAR CARRINHO
-function closeCart() {
+/* FECHAR CARRINHO */
+closeModalBtn.addEventListener("click", () => {
   cartModal.classList.add("hidden");
-  cartModal.classList.remove("flex");
-}
+});
 
-closeModalBtn.addEventListener("click", closeCart);
-
-// clicar fora do modal
-cartModal.addEventListener("click", (event) => {
-  if (event.target === cartModal) {
-    closeCart();
+/* FECHAR AO CLICAR FORA */
+cartModal.addEventListener("click", (e) => {
+  if (e.target === cartModal) {
+    cartModal.classList.add("hidden");
   }
 });
 
-// ADICIONAR PRODUTO
-document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
-  button.addEventListener("click", () => {
-    const name = button.dataset.name;
-    const price = parseFloat(button.dataset.price);
+/* ADICIONAR PRODUTO */
+document.querySelectorAll(".add-to-cart-btn").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    const name = this.getAttribute("data-name");
+    const price = parseFloat(this.getAttribute("data-price"));
 
-    addToCart(name, price);
+    // pega imagem do produto
+    const productCard = this.closest(".flex");
+    const image = productCard.querySelector("img").src;
+
+    addToCart(name, price, image);
   });
 });
 
-function addToCart(name, price) {
+/* ADD CART */
+function addToCart(name, price, image) {
   const item = cart.find((p) => p.name === name);
 
   if (item) {
-    item.quantity += 1;
+    item.quantity++;
   } else {
     cart.push({
       name,
       price,
+      image,
       quantity: 1,
     });
   }
 
-  updateCartModal();
+  updateCart();
 }
 
-// ATUALIZAR CARRINHO
-function updateCartModal() {
+/* UPDATE CART */
+function updateCart() {
   cartItemsContainer.innerHTML = "";
 
   let total = 0;
@@ -71,59 +73,70 @@ function updateCartModal() {
 
     const div = document.createElement("div");
 
-    div.classList.add("flex", "justify-between", "items-center", "border-b", "py-2");
+    div.classList.add(
+      "flex",
+      "items-center",
+      "justify-between",
+      "gap-3",
+      "bg-zinc-100",
+      "p-2",
+      "rounded"
+    );
 
     div.innerHTML = `
-      <div>
-        <p class="font-bold">${item.name}</p>
-        <p>R$ ${item.price.toFixed(2)}</p>
+      <div class="flex items-center gap-3">
+        <img src="${item.image}" class="w-12 h-12 rounded object-cover">
+
+        <div>
+          <p class="font-bold">${item.name}</p>
+          <p>R$ ${item.price.toFixed(2)}</p>
+        </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <button onclick="decreaseItem(${index})" class="px-2 bg-gray-200">-</button>
+        <button onclick="decreaseItem(${index})" class="bg-red-500 text-white px-2 rounded">-</button>
         <span>${item.quantity}</span>
-        <button onclick="increaseItem(${index})" class="px-2 bg-gray-200">+</button>
+        <button onclick="increaseItem(${index})" class="bg-green-500 text-white px-2 rounded">+</button>
       </div>
     `;
 
     cartItemsContainer.appendChild(div);
   });
 
-  cartTotal.textContent = total.toFixed(2);
-  cartCount.textContent = count;
+  cartTotal.innerText = "R$ " + total.toFixed(2);
+  cartCount.innerText = count;
 }
 
-// aumentar
-window.increaseItem = function (index) {
+/* + */
+window.increaseItem = (index) => {
   cart[index].quantity++;
-  updateCartModal();
+  updateCart();
 };
 
-// diminuir
-window.decreaseItem = function (index) {
+/* - */
+window.decreaseItem = (index) => {
   cart[index].quantity--;
 
   if (cart[index].quantity <= 0) {
     cart.splice(index, 1);
   }
 
-  updateCartModal();
+  updateCart();
 };
 
-// FINALIZAR PEDIDO
+/* FINALIZAR */
 checkoutBtn.addEventListener("click", () => {
-  if (!addressInput.value.trim()) {
+  if (!addressInput.value) {
     addressWarn.classList.remove("hidden");
     return;
   }
 
   addressWarn.classList.add("hidden");
 
-  alert("Pedido finalizado com sucesso!");
+  alert("Pedido enviado com sucesso!");
 
   cart = [];
-  updateCartModal();
-  closeCart();
-
+  updateCart();
+  cartModal.classList.add("hidden");
   addressInput.value = "";
 });
