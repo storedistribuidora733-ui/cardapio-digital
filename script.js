@@ -12,12 +12,11 @@ const addressWarn = document.getElementById("address-warn");
 
 let cart = [];
 
-/* abrir carrinho */
+/* abrir / fechar carrinho */
 cartBtn.addEventListener("click", () => {
     cartModal.classList.remove("hidden");
 });
 
-/* fechar carrinho */
 closeModalBtn.addEventListener("click", () => {
     cartModal.classList.add("hidden");
 });
@@ -25,12 +24,16 @@ closeModalBtn.addEventListener("click", () => {
 /* adicionar produto */
 document.addEventListener("click", (e) => {
     const button = e.target.closest(".add-to-cart-btn");
-
     if (!button) return;
 
     const name = button.dataset.name;
     const price = parseFloat(button.dataset.price);
 
+    addItem(name, price);
+});
+
+/* adicionar item */
+function addItem(name, price) {
     const item = cart.find(i => i.name === name);
 
     if (item) {
@@ -40,7 +43,22 @@ document.addEventListener("click", (e) => {
     }
 
     updateCart();
-});
+}
+
+/* mudar quantidade (+ / -) */
+function changeQty(name, type) {
+    const item = cart.find(i => i.name === name);
+    if (!item) return;
+
+    if (type === "plus") item.quantity++;
+    if (type === "minus") item.quantity--;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(i => i.name !== name);
+    }
+
+    updateCart();
+}
 
 /* atualizar carrinho */
 function updateCart() {
@@ -52,10 +70,21 @@ function updateCart() {
         subtotal += item.price * item.quantity;
 
         const div = document.createElement("div");
-        div.className = "flex justify-between";
+        div.className = "flex justify-between items-center border-b py-2";
 
         div.innerHTML = `
-            <p>${item.name} x${item.quantity}</p>
+            <div>
+                <p class="font-bold">${item.name}</p>
+
+                <div class="flex items-center gap-2 mt-1">
+                    <button onclick="changeQty('${item.name}','minus')" class="px-2 bg-gray-200 rounded">-</button>
+
+                    <span>${item.quantity}</span>
+
+                    <button onclick="changeQty('${item.name}','plus')" class="px-2 bg-gray-200 rounded">+</button>
+                </div>
+            </div>
+
             <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
         `;
 
