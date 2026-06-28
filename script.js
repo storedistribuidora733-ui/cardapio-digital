@@ -151,7 +151,7 @@ function updateCart() {
     cartCount.innerText = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     addQuantityEvents();
-}
+
 }
 
 
