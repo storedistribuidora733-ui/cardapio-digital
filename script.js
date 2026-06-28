@@ -237,7 +237,7 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
     message += `\n💬 *Observações*: ${obs || "Nenhuma"}\n`;
     message += `💰 *Total:* R$ ${cartTotal.innerText}`;
 
-    const whatsappNumber = ""; 
+    const whatsappNumber = "19989021323"; 
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
