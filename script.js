@@ -109,10 +109,25 @@ function updateCart() {
                 <p class="font-bold">${item.name}</p>
                 <p>Qtd: ${item.quantity}</p>
             </div>
-            <div class="flex items-center gap-4">
-                <button class="decrease-btn font-bold text-white bg-black w-10 h-10 flex items-center justify-center rounded" data-index="${index}">−</button>
-                <button class="increase-btn font-bold text-white bg-black w-10 h-10 flex items-center justify-center rounded" data-index="${index}">+</button>
-                <p class="font-bold">R$ ${itemTotal.toFixed(2)}</p>
+            <div class="flex items-center gap-3">
+    <button class="decrease-btn text-2xl font-bold text-gray-700 px-2"
+            data-index="${index}">
+        −
+    </button>
+
+    <span class="font-bold text-lg min-w-[20px] text-center">
+        ${item.quantity}
+    </span>
+
+    <button class="increase-btn text-2xl font-bold text-green-600 px-2"
+            data-index="${index}">
+        +
+    </button>
+
+    <p class="font-bold text-lg ml-3">
+        R$ ${itemTotal.toFixed(2)}
+    </p>
+</div>
             </div>
         `;
 
