@@ -93,7 +93,6 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 });
 
 // ATUALIZAR CARRINHO
-
 function updateCart() {
     cartItemsContainer.innerHTML = "";
     let total = 0;
@@ -105,68 +104,43 @@ function updateCart() {
         const cartItemElement = document.createElement("div");
 
         cartItemElement.classList.add(
-            "py-5",
+            "py-4",
             "border-b",
             "border-gray-200"
         );
 
-       cartItemElement.innerHTML = `
-<div class="flex items-center justify-between w-full">
+        cartItemElement.innerHTML = `
+            <div class="flex items-center justify-between">
 
-    <div class="flex flex-col flex-1">
-        <p class="font-bold text-lg">${item.name}</p>
-        <p class="text-gray-500">Qtd: ${item.quantity}</p>
-    </div>
+                <div class="flex-1">
+                    <p class="font-bold text-lg">${item.name}</p>
+                    <p class="text-gray-500 text-sm">
+                        Quantidade: ${item.quantity}
+                    </p>
+                </div>
 
-    <div class="flex items-center gap-5">
-
-        <button
-            class="decrease-btn w-12 h-12 rounded-xl bg-gray-100 text-gray-700 text-3xl font-bold flex items-center justify-center"
-            data-index="${index}">
-            −
-        </button>
-
-        <span class="font-bold text-2xl w-8 text-center">
-            ${item.quantity}
-        </span>
-
-        <button
-            class="increase-btn w-12 h-12 rounded-xl bg-green-500 text-white text-3xl font-bold flex items-center justify-center"
-            data-index="${index}">
-            +
-        </button>
-
-        <p class="font-bold text-2xl min-w-[100px] text-right">
-            R$ ${itemTotal.toFixed(2)}
-        </p>
-
-    </div>
-`;
-
-                <!-- Controles -->
-                <div class="flex items-center gap-6">
-
+                <div class="flex items-center gap-3">
                     <button
-                        class="decrease-btn w-12 h-12 rounded-xl bg-gray-100 text-3xl font-bold text-gray-700 flex items-center justify-center shadow-sm"
+                        class="decrease-btn bg-gray-200 rounded-lg w-10 h-10 text-2xl font-bold"
                         data-index="${index}">
-                        −
+                        -
                     </button>
 
-                    <span class="font-bold text-2xl w-8 text-center">
+                    <span class="font-bold text-xl w-6 text-center">
                         ${item.quantity}
                     </span>
 
                     <button
-                        class="increase-btn w-12 h-12 rounded-xl bg-green-500 text-white text-3xl font-bold flex items-center justify-center shadow-sm"
+                        class="increase-btn bg-green-500 text-white rounded-lg w-10 h-10 text-2xl font-bold"
                         data-index="${index}">
                         +
                     </button>
 
-                    <p class="font-bold text-2xl min-w-[110px] text-right">
+                    <p class="font-bold text-lg min-w-[90px] text-right">
                         R$ ${itemTotal.toFixed(2)}
                     </p>
-
                 </div>
+
             </div>
         `;
 
@@ -177,7 +151,7 @@ function updateCart() {
     cartCount.innerText = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     addQuantityEvents();
-
+}
 }
 
 
