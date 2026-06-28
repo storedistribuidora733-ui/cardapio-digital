@@ -103,44 +103,75 @@ function updateCart() {
 
         const cartItemElement = document.createElement("div");
 
-        cartItemElement.classList.add(
-            "py-4",
-            "border-b",
-            "border-gray-200"
-        );
-
         cartItemElement.innerHTML = `
-            <div class="flex items-center justify-between">
-
-                <div class="flex-1">
-                    <p class="font-bold text-lg">${item.name}</p>
-                    <p class="text-gray-500 text-sm">
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                padding:15px 0;
+                border-bottom:1px solid #ddd;
+            ">
+                <div>
+                    <div style="font-weight:bold;font-size:18px;">
+                        ${item.name}
+                    </div>
+                    <div style="color:#666;font-size:14px;">
                         Quantidade: ${item.quantity}
-                    </p>
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <button
-                        class="decrease-btn bg-gray-200 rounded-lg w-10 h-10 text-2xl font-bold"
-                        data-index="${index}">
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                ">
+                    <button class="decrease-btn"
+                        data-index="${index}"
+                        style="
+                            width:40px;
+                            height:40px;
+                            border:none;
+                            border-radius:8px;
+                            font-size:24px;
+                            background:#e5e7eb;
+                            cursor:pointer;
+                        ">
                         -
                     </button>
 
-                    <span class="font-bold text-xl w-6 text-center">
+                    <span style="
+                        font-size:20px;
+                        font-weight:bold;
+                        min-width:25px;
+                        text-align:center;
+                    ">
                         ${item.quantity}
                     </span>
 
-                    <button
-                        class="increase-btn bg-green-500 text-white rounded-lg w-10 h-10 text-2xl font-bold"
-                        data-index="${index}">
+                    <button class="increase-btn"
+                        data-index="${index}"
+                        style="
+                            width:40px;
+                            height:40px;
+                            border:none;
+                            border-radius:8px;
+                            font-size:24px;
+                            background:#22c55e;
+                            color:white;
+                            cursor:pointer;
+                        ">
                         +
                     </button>
 
-                    <p class="font-bold text-lg min-w-[90px] text-right">
+                    <span style="
+                        font-size:18px;
+                        font-weight:bold;
+                        min-width:90px;
+                        text-align:right;
+                    ">
                         R$ ${itemTotal.toFixed(2)}
-                    </p>
+                    </span>
                 </div>
-
             </div>
         `;
 
@@ -151,7 +182,6 @@ function updateCart() {
     cartCount.innerText = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     addQuantityEvents();
-
 }
 
 
