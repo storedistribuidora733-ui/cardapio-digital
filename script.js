@@ -237,4 +237,4 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
-});
+}); 
