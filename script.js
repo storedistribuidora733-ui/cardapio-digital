@@ -93,6 +93,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 });
 
 // ATUALIZAR CARRINHO
+
 function updateCart() {
     cartItemsContainer.innerHTML = "";
     let total = 0;
@@ -102,32 +103,41 @@ function updateCart() {
         total += itemTotal;
 
         const cartItemElement = document.createElement("div");
-        cartItemElement.classList.add("flex", "items-center", "justify-between", "py-2");
+
+        cartItemElement.classList.add(
+            "flex",
+            "items-center",
+            "justify-between",
+            "py-3",
+            "border-b",
+            "border-gray-200"
+        );
 
         cartItemElement.innerHTML = `
             <div>
-                <p class="font-bold">${item.name}</p>
-                <p>Qtd: ${item.quantity}</p>
+                <p class="font-bold text-lg">${item.name}</p>
             </div>
+
             <div class="flex items-center gap-3">
-    <button class="decrease-btn text-2xl font-bold text-gray-700 px-2"
-            data-index="${index}">
-        −
-    </button>
+                <button
+                    class="decrease-btn text-2xl font-bold text-gray-600 px-2"
+                    data-index="${index}">
+                    −
+                </button>
 
-    <span class="font-bold text-lg min-w-[20px] text-center">
-        ${item.quantity}
-    </span>
+                <span class="font-bold text-lg min-w-[20px] text-center">
+                    ${item.quantity}
+                </span>
 
-    <button class="increase-btn text-2xl font-bold text-green-600 px-2"
-            data-index="${index}">
-        +
-    </button>
+                <button
+                    class="increase-btn text-2xl font-bold text-green-600 px-2"
+                    data-index="${index}">
+                    +
+                </button>
 
-    <p class="font-bold text-lg ml-3">
-        R$ ${itemTotal.toFixed(2)}
-    </p>
-</div>
+                <p class="font-bold text-lg ml-3">
+                    R$ ${itemTotal.toFixed(2)}
+                </p>
             </div>
         `;
 
@@ -138,6 +148,7 @@ function updateCart() {
     cartCount.innerText = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     addQuantityEvents();
+
 }
 
 function addQuantityEvents() {
