@@ -110,19 +110,38 @@ function updateCart() {
             "border-gray-200"
         );
 
-        cartItemElement.innerHTML = `
-            <div class="flex justify-between items-center">
+       cartItemElement.innerHTML = `
+<div class="flex items-center justify-between w-full">
 
-                <!-- Nome e quantidade -->
-                <div class="w-1/2">
-                    <p class="font-bold text-lg">
-                        ${item.name}
-                    </p>
+    <div class="flex flex-col flex-1">
+        <p class="font-bold text-lg">${item.name}</p>
+        <p class="text-gray-500">Qtd: ${item.quantity}</p>
+    </div>
 
-                    <p class="text-gray-500 text-base mt-1">
-                        Qtd: ${item.quantity}
-                    </p>
-                </div>
+    <div class="flex items-center gap-5">
+
+        <button
+            class="decrease-btn w-12 h-12 rounded-xl bg-gray-100 text-gray-700 text-3xl font-bold flex items-center justify-center"
+            data-index="${index}">
+            −
+        </button>
+
+        <span class="font-bold text-2xl w-8 text-center">
+            ${item.quantity}
+        </span>
+
+        <button
+            class="increase-btn w-12 h-12 rounded-xl bg-green-500 text-white text-3xl font-bold flex items-center justify-center"
+            data-index="${index}">
+            +
+        </button>
+
+        <p class="font-bold text-2xl min-w-[100px] text-right">
+            R$ ${itemTotal.toFixed(2)}
+        </p>
+
+    </div>
+`;
 
                 <!-- Controles -->
                 <div class="flex items-center gap-6">
