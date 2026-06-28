@@ -17,19 +17,36 @@
 </head>
 <body class="bg-zinc-100">
 
+
 <!-- HEADER -->
-<header class="w-full h-[410px] bg-zinc-900 bg-[url('./assets/bg.png')] bg-cover bg-center">
-    <div class="w-full h-full flex flex-col justify-center items-center">
-        <img src="./assets/hamb-1.png" alt="Logo da loja" class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200" />
+<header
+    class="w-full h-[410px] bg-cover bg-center"
+    style="background-image: url('./assets/bg.png');">
 
-        <h1 class="text-2xl mt-3 mb-2 font-bold text-white">NOME DA LOJA</h1>
-        <span class="text-white font-xs">NOME DA RUA</span>
+    <!-- Camada escura opcional para melhorar a leitura -->
+    <div class="w-full h-full flex flex-col justify-center items-center bg-black/50">
 
-        <div class="px-4 py-1 rounded-lg mt-5" id="date-span">
-            <span class="text-white font-base">Seg à Dom • 07:00 às 00:00</span>
+        <img src="./assets/hamb-1.png"
+             alt="Logo da loja"
+             class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200" />
+
+        <h1 class="text-2xl mt-3 mb-2 font-bold text-white">
+            NOME DA LOJA
+        </h1>
+
+        <span class="text-white text-sm">
+            NOME DA RUA
+        </span>
+
+        <div class="px-4 py-1 rounded-lg mt-5 bg-green-600" id="date-span">
+            <span class="text-white">
+                Seg à Dom • 07:00 às 00:00
+            </span>
         </div>
+
     </div>
 </header>
+
 
 <!-- TÍTULO -->
 <h2 class="text-2xl md:text-5xl font-bold text-center mt-9 mb-10">MENU</h2>
