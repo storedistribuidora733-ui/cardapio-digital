@@ -13,8 +13,8 @@ const closedAlert = document.getElementById("closed-alert");
 const closedAlertBtn = document.getElementById("closed-alert-btn");
 
 // 🔥 HORÁRIOS CORRIGIDOS
-const openingHour =  24 * 60; // abre 00:00
-const closingHour = 6 * 60;      // fecha 24:00
+const openingHour = 0; // abre 00:00
+const closingHour = 24 * 60;      // fecha 24:00
 
 const dateSpan = document.getElementById("date-span");
 
