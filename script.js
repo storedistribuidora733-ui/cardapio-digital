@@ -10,6 +10,9 @@ const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 
+// Elemento do status visual (será atualizado automaticamente)
+const statusLojaEl = document.getElementById('statusLoja');
+
 // Horário de funcionamento
 const HORA_ABERTURA = 5;
 const HORA_FECHAMENTO = 22;
@@ -23,9 +26,24 @@ function verificarStatusLoja(mostrarAviso = false) {
     const fechamentoMin = HORA_FECHAMENTO * 60;
     const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
 
+    // Atualiza o texto e cor do status visível na tela
+    if (statusLojaEl) {
+        if (aberta) {
+            statusLojaEl.textContent = 'Aberto';
+            statusLojaEl.className = 'status-loja status-aberto';
+        } else {
+            statusLojaEl.textContent = 'Fechado';
+            statusLojaEl.className = 'status-loja status-fechado';
+        }
+    }
+
     if (!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
     return aberta;
 }
+
+// Executa na abertura da página e atualiza a cada 1 minuto
+verificarStatusLoja();
+setInterval(verificarStatusLoja, 60000);
 
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add('oculto'));
 
