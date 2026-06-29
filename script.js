@@ -78,7 +78,7 @@ function atualizarCarrinho() {
     let qtdTotal = 0;
 
     if (carrinho.length === 0) {
-        listaItensCarrinho.innerHTML = '<p style="text-align:center; padding:30px 0; color:#777; font-size:16px;">Seu carrinho está vazio</p>';
+        listaItensCarrinho.innerHTML = '<p style="text-align:center; padding:25px 0; color:#777;">Seu carrinho está vazio</p>';
         valorTotalEl.textContent = '0.00';
         qtdCarrinhoEl.textContent = '0';
         abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
@@ -94,14 +94,14 @@ function atualizarCarrinho() {
         itemEl.className = 'item-carrinho';
         itemEl.innerHTML = `
             <div>
-                <h4 style="font-size:16px; margin-bottom:4px;">${item.nome}</h4>
-                <p style="font-size:14px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
+                <h4 style="font-size:15px; margin-bottom:3px;">${item.nome}</h4>
+                <p style="font-size:13px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
             </div>
-            <div style="display:flex; align-items:center; gap:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
                 <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-                <span style="font-weight:600; font-size:16px;">${item.quantidade}</span>
+                <span style="font-weight:600; font-size:15px;">${item.quantidade}</span>
                 <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-                <span style="font-weight:700; min-width:90px; text-align:right; font-size:16px;">R$ ${totalItem.toFixed(2)}</span>
+                <span style="font-weight:700; min-width:80px; text-align:right; font-size:15px;">R$ ${totalItem.toFixed(2)}</span>
             </div>
         `;
         listaItensCarrinho.appendChild(itemEl);
