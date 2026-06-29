@@ -1,248 +1,204 @@
-const cart = [];
-const cartBtn = document.getElementById("cart-btn");
-const cartModal = document.getElementById("cart-modal");
-const cartItemsContainer = document.getElementById("cart-items");
-const cartTotal = document.getElementById("cart-total");
-const cartCount = document.getElementById("cart-count");
-const closeModalBtn = document.getElementById("close-modal-btn");
-const footerBar = document.querySelector("footer");
-const footerTotal = document.querySelector("footer p.text-sm");
+const carrinho = [];
 
-const closedAlert = document.getElementById("closed-alert");
-const closedAlertBtn = document.getElementById("closed-alert-btn");
+// Elementos gerais
+const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
+const modalCarrinho = document.getElementById('modal-carrinho');
+const fecharModalBtns = [document.getElementById('fechar-modal'), document.getElementById('btn-fechar')];
+const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
+const valorTotalEl = document.getElementById('valor-total');
+const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
+const alertaFechado = document.getElementById('alerta-fechado');
+const btnEntendi = document.getElementById('btn-entendi');
 
-// 🔥 HORÁRIOS CORRIGIDOS
-const openingHour = 7 * 60; // abre às 07:00
-const closingHour = 24 * 60; // fecha às 00:00
+// Horário de funcionamento
+const HORA_ABERTURA = 8;
+const HORA_FECHAMENTO = 22;
 
-const dateSpan = document.getElementById("date-span");
+// ---------------- STATUS DA LOJA ----------------
+function verificarStatusLoja(mostrarAviso = false) {
+    const agora = new Date();
+    const hora = agora.getHours();
+    const totalMinutos = hora * 60 + agora.getMinutes();
+    const aberturaMin = HORA_ABERTURA * 60;
+    const fechamentoMin = HORA_FECHAMENTO * 60;
+    const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
 
-// 🔥 Função corrigida para controlar o status da loja
-function checkStoreStatus(showWarning = false) {
-    const now = new Date();
-    const totalMinutesNow = now.getHours() * 60 + now.getMinutes();
-
-    let isOpen = totalMinutesNow >= openingHour && totalMinutesNow < closingHour;
-
-    if (isOpen) {
-        const minutesToClose = closingHour - totalMinutesNow;
-
-        if (minutesToClose <= 20) {
-            dateSpan.className = "px-3 py-1 rounded-lg text-black font-bold";
-            dateSpan.style.backgroundColor = "#FFD54F";
-            dateSpan.textContent = "⚠ 20 minutos para fechar!";
-        } else {
-            dateSpan.className = "bg-green-600 px-3 py-1 rounded-lg text-white font-bold";
-            dateSpan.style.backgroundColor = "";
-            dateSpan.textContent = "Aberto agora";
-        }
-    } else {
-        dateSpan.className = "bg-red-600 px-3 py-1 rounded-lg text-white font-bold";
-        dateSpan.style.backgroundColor = "";
-        dateSpan.textContent = "Fechado agora";
-
-        if (showWarning) showClosedAlert();
-    }
-
-    return isOpen;
+    if (!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
+    return aberta;
 }
 
-setInterval(checkStoreStatus, 10000);
-checkStoreStatus();
+btnEntendi.addEventListener('click', () => alertaFechado.classList.add('oculto'));
 
-// ALERTA LOJA FECHADA
-function showClosedAlert() {
-    closedAlert.classList.remove("hidden");
-}
-
-closedAlertBtn.addEventListener("click", () => {
-    closedAlert.classList.add("hidden");
-});
-
-// MODAL DO CARRINHO
-cartBtn.addEventListener("click", () => {
-    if (!checkStoreStatus(true)) return;
-    cartModal.classList.remove("hidden");
-    footerBar.classList.add("hidden");
-    cartModal.querySelector(".cart-content").scrollTop = 0;
-});
-
-closeModalBtn.addEventListener("click", () => {
-    cartModal.classList.add("hidden");
-    footerBar.classList.remove("hidden");
-});
-
-// ADICIONAR AO CARRINHO
-document.querySelectorAll(".add-to-cart-btn").forEach(button => {
-    button.addEventListener("click", () => {
-        if (!checkStoreStatus(true)) return;
-
-        const name = button.getAttribute("data-name");
-        const price = parseFloat(button.getAttribute("data-price"));
-
-        const existing = cart.find(item => item.name === name);
-        if (existing) {
-            existing.quantity++;
-        } else {
-            cart.push({ name, price, quantity: 1 });
-        }
-
-        updateCart();
+// ---------------- CONTROLE DE QUANTIDADE ----------------
+document.querySelectorAll('.qtd-btn').forEach(botao => {
+    botao.addEventListener('click', () => {
+        const valorEl = botao.parentElement.querySelector('.qtd-valor');
+        let valor = parseInt(valorEl.textContent);
+        if (botao.classList.contains('aumentar')) valor++;
+        if (botao.classList.contains('diminuir') && valor > 1) valor--;
+        valorEl.textContent = valor;
     });
 });
 
-// ATUALIZAR CARRINHO
-function updateCart() {
-    cartItemsContainer.innerHTML = "";
+// ---------------- ADICIONAR AO CARRINHO ----------------
+document.querySelectorAll('.add-carrinho').forEach(botao => {
+    botao.addEventListener('click', () => {
+        if (!verificarStatusLoja(true)) return;
+
+        const nome = botao.dataset.nome;
+        const preco = parseFloat(botao.dataset.preco);
+        const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
+
+        const itemExistente = carrinho.find(item => item.nome === nome);
+        if (itemExistente) {
+            itemExistente.quantidade += qtd;
+        } else {
+            carrinho.push({ nome, preco, quantidade: qtd });
+        }
+
+        atualizarCarrinho();
+
+        // Feedback visual
+        const original = botao.innerHTML;
+        botao.innerHTML = '<i class="fa fa-check"></i> Adicionado';
+        botao.style.background = '#22c55e';
+        botao.style.color = 'white';
+        setTimeout(() => {
+            botao.innerHTML = original;
+            botao.style.background = '#fbbf24';
+            botao.style.color = '#111827';
+        }, 1300);
+    });
+});
+
+// ---------------- ATUALIZAR CARRINHO ----------------
+function atualizarCarrinho() {
+    listaItensCarrinho.innerHTML = '';
     let total = 0;
-    let totalItems = 0;
+    let qtdTotal = 0;
 
-    cart.forEach((item, index) => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        totalItems += item.quantity;
+    if (carrinho.length === 0) {
+        listaItensCarrinho.innerHTML = '<p style="text-align:center; padding:25px 0; color:#777;">Seu carrinho está vazio</p>';
+        valorTotalEl.textContent = '0.00';
+        qtdCarrinhoEl.textContent = '0';
+        abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
+        return;
+    }
 
-        const cartItemElement = document.createElement("div");
+    carrinho.forEach((item, index) => {
+        const totalItem = item.preco * item.quantidade;
+        total += totalItem;
+        qtdTotal += item.quantidade;
 
-        cartItemElement.innerHTML = `
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                padding:12px 0;
-                border-bottom:1px solid #eee;
-                flex-wrap: wrap;
-                gap: 8px;
-            ">
-                <div>
-                    <div style="font-weight:bold;font-size:16px;">
-                        ${item.name}
-                    </div>
-                    <div style="color:#666;font-size:14px;">
-                        Quantidade: ${item.quantity}
-                    </div>
-                </div>
-
-                <div style="
-                    display:flex;
-                    align-items:center;
-                    gap:8px;
-                ">
-                    <button class="decrease-btn"
-                        data-index="${index}"
-                        style="
-                            width:36px;
-                            height:36px;
-                            border:none;
-                            border-radius:6px;
-                            font-size:20px;
-                            background:#e5e7eb;
-                            cursor:pointer;
-                        ">
-                        -
-                    </button>
-
-                    <span style="
-                        font-size:18px;
-                        font-weight:bold;
-                        min-width:25px;
-                        text-align:center;
-                    ">
-                        ${item.quantity}
-                    </span>
-
-                    <button class="increase-btn"
-                        data-index="${index}"
-                        style="
-                            width:36px;
-                            height:36px;
-                            border:none;
-                            border-radius:6px;
-                            font-size:20px;
-                            background:#22c55e;
-                            color:white;
-                            cursor:pointer;
-                        ">
-                        +
-                    </button>
-
-                    <span style="
-                        font-size:16px;
-                        font-weight:bold;
-                        min-width:80px;
-                        text-align:right;
-                    ">
-                        R$ ${itemTotal.toFixed(2)}
-                    </span>
-                </div>
+        const itemEl = document.createElement('div');
+        itemEl.className = 'item-carrinho';
+        itemEl.innerHTML = `
+            <div>
+                <h4>${item.nome}</h4>
+                <p style="font-size:13px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
+                <span>${item.quantidade}</span>
+                <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
+                <span style="font-weight:600; min-width:80px; text-align:right;">R$ ${totalItem.toFixed(2)}</span>
             </div>
         `;
-
-        cartItemsContainer.appendChild(cartItemElement);
+        listaItensCarrinho.appendChild(itemEl);
     });
 
-    cartTotal.innerText = total.toFixed(2);
-    cartCount.innerText = totalItems;
-    footerTotal.innerText = `${totalItems} itens • R$ ${total.toFixed(2)}`;
+    valorTotalEl.textContent = total.toFixed(2);
+    qtdCarrinhoEl.textContent = qtdTotal;
+    abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
 
-    addQuantityEvents();
+    adicionarEventosCarrinho();
 }
 
-
-function addQuantityEvents() {
-    document.querySelectorAll(".increase-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const index = btn.getAttribute("data-index");
-            cart[index].quantity++;
-            updateCart();
+function adicionarEventosCarrinho() {
+    document.querySelectorAll('.aumentar-item').forEach(botao => {
+        botao.addEventListener('click', () => {
+            const idx = parseInt(botao.dataset.index);
+            carrinho[idx].quantidade++;
+            atualizarCarrinho();
         });
     });
-
-    document.querySelectorAll(".decrease-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const index = btn.getAttribute("data-index");
-            if (cart[index].quantity > 1) {
-                cart[index].quantity--;
+    document.querySelectorAll('.diminuir-item').forEach(botao => {
+        botao.addEventListener('click', () => {
+            const idx = parseInt(botao.dataset.index);
+            if (carrinho[idx].quantidade > 1) {
+                carrinho[idx].quantidade--;
             } else {
-                cart.splice(index, 1);
+                carrinho.splice(idx, 1);
             }
-            updateCart();
+            atualizarCarrinho();
         });
     });
 }
 
-// FINALIZAR PEDIDO
-document.getElementById("checkout-btn").addEventListener("click", () => {
-    const name = document.getElementById("customer-name").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const payment = document.getElementById("payment-method").value;
-    const obs = document.getElementById("observations").value.trim();
+// ---------------- ABRIR / FECHAR MODAL ----------------
+abrirCarrinhoBtn.addEventListener('click', () => {
+    if (!verificarStatusLoja(true)) return;
+    modalCarrinho.classList.remove('oculto');
+    document.body.style.overflow = 'hidden';
+});
 
-    if (cart.length === 0) {
-        alert("Seu carrinho está vazio!");
+fecharModalBtns.forEach(botao => {
+    botao.addEventListener('click', () => {
+        modalCarrinho.classList.add('oculto');
+        document.body.style.overflow = 'auto';
+    });
+});
+
+// ---------------- FILTRO POR CATEGORIAS ----------------
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+    botao.addEventListener('click', () => {
+        document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+        botao.classList.add('ativo');
+        const categoria = botao.dataset.categoria;
+
+        document.querySelectorAll('.produto').forEach(produto => {
+            if (categoria === 'todos' || produto.dataset.categoria === categoria) {
+                produto.style.display = 'flex';
+            } else {
+                produto.style.display = 'none';
+            }
+        });
+    });
+});
+
+// ---------------- FINALIZAR PEDIDO NO WHATSAPP ----------------
+document.getElementById('btn-finalizar').addEventListener('click', () => {
+    const nome = document.getElementById('nome-cliente').value.trim();
+    const endereco = document.getElementById('endereco-cliente').value.trim();
+    const pagamento = document.getElementById('forma-pagamento').value;
+    const obs = document.getElementById('observacoes').value.trim();
+    const avisoEndereco = document.getElementById('aviso-endereco');
+
+    if (carrinho.length === 0) {
+        alert('Adicione itens ao carrinho primeiro!');
         return;
     }
 
-    if (address.length < 5) {
-        document.getElementById("address-warn").classList.remove("hidden");
+    if (endereco.length < 8) {
+        avisoEndereco.classList.remove('oculto');
         return;
     }
+    avisoEndereco.classList.add('oculto');
 
-    let message = `📦 *Novo pedido:*\n`;
-    message += `👤 *Cliente*: ${name || "Não informado"}\n`;
-    message += `🏠 *Endereço*: ${address}\n`;
-    message += `💳 *Pagamento*: ${payment}\n\n`;
-    message += `🛒 *Itens:*\n`;
+    let mensagem = `📦 *NOVO PEDIDO*\n\n`;
+    mensagem += `👤 *Nome:* ${nome || 'Não informado'}\n`;
+    mensagem += `🏠 *Endereço:* ${endereco}\n`;
+    mensagem += `💳 *Forma de pagamento:* ${pagamento}\n\n`;
+    mensagem += `🛒 *Itens do pedido:*\n`;
 
-    cart.forEach(item => {
-        message += `• ${item.name} - Qtd: ${item.quantity} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+    carrinho.forEach(item => {
+        mensagem += `• ${item.nome} | ${item.quantidade}x | R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
     });
 
-    message += `\n💬 *Observações*: ${obs || "Nenhuma"}\n`;
-    message += `💰 *Total:* R$ ${cartTotal.innerText}`;
+    mensagem += `\n💬 *Observações:* ${obs || 'Nenhuma observação'}\n`;
+    mensagem += `💰 *Total:* R$ ${valorTotalEl.textContent}`;
 
-    const whatsappNumber = "19989021323"; 
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-
-    window.open(url, "_blank");
+    const numeroWhatsApp = '5519989021323';
+    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
 });
