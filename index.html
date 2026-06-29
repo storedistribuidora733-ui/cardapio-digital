@@ -2,300 +2,693 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="./styles/output.css" />
-
-    <title>Cardápio Digital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Cardápio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* Ajustes globais para responsividade */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-        }
-        body {
+            box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            padding-bottom: 80px; /* Espaço para o carrinho fixo */
         }
-        @keyframes fade {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+
+        body {
+            background-color: #f8f9fa;
+            padding-bottom: 100px;
         }
-        .animate-fade { animation: fade 0.25s ease-out; }
-        /* Ajuste para telas pequenas */
+
+        /* ---------------- CABEÇALHO DA LOJA ---------------- */
+        .cabecalho-loja {
+            width: 100%;
+            height: 360px;
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo-loja {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.25);
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .cabecalho-loja h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .cabecalho-loja p {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* ---------------- CATEGORIAS ---------------- */
+        .categorias {
+            max-width: 1180px;
+            margin: 25px auto;
+            padding: 0 16px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .categorias::-webkit-scrollbar {
+            display: none;
+        }
+
+        .categoria-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .categoria-btn.ativo {
+            background-color: #fbbf24;
+            border-color: #fbbf24;
+            color: #111;
+            font-weight: 600;
+        }
+
+        /* ---------------- LISTA DE PRODUTOS ---------------- */
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .lista-produtos {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .produto {
+            display: flex;
+            align-items: flex-start;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 14px;
+            gap: 16px;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        .produto-imagem {
+            position: relative;
+            flex-shrink: 0;
+            width: 160px;
+            height: 160px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .produto-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tag-mais-pedido {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #dc2626;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .produto-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 4px;
+        }
+
+        .produto-codigo {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .produto-nome {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .produto-descricao {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .produto-detalhes {
+            font-size: 13px;
+            color: #78716c;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 6px;
+        }
+
+        .produto-acoes {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 14px;
+            flex-shrink: 0;
+            padding-top: 4px;
+        }
+
+        .produto-preco {
+            font-size: 22px;
+            font-weight: 700;
+            color: #dc2626;
+        }
+
+        .controle-qtd {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .qtd-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: #f3f4f6;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+        }
+
+        .qtd-valor {
+            width: 42px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            background: #fff;
+            color: #111;
+        }
+
+        .add-carrinho {
+            width: 130px;
+            height: 42px;
+            border: none;
+            border-radius: 8px;
+            background: #fbbf24;
+            color: #111827;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .add-carrinho:hover {
+            background: #f59e0b;
+        }
+
+        /* ---------------- RODAPÉ CARRINHO FIXO ---------------- */
+        .carrinho-fixo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            color: white;
+            padding: 14px 16px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+            z-index: 999;
+        }
+
+        .carrinho-btn {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .carrinho-esq {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .badge-qtd {
+            width: 40px;
+            height: 40px;
+            background: #fbbf24;
+            color: #111827;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .texto-seguro {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .btn-ver-carrinho {
+            background: #fbbf24;
+            color: #111827;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ---------------- MODAL CARRINHO ---------------- */
+        #modal-carrinho {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-conteudo {
+            background: white;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            border-radius: 14px;
+            padding: 22px;
+            overflow-y: auto;
+        }
+
+        .modal-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fechar-modal {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .item-carrinho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-grupo {
+            margin: 15px 0;
+        }
+
+        .form-grupo label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-grupo input,
+        .form-grupo select,
+        .form-grupo textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .aviso-erro {
+            font-size: 12px;
+            color: #dc2626;
+            margin-top: 4px;
+        }
+
+        .total-texto {
+            font-size: 19px;
+            font-weight: 700;
+            text-align: right;
+            margin: 15px 0;
+        }
+
+        .botoes-modal {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-fechar {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #eee;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-finalizar {
+            flex: 2;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #22c55e;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ---------------- ALERTA FECHADO ---------------- */
+        #alerta-fechado {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            padding: 16px;
+        }
+
+        .alerta-caixa {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 350px;
+        }
+
+        .alerta-caixa h3 {
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+
+        .btn-entendi {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #dc2626;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        /* ---------------- AJUSTES RESPONSIVOS ---------------- */
         @media (max-width: 768px) {
-            h1 { font-size: 1.75rem !important; }
-            h2 { font-size: 1.5rem !important; }
-            .product-img { width: 100px !important; height: 100px !important; }
-            .product-info p { font-size: 0.9rem !important; }
-            .product-price { font-size: 1.1rem !important; }
-            .cart-btn-footer { padding: 0.75rem !important; font-size: 1rem !important; }
-            .modal-content { width: 95% !important; padding: 1rem !important; }
+            .cabecalho-loja {
+                height: 280px;
+            }
+
+            .logo-loja {
+                width: 110px;
+                height: 110px;
+            }
+
+            .cabecalho-loja h1 {
+                font-size: 28px;
+            }
+
+            .cabecalho-loja p {
+                font-size: 16px;
+            }
+
+            .produto {
+                flex-direction: column;
+            }
+
+            .produto-imagem {
+                width: 100%;
+                height: 180px;
+            }
+
+            .produto-acoes {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
+            }
+
+            .add-carrinho {
+                width: auto;
+                padding: 0 16px;
+            }
         }
     </style>
 </head>
-<body class="bg-zinc-100">
+<body>
 
-<!-- HEADER -->
-<header
-    class="w-full h-[320px] md:h-[410px] bg-cover bg-center"
-    style="background-image: url('./assets/bg.png');">
+<!-- CABEÇALHO DA LOJA -->
+<div class="cabecalho-loja">
+    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Logo Loja" class="logo-loja">
+    <h1>NOME DA LOJA</h1>
+    <p>NOME DA RUA, 123 - SUA CIDADE</p>
+</div>
 
-    <!-- Camada escura opcional para melhorar a leitura -->
-    <div class="w-full h-full flex flex-col justify-center items-center bg-black/50 px-4 text-center">
-
-        <img src="./assets/hamb-1.png"
-             alt="Logo da loja"
-             class="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-lg hover:scale-110 duration-200 mb-3" />
-
-        <h1 class="text-2xl md:text-4xl font-bold text-white">
-            NOME DA LOJA
-        </h1>
-
-        <span class="text-white text-base md:text-lg mt-1">
-            NOME DA RUA, 123 - SUA CIDADE
-        </span>
-
-        <div class="px-4 py-2 rounded-lg mt-4 bg-green-600 text-sm md:text-base" id="date-span">
-            <span class="text-white font-medium">
-                Seg à Dom • 07:00 às 00:00
-            </span>
-        </div>
-
-    </div>
-</header>
-
-
-<!-- TÍTULO -->
-<h2 class="text-2xl md:text-5xl font-bold text-center mt-8 mb-8">MENU</h2>
+<!-- CATEGORIAS -->
+<div class="categorias">
+    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
+    <button class="categoria-btn" data-categoria="burgers"><i class="fa fa-burger"></i> Burgers</button>
+    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
+    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
+    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
+</div>
 
 <!-- LISTA DE PRODUTOS -->
-<main id="menu" class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 mx-auto max-w-7xl px-3 md:px-6 mb-24">
-
-    <!-- PRODUTO 1 -->
-    <div class="flex gap-3 md:gap-4 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-        <img src="./assets/hamb-2.png" class="product-img w-28 h-28 rounded-md hover:scale-105 duration-300 object-cover" alt="Produto 1">
-
-        <div class="flex-1 flex flex-col justify-between">
-            <div>
-                <p class="font-bold text-lg">Nome do produto 1</p>
-                <p class="text-sm text-gray-600 mt-1">Descrição do produto de forma curta e objetiva</p>
+<div class="container">
+    <div class="lista-produtos">
+        <!-- PRODUTO 1 -->
+        <div class="produto" data-categoria="burgers" data-nome="Nome do produto 1">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1">
+                <span class="tag-mais-pedido"><i class="fa fa-star"></i> MAIS PEDIDO</span>
             </div>
-
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg product-price">R$ 10,00</p>
-
-                <button class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg add-to-cart-btn transition-colors"
-                        data-name="Nome do produto 1" data-price="10.00">
-                    <i class="fa fa-cart-plus text-white text-lg"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRODUTO 2 -->
-    <div class="flex gap-3 md:gap-4 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-        <img src="./assets/hamb-8.png" class="product-img w-28 h-28 rounded-md hover:scale-105 duration-300 object-cover" alt="Produto 2">
-
-        <div class="flex-1 flex flex-col justify-between">
-            <div>
-                <p class="font-bold text-lg">Nome do produto 2</p>
-                <p class="text-sm text-gray-600 mt-1">Descrição do produto de forma curta e objetiva</p>
-            </div>
-
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg product-price">R$ 12,00</p>
-
-                <button class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg add-to-cart-btn transition-colors"
-                        data-name="Nome do produto 2" data-price="12.00">
-                    <i class="fa fa-cart-plus text-white text-lg"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRODUTO 3 -->
-    <div class="flex gap-3 md:gap-4 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-        <img src="./assets/hamb-8.png" class="product-img w-28 h-28 rounded-md hover:scale-105 duration-300 object-cover" alt="Produto 3">
-
-        <div class="flex-1 flex flex-col justify-between">
-            <div>
-                <p class="font-bold text-lg">Nome do produto 3</p>
-                <p class="text-sm text-gray-600 mt-1">Descrição do produto de forma curta e objetiva</p>
-            </div>
-
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg product-price">R$ 12,00</p>
-
-                <button class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg add-to-cart-btn transition-colors"
-                        data-name="Nome do produto 3" data-price="12.00">
-                    <i class="fa fa-cart-plus text-white text-lg"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRODUTO 4 -->
-    <div class="flex gap-3 md:gap-4 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-        <img src="./assets/hamb-8.png" class="product-img w-28 h-28 rounded-md hover:scale-105 duration-300 object-cover" alt="Produto 4">
-
-        <div class="flex-1 flex flex-col justify-between">
-            <div>
-                <p class="font-bold text-lg">Nome do produto 4</p>
-                <p class="text-sm text-gray-600 mt-1">Descrição do produto de forma curta e objetiva</p>
-            </div>
-
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg product-price">R$ 12,00</p>
-
-                <button class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg add-to-cart-btn transition-colors"
-                        data-name="Nome do produto 4" data-price="12.00">
-                    <i class="fa fa-cart-plus text-white text-lg"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- BEBIDAS TÍTULO -->
-    <h2 class="font-bold text-2xl md:text-3xl text-center my-6 col-span-full">BEBIDAS</h2>
-
-    <!-- BEBIDA 1 -->
-    <div class="flex gap-3 md:gap-4 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-        <img src="./assets/refri-1.png" class="product-img w-28 h-28 rounded-md hover:scale-105 duration-300 object-cover" alt="Bebida 1">
-
-        <div class="flex-1 flex flex-col justify-between">
-            <div>
-                <p class="font-bold text-lg">Nome da bebida 1</p>
-                <p class="text-sm text-gray-600 mt-1">Descrição da bebida</p>
-            </div>
-
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg product-price">R$ 5,00</p>
-
-                <button class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg add-to-cart-btn transition-colors"
-                        data-name="Nome da bebida 1" data-price="5.00">
-                    <i class="fa fa-cart-plus text-white text-lg"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- BEBIDA 2 -->
-    <div class="flex gap-3 md:gap-4 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-        <img src="./assets/refri-2.png" class="product-img w-28 h-28 rounded-md hover:scale-105 duration-300 object-cover" alt="Bebida 2">
-
-        <div class="flex-1 flex flex-col justify-between">
-            <div>
-                <p class="font-bold text-lg">Nome da bebida 2</p>
-                <p class="text-sm text-gray-600 mt-1">Descrição da bebida</p>
-            </div>
-
-            <div class="flex items-center justify-between mt-3">
-                <p class="font-bold text-lg product-price">R$ 5,00</p>
-
-                <button class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg add-to-cart-btn transition-colors"
-                        data-name="Nome da bebida 2" data-price="5.00">
-                    <i class="fa fa-cart-plus text-white text-lg"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-</main>
-
-<!-- MODAL DO CARRINHO -->
-<div id="cart-modal" class="bg-black/70 w-full h-full fixed inset-0 z-[99] flex items-center justify-center hidden p-4">
-    <div class="bg-white p-5 rounded-xl min-w-[95%] md:min-w-[600px] max-h-[90vh] overflow-y-auto cart-content modal-content">
-        <h2 class="text-center font-bold text-2xl mb-4">Meu Carrinho</h2>
-
-        <div id="cart-items" class="flex flex-col gap-3 my-4"></div>
-
-        <div class="border-t border-gray-200 pt-3 mb-4">
-            <p class="font-bold text-xl">Total: R$ <span id="cart-total">0.00</span></p>
-        </div>
-
-        <div class="space-y-4">
-            <div>
-                <label for="customer-name" class="block font-bold mb-1">Nome:</label>
-                <input type="text" id="customer-name" class="w-full border border-gray-300 p-2 rounded-lg">
-            </div>
-
-            <div>
-                <label for="address" class="block font-bold mb-1">Endereço:</label>
-                <input type="text" id="address" class="w-full border border-gray-300 p-2 rounded-lg">
-                <p class="text-red-500 text-sm mt-1 hidden" id="address-warn">Digite seu endereço completo!</p>
-            </div>
-
-            <div>
-                <label for="payment-method" class="block font-bold mb-1">Pagamento:</label>
-                <select id="payment-method" class="w-full border border-gray-300 p-2 rounded-lg">
-                    <option value="Cartão">Cartão</option>
-                    <option value="Pix">Pix</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="observations" class="block font-bold mb-1">Observações:</label>
-                <textarea id="observations" class="w-full border border-gray-300 p-2 rounded-lg h-20"></textarea>
-            </div>
-        </div>
-
-        <div class="flex items-center justify-between mt-6 gap-3">
-            <button id="close-modal-btn" class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 font-medium transition-colors">Fechar</button>
-            <button id="checkout-btn" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg font-bold text-lg transition-colors">
-                Finalizar pedido
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL DE LOJA FECHADA -->
-<div id="closed-alert" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
-    <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-[380px] text-center animate-fade">
-        <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
-        <p class="text-gray-700">Nosso horário de atendimento é das <b>07:00 às 00:00</b>.</p>
-        <p class="text-gray-700 mt-1">Volte mais tarde! 😊</p>
-
-        <button id="closed-alert-btn"
-                class="mt-5 bg-red-600 hover:bg-red-700 duration-200 text-white px-5 py-2 rounded-lg font-bold w-full">
-            Entendi
-        </button>
-    </div>
-</div>
-
-<!-- BOTÃO FIXO DO CARRINHO - IGUAL AO MODELO -->
-<footer class="w-full bg-zinc-900 py-3 fixed bottom-0 left-0 right-0 z-[100] shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="relative">
-                <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <i class="fa fa-shopping-cart text-black text-xl"></i>
+            <div class="produto-info">
+                <p class="produto-codigo">01</p>
+                <h3 class="produto-nome">Nome do produto 1</h3>
+                <p class="produto-descricao">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-fire"></i> Muito pedido</span>
+                    <span><i class="fa fa-clock"></i> 20-30 min</span>
                 </div>
-                <span id="cart-count" class="absolute -top-1 -right-1 bg-white text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
             </div>
-            <div class="text-white">
-                <p class="font-bold text-lg">Seu carrinho</p>
-                <p class="text-gray-300 text-sm">0 itens • R$ 0,00</p>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 10,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">1</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Nome do produto 1" data-preco="10.00">
+                    <i class="fa fa-shopping-cart"></i> Adicionar
+                </button>
             </div>
-            <span class="hidden md:flex items-center gap-1 text-xs text-gray-300 ml-4">
-                <i class="fa fa-lock"></i> Ambiente 100% seguro
-            </span>
         </div>
-        <button id="cart-btn" class="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors cart-btn-footer">
-            Ver carrinho <i class="fa fa-arrow-right"></i>
-        </button>
+
+        <!-- PRODUTO 2 -->
+        <div class="produto" data-categoria="burgers" data-nome="Nome do produto 2">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">02</p>
+                <h3 class="produto-nome">Nome do produto 2</h3>
+                <p class="produto-descricao">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-leaf"></i> Vegetariano</span>
+                    <span><i class="fa fa-clock"></i> 20-30 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 12,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">1</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Nome do produto 2" data-preco="12.00">
+                    <i class="fa fa-shopping-cart"></i> Adicionar
+                </button>
+            </div>
+        </div>
+
+        <!-- PRODUTO 3 -->
+        <div class="produto" data-categoria="burgers" data-nome="Nome do produto 3">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">03</p>
+                <h3 class="produto-nome">Nome do produto 3</h3>
+                <p class="produto-descricao">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-pepper-hot"></i> Picante</span>
+                    <span><i class="fa fa-clock"></i> 20-30 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 15,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">1</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Nome do produto 3" data-preco="15.00">
+                    <i class="fa fa-shopping-cart"></i> Adicionar
+                </button>
+            </div>
+        </div>
     </div>
-</footer>
+</div>
 
-<!-- JS -->
+<!-- MODAL CARRINHO -->
+<div id="modal-carrinho" class="oculto">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h3>Meu Carrinho</h3>
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
+        </div>
+
+        <div id="lista-itens-carrinho"></div>
+
+        <p class="total-texto">Total: R$ <span id="valor-total">0.00</span></p>
+
+        <div class="form-grupo">
+            <label>Nome completo</label>
+            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
+        </div>
+
+        <div class="form-grupo">
+            <label>Endereço completo</label>
+            <input type="text" id="endereco-cliente" placeholder="Rua, número, bairro, cidade">
+            <p id="aviso-endereco" class="aviso-erro oculto">Informe o endereço completo!</p>
+        </div>
+
+        <div class="form-grupo">
+            <label>Forma de pagamento</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+            </select>
+        </div>
+
+        <div class="form-grupo">
+            <label>Observações</label>
+            <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, ponto da carne..."></textarea>
+        </div>
+
+        <div class="botoes-modal">
+            <button id="btn-fechar" class="btn-fechar">Fechar</button>
+            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
+        </div>
+    </div>
+</div>
+
+<!-- ALERTA FECHADO -->
+<div id="alerta-fechado" class="oculto">
+    <div class="alerta-caixa">
+        <h3>Loja Fechada</h3>
+        <p>Nosso horário de atendimento é das <b>08:00 às 22:00</b>. Volte mais tarde!</p>
+        <button id="btn-entendi" class="btn-entendi">Entendi</button>
+    </div>
+</div>
+
+<!-- BOTÃO CARRINHO FIXO -->
+<div class="carrinho-fixo">
+    <button id="abrir-carrinho" class="carrinho-btn">
+        <div class="carrinho-esq">
+            <span class="badge-qtd" id="qtd-carrinho">0</span>
+            <div>
+                <div>Seu carrinho</div>
+                <div class="texto-seguro">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</div>
+            </div>
+        </div>
+        <div class="btn-ver-carrinho">
+            Ver carrinho <i class="fa fa-arrow-right"></i>
+        </div>
+    </button>
+</div>
+
+<!-- ARQUIVO JAVASCRIPT -->
 <script src="script.js"></script>
-
 </body>
 </html>
