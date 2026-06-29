@@ -1,7 +1,6 @@
 const carrinho = [];
 
 // Elementos gerais
-const statusLojaEl = document.getElementById('status-loja');
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
 const fecharModalBtns = [document.getElementById('fechar-modal'), document.getElementById('btn-fechar')];
@@ -10,6 +9,7 @@ const valorTotalEl = document.getElementById('valor-total');
 const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
+const campoBusca = document.getElementById('campo-busca');
 
 // Horário de funcionamento
 const HORA_ABERTURA = 8;
@@ -27,33 +27,13 @@ function verificarStatusLoja(mostrarAviso = false) {
 
     const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
 
-    if (aberta) {
-        const minutosRestantes = fechamentoMin - totalMinutos;
-        if (minutosRestantes <= 20) {
-            statusLojaEl.textContent = "⚠ Aberto - Fecha em breve!";
-            statusLojaEl.style.backgroundColor = "#ffc107";
-            statusLojaEl.style.color = "#111";
-        } else {
-            statusLojaEl.textContent = "✅ Aberto agora • 08:00 às 22:00";
-            statusLojaEl.style.backgroundColor = "#22c55e";
-            statusLojaEl.style.color = "white";
-        }
-    } else {
-        statusLojaEl.textContent = "🔒 Fechado agora • Volta às 08:00";
-        statusLojaEl.style.backgroundColor = "#e21b23";
-        statusLojaEl.style.color = "white";
-        if (mostrarAviso) alertaFechado.classList.remove('oculto');
-    }
-
+    if (!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
     return aberta;
 }
 
-setInterval(verificarStatusLoja, 10000);
-verificarStatusLoja();
-
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add('oculto'));
 
-// ---------------- CONTROLE DE QUANTIDADE NOS PRODUTOS ----------------
+// ---------------- CONTROLE DE QUANTIDADE ----------------
 document.querySelectorAll('.qtd-btn').forEach(botao => {
     botao.addEventListener('click', () => {
         const valorEl = botao.parentElement.querySelector('.qtd-valor');
@@ -84,12 +64,14 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
 
         // Feedback visual
         const original = botao.innerHTML;
-        botao.innerHTML = '<i class="fa fa-check"></i>';
+        botao.innerHTML = '<i class="fa fa-check"></i> Adicionado';
         botao.style.background = '#22c55e';
+        botao.style.color = 'white';
         setTimeout(() => {
             botao.innerHTML = original;
-            botao.style.background = '';
-        }, 1200);
+            botao.style.background = '#f9c74f';
+            botao.style.color = '#111';
+        }, 1300);
     });
 });
 
@@ -103,7 +85,7 @@ function atualizarCarrinho() {
         listaItensCarrinho.innerHTML = '<p style="text-align:center; padding:25px 0; color:#777;">Seu carrinho está vazio</p>';
         valorTotalEl.textContent = '0.00';
         qtdCarrinhoEl.textContent = '0';
-        abrirCarrinhoBtn.querySelector('span:nth-child(3)').textContent = '0 itens • R$ 0,00';
+        abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
         return;
     }
 
@@ -131,7 +113,7 @@ function atualizarCarrinho() {
 
     valorTotalEl.textContent = total.toFixed(2);
     qtdCarrinhoEl.textContent = qtdTotal;
-    abrirCarrinhoBtn.querySelector('span:nth-child(3)').textContent = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')}`;
+    abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
 
     adicionarEventosCarrinho();
 }
@@ -171,7 +153,7 @@ fecharModalBtns.forEach(botao => {
     });
 });
 
-// ---------------- FILTRO DE CATEGORIAS ----------------
+// ---------------- FILTRO POR CATEGORIAS ----------------
 document.querySelectorAll('.categoria-btn').forEach(botao => {
     botao.addEventListener('click', () => {
         document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
@@ -185,6 +167,19 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
                 produto.style.display = 'none';
             }
         });
+    });
+});
+
+// ---------------- BUSCA DE PRODUTOS ----------------
+campoBusca.addEventListener('input', () => {
+    const termo = campoBusca.value.trim().toLowerCase();
+    document.querySelectorAll('.produto').forEach(produto => {
+        const nome = produto.dataset.nome.toLowerCase();
+        if (nome.includes(termo)) {
+            produto.style.display = 'flex';
+        } else {
+            produto.style.display = 'none';
+        }
     });
 });
 
@@ -223,4 +218,4 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     const numeroWhatsApp = '5519989021323';
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, '_blank');
-}); 
+});
