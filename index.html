@@ -18,13 +18,13 @@
 
         body {
             background-color: #f8f9fa;
-            padding-bottom: 110px;
+            padding-bottom: 90px;
         }
 
         /* ---------------- CABEÇALHO DA LOJA ---------------- */
         .cabecalho-loja {
             width: 100%;
-            height: 360px;
+            height: 320px;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=90') center/cover no-repeat;
             display: flex;
             flex-direction: column;
@@ -32,38 +32,36 @@
             justify-content: center;
             color: #ffffff;
             text-align: center;
-            padding: 20px;
+            padding: 16px;
         }
 
         .logo-loja {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             border: 3px solid rgba(255,255,255,0.3);
             object-fit: cover;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
 
         .cabecalho-loja h1 {
-            font-size: 38px;
+            font-size: 30px;
             font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
 
         .cabecalho-loja p {
-            font-size: 19px;
-            opacity: 0.92;
-            font-weight: 400;
+            font-size: 16px;
+            opacity: 0.9;
         }
 
         /* ---------------- CATEGORIAS ---------------- */
         .categorias {
             width: 100%;
-            padding: 24px 20px;
+            padding: 16px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
             scrollbar-width: none;
         }
@@ -73,54 +71,55 @@
         }
 
         .categoria-btn {
-            padding: 14px 28px;
-            border-radius: 12px;
-            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
             background: #ffffff;
-            font-weight: 600;
-            font-size: 18px;
+            font-weight: 500;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             white-space: nowrap;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .categoria-btn.ativo {
             background-color: #facc15;
-            color: #000000;
-            font-weight: 700;
+            border-color: #facc15;
+            color: #111;
+            font-weight: 600;
         }
 
         /* ---------------- LISTA DE PRODUTOS ---------------- */
         .container {
             width: 100%;
-            padding: 0 20px;
+            padding: 0 16px;
         }
 
         .lista-produtos {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .produto {
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 12px;
             display: grid;
-            grid-template-columns: 110px 1fr auto;
-            gap: 16px;
+            grid-template-columns: 90px 1fr auto;
+            gap: 12px;
             align-items: start;
         }
 
         .produto-imagem {
             position: relative;
-            width: 110px;
-            height: 110px;
-            border-radius: 12px;
+            width: 90px;
+            height: 90px;
+            border-radius: 8px;
             overflow: hidden;
         }
 
@@ -132,114 +131,114 @@
 
         .tag-mais-pedido {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 4px;
+            left: 4px;
             background: #dc2626;
             color: white;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 6px 10px;
-            border-radius: 0 0 12px 0;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .produto-info {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
+            padding-top: 2px;
         }
 
         .produto-codigo {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 600;
             color: #ca8a04;
         }
 
         .produto-nome {
-            font-size: 24px;
+            font-size: 17px;
             font-weight: 700;
             color: #111827;
             line-height: 1.2;
         }
 
         .produto-descricao {
-            font-size: 16px;
+            font-size: 13px;
             color: #6b7280;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .produto-detalhes {
-            font-size: 14px;
+            font-size: 12px;
             color: #78716c;
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-top: 6px;
+            gap: 12px;
+            margin-top: 4px;
         }
 
         .produto-acoes {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 12px;
+            gap: 8px;
+            padding-top: 2px;
         }
 
         .produto-preco {
-            font-size: 26px;
+            font-size: 19px;
             font-weight: 700;
             color: #dc2626;
         }
 
         .controle-qtd {
             display: flex;
-            flex-direction: column;
-            gap: 6px;
+            align-items: center;
+            gap: 4px;
         }
 
         .qtd-btn {
-            width: 44px;
-            height: 44px;
+            width: 30px;
+            height: 30px;
             border: none;
             background: #f3f4f6;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .qtd-valor {
-            width: 44px;
-            height: 44px;
+            width: 32px;
+            height: 30px;
             text-align: center;
             font-weight: 600;
-            font-size: 18px;
+            font-size: 15px;
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
         }
 
         .add-carrinho {
-            width: 140px;
-            height: 48px;
+            width: 100px;
+            height: 36px;
             border: none;
-            border-radius: 10px;
+            border-radius: 6px;
             background: #facc15;
             color: #111827;
-            font-weight: 700;
-            font-size: 17px;
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
             transition: background 0.2s;
         }
 
@@ -255,7 +254,7 @@
             width: 100%;
             background: #111827;
             color: white;
-            padding: 16px 20px;
+            padding: 12px 16px;
             box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
             z-index: 999;
         }
@@ -274,12 +273,12 @@
         .carrinho-esq {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .badge-qtd {
-            width: 48px;
-            height: 48px;
+            width: 36px;
+            height: 36px;
             background: #facc15;
             color: #111827;
             border-radius: 50%;
@@ -287,17 +286,17 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 16px;
         }
 
         .texto-carrinho h4 {
-            font-size: 22px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .texto-seguro {
-            font-size: 15px;
+            font-size: 13px;
             color: #9ca3af;
         }
 
@@ -305,14 +304,14 @@
             background: #facc15;
             color: #111827;
             border: none;
-            border-radius: 10px;
-            padding: 14px 24px;
-            font-weight: 700;
-            font-size: 20px;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         /* ---------------- MODAL CARRINHO ---------------- */
@@ -324,7 +323,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            padding: 20px;
+            padding: 16px;
         }
 
         .modal-conteudo {
@@ -332,8 +331,8 @@
             width: 100%;
             max-width: 520px;
             max-height: 90vh;
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 12px;
+            padding: 20px;
             overflow-y: auto;
         }
 
@@ -341,15 +340,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
 
         .fechar-modal {
             background: none;
             border: none;
-            font-size: 26px;
+            font-size: 22px;
             cursor: pointer;
             color: #666;
         }
@@ -358,70 +357,68 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
 
         .form-grupo {
-            margin: 18px 0;
+            margin: 14px 0;
         }
 
         .form-grupo label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: 500;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .form-grupo input,
         .form-grupo select,
         .form-grupo textarea {
             width: 100%;
-            padding: 12px;
+            padding: 9px;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 6px;
+            font-size: 14px;
         }
 
         .aviso-erro {
-            font-size: 13px;
+            font-size: 12px;
             color: #dc2626;
             margin-top: 4px;
         }
 
         .total-texto {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             text-align: right;
-            margin: 18px 0;
+            margin: 14px 0;
         }
 
         .botoes-modal {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 10px;
+            margin-top: 18px;
         }
 
         .btn-fechar {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #eee;
             font-weight: 600;
-            font-size: 16px;
             cursor: pointer;
         }
 
         .btn-finalizar {
             flex: 2;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #22c55e;
             color: white;
             font-weight: 600;
-            font-size: 16px;
             cursor: pointer;
         }
 
@@ -434,31 +431,30 @@
             align-items: center;
             justify-content: center;
             z-index: 1001;
-            padding: 20px;
+            padding: 16px;
         }
 
         .alerta-caixa {
             background: white;
-            padding: 28px;
-            border-radius: 12px;
+            padding: 22px;
+            border-radius: 10px;
             text-align: center;
-            max-width: 340px;
+            max-width: 320px;
         }
 
         .alerta-caixa h3 {
             color: #dc2626;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .btn-entendi {
-            margin-top: 16px;
-            padding: 10px 22px;
+            margin-top: 14px;
+            padding: 9px 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #dc2626;
             color: white;
             font-weight: 600;
-            font-size: 16px;
             cursor: pointer;
         }
 
@@ -499,7 +495,7 @@
                 <h3 class="produto-nome">Nome do produto 1</h3>
                 <p class="produto-descricao">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
                 <div class="produto-detalhes">
-                    <span><i class="fa fa-heart"></i> Muito pedido</span>
+                    <span><i class="fa fa-fire"></i> Muito pedido</span>
                     <span><i class="fa fa-clock"></i> 20-30 min</span>
                 </div>
             </div>
