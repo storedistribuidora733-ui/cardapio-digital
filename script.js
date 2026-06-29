@@ -219,4 +219,4 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     const numeroWhatsApp = '5519989021323';
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, '_blank');
-});
+}); 
