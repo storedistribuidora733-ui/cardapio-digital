@@ -24,7 +24,7 @@
         /* ---------------- CABEÇALHO DA LOJA ---------------- */
         .cabecalho-loja {
             width: 100%;
-            height: 360px;
+            height: 320px;
             background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90') center/cover no-repeat;
             display: flex;
             flex-direction: column;
@@ -36,37 +36,37 @@
         }
 
         .logo-loja {
-            width: 140px;
-            height: 140px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.25);
+            border: 3px solid rgba(255,255,255,0.3);
             object-fit: cover;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
 
         .cabecalho-loja h1 {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
         }
 
         .cabecalho-loja p {
-            font-size: 18px;
-            opacity: 0.9;
+            font-size: 17px;
+            opacity: 0.92;
             font-weight: 400;
         }
 
         /* ---------------- CATEGORIAS ---------------- */
         .categorias {
             max-width: 1180px;
-            margin: 25px auto;
+            margin: 20px auto;
             padding: 0 16px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             scrollbar-width: none;
         }
 
@@ -75,8 +75,8 @@
         }
 
         .categoria-btn {
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 10px 18px;
+            border-radius: 8px;
             border: 1px solid #e5e7eb;
             background: #ffffff;
             font-weight: 500;
@@ -87,12 +87,12 @@
             gap: 6px;
             white-space: nowrap;
             transition: all 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .categoria-btn.ativo {
-            background-color: #fbbf24;
-            border-color: #fbbf24;
+            background-color: #facc15;
+            border-color: #facc15;
             color: #111;
             font-weight: 600;
         }
@@ -107,17 +107,17 @@
         .lista-produtos {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
         }
 
         .produto {
             display: flex;
             align-items: flex-start;
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 14px;
-            gap: 16px;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 12px;
+            gap: 14px;
             width: 100%;
             flex-wrap: nowrap;
         }
@@ -125,9 +125,9 @@
         .produto-imagem {
             position: relative;
             flex-shrink: 0;
-            width: 160px;
-            height: 160px;
-            border-radius: 12px;
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
             overflow: hidden;
         }
 
@@ -139,17 +139,17 @@
 
         .tag-mais-pedido {
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 6px;
+            left: 6px;
             background: #dc2626;
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 3px 8px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .produto-info {
@@ -157,48 +157,48 @@
             min-width: 0;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            padding-top: 4px;
+            gap: 6px;
+            padding-top: 2px;
         }
 
         .produto-codigo {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            color: #f59e0b;
+            color: #ca8a04;
         }
 
         .produto-nome {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #111827;
         }
 
         .produto-descricao {
-            font-size: 14px;
+            font-size: 13px;
             color: #6b7280;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .produto-detalhes {
-            font-size: 13px;
+            font-size: 12px;
             color: #78716c;
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-top: 6px;
+            gap: 12px;
+            margin-top: 4px;
         }
 
         .produto-acoes {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 14px;
+            gap: 10px;
             flex-shrink: 0;
-            padding-top: 4px;
+            padding-top: 2px;
         }
 
         .produto-preco {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: #dc2626;
         }
@@ -206,18 +206,17 @@
         .controle-qtd {
             display: flex;
             align-items: center;
-            background: #ffffff;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            background: #f3f4f6;
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .qtd-btn {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border: none;
-            background: #f3f4f6;
-            font-size: 18px;
+            background: #e5e7eb;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
@@ -227,33 +226,33 @@
         }
 
         .qtd-valor {
-            width: 42px;
+            width: 36px;
             text-align: center;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             background: #fff;
             color: #111;
         }
 
         .add-carrinho {
-            width: 130px;
-            height: 42px;
+            width: 110px;
+            height: 36px;
             border: none;
-            border-radius: 8px;
-            background: #fbbf24;
+            border-radius: 6px;
+            background: #facc15;
             color: #111827;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
             transition: background 0.2s;
         }
 
         .add-carrinho:hover {
-            background: #f59e0b;
+            background: #eab308;
         }
 
         /* ---------------- RODAPÉ CARRINHO FIXO ---------------- */
@@ -264,7 +263,7 @@
             width: 100%;
             background: #111827;
             color: white;
-            padding: 14px 16px;
+            padding: 12px 16px;
             box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
             z-index: 999;
         }
@@ -287,13 +286,13 @@
         .carrinho-esq {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
         .badge-qtd {
-            width: 40px;
-            height: 40px;
-            background: #fbbf24;
+            width: 36px;
+            height: 36px;
+            background: #facc15;
             color: #111827;
             border-radius: 50%;
             display: flex;
@@ -306,21 +305,21 @@
         .texto-seguro {
             font-size: 13px;
             color: #9ca3af;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .btn-ver-carrinho {
-            background: #fbbf24;
+            background: #facc15;
             color: #111827;
             border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
+            border-radius: 6px;
+            padding: 10px 18px;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         /* ---------------- MODAL CARRINHO ---------------- */
@@ -340,8 +339,8 @@
             width: 100%;
             max-width: 520px;
             max-height: 90vh;
-            border-radius: 14px;
-            padding: 22px;
+            border-radius: 12px;
+            padding: 20px;
             overflow-y: auto;
         }
 
@@ -349,7 +348,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
@@ -366,12 +365,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
 
         .form-grupo {
-            margin: 15px 0;
+            margin: 14px 0;
         }
 
         .form-grupo label {
@@ -385,9 +384,9 @@
         .form-grupo select,
         .form-grupo textarea {
             width: 100%;
-            padding: 10px;
+            padding: 9px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 14px;
         }
 
@@ -398,23 +397,23 @@
         }
 
         .total-texto {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 700;
             text-align: right;
-            margin: 15px 0;
+            margin: 14px 0;
         }
 
         .botoes-modal {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 18px;
         }
 
         .btn-fechar {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #eee;
             font-weight: 600;
             cursor: pointer;
@@ -422,9 +421,9 @@
 
         .btn-finalizar {
             flex: 2;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #22c55e;
             color: white;
             font-weight: 600;
@@ -445,10 +444,10 @@
 
         .alerta-caixa {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
+            padding: 22px;
+            border-radius: 10px;
             text-align: center;
-            max-width: 350px;
+            max-width: 320px;
         }
 
         .alerta-caixa h3 {
@@ -457,10 +456,10 @@
         }
 
         .btn-entendi {
-            margin-top: 15px;
-            padding: 10px 20px;
+            margin-top: 14px;
+            padding: 9px 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #dc2626;
             color: white;
             font-weight: 600;
@@ -471,45 +470,64 @@
             display: none !important;
         }
 
-        /* ---------------- AJUSTES RESPONSIVOS ---------------- */
+        /* ---------------- AJUSTES PARA CELULAR ---------------- */
         @media (max-width: 768px) {
             .cabecalho-loja {
-                height: 280px;
+                height: 260px;
             }
 
             .logo-loja {
-                width: 110px;
-                height: 110px;
+                width: 90px;
+                height: 90px;
             }
 
             .cabecalho-loja h1 {
-                font-size: 28px;
+                font-size: 26px;
             }
 
             .cabecalho-loja p {
-                font-size: 16px;
+                font-size: 15px;
             }
 
+            /* Mantém o layout lado a lado no celular */
             .produto {
-                flex-direction: column;
+                flex-wrap: nowrap;
+                gap: 10px;
+                padding: 10px;
             }
 
             .produto-imagem {
-                width: 100%;
-                height: 180px;
+                width: 90px;
+                height: 90px;
             }
 
-            .produto-acoes {
-                width: 100%;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 10px;
+            .produto-nome {
+                font-size: 16px;
+            }
+
+            .produto-descricao {
+                font-size: 12px;
+            }
+
+            .produto-preco {
+                font-size: 18px;
+            }
+
+            .controle-qtd {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .qtd-btn, .qtd-valor {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
             }
 
             .add-carrinho {
-                width: auto;
-                padding: 0 16px;
+                width: 90px;
+                font-size: 13px;
+                height: 34px;
             }
         }
     </style>
