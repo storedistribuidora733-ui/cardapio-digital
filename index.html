@@ -9,321 +9,272 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="./styles/output.css" />
 
-    <title>Cardápio Digital - Nome da Loja</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#121212',
-                        secondary: '#FFC107',
-                        dark: '#1E1E1E',
-                    },
-                    fontFamily: {
-                        poppins: ['Poppins', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .scrollbar-thin::-webkit-scrollbar {
-                width: 6px;
-            }
-            .scrollbar-thin::-webkit-scrollbar-thumb {
-                background: #444;
-                border-radius: 3px;
-            }
-            .scrollbar-thin::-webkit-scrollbar-track {
-                background: #222;
-            }
-        }
-
+    <title>Cardápio Digital</title>
+    <style>
         @keyframes fade {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
         .animate-fade { animation: fade 0.25s ease-out; }
+        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-primary text-white font-poppins">
+<body class="bg-gray-50 text-gray-800 font-sans">
 
 <!-- CABEÇALHO SUPERIOR -->
-<header class="bg-dark shadow-md sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+<header class="w-full bg-gray-900 text-white sticky top-0 z-50 shadow-lg">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <button id="menuToggle" class="text-2xl hover:text-red-600 transition-colors">
+            <i class="fa fa-bars"></i>
+        </button>
+        
         <div class="flex items-center gap-2">
-            <i class="fa fa-burger text-secondary text-2xl"></i>
-            <span class="text-xl font-bold">NOME DA LOJA</span>
+            <i class="fa fa-burger text-yellow-500 text-xl"></i>
+            <h1 class="text-xl font-bold">NOME DA LOJA</h1>
         </div>
 
-        <nav class="hidden md:flex gap-8">
-            <a href="#inicio" class="text-secondary font-medium border-b-2 border-secondary pb-1">Início</a>
-            <a href="#cardapio" class="hover:text-secondary transition">Cardápio</a>
-            <a href="#combos" class="hover:text-secondary transition">Combos</a>
-            <a href="#bebidas" class="hover:text-secondary transition">Bebidas</a>
-            <a href="#contato" class="hover:text-secondary transition">Contato</a>
-        </nav>
+        <div class="hidden md:flex items-center gap-3 text-sm">
+            <i class="fa fa-clock-o"></i>
+            <span>Horário: 00:00 às 24:00</span>
+        </div>
 
-        <button id="cart-header-btn" class="relative text-xl">
-            <i class="fa fa-shopping-cart"></i>
-            <span id="cart-count-header" class="absolute -top-2 -right-2 bg-secondary text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">0</span>
+        <button class="text-2xl text-green-500 hover:text-green-400 transition-colors">
+            <i class="fa fa-whatsapp"></i>
         </button>
     </div>
 </header>
 
-<!-- SEÇÃO DE INFORMAÇÕES DA LOJA -->
-<section id="inicio" class="bg-dark py-8">
-    <div class="container mx-auto px-4 flex flex-col lg:flex-row gap-8 items-center justify-between">
-        <div class="w-full lg:w-1/2">
-            <div id="status-loja" class="flex items-center gap-2 mb-4">
-                <span class="bg-red-600 text-white px-3 py-1 rounded-md text-sm font-bold">Fechado agora</span>
+<!-- MENU LATERAL -->
+<div id="sidebar" class="fixed inset-0 bg-black/70 z-50 hidden">
+    <div class="bg-gray-900 h-full w-4/5 max-w-xs p-5 transform transition-transform duration-300 translate-x-[-100%]" id="sidebarContent">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-xl font-bold text-white">Menu</h3>
+            <button id="closeSidebar" class="text-white text-xl">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-4 text-lg text-gray-200">
+            <a href="#inicio" class="hover:text-red-600 transition-colors">Início</a>
+            <a href="#cardapio" class="hover:text-red-600 transition-colors">Cardápio</a>
+            <a href="#sobre" class="hover:text-red-600 transition-colors">Sobre Nós</a>
+            <a href="#contato" class="hover:text-red-600 transition-colors">Contato</a>
+        </nav>
+    </div>
+</div>
+
+<!-- BANNER PRINCIPAL -->
+<section id="inicio" class="bg-gray-900 text-white relative overflow-hidden">
+    <div class="container mx-auto px-4 py-8 md:py-12 flex flex-col md:flex-row gap-8 items-center">
+        <div class="w-full md:w-1/2 space-y-5">
+            <div id="date-span" class="inline-block bg-red-600 px-4 py-1.5 rounded-lg font-medium text-sm">
+                <i class="fa fa-lock mr-1"></i> Fechado agora
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">NOME DA LOJA</h1>
-            <p class="flex items-center gap-2 text-gray-300 mb-6">
-                <i class="fa fa-map-marker-alt"></i> Nome da rua, 123 - Sua Cidade
+            <h2 class="text-4xl md:text-5xl font-bold text-shadow">NOME DA LOJA</h2>
+            <p class="flex items-center gap-2 text-gray-300">
+                <i class="fa fa-map-marker"></i> NOME DA RUA, 123 - SUA CIDADE
             </p>
-
-            <div class="bg-primary p-4 rounded-lg mb-6">
-                <p class="flex items-center gap-3 mb-2">
-                    <i class="fa fa-clock-o text-secondary"></i>
-                    <span>Horário de funcionamento: <b>08:00 às 22:00</b></span>
-                </p>
-                <p class="text-sm text-gray-400">Voltamos a abrir às 08:00</p>
-            </div>
-
-            <div class="flex gap-6">
-                <div class="flex items-center gap-2">
-                    <i class="fa fa-truck text-secondary"></i>
-                    <div>
-                        <p class="font-medium">Entrega rápida</p>
-                        <p class="text-xs text-gray-400">Para toda a cidade</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <i class="fa fa-lock text-secondary"></i>
-                    <div>
-                        <p class="font-medium">Pagamento seguro</p>
-                        <p class="text-xs text-gray-400">Seus dados protegidos</p>
-                    </div>
-                </div>
+            <hr class="w-24 border-red-600 my-2">
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Horário de funcionamento</h4>
+                <p>00:00 às 24:00</p>
+                <p class="text-sm text-gray-400 mt-1">Funcionamos todos os dias</p>
             </div>
         </div>
-
-        <div class="w-full lg:w-1/2">
-            <img src="./assets/banner-hamburguer.jpg" alt="Hambúrguer artesanal" class="w-full rounded-xl shadow-xl">
+        <div class="w-full md:w-1/2">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Hambúrguer artesanal" class="w-full h-auto rounded-xl shadow-2xl">
         </div>
     </div>
 </section>
 
-<!-- CARDÁPIO -->
-<section id="cardapio" class="container mx-auto px-4 py-10">
-    <h2 class="text-2xl md:text-3xl font-bold mb-6 flex items-center gap-2">
-        <i class="fa fa-utensils text-secondary"></i> NOSSO CARDÁPIO
-    </h2>
-
-    <!-- BUSCA E CATEGORIAS -->
-    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-        <div class="w-full md:w-72">
-            <input type="text" id="busca-produto" placeholder="Buscar produtos..." class="w-full bg-dark border border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:border-secondary transition">
-        </div>
-
-        <div class="flex gap-3 overflow-x-auto pb-2">
-            <button class="categoria-btn bg-secondary text-black font-bold px-4 py-2 rounded-md" data-categoria="todos">Todos</button>
-            <button class="categoria-btn bg-dark hover:bg-gray-700 px-4 py-2 rounded-md transition" data-categoria="burgers">Burgers</button>
-            <button class="categoria-btn bg-dark hover:bg-gray-700 px-4 py-2 rounded-md transition" data-categoria="combos">Combos</button>
-            <button class="categoria-btn bg-dark hover:bg-gray-700 px-4 py-2 rounded-md transition" data-categoria="bebidas">Bebidas</button>
-            <button class="categoria-btn bg-dark hover:bg-gray-700 px-4 py-2 rounded-md transition" data-categoria="acompanhamentos">Acompanhamentos</button>
+<!-- SEÇÃO DO CARDÁPIO -->
+<section id="cardapio" class="py-10 container mx-auto px-4">
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <h3 class="text-2xl md:text-3xl font-bold relative">
+            NOSSO MENU
+            <span class="absolute left-0 -bottom-2 w-16 h-1 bg-red-600 rounded-full"></span>
+        </h3>
+        <div class="flex gap-2 overflow-x-auto scrollbar-hide w-full sm:w-auto">
+            <button class="categoria-btn bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap active" data-categoria="todos">
+                <i class="fa fa-th-large mr-1"></i> Todos
+            </button>
+            <button class="categoria-btn bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap hover:bg-gray-100 transition-colors" data-categoria="burgers">
+                <i class="fa fa-burger mr-1"></i> Burgers
+            </button>
+            <button class="categoria-btn bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap hover:bg-gray-100 transition-colors" data-categoria="bebidas">
+                <i class="fa fa-glass mr-1"></i> Bebidas
+            </button>
+            <button class="categoria-btn bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap hover:bg-gray-100 transition-colors" data-categoria="combos">
+                <i class="fa fa-star mr-1"></i> Combos
+            </button>
         </div>
     </div>
 
     <!-- LISTA DE PRODUTOS -->
-    <div id="lista-produtos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
+    <div id="listaProdutos" class="space-y-5">
         <!-- PRODUTO 1 -->
-        <div class="produto bg-dark rounded-xl overflow-hidden shadow-md" data-categoria="burgers">
-            <div class="relative">
-                <img src="./assets/hamb-2.png" alt="Produto 1" class="w-full h-52 object-cover">
-                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded-md font-bold">MAIS PEDIDO</span>
+        <div class="produto bg-white rounded-xl shadow-md p-4 flex flex-col sm:flex-row gap-5 border border-gray-100" data-categoria="burgers">
+            <div class="w-full sm:w-40 h-40 rounded-lg overflow-hidden relative">
+                <span class="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-medium">
+                    <i class="fa fa-star mr-1"></i> MAIS PEDIDO
+                </span>
+                <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1" class="w-full h-full object-cover">
             </div>
-            <div class="p-4">
-                <h3 class="text-xl font-bold mb-2">Nome do produto 1</h3>
-                <p class="text-gray-300 text-sm mb-4">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-xl font-bold text-secondary">R$ 10,00</span>
-                    <div class="flex items-center gap-3">
-                        <button class="diminuir-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">-</button>
-                        <span class="qtd">1</span>
-                        <button class="aumentar-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">+</button>
+            <div class="flex-1 flex flex-col justify-between">
+                <div>
+                    <span class="text-gray-400 font-mono">01</span>
+                    <h4 class="text-xl font-bold mt-1">Nome do produto 1</h4>
+                    <p class="text-gray-600 mt-2 text-sm">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
+                    <p class="text-red-600 font-bold text-xl mt-3">R$ 10,00</p>
+                </div>
+                <div class="flex items-center gap-3 mt-4">
+                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="qtd-btn diminuir px-3 py-1 bg-gray-100 hover:bg-gray-200">-</button>
+                        <span class="quantidade px-3">1</span>
+                        <button class="qtd-btn aumentar px-3 py-1 bg-gray-100 hover:bg-gray-200">+</button>
                     </div>
+                    <button class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition-colors add-to-cart-btn"
+                            data-name="Nome do produto 1" data-price="10.00">
+                        <i class="fa fa-cart-plus mr-1"></i> Adicionar
+                    </button>
                 </div>
-                <div class="flex items-center justify-between mt-4 text-sm text-gray-400">
-                    <span><i class="fa fa-fire mr-1"></i> Muito pedido</span>
-                    <span><i class="fa fa-clock-o mr-1"></i> 20-30 min</span>
-                </div>
-                <button class="add-to-cart-btn w-full bg-secondary hover:bg-amber-500 text-black font-bold py-2 rounded-md mt-4 transition"
-                        data-name="Nome do produto 1" data-price="10.00">
-                    <i class="fa fa-cart-plus mr-1"></i> Adicionar
-                </button>
             </div>
         </div>
 
         <!-- PRODUTO 2 -->
-        <div class="produto bg-dark rounded-xl overflow-hidden shadow-md" data-categoria="burgers">
-            <img src="./assets/hamb-8.png" alt="Produto 2" class="w-full h-52 object-cover">
-            <div class="p-4">
-                <h3 class="text-xl font-bold mb-2">Nome do produto 2</h3>
-                <p class="text-gray-300 text-sm mb-4">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-xl font-bold text-secondary">R$ 12,00</span>
-                    <div class="flex items-center gap-3">
-                        <button class="diminuir-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">-</button>
-                        <span class="qtd">1</span>
-                        <button class="aumentar-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">+</button>
+        <div class="produto bg-white rounded-xl shadow-md p-4 flex flex-col sm:flex-row gap-5 border border-gray-100" data-categoria="burgers">
+            <div class="w-full sm:w-40 h-40 rounded-lg overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 flex flex-col justify-between">
+                <div>
+                    <span class="text-gray-400 font-mono">02</span>
+                    <h4 class="text-xl font-bold mt-1">Nome do produto 2</h4>
+                    <p class="text-gray-600 mt-2 text-sm">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
+                    <p class="text-red-600 font-bold text-xl mt-3">R$ 12,00</p>
+                </div>
+                <div class="flex items-center gap-3 mt-4">
+                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="qtd-btn diminuir px-3 py-1 bg-gray-100 hover:bg-gray-200">-</button>
+                        <span class="quantidade px-3">1</span>
+                        <button class="qtd-btn aumentar px-3 py-1 bg-gray-100 hover:bg-gray-200">+</button>
                     </div>
+                    <button class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition-colors add-to-cart-btn"
+                            data-name="Nome do produto 2" data-price="12.00">
+                        <i class="fa fa-cart-plus mr-1"></i> Adicionar
+                    </button>
                 </div>
-                <div class="flex items-center justify-between mt-4 text-sm text-gray-400">
-                    <span><i class="fa fa-leaf mr-1"></i> Vegetariano</span>
-                    <span><i class="fa fa-clock-o mr-1"></i> 20-30 min</span>
-                </div>
-                <button class="add-to-cart-btn w-full bg-secondary hover:bg-amber-500 text-black font-bold py-2 rounded-md mt-4 transition"
-                        data-name="Nome do produto 2" data-price="12.00">
-                    <i class="fa fa-cart-plus mr-1"></i> Adicionar
-                </button>
             </div>
         </div>
 
         <!-- PRODUTO 3 -->
-        <div class="produto bg-dark rounded-xl overflow-hidden shadow-md" data-categoria="burgers">
-            <img src="./assets/hamb-2.png" alt="Produto 3" class="w-full h-52 object-cover">
-            <div class="p-4">
-                <h3 class="text-xl font-bold mb-2">Nome do produto 3</h3>
-                <p class="text-gray-300 text-sm mb-4">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-xl font-bold text-secondary">R$ 15,00</span>
-                    <div class="flex items-center gap-3">
-                        <button class="diminuir-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">-</button>
-                        <span class="qtd">1</span>
-                        <button class="aumentar-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">+</button>
+        <div class="produto bg-white rounded-xl shadow-md p-4 flex flex-col sm:flex-row gap-5 border border-gray-100" data-categoria="burgers">
+            <div class="w-full sm:w-40 h-40 rounded-lg overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 flex flex-col justify-between">
+                <div>
+                    <span class="text-gray-400 font-mono">03</span>
+                    <h4 class="text-xl font-bold mt-1">Nome do produto 3</h4>
+                    <p class="text-gray-600 mt-2 text-sm">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
+                    <p class="text-red-600 font-bold text-xl mt-3">R$ 15,00</p>
+                </div>
+                <div class="flex items-center gap-3 mt-4">
+                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="qtd-btn diminuir px-3 py-1 bg-gray-100 hover:bg-gray-200">-</button>
+                        <span class="quantidade px-3">1</span>
+                        <button class="qtd-btn aumentar px-3 py-1 bg-gray-100 hover:bg-gray-200">+</button>
                     </div>
+                    <button class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition-colors add-to-cart-btn"
+                            data-name="Nome do produto 3" data-price="15.00">
+                        <i class="fa fa-cart-plus mr-1"></i> Adicionar
+                    </button>
                 </div>
-                <div class="flex items-center justify-between mt-4 text-sm text-gray-400">
-                    <span><i class="fa fa-pepper-hot mr-1"></i> Picante</span>
-                    <span><i class="fa fa-clock-o mr-1"></i> 20-30 min</span>
-                </div>
-                <button class="add-to-cart-btn w-full bg-secondary hover:bg-amber-500 text-black font-bold py-2 rounded-md mt-4 transition"
-                        data-name="Nome do produto 3" data-price="15.00">
-                    <i class="fa fa-cart-plus mr-1"></i> Adicionar
-                </button>
             </div>
         </div>
 
         <!-- BEBIDA 1 -->
-        <div class="produto bg-dark rounded-xl overflow-hidden shadow-md" data-categoria="bebidas">
-            <img src="./assets/refri-1.png" alt="Bebida 1" class="w-full h-52 object-cover">
-            <div class="p-4">
-                <h3 class="text-xl font-bold mb-2">Nome da bebida 1</h3>
-                <p class="text-gray-300 text-sm mb-4">Descrição da bebida.</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-xl font-bold text-secondary">R$ 5,00</span>
-                    <div class="flex items-center gap-3">
-                        <button class="diminuir-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">-</button>
-                        <span class="qtd">1</span>
-                        <button class="aumentar-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">+</button>
-                    </div>
+        <div class="produto bg-white rounded-xl shadow-md p-4 flex flex-col sm:flex-row gap-5 border border-gray-100" data-categoria="bebidas">
+            <div class="w-full sm:w-40 h-40 rounded-lg overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1581636626027-8577a8910423?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Bebida 1" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 flex flex-col justify-between">
+                <div>
+                    <span class="text-gray-400 font-mono">04</span>
+                    <h4 class="text-xl font-bold mt-1">Refrigerante 500ml</h4>
+                    <p class="text-gray-600 mt-2 text-sm">Garrafa de 500ml, sabor a escolher.</p>
+                    <p class="text-red-600 font-bold text-xl mt-3">R$ 5,00</p>
                 </div>
-                <button class="add-to-cart-btn w-full bg-secondary hover:bg-amber-500 text-black font-bold py-2 rounded-md mt-4 transition"
-                        data-name="Nome da bebida 1" data-price="5.00">
-                    <i class="fa fa-cart-plus mr-1"></i> Adicionar
-                </button>
+                <div class="flex items-center gap-3 mt-4">
+                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="qtd-btn diminuir px-3 py-1 bg-gray-100 hover:bg-gray-200">-</button>
+                        <span class="quantidade px-3">1</span>
+                        <button class="qtd-btn aumentar px-3 py-1 bg-gray-100 hover:bg-gray-200">+</button>
+                    </div>
+                    <button class="bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition-colors add-to-cart-btn"
+                            data-name="Refrigerante 500ml" data-price="5.00">
+                        <i class="fa fa-cart-plus mr-1"></i> Adicionar
+                    </button>
+                </div>
             </div>
         </div>
-
-        <!-- BEBIDA 2 -->
-        <div class="produto bg-dark rounded-xl overflow-hidden shadow-md" data-categoria="bebidas">
-            <img src="./assets/refri-2.png" alt="Bebida 2" class="w-full h-52 object-cover">
-            <div class="p-4">
-                <h3 class="text-xl font-bold mb-2">Nome da bebida 2</h3>
-                <p class="text-gray-300 text-sm mb-4">Descrição da bebida.</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-xl font-bold text-secondary">R$ 5,00</span>
-                    <div class="flex items-center gap-3">
-                        <button class="diminuir-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">-</button>
-                        <span class="qtd">1</span>
-                        <button class="aumentar-qtd bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center">+</button>
-                    </div>
-                </div>
-                <button class="add-to-cart-btn w-full bg-secondary hover:bg-amber-500 text-black font-bold py-2 rounded-md mt-4 transition"
-                        data-name="Nome da bebida 2" data-price="5.00">
-                    <i class="fa fa-cart-plus mr-1"></i> Adicionar
-                </button>
-            </div>
-        </div>
-
     </div>
 </section>
 
 <!-- MODAL DO CARRINHO -->
-<div id="cart-modal" class="bg-black/70 w-full h-full fixed inset-0 z-[99] flex items-center justify-center hidden">
-    <div class="bg-dark p-6 rounded-xl min-w-[90%] md:min-w-[650px] max-h-[90vh] overflow-y-auto scrollbar-thin">
-        <div class="flex items-center justify-between mb-5">
-            <h2 class="text-2xl font-bold">Seu Carrinho</h2>
-            <button id="close-modal-btn" class="text-2xl hover:text-secondary transition">&times;</button>
-        </div>
+<div id="cart-modal" class="bg-black/60 w-full h-full fixed inset-0 z-[99] flex items-center justify-center hidden">
+    <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px] max-h-[90%] overflow-y-auto cart-content">
+        <h2 class="text-center font-bold text-2xl mb-4">Meu Carrinho</h2>
 
-        <div id="cart-items" class="flex flex-col gap-4 my-4"></div>
+        <div id="cart-items" class="flex flex-col gap-2 my-4"></div>
 
-        <div class="border-t border-gray-700 pt-4 mb-4">
-            <p class="text-xl font-bold">Total: R$ <span id="cart-total">0,00</span></p>
-            <p class="text-sm text-gray-400 mt-1">Ambiente 100% seguro</p>
-        </div>
+        <p class="font-bold text-lg mb-4">Total: R$ <span id="cart-total">0.00</span></p>
 
         <div class="space-y-4">
             <div>
-                <label class="block font-medium mb-1">Nome completo:</label>
-                <input type="text" id="customer-name" class="w-full bg-primary border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:border-secondary">
+                <p class="font-bold">Nome:</p>
+                <input type="text" id="customer-name" class="w-full border-2 p-2 rounded my-1">
             </div>
 
             <div>
-                <label class="block font-medium mb-1">Endereço de entrega:</label>
-                <input type="text" id="address" class="w-full bg-primary border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:border-secondary">
-                <p class="text-red-500 text-sm hidden mt-1" id="address-warn">Digite seu endereço completo!</p>
+                <p class="font-bold">Endereço:</p>
+                <input type="text" id="address" class="w-full border-2 p-2 rounded my-1">
+                <p class="text-red-500 text-sm hidden" id="address-warn">Digite seu endereço completo!</p>
             </div>
 
             <div>
-                <label class="block font-medium mb-1">Forma de pagamento:</label>
-                <select id="payment-method" class="w-full bg-primary border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:border-secondary">
-                    <option value="Pix">Pix</option>
+                <p class="font-bold">Pagamento:</p>
+                <select id="payment-method" class="w-full border-2 p-2 rounded my-1">
                     <option value="Dinheiro">Dinheiro</option>
+                    <option value="Pix">Pix</option>
                     <option value="Cartão">Cartão</option>
                 </select>
             </div>
 
             <div>
-                <label class="block font-medium mb-1">Observações:</label>
-                <textarea id="observations" rows="2" class="w-full bg-primary border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:border-secondary"></textarea>
+                <p class="font-bold">Observações:</p>
+                <textarea id="observations" class="w-full border-2 p-2 rounded my-1" rows="2"></textarea>
             </div>
         </div>
 
-        <button id="checkout-btn" class="w-full bg-secondary hover:bg-amber-500 text-black font-bold py-3 rounded-md mt-6 transition text-lg">
-            Finalizar Pedido
-        </button>
+        <div class="flex items-center justify-between mt-6">
+            <button id="close-modal-btn" class="font-bold text-gray-600 hover:text-gray-900">Fechar</button>
+            <button id="checkout-btn" class="bg-green-500 text-white px-6 py-3 rounded-lg font-bold text-lg hover:bg-green-600 transition-colors">
+                Finalizar pedido
+            </button>
+        </div>
     </div>
 </div>
 
 <!-- MODAL DE LOJA FECHADA -->
-<div id="closed-alert" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[999]">
-    <div class="bg-dark p-6 rounded-xl shadow-2xl max-w-[90%] w-[380px] text-center animate-fade">
-        <h2 class="text-2xl font-bold text-red-500 mb-3">Loja Fechada</h2>
-        <p class="text-gray-300">Nosso horário de atendimento é das <b>08:00 às 22:00</b>.</p>
-        <p class="text-gray-300 mt-1">Voltamos a abrir às 08:00! 😊</p>
+<div id="closed-alert" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+    <div class="bg-white p-6 rounded-xl shadow-2xl max-w-[90%] w-[380px] text-center animate-fade">
+        <h2 class="text-2xl font-bold text-red-600 mb-3">Loja Fechada</h2>
+        <p class="text-gray-700">Nosso horário de atendimento é das <b>00:00 às 24:00</b>.</p>
+        <p class="text-gray-700 mt-1">Volte mais tarde! 😊</p>
 
         <button id="closed-alert-btn"
                 class="mt-5 bg-red-600 hover:bg-red-700 duration-200 text-white px-5 py-2 rounded-lg font-bold">
@@ -333,19 +284,14 @@
 </div>
 
 <!-- BOTÃO FIXO DO CARRINHO -->
-<footer class="w-full bg-dark py-3 fixed bottom-0 z-[100] shadow-lg">
-    <div class="container mx-auto px-4 flex items-center justify-between">
-        <div>
-            <span class="text-sm text-gray-300">Seu carrinho:</span>
-            <p class="font-bold"><span id="cart-count-footer">0</span> itens • R$ <span id="cart-total-footer">0,00</span></p>
-        </div>
-        <button id="open-cart-btn" class="bg-secondary hover:bg-amber-500 text-black font-bold px-6 py-2 rounded-md transition flex items-center gap-2">
-            Ver carrinho <i class="fa fa-arrow-right"></i>
-        </button>
-    </div>
+<footer id="cart-footer" class="w-full bg-red-600 py-3 fixed bottom-0 z-[100] flex items-center justify-center shadow-lg">
+    <button id="cart-btn" class="flex items-center gap-2 text-white font-bold text-lg">
+        <span id="cart-count" class="bg-white text-red-600 rounded-full w-6 h-6 flex items-center justify-center text-sm">0</span> Carrinho
+        <i class="fa fa-shopping-cart text-xl"></i>
+    </button>
 </footer>
 
-<!-- JS -->
+<!-- ARQUIVO JS SEPARADO -->
 <script src="script.js"></script>
 
 </body>
