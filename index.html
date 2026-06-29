@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="./styles/output.css" />
-
     <title>Cardápio Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -22,94 +18,83 @@
 
         body {
             background-color: #f8f9fa;
-            color: #111;
-            line-height: 1.5;
+            padding-bottom: 90px;
         }
 
-        /* CABEÇALHO */
+        /* ---------------- HEADER ---------------- */
         header {
             width: 100%;
-            height: 420px;
-            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('./assets/bg.png') center/cover no-repeat;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
             color: white;
-            padding: 20px;
+            text-align: center;
+            padding: 40px 20px;
         }
 
         .logo {
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.2);
             object-fit: cover;
-            border: 4px solid rgba(255,255,255,0.2);
-            margin-bottom: 16px;
-            transition: transform 0.2s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
+            margin-bottom: 15px;
         }
 
         header h1 {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 26px;
             margin-bottom: 8px;
         }
 
         .endereco {
-            font-size: 16px;
-            opacity: 0.9;
-            margin-bottom: 24px;
-        }
-
-        #date-span {
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 600;
             font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 20px;
         }
 
-        /* SEÇÃO MENU */
-        .menu-section {
+        #status-loja {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* ---------------- MENU ---------------- */
+        .container {
             max-width: 1100px;
-            margin: 40px auto;
+            margin: 30px auto;
             padding: 0 20px;
         }
 
-        .menu-header {
+        .menu-topo {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
-        .menu-title {
-            font-size: 28px;
+        .menu-titulo {
+            font-size: 24px;
             font-weight: 700;
             position: relative;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
-        .menu-title::after {
+        .menu-titulo::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 50px;
+            width: 40px;
             height: 3px;
-            background-color: #e51e25;
+            background-color: #e21b23;
             border-radius: 2px;
         }
 
         .categorias {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 5px;
             scrollbar-width: none;
         }
 
@@ -118,111 +103,107 @@
         }
 
         .categoria-btn {
-            padding: 9px 18px;
-            border-radius: 25px;
-            border: none;
-            background: #f1f1f1;
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
             font-weight: 500;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             white-space: nowrap;
         }
 
-        .categoria-btn.active {
-            background: #e51e25;
+        .categoria-btn.ativo {
+            background-color: #e21b23;
+            border-color: #e21b23;
             color: white;
         }
 
-        .categoria-btn:hover:not(.active) {
-            background: #e2e2e2;
-        }
-
-        /* LISTA DE PRODUTOS */
-        .produtos-grid {
-            display: grid;
-            gap: 25px;
-        }
-
-        .produto-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            overflow: hidden;
+        /* ---------------- ITENS DO MENU ---------------- */
+        .lista-produtos {
             display: flex;
             flex-direction: column;
+            gap: 18px;
+        }
+
+        .produto {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            overflow: hidden;
+            padding: 12px;
+            gap: 15px;
         }
 
         .produto-imagem {
-            width: 100%;
-            height: 220px;
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            position: relative;
+            flex-shrink: 0;
         }
 
-        .produto-imagem:hover {
-            transform: scale(1.03);
+        .tag-mais-pedido {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #e21b23;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 10px;
         }
 
         .produto-info {
-            padding: 20px;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 6px;
         }
 
-        .produto-topo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .produto-numero {
-            font-size: 14px;
+        .produto-codigo {
+            font-size: 13px;
             font-weight: 600;
             color: #999;
         }
 
-        .tag-mais-pedido {
-            background: #e51e25;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 12px;
-        }
-
         .produto-nome {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
+            color: #111;
         }
 
         .produto-descricao {
-            font-size: 14px;
+            font-size: 13px;
             color: #666;
-            line-height: 1.6;
-        }
-
-        .produto-rodape {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
+            line-height: 1.4;
         }
 
         .produto-preco {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
-            color: #e51e25;
+            color: #e21b23;
+            margin-top: 4px;
         }
 
-        .controle-quantidade {
+        .produto-acoes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .controle-qtd {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: #f5f5f5;
+            background: #f3f3f3;
             border-radius: 8px;
-            padding: 4px;
+            overflow: hidden;
         }
 
         .qtd-btn {
@@ -230,87 +211,83 @@
             height: 32px;
             border: none;
             background: #e9e9e9;
-            border-radius: 6px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .qtd-btn:hover {
-            background: #ddd;
         }
 
         .qtd-valor {
-            font-weight: 600;
-            min-width: 24px;
+            width: 35px;
             text-align: center;
-        }
-
-        .add-to-cart-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 12px;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            border-radius: 8px;
             font-weight: 600;
             font-size: 15px;
+        }
+
+        .add-carrinho {
+            width: 110px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: #111;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 5px;
             transition: background 0.2s;
         }
 
-        .add-to-cart-btn:hover {
-            background: #333;
+        .add-carrinho:hover {
+            background: #222;
         }
 
-        /* BOTÃO CARRINHO FIXO */
-        .cart-footer {
+        /* ---------------- RODAPÉ CARRINHO ---------------- */
+        .carrinho-fixo {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #e51e25;
+            background: #111;
             color: white;
             padding: 12px 20px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
             z-index: 999;
         }
 
-        .cart-btn {
-            width: 100%;
+        .carrinho-btn {
             max-width: 1100px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: none;
+            background: #e21b23;
             border: none;
+            border-radius: 10px;
+            width: 100%;
+            padding: 12px 18px;
             color: white;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
         }
 
-        .cart-esq {
+        .carrinho-esq {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .cart-badge {
-            width: 30px;
-            height: 30px;
+        .badge-qtd {
+            width: 28px;
+            height: 28px;
             background: white;
-            color: #e51e25;
+            color: #e21b23;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -319,8 +296,8 @@
             font-size: 14px;
         }
 
-        /* MODAL CARRINHO */
-        #cart-modal {
+        /* ---------------- MODAL CARRINHO ---------------- */
+        #modal-carrinho {
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.6);
@@ -331,31 +308,26 @@
             padding: 20px;
         }
 
-        .modal-content {
+        .modal-conteudo {
             background: white;
-            border-radius: 16px;
             width: 100%;
-            max-width: 550px;
+            max-width: 520px;
             max-height: 90vh;
-            overflow-y: auto;
+            border-radius: 14px;
             padding: 25px;
+            overflow-y: auto;
         }
 
-        .modal-header {
+        .modal-cabecalho {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
 
-        .modal-header h2 {
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .close-modal {
+        .fechar-modal {
             background: none;
             border: none;
             font-size: 22px;
@@ -363,68 +335,52 @@
             color: #666;
         }
 
-        .cart-item {
+        .item-carrinho {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #eee;
         }
 
-        .item-info h4 {
-            font-weight: 600;
-            margin-bottom: 4px;
+        .form-grupo {
+            margin: 15px 0;
         }
 
-        .item-info p {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .item-controle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-total {
-            font-size: 20px;
-            font-weight: 700;
-            text-align: right;
-            margin: 20px 0;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
+        .form-grupo label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: 500;
+            font-size: 14px;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-grupo input,
+        .form-grupo select,
+        .form-grupo textarea {
             width: 100%;
-            padding: 10px 12px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
         }
 
-        #address-warn {
-            font-size: 13px;
-            color: #e51e25;
+        .aviso-erro {
+            font-size: 12px;
+            color: #e21b23;
             margin-top: 4px;
         }
 
-        .modal-botoes {
+        .total-texto {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: right;
+            margin: 15px 0;
+        }
+
+        .botoes-modal {
             display: flex;
-            justify-content: space-between;
             gap: 12px;
-            margin-top: 24px;
+            margin-top: 20px;
         }
 
         .btn-fechar {
@@ -448,8 +404,8 @@
             cursor: pointer;
         }
 
-        /* ALERTA FECHADO */
-        #closed-alert {
+        /* ---------------- ALERTA FECHADO ---------------- */
+        #alerta-fechado {
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.5);
@@ -460,58 +416,57 @@
             padding: 20px;
         }
 
-        .alert-box {
+        .alerta-caixa {
             background: white;
-            padding: 30px;
-            border-radius: 16px;
+            padding: 25px;
+            border-radius: 12px;
             text-align: center;
-            max-width: 380px;
+            max-width: 350px;
         }
 
-        .alert-box h3 {
-            color: #e51e25;
-            margin-bottom: 12px;
-        }
-
-        .alert-box p {
-            margin-bottom: 20px;
-            color: #555;
+        .alerta-caixa h3 {
+            color: #e21b23;
+            margin-bottom: 10px;
         }
 
         .btn-entendi {
-            padding: 10px 24px;
+            margin-top: 15px;
+            padding: 10px 20px;
             border: none;
             border-radius: 8px;
-            background: #e51e25;
+            background: #e21b23;
             color: white;
             font-weight: 600;
             cursor: pointer;
         }
 
-        .hidden {
+        .oculto {
             display: none !important;
         }
 
-        /* RESPONSIVIDADE COMPUTADOR */
-        @media (min-width: 768px) {
-            .produtos-grid {
-                grid-template-columns: repeat(2, 1fr);
+        /* ---------------- RESPONSIVO ---------------- */
+        @media (max-width: 480px) {
+            .produto {
+                flex-direction: column;
+                text-align: center;
             }
 
-            .menu-header {
+            .produto-imagem {
+                width: 100%;
+                height: 180px;
+            }
+
+            .produto-acoes {
+                width: 100%;
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
+                margin-top: 10px;
             }
 
-            .categorias {
-                padding-bottom: 0;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .produtos-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .add-carrinho {
+                width: auto;
+                padding: 0 15px;
             }
         }
     </style>
@@ -520,213 +475,186 @@
 
 <!-- CABEÇALHO -->
 <header>
-    <img src="./assets/hamb-1.png" alt="Logo da loja" class="logo" />
+    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Logo Loja" class="logo">
     <h1>NOME DA LOJA</h1>
     <p class="endereco">NOME DA RUA, 123 - SUA CIDADE</p>
-    <div id="date-span">
-        Seg à Dom • 08:00 às 22:00
-    </div>
+    <div id="status-loja"></div>
 </header>
 
-<!-- SEÇÃO DO MENU -->
-<section class="menu-section">
-    <div class="menu-header">
-        <h2 class="menu-title">NOSSO MENU</h2>
+<!-- MENU -->
+<div class="container">
+    <div class="menu-topo">
+        <h2 class="menu-titulo">NOSSO MENU</h2>
         <div class="categorias">
-            <button class="categoria-btn active" data-categoria="todos">Todos</button>
-            <button class="categoria-btn" data-categoria="burgers">Burgers</button>
-            <button class="categoria-btn" data-categoria="bebidas">Bebidas</button>
-            <button class="categoria-btn" data-categoria="combos">Combos</button>
+            <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
+            <button class="categoria-btn" data-categoria="burgers"><i class="fa fa-burger"></i> Burgers</button>
+            <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass"></i> Bebidas</button>
+            <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
         </div>
     </div>
 
-    <div class="produtos-grid" id="lista-produtos">
+    <div class="lista-produtos">
         <!-- PRODUTO 1 -->
-        <div class="produto-card" data-categoria="burgers">
-            <img src="./assets/hamb-2.png" alt="Produto 1" class="produto-imagem" />
+        <div class="produto" data-categoria="burgers">
+            <div style="position: relative;">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1" class="produto-imagem">
+                <span class="tag-mais-pedido">★ MAIS PEDIDO</span>
+            </div>
             <div class="produto-info">
-                <div class="produto-topo">
-                    <span class="produto-numero">— 01</span>
-                    <span class="tag-mais-pedido">★ MAIS PEDIDO</span>
-                </div>
+                <p class="produto-codigo">— 01</p>
                 <h3 class="produto-nome">Nome do produto 1</h3>
                 <p class="produto-descricao">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
-                <div class="produto-rodape">
-                    <span class="produto-preco">R$ 10,00</span>
-                    <div class="controle-quantidade">
-                        <button class="qtd-btn diminuir">−</button>
-                        <span class="qtd-valor">1</span>
-                        <button class="qtd-btn aumentar">+</button>
-                    </div>
+                <p class="produto-preco">R$ 10,00</p>
+            </div>
+            <div class="produto-acoes">
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">1</span>
+                    <button class="qtd-btn aumentar">+</button>
                 </div>
-                <button class="add-to-cart-btn" data-name="Nome do produto 1" data-price="10.00">
-                    <i class="fa fa-cart-plus"></i> Adicionar
+                <button class="add-carrinho" data-nome="Nome do produto 1" data-preco="10.00">
+                    <i class="fa fa-shopping-cart"></i>
                 </button>
             </div>
         </div>
 
         <!-- PRODUTO 2 -->
-        <div class="produto-card" data-categoria="burgers">
-            <img src="./assets/hamb-8.png" alt="Produto 2" class="produto-imagem" />
+        <div class="produto" data-categoria="burgers">
+            <div>
+                <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2" class="produto-imagem">
+            </div>
             <div class="produto-info">
-                <div class="produto-topo">
-                    <span class="produto-numero">— 02</span>
-                </div>
+                <p class="produto-codigo">— 02</p>
                 <h3 class="produto-nome">Nome do produto 2</h3>
                 <p class="produto-descricao">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
-                <div class="produto-rodape">
-                    <span class="produto-preco">R$ 12,00</span>
-                    <div class="controle-quantidade">
-                        <button class="qtd-btn diminuir">−</button>
-                        <span class="qtd-valor">1</span>
-                        <button class="qtd-btn aumentar">+</button>
-                    </div>
+                <p class="produto-preco">R$ 12,00</p>
+            </div>
+            <div class="produto-acoes">
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">1</span>
+                    <button class="qtd-btn aumentar">+</button>
                 </div>
-                <button class="add-to-cart-btn" data-name="Nome do produto 2" data-price="12.00">
-                    <i class="fa fa-cart-plus"></i> Adicionar
+                <button class="add-carrinho" data-nome="Nome do produto 2" data-preco="12.00">
+                    <i class="fa fa-shopping-cart"></i>
                 </button>
             </div>
         </div>
 
         <!-- PRODUTO 3 -->
-        <div class="produto-card" data-categoria="burgers">
-            <img src="./assets/hamb-8.png" alt="Produto 3" class="produto-imagem" />
+        <div class="produto" data-categoria="burgers">
+            <div>
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3" class="produto-imagem">
+            </div>
             <div class="produto-info">
-                <div class="produto-topo">
-                    <span class="produto-numero">— 03</span>
-                </div>
+                <p class="produto-codigo">— 03</p>
                 <h3 class="produto-nome">Nome do produto 3</h3>
                 <p class="produto-descricao">Descrição do produto de forma curta e objetiva para o cliente entender.</p>
-                <div class="produto-rodape">
-                    <span class="produto-preco">R$ 15,00</span>
-                    <div class="controle-quantidade">
-                        <button class="qtd-btn diminuir">−</button>
-                        <span class="qtd-valor">1</span>
-                        <button class="qtd-btn aumentar">+</button>
-                    </div>
+                <p class="produto-preco">R$ 15,00</p>
+            </div>
+            <div class="produto-acoes">
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">1</span>
+                    <button class="qtd-btn aumentar">+</button>
                 </div>
-                <button class="add-to-cart-btn" data-name="Nome do produto 3" data-price="15.00">
-                    <i class="fa fa-cart-plus"></i> Adicionar
+                <button class="add-carrinho" data-nome="Nome do produto 3" data-preco="15.00">
+                    <i class="fa fa-shopping-cart"></i>
                 </button>
             </div>
         </div>
 
         <!-- BEBIDA 1 -->
-        <div class="produto-card" data-categoria="bebidas">
-            <img src="./assets/refri-1.png" alt="Bebida 1" class="produto-imagem" />
+        <div class="produto" data-categoria="bebidas">
+            <div>
+                <img src="https://images.unsplash.com/photo-1581636626027-8577a8910423?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Bebida 1" class="produto-imagem">
+            </div>
             <div class="produto-info">
-                <div class="produto-topo">
-                    <span class="produto-numero">— 04</span>
-                </div>
+                <p class="produto-codigo">— 04</p>
                 <h3 class="produto-nome">Refrigerante 500ml</h3>
                 <p class="produto-descricao">Garrafa de 500ml, sabor a escolher.</p>
-                <div class="produto-rodape">
-                    <span class="produto-preco">R$ 5,00</span>
-                    <div class="controle-quantidade">
-                        <button class="qtd-btn diminuir">−</button>
-                        <span class="qtd-valor">1</span>
-                        <button class="qtd-btn aumentar">+</button>
-                    </div>
-                </div>
-                <button class="add-to-cart-btn" data-name="Refrigerante 500ml" data-price="5.00">
-                    <i class="fa fa-cart-plus"></i> Adicionar
-                </button>
+                <p class="produto-preco">R$ 5,00</p>
             </div>
-        </div>
-
-        <!-- BEBIDA 2 -->
-        <div class="produto-card" data-categoria="bebidas">
-            <img src="./assets/refri-2.png" alt="Bebida 2" class="produto-imagem" />
-            <div class="produto-info">
-                <div class="produto-topo">
-                    <span class="produto-numero">— 05</span>
+            <div class="produto-acoes">
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">1</span>
+                    <button class="qtd-btn aumentar">+</button>
                 </div>
-                <h3 class="produto-nome">Água Mineral 500ml</h3>
-                <p class="produto-descricao">Garrafa de 500ml, sem gás ou com gás.</p>
-                <div class="produto-rodape">
-                    <span class="produto-preco">R$ 4,00</span>
-                    <div class="controle-quantidade">
-                        <button class="qtd-btn diminuir">−</button>
-                        <span class="qtd-valor">1</span>
-                        <button class="qtd-btn aumentar">+</button>
-                    </div>
-                </div>
-                <button class="add-to-cart-btn" data-name="Água Mineral 500ml" data-price="4.00">
-                    <i class="fa fa-cart-plus"></i> Adicionar
+                <button class="add-carrinho" data-nome="Refrigerante 500ml" data-preco="5.00">
+                    <i class="fa fa-shopping-cart"></i>
                 </button>
             </div>
         </div>
     </div>
-</section>
+</div>
 
 <!-- MODAL CARRINHO -->
-<div id="cart-modal" class="hidden">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Meu Carrinho</h2>
-            <button id="close-modal-btn" class="close-modal">&times;</button>
+<div id="modal-carrinho" class="oculto">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h3>Meu Carrinho</h3>
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
         </div>
 
-        <div id="cart-items"></div>
+        <div id="lista-itens-carrinho"></div>
 
-        <div class="modal-total">
-            Total: R$ <span id="cart-total">0.00</span>
+        <p class="total-texto">Total: R$ <span id="valor-total">0.00</span></p>
+
+        <div class="form-grupo">
+            <label>Nome completo</label>
+            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
         </div>
 
-        <div class="form-group">
-            <label>Nome do cliente</label>
-            <input type="text" id="customer-name" placeholder="Digite seu nome" />
-        </div>
-
-        <div class="form-group">
+        <div class="form-grupo">
             <label>Endereço completo</label>
-            <input type="text" id="address" placeholder="Rua, número, bairro, cidade" />
-            <p id="address-warn" class="hidden">Digite o endereço completo!</p>
+            <input type="text" id="endereco-cliente" placeholder="Rua, número, bairro, cidade">
+            <p id="aviso-endereco" class="aviso-erro oculto">Informe o endereço completo!</p>
         </div>
 
-        <div class="form-group">
+        <div class="form-grupo">
             <label>Forma de pagamento</label>
-            <select id="payment-method">
+            <select id="forma-pagamento">
                 <option value="Dinheiro">Dinheiro</option>
                 <option value="Pix">Pix</option>
                 <option value="Cartão">Cartão</option>
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-grupo">
             <label>Observações</label>
-            <textarea id="observations" rows="2" placeholder="Ex: sem cebola, ponto da carne..."></textarea>
+            <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, ponto da carne..."></textarea>
         </div>
 
-        <div class="modal-botoes">
-            <button id="close-modal-btn-2" class="btn-fechar">Fechar</button>
-            <button id="checkout-btn" class="btn-finalizar">Finalizar Pedido</button>
+        <div class="botoes-modal">
+            <button id="btn-fechar" class="btn-fechar">Fechar</button>
+            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
         </div>
     </div>
 </div>
 
-<!-- ALERTA LOJA FECHADA -->
-<div id="closed-alert" class="hidden">
-    <div class="alert-box">
+<!-- ALERTA FECHADO -->
+<div id="alerta-fechado" class="oculto">
+    <div class="alerta-caixa">
         <h3>Loja Fechada</h3>
         <p>Nosso horário de atendimento é das <b>08:00 às 22:00</b>. Volte mais tarde!</p>
-        <button id="closed-alert-btn" class="btn-entendi">Entendi</button>
+        <button id="btn-entendi" class="btn-entendi">Entendi</button>
     </div>
 </div>
 
 <!-- BOTÃO CARRINHO FIXO -->
-<footer class="cart-footer">
-    <button id="cart-btn" class="cart-btn">
-        <div class="cart-esq">
-            <span class="cart-badge" id="cart-count">0</span>
-            <span>Seu Carrinho</span>
+<div class="carrinho-fixo">
+    <button id="abrir-carrinho" class="carrinho-btn">
+        <div class="carrinho-esq">
+            <span class="badge-qtd" id="qtd-carrinho">0</span>
+            <span>Seu carrinho</span>
+            <span>0 itens • R$ 0,00</span>
         </div>
-        <span>Ver Carrinho &rarr;</span>
+        <span>Ver carrinho &rarr;</span>
     </button>
-</footer>
+</div>
 
-<!-- ARQUIVO JS -->
+<!-- ARQUIVO JAVASCRIPT -->
 <script src="script.js"></script>
-
 </body>
 </html>
