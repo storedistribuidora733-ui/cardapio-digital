@@ -11,7 +11,7 @@ const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 
 // Horário de funcionamento
-const HORA_ABERTURA = 8;
+const HORA_ABERTURA = 5;
 const HORA_FECHAMENTO = 22;
 
 // ---------------- STATUS DA LOJA ----------------
