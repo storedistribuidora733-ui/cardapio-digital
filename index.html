@@ -21,7 +21,7 @@
             padding-bottom: 90px;
         }
 
-        /* ---------------- HEADER ---------------- */
+        /* ---------------- CABEÇALHO ---------------- */
         header {
             width: 100%;
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
@@ -31,8 +31,8 @@
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             border: 3px solid rgba(255,255,255,0.2);
             object-fit: cover;
@@ -42,6 +42,7 @@
         header h1 {
             font-size: 26px;
             margin-bottom: 8px;
+            font-weight: 700;
         }
 
         .endereco {
@@ -58,11 +59,11 @@
             font-size: 14px;
         }
 
-        /* ---------------- MENU ---------------- */
+        /* ---------------- CONTAINER GERAL ---------------- */
         .container {
             max-width: 1100px;
             margin: 30px auto;
-            padding: 0 20px;
+            padding: 0 16px;
         }
 
         .menu-topo {
@@ -120,11 +121,11 @@
             color: white;
         }
 
-        /* ---------------- ITENS DO MENU ---------------- */
+        /* ---------------- ITENS DO MENU - LAYOUT FIXO ---------------- */
         .lista-produtos {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
         }
 
         .produto {
@@ -133,59 +134,72 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            overflow: hidden;
             padding: 12px;
-            gap: 15px;
+            gap: 12px;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        .produto-imagem-container {
+            position: relative;
+            flex-shrink: 0;
+            width: 90px;
+            height: 90px;
         }
 
         .produto-imagem {
-            width: 110px;
-            height: 110px;
+            width: 100%;
+            height: 100%;
             border-radius: 8px;
             object-fit: cover;
-            position: relative;
-            flex-shrink: 0;
         }
 
         .tag-mais-pedido {
             position: absolute;
-            top: 5px;
-            left: 5px;
+            top: -6px;
+            left: -6px;
             background: #e21b23;
             color: white;
             font-size: 10px;
             font-weight: 600;
             padding: 3px 8px;
             border-radius: 10px;
+            white-space: nowrap;
         }
 
         .produto-info {
             flex: 1;
+            min-width: 0;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .produto-codigo {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             color: #999;
         }
 
         .produto-nome {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             color: #111;
+            line-height: 1.2;
         }
 
         .produto-descricao {
-            font-size: 13px;
+            font-size: 12px;
             color: #666;
             line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .produto-preco {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #e21b23;
             margin-top: 4px;
@@ -194,8 +208,9 @@
         .produto-acoes {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             align-items: flex-end;
+            flex-shrink: 0;
         }
 
         .controle-qtd {
@@ -204,6 +219,7 @@
             background: #f3f3f3;
             border-radius: 8px;
             overflow: hidden;
+            width: fit-content;
         }
 
         .qtd-btn {
@@ -224,10 +240,11 @@
             text-align: center;
             font-weight: 600;
             font-size: 15px;
+            background: #fff;
         }
 
         .add-carrinho {
-            width: 110px;
+            width: 95px;
             height: 36px;
             border: none;
             border-radius: 8px;
@@ -253,24 +270,22 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #111;
+            background: #e21b23;
             color: white;
-            padding: 12px 20px;
+            padding: 12px 16px;
             box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
             z-index: 999;
         }
 
         .carrinho-btn {
+            width: 100%;
             max-width: 1100px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #e21b23;
+            background: none;
             border: none;
-            border-radius: 10px;
-            width: 100%;
-            padding: 12px 18px;
             color: white;
             font-size: 16px;
             font-weight: 600;
@@ -305,7 +320,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            padding: 20px;
+            padding: 16px;
         }
 
         .modal-conteudo {
@@ -314,7 +329,7 @@
             max-width: 520px;
             max-height: 90vh;
             border-radius: 14px;
-            padding: 25px;
+            padding: 20px;
             overflow-y: auto;
         }
 
@@ -413,7 +428,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1001;
-            padding: 20px;
+            padding: 16px;
         }
 
         .alerta-caixa {
@@ -444,29 +459,27 @@
             display: none !important;
         }
 
-        /* ---------------- RESPONSIVO ---------------- */
-        @media (max-width: 480px) {
-            .produto {
-                flex-direction: column;
-                text-align: center;
+        /* ---------------- AJUSTE PARA TELAS MAIORES ---------------- */
+        @media (min-width: 768px) {
+            .produto-imagem-container {
+                width: 110px;
+                height: 110px;
             }
 
-            .produto-imagem {
-                width: 100%;
-                height: 180px;
+            .produto-nome {
+                font-size: 19px;
             }
 
-            .produto-acoes {
-                width: 100%;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 10px;
+            .produto-descricao {
+                font-size: 13px;
+            }
+
+            .produto-preco {
+                font-size: 20px;
             }
 
             .add-carrinho {
-                width: auto;
-                padding: 0 15px;
+                width: 110px;
             }
         }
     </style>
@@ -496,7 +509,7 @@
     <div class="lista-produtos">
         <!-- PRODUTO 1 -->
         <div class="produto" data-categoria="burgers">
-            <div style="position: relative;">
+            <div class="produto-imagem-container">
                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1" class="produto-imagem">
                 <span class="tag-mais-pedido">★ MAIS PEDIDO</span>
             </div>
@@ -520,7 +533,7 @@
 
         <!-- PRODUTO 2 -->
         <div class="produto" data-categoria="burgers">
-            <div>
+            <div class="produto-imagem-container">
                 <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2" class="produto-imagem">
             </div>
             <div class="produto-info">
@@ -543,7 +556,7 @@
 
         <!-- PRODUTO 3 -->
         <div class="produto" data-categoria="burgers">
-            <div>
+            <div class="produto-imagem-container">
                 <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3" class="produto-imagem">
             </div>
             <div class="produto-info">
@@ -566,7 +579,7 @@
 
         <!-- BEBIDA 1 -->
         <div class="produto" data-categoria="bebidas">
-            <div>
+            <div class="produto-imagem-container">
                 <img src="https://images.unsplash.com/photo-1581636626027-8577a8910423?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Bebida 1" class="produto-imagem">
             </div>
             <div class="produto-info">
