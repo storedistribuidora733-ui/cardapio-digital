@@ -21,10 +21,10 @@
             padding-bottom: 90px;
         }
 
-        /* ---------------- CABEÇALHO DA LOJA ---------------- */
+        /* ---------------- CABEÇALHO ---------------- */
         .cabecalho-loja {
             width: 100%;
-            height: 320px;
+            height: 280px;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=90') center/cover no-repeat;
             display: flex;
             flex-direction: column;
@@ -36,30 +36,30 @@
         }
 
         .logo-loja {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             border: 3px solid rgba(255,255,255,0.3);
             object-fit: cover;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            margin-bottom: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
 
         .cabecalho-loja h1 {
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .cabecalho-loja p {
-            font-size: 16px;
+            font-size: 15px;
             opacity: 0.9;
         }
 
         /* ---------------- CATEGORIAS ---------------- */
         .categorias {
             width: 100%;
-            padding: 16px;
+            padding: 14px 16px;
             display: flex;
             gap: 10px;
             overflow-x: auto;
@@ -71,7 +71,7 @@
         }
 
         .categoria-btn {
-            padding: 10px 16px;
+            padding: 9px 18px;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
             background: #ffffff;
@@ -101,24 +101,24 @@
         .lista-produtos {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .produto {
             background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             padding: 12px;
             display: grid;
-            grid-template-columns: 90px 1fr auto;
+            grid-template-columns: 85px 1fr auto;
             gap: 12px;
             align-items: start;
         }
 
         .produto-imagem {
             position: relative;
-            width: 90px;
-            height: 90px;
+            width: 85px;
+            height: 85px;
             border-radius: 8px;
             overflow: hidden;
         }
@@ -131,52 +131,52 @@
 
         .tag-mais-pedido {
             position: absolute;
-            top: 4px;
-            left: 4px;
+            top: 0;
+            left: 0;
             background: #dc2626;
             color: white;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
-            padding: 3px 6px;
-            border-radius: 4px;
+            padding: 3px 5px;
+            border-radius: 0 0 6px 0;
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
         }
 
         .produto-info {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             padding-top: 2px;
         }
 
         .produto-codigo {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             color: #ca8a04;
         }
 
         .produto-nome {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: #111827;
             line-height: 1.2;
         }
 
         .produto-descricao {
-            font-size: 13px;
+            font-size: 12px;
             color: #6b7280;
             line-height: 1.4;
         }
 
         .produto-detalhes {
-            font-size: 12px;
+            font-size: 11px;
             color: #78716c;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .produto-acoes {
@@ -188,7 +188,7 @@
         }
 
         .produto-preco {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 700;
             color: #dc2626;
         }
@@ -196,15 +196,15 @@
         .controle-qtd {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .qtd-btn {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             border: none;
             background: #f3f4f6;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             border-radius: 4px;
@@ -214,11 +214,11 @@
         }
 
         .qtd-valor {
-            width: 32px;
-            height: 30px;
+            width: 30px;
+            height: 28px;
             text-align: center;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             background: #ffffff;
             display: flex;
             align-items: center;
@@ -226,19 +226,19 @@
         }
 
         .add-carrinho {
-            width: 100px;
-            height: 36px;
+            width: 95px;
+            height: 34px;
             border: none;
             border-radius: 6px;
             background: #facc15;
             color: #111827;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 4px;
             transition: background 0.2s;
         }
 
@@ -246,7 +246,7 @@
             background: #eab308;
         }
 
-        /* ---------------- RODAPÉ CARRINHO FIXO ---------------- */
+        /* ---------------- RODAPÉ CARRINHO ---------------- */
         .carrinho-fixo {
             position: fixed;
             bottom: 0;
@@ -254,7 +254,7 @@
             width: 100%;
             background: #111827;
             color: white;
-            padding: 12px 16px;
+            padding: 10px 16px;
             box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
             z-index: 999;
         }
@@ -277,8 +277,8 @@
         }
 
         .badge-qtd {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             background: #facc15;
             color: #111827;
             border-radius: 50%;
@@ -286,17 +286,17 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .texto-carrinho h4 {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             margin-bottom: 2px;
         }
 
         .texto-seguro {
-            font-size: 13px;
+            font-size: 12px;
             color: #9ca3af;
         }
 
@@ -305,13 +305,13 @@
             color: #111827;
             border: none;
             border-radius: 6px;
-            padding: 10px 16px;
+            padding: 9px 16px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         /* ---------------- MODAL CARRINHO ---------------- */
@@ -332,7 +332,7 @@
             max-width: 520px;
             max-height: 90vh;
             border-radius: 12px;
-            padding: 20px;
+            padding: 18px;
             overflow-y: auto;
         }
 
@@ -340,15 +340,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #eee;
         }
 
         .fechar-modal {
             background: none;
             border: none;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             color: #666;
         }
@@ -357,68 +357,70 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
 
         .form-grupo {
-            margin: 14px 0;
+            margin: 12px 0;
         }
 
         .form-grupo label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .form-grupo input,
         .form-grupo select,
         .form-grupo textarea {
             width: 100%;
-            padding: 9px;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .aviso-erro {
-            font-size: 12px;
+            font-size: 11px;
             color: #dc2626;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .total-texto {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             text-align: right;
-            margin: 14px 0;
+            margin: 12px 0;
         }
 
         .botoes-modal {
             display: flex;
-            gap: 10px;
-            margin-top: 18px;
+            gap: 8px;
+            margin-top: 16px;
         }
 
         .btn-fechar {
             flex: 1;
-            padding: 10px;
+            padding: 9px;
             border: none;
             border-radius: 6px;
             background: #eee;
             font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
         }
 
         .btn-finalizar {
             flex: 2;
-            padding: 10px;
+            padding: 9px;
             border: none;
             border-radius: 6px;
             background: #22c55e;
             color: white;
             font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
         }
 
@@ -436,25 +438,32 @@
 
         .alerta-caixa {
             background: white;
-            padding: 22px;
+            padding: 20px;
             border-radius: 10px;
             text-align: center;
-            max-width: 320px;
+            max-width: 300px;
         }
 
         .alerta-caixa h3 {
             color: #dc2626;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .alerta-caixa p {
+            font-size: 14px;
+            line-height: 1.4;
         }
 
         .btn-entendi {
-            margin-top: 14px;
-            padding: 9px 18px;
+            margin-top: 12px;
+            padding: 8px 16px;
             border: none;
             border-radius: 6px;
             background: #dc2626;
             color: white;
             font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
         }
 
@@ -475,7 +484,7 @@
 <!-- CATEGORIAS -->
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
-    <button class="categoria-btn" data-categoria="burgers"><i class="fa fa-burger"></i> Burgers</button>
+    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
     <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
     <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
     <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
@@ -485,7 +494,7 @@
 <div class="container">
     <div class="lista-produtos">
         <!-- PRODUTO 1 -->
-        <div class="produto" data-categoria="burgers" data-nome="Nome do produto 1">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 1">
             <div class="produto-imagem">
                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1">
                 <span class="tag-mais-pedido"><i class="fa fa-star"></i> MAIS PEDIDO</span>
@@ -513,7 +522,7 @@
         </div>
 
         <!-- PRODUTO 2 -->
-        <div class="produto" data-categoria="burgers" data-nome="Nome do produto 2">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 2">
             <div class="produto-imagem">
                 <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2">
             </div>
@@ -540,7 +549,7 @@
         </div>
 
         <!-- PRODUTO 3 -->
-        <div class="produto" data-categoria="burgers" data-nome="Nome do produto 3">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 3">
             <div class="produto-imagem">
                 <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3">
             </div>
