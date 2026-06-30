@@ -4,262 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALISON BURGER</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#f59e0b',
-                        secondary: '#1f2937',
-                        success: '#10b981',
-                        danger: '#ef4444'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .oculto {
-                display: none !important;
-            }
-            .status-aberto {
-                color: #10b981;
-            }
-            .status-fechado {
-                color: #ef4444;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen">
+<body>
 
-    <!-- Cabeçalho -->
-    <header class="bg-secondary text-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold">ALISON BURGER</h1>
-                <p class="text-sm text-gray-300">Sabor de verdade!</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <div id="ponto-status" class="w-3 h-3 rounded-full bg-green-500"></div>
-                <span id="texto-status" class="text-sm font-medium">Aberto até às 06:00</span>
-                <button id="abrir-carrinho" class="relative bg-primary hover:bg-amber-500 text-white px-4 py-2 rounded-lg transition">
-                    <i class="fa fa-shopping-cart mr-1"></i> Pedido
-                    <span id="qtd-carrinho" class="absolute -top-2 -right-2 bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-                </button>
-            </div>
+<!-- Cabeçalho -->
+<header>
+    <div class="container">
+        <div class="logo">
+            <h1>ALISON BURGER</h1>
+            <p>Sabor de verdade!</p>
         </div>
-    </header>
-
-    <!-- Barra de busca -->
-    <div class="container mx-auto px-4 py-4">
-        <input type="text" id="campoBusca" placeholder="Buscar produto..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-    </div>
-
-    <!-- Categorias -->
-    <div class="container mx-auto px-4 mb-6">
-        <div class="flex flex-wrap gap-2">
-            <button class="categoria-btn ativo bg-primary text-white px-4 py-1 rounded-full text-sm" data-categoria="todos">Todos</button>
-            <button class="categoria-btn bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full text-sm" data-categoria="hamburgueres">Hambúrgueres</button>
-            <button class="categoria-btn bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full text-sm" data-categoria="bebidas">Bebidas</button>
-            <button class="categoria-btn bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full text-sm" data-categoria="porcoes">Porções</button>
+        <div class="status-carrinho">
+            <div class="status-loja">
+                <span id="ponto-status"></span>
+                <span id="texto-status">Aberto até às 06:00</span>
+            </div>
+            <button id="abrir-carrinho" class="btn-carrinho">
+                <i class="fa fa-shopping-cart"></i>
+                <span id="qtd-carrinho">0</span>
+            </button>
         </div>
     </div>
+</header>
 
-    <!-- Lista de Produtos -->
-    <main class="container mx-auto px-4 pb-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            <!-- Exemplo de Produto -->
-            <div class="produto bg-white rounded-lg shadow-md overflow-hidden" data-categoria="hamburgueres" data-nome="Hambúrguer Artesanal">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg mb-2">Hambúrguer Artesanal</h3>
-                    <p class="text-gray-600 text-sm mb-3">Pão artesanal, carne 180g, queijo, alface e tomate</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-lg text-primary">R$ 18,00</span>
-                        <div class="flex items-center gap-2">
-                            <button class="diminuir w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button>
-                            <span class="qtd-valor w-6 text-center">0</span>
-                            <button class="aumentar w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
-                        </div>
-                    </div>
-                    <button class="add-carrinho w-full mt-4 bg-primary hover:bg-amber-500 text-white py-2 rounded-lg transition" data-nome="Hambúrguer Artesanal" data-preco="18.00">Adicionar</button>
-                </div>
+<!-- Barra de busca -->
+<div class="container busca">
+    <input type="text" id="campoBusca" placeholder="Buscar produto...">
+</div>
+
+<!-- Categorias -->
+<div class="container categorias">
+    <button class="categoria-btn ativo" data-categoria="todos">Todos</button>
+    <button class="categoria-btn" data-categoria="hamburgueres">Hambúrgueres</button>
+    <button class="categoria-btn" data-categoria="bebidas">Bebidas</button>
+    <button class="categoria-btn" data-categoria="porcoes">Porções</button>
+</div>
+
+<!-- Lista de Produtos -->
+<main class="container">
+    <div class="produtos-grid">
+        <!-- Exemplo de produto original -->
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Artesanal" data-preco="18.00">
+            <h3>Hambúrguer Artesanal</h3>
+            <p>Pão, carne 180g, queijo, alface e tomate</p>
+            <div class="preco">R$ 18,00</div>
+            <div class="qtd-controle">
+                <button class="qtd-btn diminuir">-</button>
+                <span class="qtd-valor">0</span>
+                <button class="qtd-btn aumentar">+</button>
             </div>
-
-            <div class="produto bg-white rounded-lg shadow-md overflow-hidden" data-categoria="bebidas" data-nome="Refrigerante 500ml">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg mb-2">Refrigerante 500ml</h3>
-                    <p class="text-gray-600 text-sm mb-3">Diversas marcas e sabores</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-lg text-primary">R$ 6,00</span>
-                        <div class="flex items-center gap-2">
-                            <button class="diminuir w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button>
-                            <span class="qtd-valor w-6 text-center">0</span>
-                            <button class="aumentar w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
-                        </div>
-                    </div>
-                    <button class="add-carrinho w-full mt-4 bg-primary hover:bg-amber-500 text-white py-2 rounded-lg transition" data-nome="Refrigerante 500ml" data-preco="6.00">Adicionar</button>
-                </div>
-            </div>
-
-            <div class="produto bg-white rounded-lg shadow-md overflow-hidden" data-categoria="porcoes" data-nome="Porção de Batata Frita">
-                <div class="p-4">
-                    <h3 class="font-bold text-lg mb-2">Porção de Batata Frita</h3>
-                    <p class="text-gray-600 text-sm mb-3">Batata sequinha com sal e temperos</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-lg text-primary">R$ 12,00</span>
-                        <div class="flex items-center gap-2">
-                            <button class="diminuir w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button>
-                            <span class="qtd-valor w-6 text-center">0</span>
-                            <button class="aumentar w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
-                        </div>
-                    </div>
-                    <button class="add-carrinho w-full mt-4 bg-primary hover:bg-amber-500 text-white py-2 rounded-lg transition" data-nome="Porção de Batata Frita" data-preco="12.00">Adicionar</button>
-                </div>
-            </div>
-
+            <button class="add-carrinho">Adicionar</button>
         </div>
-    </main>
 
-    <!-- Modal do Carrinho -->
-    <div id="modal-carrinho" class="oculto fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div class="p-5 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-xl font-bold">Seu Pedido</h2>
-                <button id="fechar-modal" class="text-gray-500 hover:text-gray-800 text-xl">&times;</button>
+        <div class="produto" data-categoria="bebidas" data-nome="Refrigerante 500ml" data-preco="6.00">
+            <h3>Refrigerante 500ml</h3>
+            <p>Diversos sabores</p>
+            <div class="preco">R$ 6,00</div>
+            <div class="qtd-controle">
+                <button class="qtd-btn diminuir">-</button>
+                <span class="qtd-valor">0</span>
+                <button class="qtd-btn aumentar">+</button>
             </div>
-
-            <div class="p-5">
-                <div id="carrinho-container" class="mb-5 oculto">
-                    <h3 class="font-semibold mb-3">Itens Selecionados</h3>
-                    <div id="lista-itens-carrinho" class="space-y-3 mb-4"></div>
-                    <div id="resumo-carrinho" class="text-right font-semibold text-lg">Total: R$ 0,00</div>
-                </div>
-
-                <hr class="my-4">
-
-                <!-- Formulário do Cliente -->
-                <h3 class="font-semibold mb-4">Dados do Pedido</h3>
-
-                <!-- Forma de recebimento -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Forma de recebimento:</label>
-                    <select id="tipo-atendimento" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                        <option value="retirada">Retirada na loja</option>
-                        <option value="entrega">Entrega em domicílio</option>
-                    </select>
-                </div>
-
-                <!-- Taxa de entrega -->
-                <div id="campo-taxa-entrega" class="oculto mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Taxa de entrega:</label>
-                    <input type="text" id="taxa-entrega" value="6,00" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
-                </div>
-
-                <!-- Nome do cliente -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome completo:</label>
-                    <input type="text" id="nome-cliente" placeholder="Digite seu nome" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                </div>
-
-                <!-- CEP -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">CEP:</label>
-                    <input type="text" id="cep-cliente" placeholder="00000-000" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                </div>
-
-                <!-- Rua e Número -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Rua:</label>
-                        <input type="text" id="rua-cliente" placeholder="Nome da rua" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Número:</label>
-                        <input type="text" id="numero-cliente" placeholder="Nº" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                        <label class="inline-flex items-center mt-1">
-                            <input type="checkbox" id="sn-cliente" class="mr-1">
-                            <span class="text-xs">Sem número</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Complemento e Bairro -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Complemento:</label>
-                        <input type="text" id="complemento-cliente" placeholder="Apto, casa, etc" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Bairro:</label>
-                        <input type="text" id="bairro-cliente" placeholder="Seu bairro" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                    </div>
-                </div>
-
-                <!-- Cidade e UF -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Cidade:</label>
-                        <input type="text" id="cidade-cliente" placeholder="Sua cidade" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">UF:</label>
-                        <input type="text" id="uf-cliente" placeholder="SP" maxlength="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                    </div>
-                </div>
-
-                <!-- Ponto de referência -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Ponto de referência:</label>
-                    <input type="text" id="referencia-cliente" placeholder="Perto de onde?" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                </div>
-
-                <!-- Forma de pagamento -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Forma de pagamento:</label>
-                    <select id="forma-pagamento" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
-                        <option value="Dinheiro">Dinheiro</option>
-                        <option value="Cartão de Crédito">Cartão de Crédito</option>
-                        <option value="Cartão de Débito">Cartão de Débito</option>
-                        <option value="Pix">Pix</option>
-                    </select>
-                </div>
-
-                <!-- Observações -->
-                <div class="mb-5">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Observações:</label>
-                    <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, ponto da carne..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"></textarea>
-                </div>
-
-                <!-- Aviso de erro -->
-                <div id="aviso-endereco" class="oculto p-3 mb-4 rounded bg-red-50 text-red-700 text-sm"></div>
-
-                <!-- Botão Finalizar -->
-                <button id="btn-finalizar" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">Finalizar Pedido</button>
-            </div>
+            <button class="add-carrinho">Adicionar</button>
         </div>
     </div>
+</main>
 
-    <!-- Aviso de loja fechada -->
-    <div id="alerta-fechado" class="oculto fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg p-6 max-w-md w-full text-center">
-            <h3 class="text-xl font-bold text-red-600 mb-3">Loja Fechada</h3>
-            <p class="mb-4">No momento estamos fora do nosso horário de atendimento. Voltamos a atender às 23:00.</p>
-            <button id="btn-entendi" class="bg-gray-700 text-white px-5 py-2 rounded-lg">Entendi</button>
+<!-- Modal do Carrinho -->
+<div id="modal-carrinho" class="modal oculto">
+    <div class="modal-conteudo">
+        <span id="fechar-modal" class="fechar">&times;</span>
+        <h2>Seu Pedido</h2>
+
+        <div id="carrinho-container" class="oculto">
+            <h3>Itens Selecionados</h3>
+            <div id="lista-itens-carrinho"></div>
+            <div id="resumo-carrinho" class="total">Total: R$ 0,00</div>
         </div>
-    </div>
 
-    <!-- Arquivo JavaScript -->
-    <script src="script.js"></script>
+        <hr>
+
+        <!-- Formulário de Dados - AQUI ADICIONAMOS OS NOVOS CAMPOS -->
+        <h3>Dados do Pedido</h3>
+
+        <!-- ===== NOVO: Forma de recebimento ===== -->
+        <div class="campo">
+            <label>Forma de recebimento:</label>
+            <select id="tipo-atendimento">
+                <option value="retirada">Retirada na loja</option>
+                <option value="entrega">Entrega</option>
+            </select>
+        </div>
+
+        <!-- ===== NOVO: Taxa de entrega ===== -->
+        <div id="campo-taxa-entrega" class="campo oculto">
+            <label>Taxa de entrega:</label>
+            <input type="text" id="taxa-entrega" value="6,00" readonly>
+        </div>
+
+        <!-- Campos originais do seu código -->
+        <div class="campo">
+            <label>Nome completo:</label>
+            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
+        </div>
+
+        <div class="campo">
+            <label>CEP:</label>
+            <input type="text" id="cep-cliente" placeholder="00000-000">
+        </div>
+
+        <div class="campo-linha">
+            <div class="campo">
+                <label>Rua:</label>
+                <input type="text" id="rua-cliente" placeholder="Nome da rua">
+            </div>
+            <div class="campo">
+                <label>Número:</label>
+                <input type="text" id="numero-cliente" placeholder="Nº">
+                <label class="check">
+                    <input type="checkbox" id="sn-cliente"> Sem número
+                </label>
+            </div>
+        </div>
+
+        <div class="campo-linha">
+            <div class="campo">
+                <label>Complemento:</label>
+                <input type="text" id="complemento-cliente" placeholder="Apto, casa...">
+            </div>
+            <div class="campo">
+                <label>Bairro:</label>
+                <input type="text" id="bairro-cliente" placeholder="Bairro">
+            </div>
+        </div>
+
+        <div class="campo-linha">
+            <div class="campo">
+                <label>Cidade:</label>
+                <input type="text" id="cidade-cliente" placeholder="Cidade">
+            </div>
+            <div class="campo">
+                <label>UF:</label>
+                <input type="text" id="uf-cliente" maxlength="2" placeholder="SP">
+            </div>
+        </div>
+
+        <div class="campo">
+            <label>Ponto de referência:</label>
+            <input type="text" id="referencia-cliente" placeholder="Perto de onde?">
+        </div>
+
+        <div class="campo">
+            <label>Forma de pagamento:</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Cartão">Cartão</option>
+                <option value="Pix">Pix</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Observações:</label>
+            <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola..."></textarea>
+        </div>
+
+        <div id="aviso-endereco" class="aviso oculto"></div>
+
+        <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
+    </div>
+</div>
+
+<!-- Aviso de loja fechada -->
+<div id="alerta-fechado" class="modal oculto">
+    <div class="modal-conteudo aviso-fechado">
+        <h3>Loja Fechada</h3>
+        <p>Estamos fora do horário de atendimento. Voltamos às 23h.</p>
+        <button id="btn-entendi">Entendi</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
