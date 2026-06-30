@@ -454,7 +454,6 @@
             background: #eee;
             font-weight: 600;
             font-size: 12px;
-            cursor: pointer;
         }
         .btn-finalizar {
             flex: 2;
@@ -465,7 +464,6 @@
             color: white;
             font-weight: 600;
             font-size: 12px;
-            cursor: pointer;
         }
 
         #alerta-fechado {
@@ -499,306 +497,6 @@
             color: white;
             font-weight: 600;
             font-size: 12px;
-            cursor: pointer;
-        }
-
-        /* ==================== ESTILOS DO CHECKOUT PROFISSIONAL (IMAGEM) ==================== */
-        .checkout-stepper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111;
-            border-radius: 30px;
-            padding: 8px 16px;
-            margin-bottom: 20px;
-        }
-
-        .checkout-step {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            opacity: 0.4;
-        }
-
-        .checkout-step.active {
-            opacity: 1;
-        }
-
-        .step-num {
-            background: #facc15;
-            color: #111;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 11px;
-        }
-
-        .step-lbl {
-            color: #fff;
-            font-weight: 600;
-            font-size: 11px;
-        }
-
-        .checkout-titulo {
-            font-size: 20px;
-            font-weight: 800;
-            color: #111;
-            margin-bottom: 2px;
-        }
-
-        .checkout-subtitulo {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        /* Box de Pagamento do Checkout */
-        .checkout-payment-box {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 16px;
-            background: #ffffff;
-            margin-bottom: 20px;
-        }
-
-        .checkout-section-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 14px;
-            color: #111;
-            margin-bottom: 15px;
-        }
-
-        .checkout-option {
-            border: 1.5px solid #e5e7eb;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            transition: 0.2s;
-        }
-
-        .checkout-option.active {
-            border-color: #32bcad; /* Cor Pix */
-        }
-
-        .checkout-option.active-card {
-            border-color: #111; /* Cor Cartão */
-        }
-
-        .checkout-option-header {
-            display: flex;
-            align-items: center;
-            padding: 14px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .checkout-radio-circle {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #cbd5e1;
-            border-radius: 50%;
-            margin-right: 12px;
-            display: inline-block;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .checkout-option.active .checkout-radio-circle,
-        .checkout-option.active-card .checkout-radio-circle {
-            border-color: #0c4384;
-        }
-
-        .checkout-option.active .checkout-radio-circle::after,
-        .checkout-option.active-card .checkout-radio-circle::after {
-            content: '';
-            width: 9px;
-            height: 9px;
-            background: #0c4384;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .checkout-option-info {
-            flex-grow: 1;
-        }
-
-        .checkout-pix-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .pix-brand {
-            font-weight: 800;
-            color: #32bcad;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .pix-badge {
-            background: #e6f7ed;
-            color: #00875a;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid #a3e2bc;
-        }
-
-        .checkout-option-title {
-            font-weight: 700;
-            font-size: 13px;
-            color: #111;
-        }
-
-        .card-badge-right {
-            font-size: 11px;
-            color: #666;
-            text-align: right;
-            line-height: 1.2;
-        }
-
-        .checkout-option-body {
-            display: none;
-            padding: 14px;
-            background: #fcfcfc;
-            border-top: 1.5px solid #f1f5f9;
-        }
-
-        .checkout-option.active .checkout-option-body,
-        .checkout-option.active-card .checkout-option-body {
-            display: block;
-        }
-
-        /* Box de Conteúdo do Pix */
-        .pix-box-body {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .pix-escaneie {
-            font-size: 11px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .pix-grid-layout {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .pix-qr-frame {
-            border: 1.5px solid #e5e7eb;
-            padding: 4px;
-            border-radius: 8px;
-            background: #fff;
-            width: 120px;
-            height: 120px;
-        }
-
-        .pix-qr-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .pix-copy-action {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .pix-hash-input {
-            width: 100%;
-            height: 54px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            background: #f1f5f9;
-            padding: 6px;
-            font-size: 10px;
-            color: #475569;
-            resize: none;
-            font-family: monospace;
-        }
-
-        .btn-copiar-pix {
-            background: #fff;
-            border: 1.5px solid #cbd5e1;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            color: #333;
-        }
-
-        .pix-expira-cronometro {
-            font-size: 11px;
-            color: #0c4384;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Formulário do Cartão */
-        .checkout-form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        /* Selos de Segurança e Confiança */
-        .checkout-trust-footer {
-            margin-top: 25px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .trust-item-footer {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .trust-item-footer i {
-            font-size: 18px;
-            color: #333;
-        }
-
-        .trust-item-text strong {
-            font-size: 11px;
-            font-weight: 700;
-            color: #111;
-            display: block;
-        }
-
-        .trust-item-text p {
-            font-size: 10px;
-            color: #666;
         }
     </style>
 </head>
@@ -925,33 +623,15 @@
     </div>
 </div>
 
-<!-- MODAL CHECKOUT COMPLETO (INTEGRADO COM DESIGN DA IMAGEM) -->
+<!-- MODAL CARRINHO - COM CEP E PREENCHIMENTO AUTOMÁTICO -->
 <div id="modal-carrinho" class="oculto">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
-            <h3>Finalizar Pedido</h3>
+            <h3>Meu Carrinho</h3>
             <button id="fechar-modal" class="fechar-modal">&times;</button>
         </div>
-
-        <!-- Stepper no topo -->
-        <div class="checkout-stepper">
-            <div class="checkout-step" id="step-carrinho-visual">
-                <span class="step-num">1</span>
-                <span class="step-lbl">Carrinho</span>
-            </div>
-            <div class="checkout-step active" id="step-pagamento-visual">
-                <span class="step-num">2</span>
-                <span class="step-lbl">Pagamento</span>
-            </div>
-            <div class="checkout-step" id="step-confirmacao-visual">
-                <span class="step-num">3</span>
-                <span class="step-lbl">Confirmação</span>
-            </div>
-        </div>
-
-        <!-- Seção de Revisão de Itens -->
         <div id="lista-itens-carrinho"></div>
-        <p class="total-texto">Total do Pedido: R$ <span id="valor-total">0,00</span></p>
+        <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
 
         <!-- Forma de recebimento -->
         <div class="form-grupo">
@@ -1015,101 +695,13 @@
             </div>
         </div>
 
-        <!-- CHECKOUT PROFISSIONAL DE PAGAMENTO (COMO NA IMAGEM) -->
-        <div class="checkout-payment-box">
-            <div class="checkout-section-title">
-                <i class="fa-regular fa-credit-card"></i>
-                <div>
-                    <p style="font-weight: 700; font-size: 13px;">Forma de pagamento</p>
-                    <p style="font-size: 10px; color: #666; font-weight: 500;">Escolha a melhor forma para você</p>
-                </div>
-            </div>
-
-            <!-- Opção PIX (Ativa por padrão) -->
-            <div class="checkout-option active" id="option-pix-wrapper">
-                <div class="checkout-option-header" onclick="selectPaymentMethod('pix')">
-                    <span class="checkout-radio-circle"></span>
-                    <div class="checkout-option-info">
-                        <div class="checkout-pix-row">
-                            <span class="pix-brand">⚡ pix</span>
-                            <span class="pix-badge">5% OFF</span>
-                        </div>
-                        <p style="font-size: 10px; color: #666; margin-top: 2px;">Aprovação imediata • Desconto no pedido</p>
-                    </div>
-                </div>
-                
-                <div class="checkout-option-body">
-                    <div class="pix-box-body">
-                        <p class="pix-escaneie">Escaneie o QR Code com o app do seu banco</p>
-                        <div class="pix-grid-layout">
-                            <div class="pix-qr-frame">
-                                <img id="checkout-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126360014BR.GOV.BCB.PIX" alt="QR Code Pix">
-                            </div>
-                            <div class="pix-copy-action">
-                                <p style="font-size: 11px; font-weight: 600; color: #333;">Ou copie o código Pix</p>
-                                <textarea readonly class="pix-hash-input" id="pix-copia-cola-text">00020126360014BR.GOV.BCB.PIX0114+5519989021323005204000053039865802BR5908ALISONBURGER6009SAOPAULO62070503***6304A1B2</textarea>
-                                <button type="button" class="btn-copiar-pix" onclick="copyPixCode()"><i class="fa-regular fa-copy"></i> Copiar código</button>
-                            </div>
-                        </div>
-                        <div class="pix-expira-cronometro">
-                            <i class="fa-regular fa-clock"></i> Pix expira em <span id="pix-timer-count">09:45</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Opção Cartão de Crédito -->
-            <div class="checkout-option" id="option-card-wrapper">
-                <div class="checkout-option-header" onclick="selectPaymentMethod('card')">
-                    <span class="checkout-radio-circle"></span>
-                    <div class="checkout-option-info" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <div>
-                            <span class="checkout-option-title"><i class="fa-regular fa-credit-card"></i> Cartão de crédito / débito</span>
-                        </div>
-                        <div class="card-badge-right">
-                            <strong>Até 12x</strong><br><span style="font-size: 9px; color: #777;">com juros</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="checkout-option-body">
-                    <div class="form-grupo">
-                        <label>Número do cartão</label>
-                        <input type="text" id="card-num" placeholder="0000 0000 0000 0000">
-                    </div>
-                    <div class="form-grupo">
-                        <label>Nome do titular</label>
-                        <input type="text" id="card-name" placeholder="NOME COMO ESTÁ NO CARTÃO">
-                    </div>
-                    <div class="checkout-form-row">
-                        <div class="form-grupo">
-                            <label>Validade</label>
-                            <input type="text" id="card-expiry" placeholder="MM/AA">
-                        </div>
-                        <div class="form-grupo">
-                            <label>CVV</label>
-                            <input type="text" id="card-cvv" placeholder="123">
-                        </div>
-                    </div>
-                    <div class="form-grupo">
-                        <label>Parcelamento</label>
-                        <select id="card-installments">
-                            <option value="1">1x de R$ 0,00</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Opção Dinheiro -->
-            <div class="checkout-option" id="option-cash-wrapper">
-                <div class="checkout-option-header" onclick="selectPaymentMethod('cash')">
-                    <span class="checkout-radio-circle"></span>
-                    <div class="checkout-option-info">
-                        <span class="checkout-option-title"><i class="fa-solid fa-money-bill-wave" style="color: #22c55e;"></i> Dinheiro</span>
-                        <p style="font-size: 10px; color: #22c55e; font-weight: 600; margin-top: 2px;">Pagamento na entrega • Pague ao receber seu pedido</p>
-                    </div>
-                </div>
-            </div>
+        <div class="form-grupo">
+            <label>Forma de pagamento</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+            </select>
         </div>
 
         <div class="form-grupo">
@@ -1119,38 +711,9 @@
 
         <p id="aviso-geral" class="aviso-erro oculto"></p>
 
-        <!-- Botão de Finalização idêntico à Imagem -->
-        <button id="btn-finalizar" class="btn-finalizar" style="background: #facc15; color: #111; font-weight: 800; font-size: 14px; padding: 14px; width: 100%; border-radius: 8px;">
-            <i class="fa-solid fa-lock"></i> Confirmar pedido e continuar
-        </button>
-
-        <div class="botoes-modal" style="margin-top: 10px;">
-            <button id="btn-fechar" class="btn-fechar">Voltar</button>
-        </div>
-
-        <!-- Rodapé de Satisfação da Imagem -->
-        <div class="checkout-trust-footer">
-            <div class="trust-item-footer">
-                <i class="fa-solid fa-rotate-left"></i>
-                <div class="trust-item-text">
-                    <strong>Satisfação garantida</strong>
-                    <p>Ou seu dinheiro de volta</p>
-                </div>
-            </div>
-            <div class="trust-item-footer">
-                <i class="fa-regular fa-clock"></i>
-                <div class="trust-item-text">
-                    <strong>Entrega rápida</strong>
-                    <p>20 a 30 minutos</p>
-                </div>
-            </div>
-            <div class="trust-item-footer">
-                <i class="fa-solid fa-headset"></i>
-                <div class="trust-item-text">
-                    <strong>Suporte dedicado</strong>
-                    <p>Atendimento humanizado</p>
-                </div>
-            </div>
+        <div class="botoes-modal">
+            <button id="btn-fechar" class="btn-fechar">Fechar</button>
+            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
         </div>
     </div>
 </div>
