@@ -435,8 +435,14 @@
             border-radius: 5px;
             font-size: 12px;
         }
+        .form-duplo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
 
         .aviso-erro { font-size: 11px; color: #dc2626; margin-top: 2px; }
+        .aviso-info { font-size: 11px; color: #2563eb; margin-top: 2px; }
         .total-texto { font-size: 15px; font-weight: 700; text-align: right; margin: 9px 0; }
 
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
@@ -617,7 +623,7 @@
     </div>
 </div>
 
-<!-- MODAL CARRINHO -->
+<!-- MODAL CARRINHO - COM CEP E PREENCHIMENTO AUTOMÁTICO -->
 <div id="modal-carrinho" class="oculto">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
@@ -627,6 +633,7 @@
         <div id="lista-itens-carrinho"></div>
         <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
 
+        <!-- Forma de recebimento -->
         <div class="form-grupo">
             <label>Forma de recebimento</label>
             <select id="tipo-atendimento">
@@ -635,20 +642,59 @@
             </select>
         </div>
 
+        <!-- Taxa de entrega -->
         <div id="campo-taxa-entrega" class="form-grupo oculto">
             <label>Taxa de entrega</label>
             <input type="text" id="taxa-entrega" value="6,00" readonly style="background: #f8f8f8;">
         </div>
 
+        <!-- Dados do cliente -->
         <div class="form-grupo">
             <label>Nome completo</label>
             <input type="text" id="nome-cliente" placeholder="Digite seu nome">
         </div>
-        <div class="form-grupo">
-            <label>Endereço completo</label>
-            <input type="text" id="endereco-cliente" placeholder="Rua, número, bairro, cidade">
-            <p id="aviso-endereco" class="aviso-erro oculto">Informe o endereço completo!</p>
+
+        <!-- Campos de endereço - só aparece quando for entrega -->
+        <div id="bloco-endereco" class="oculto">
+            <div class="form-grupo">
+                <label>CEP</label>
+                <input type="text" id="cep" placeholder="Ex: 28300-000" maxlength="9">
+                <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
+            </div>
+
+            <div class="form-duplo">
+                <div class="form-grupo">
+                    <label>Número</label>
+                    <input type="text" id="numero" placeholder="Ex: 344">
+                </div>
+                <div class="form-grupo">
+                    <label>Complemento</label>
+                    <input type="text" id="complemento" placeholder="Ex: Apto 2, Casa">
+                </div>
+            </div>
+
+            <div class="form-grupo">
+                <label>Referência</label>
+                <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
+            </div>
+
+            <div class="form-grupo">
+                <label>Rua / Logradouro</label>
+                <input type="text" id="rua" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+            </div>
+
+            <div class="form-duplo">
+                <div class="form-grupo">
+                    <label>Bairro</label>
+                    <input type="text" id="bairro" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                </div>
+                <div class="form-grupo">
+                    <label>Cidade / UF</label>
+                    <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                </div>
+            </div>
         </div>
+
         <div class="form-grupo">
             <label>Forma de pagamento</label>
             <select id="forma-pagamento">
@@ -657,10 +703,14 @@
                 <option value="Cartão">Cartão</option>
             </select>
         </div>
+
         <div class="form-grupo">
             <label>Observações</label>
-            <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola..."></textarea>
+            <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, troco para R$ 50..."></textarea>
         </div>
+
+        <p id="aviso-geral" class="aviso-erro oculto"></p>
+
         <div class="botoes-modal">
             <button id="btn-fechar" class="btn-fechar">Fechar</button>
             <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
