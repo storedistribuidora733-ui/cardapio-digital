@@ -1,9 +1,9 @@
 // ==============================================
-// ⚙️ CONFIGURAÇÕES — HORÁRIO, VALORES E DADOS
+// ⚙️ CONFIGURAÇÕES — AJUSTE OS HORÁRIOS AQUI
 // ==============================================
 const CONFIG = {
-  horaAbertura: 23,
-  horaFechamento: 6,
+  horaAbertura: 23,       // 23h = 23:00
+  horaFechamento: 6,      // 6h = 06:00
   textoStatusAberto: "Aberto até às 06:00",
   textoStatusFechado: "Fechado",
   corStatusAberto: "#22c55e",
@@ -14,10 +14,11 @@ const CONFIG = {
 };
 
 // ==============================================
-// 🛒 ELEMENTOS
+// 🛒 VARIÁVEIS GERAIS
 // ==============================================
 const carrinho = [];
 
+// Elementos da página
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
 const fecharModalBtns = [document.getElementById('fechar-modal'), document.getElementById('btn-fechar')];
@@ -61,7 +62,7 @@ tipoAtendimentoEl.addEventListener('change', () => {
 });
 
 // ==============================================
-// 🕒 STATUS DA LOJA — FUNCIONANDO PERFEITAMENTE
+// 🕒 STATUS DA LOJA — FUNCIONANDO 100%
 // ==============================================
 function verificarStatusLoja(mostrarAviso = false) {
   const agora = new Date();
@@ -84,12 +85,13 @@ function verificarStatusLoja(mostrarAviso = false) {
   return lojaAberta;
 }
 
+// Executa na hora que carrega e atualiza a cada 1 minuto
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ==============================================
-// ➕ / ➖ QUANTIDADE
+// ➕ / ➖ CONTROLE DE QUANTIDADE
 // ==============================================
 document.querySelectorAll('.qtd-btn').forEach(botao => {
   botao.addEventListener('click', () => {
