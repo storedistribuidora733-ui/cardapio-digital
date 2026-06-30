@@ -17,7 +17,7 @@ const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
 // Horário de funcionamento
 const HORA_ABERTURA = 6;
-const HORA_FECHAMENTO = 24;
+const HORA_FECHAMENTO = 22;
 
 // ---------------- STATUS DA LOJA ----------------
 function verificarStatusLoja(mostrarAviso = false) {
@@ -30,12 +30,14 @@ function verificarStatusLoja(mostrarAviso = false) {
 
     if (aberta) {
         textoStatusEl.textContent = 'Aberto até às 22:00';
-        pontoStatusEl.classList.remove('ponto-vermelho');
-        pontoStatusEl.classList.add('ponto-verde');
+        textoStatusEl.classList.remove('fechado');
+        textoStatusEl.classList.add('aberto');
+        pontoStatusEl.style.backgroundColor = '#22c55e';
     } else {
         textoStatusEl.textContent = 'Fechado';
-        pontoStatusEl.classList.remove('ponto-verde');
-        pontoStatusEl.classList.add('ponto-vermelho');
+        textoStatusEl.classList.remove('aberto');
+        textoStatusEl.classList.add('fechado');
+        pontoStatusEl.style.backgroundColor = '#dc2626';
     }
 
     if (!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
@@ -103,12 +105,10 @@ function atualizarCarrinho() {
 
     if (carrinho.length === 0) {
         valorTotalEl.textContent = '0.00';
-        // Esconde o carrinho quando vazio
         carrinhoContainer.style.display = 'none';
         return;
     }
 
-    // Mostra o carrinho quando tem itens
     carrinhoContainer.style.display = 'flex';
 
     carrinho.forEach((item, index) => {
