@@ -2,27 +2,30 @@
 // ⚙️ CONFIGURAÇÕES GERAIS — ALTERE APENAS AQUI
 // ==============================================
 const CONFIG = {
-  horaAbertura: 23,
-  horaFechamento: 6,
-  textoStatusAberto: "Aberto até às 06:00",
-  textoStatusFechado: "Fechado",
-  corStatusAberto: "#22c55e",
-  corStatusFechado: "#dc2626",
-  numeroWhatsApp: "5519989021323", // ✅ Seu número correto
-  nomeLoja: "ALISON BURGER",
-  subtituloLoja: "Sabor de verdade!" // ✅ Igual da foto
+    horaAbertura: 23,
+    horaFechamento: 6,
+    textoStatusAberto: "Aberto até às 06:00",
+    textoStatusFechado: "Fechado",
+    corStatusAberto: "#10b981",
+    corStatusFechado: "#ef4444",
+    numeroWhatsApp: "5519989021323", // Coloque seu número com DDD
+    nomeLoja: "ALISON BURGER",
+    subtituloLoja: "Sabor de verdade!",
+    iniciarNumeroPedido: 2250,
+    taxaEntregaPadrao: 6.00 // Valor da taxa de entrega padrão
 };
 
 // ==============================================
-// 🛒 ELEMENTOS DA PÁGINA
+// 🛒 VARIÁVEIS ELEMENTOS DA PÁGINA
 // ==============================================
+let numeroPedidoAtual = CONFIG.iniciarNumeroPedido;
 const carrinho = [];
 
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
-const fecharModalBtns = [document.getElementById('fechar-modal'), document.getElementById('btn-fechar')];
+const fecharModalBtns = [document.getElementById('fechar-modal')];
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
-const valorTotalEl = document.getElementById('valor-total');
+const valorTotalEl = document.getElementById('resumo-carrinho');
 const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
@@ -30,319 +33,353 @@ const textoStatusEl = document.getElementById('texto-status');
 const pontoStatusEl = document.getElementById('ponto-status');
 const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
-const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
-// Campos do endereço
+// Campos do formulário
+const nomeEl = document.getElementById('nome-cliente');
 const cepEl = document.getElementById('cep-cliente');
 const ruaEl = document.getElementById('rua-cliente');
 const bairroEl = document.getElementById('bairro-cliente');
 const cidadeEl = document.getElementById('cidade-cliente');
 const ufEl = document.getElementById('uf-cliente');
+const numeroEl = document.getElementById('numero-cliente');
+const semNumeroEl = document.getElementById('sn-cliente');
+const complementoEl = document.getElementById('complemento-cliente');
+const referenciaEl = document.getElementById('referencia-cliente');
+const pagamentoEl = document.getElementById('forma-pagamento');
+const obsEl = document.getElementById('observacoes');
 const avisoEndereco = document.getElementById('aviso-endereco');
 
+// Novos campos
+const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
+const campoTaxaEntregaEl = document.getElementById('campo-taxa-entrega');
+const taxaEntregaEl = document.getElementById('taxa-entrega');
+
 // ==============================================
-// 🚀 FUNÇÃO BUSCAR CEP AUTOMÁTICA + MÁSCARA
+// 🚀 FUNÇÕES AUXILIARES
 // ==============================================
+
+// Máscara para CEP
 function aplicarMascaraCEP(valor) {
-  valor = valor.replace(/\D/g, '');
-  if (valor.length > 5) valor = valor.replace(/^(\d{5})(\d)/, '$1-$2');
-  return valor;
+    valor = valor.replace(/\D/g, '');
+    if (valor.length > 5) valor = valor.replace(/^(\d{5})(\d)/, '$1-$2');
+    return valor;
 }
 
 cepEl.addEventListener('input', () => {
-  cepEl.value = aplicarMascaraCEP(cepEl.value);
+    cepEl.value = aplicarMascaraCEP(cepEl.value);
 });
 
+// Buscar endereço pelo CEP
 async function buscarCEP(cep) {
-  cep = cep.replace(/\D/g, '');
-  if (cep.length !== 8) return;
+    cep = cep.replace(/\D/g, '');
+    if (cep.length !== 8) return;
 
-  try {
-    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const dados = await resposta.json();
+    try {
+        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const dados = await resposta.json();
 
-    if (dados.erro) {
-      avisoEndereco.textContent = '❌ CEP não encontrado!';
-      avisoEndereco.classList.remove('oculto');
-      return;
+        if (dados.erro) {
+            avisoEndereco.textContent = 'CEP não encontrado, preencha manualmente.';
+            avisoEndereco.classList.remove('oculto');
+            return;
+        }
+
+        ruaEl.value = dados.logradouro || '';
+        bairroEl.value = dados.bairro || '';
+        cidadeEl.value = dados.localidade || '';
+        ufEl.value = dados.uf || '';
+        avisoEndereco.classList.add('oculto');
+
+    } catch (erro) {
+        avisoEndereco.textContent = 'Erro ao buscar CEP, preencha manualmente.';
+        avisoEndereco.classList.remove('oculto');
     }
-
-    ruaEl.value = dados.logradouro || '';
-    bairroEl.value = dados.bairro || '';
-    cidadeEl.value = dados.localidade || '';
-    ufEl.value = dados.uf || '';
-    avisoEndereco.classList.add('oculto');
-
-  } catch (erro) {
-    avisoEndereco.textContent = '⚠️ Erro ao buscar CEP, preencha manualmente.';
-    avisoEndereco.classList.remove('oculto');
-  }
 }
 
 cepEl.addEventListener('blur', () => buscarCEP(cepEl.value));
 
-// ==============================================
-// 🕒 VERIFICAR STATUS DA LOJA
-// ==============================================
+// Mostrar/ocultar campos conforme tipo de recebimento
+tipoAtendimentoEl.addEventListener('change', () => {
+    if (tipoAtendimentoEl.value === 'entrega') {
+        campoTaxaEntregaEl.classList.remove('oculto');
+        taxaEntregaEl.value = CONFIG.taxaEntregaPadrao.toFixed(2).replace('.', ',');
+        cepEl.disabled = false;
+        ruaEl.disabled = false;
+        bairroEl.disabled = false;
+        cidadeEl.disabled = false;
+        ufEl.disabled = false;
+        numeroEl.disabled = false;
+        semNumeroEl.disabled = false;
+        complementoEl.disabled = false;
+        referenciaEl.disabled = false;
+    } else {
+        campoTaxaEntregaEl.classList.add('oculto');
+        taxaEntregaEl.value = '0,00';
+        cepEl.disabled = true;
+        ruaEl.disabled = true;
+        bairroEl.disabled = true;
+        cidadeEl.disabled = true;
+        ufEl.disabled = true;
+        numeroEl.disabled = true;
+        semNumeroEl.disabled = true;
+        complementoEl.disabled = true;
+        referenciaEl.disabled = true;
+    }
+});
+
+// Verificar horário de funcionamento
 function verificarStatusLoja(mostrarAviso = false) {
-  const agora = new Date();
-  const horaAtual = agora.getHours();
-  const lojaAberta = horaAtual >= CONFIG.horaAbertura || horaAtual < CONFIG.horaFechamento;
+    const agora = new Date();
+    const horaAtual = agora.getHours();
+    const lojaAberta = horaAtual >= CONFIG.horaAbertura || horaAtual < CONFIG.horaFechamento;
 
-  if (lojaAberta) {
-    pontoStatusEl.style.backgroundColor = CONFIG.corStatusAberto;
-    textoStatusEl.textContent = CONFIG.textoStatusAberto;
-    textoStatusEl.classList.remove("fechado");
-    textoStatusEl.classList.add("aberto");
-  } else {
-    pontoStatusEl.style.backgroundColor = CONFIG.corStatusFechado;
-    textoStatusEl.textContent = CONFIG.textoStatusFechado;
-    textoStatusEl.classList.remove("aberto");
-    textoStatusEl.classList.add("fechado");
-  }
+    if (lojaAberta) {
+        pontoStatusEl.style.backgroundColor = CONFIG.corStatusAberto;
+        textoStatusEl.textContent = CONFIG.textoStatusAberto;
+        textoStatusEl.classList.remove('status-fechado');
+        textoStatusEl.classList.add('status-aberto');
+    } else {
+        pontoStatusEl.style.backgroundColor = CONFIG.corStatusFechado;
+        textoStatusEl.textContent = CONFIG.textoStatusFechado;
+        textoStatusEl.classList.remove('status-aberto');
+        textoStatusEl.classList.add('status-fechado');
+    }
 
-  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
-  return lojaAberta;
+    if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove('oculto');
+    return lojaAberta;
 }
 
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
-btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
+btnEntendi.addEventListener('click', () => alertaFechado.classList.add('oculto'));
 
 // ==============================================
-// ➕ / ➖ CONTROLE DE QUANTIDADE
+// 🛍️ CONTROLE DO CARRINHO
 // ==============================================
-document.querySelectorAll('.qtd-btn').forEach(botao => {
-  botao.addEventListener('click', () => {
-    const valorEl = botao.parentElement.querySelector('.qtd-valor');
-    let valor = parseInt(valorEl.textContent);
-    if (botao.classList.contains('aumentar')) valor++;
-    if (botao.classList.contains('diminuir') && valor > 0) valor--;
-    valorEl.textContent = valor;
-  });
+
+// Alterar quantidade nos produtos
+document.querySelectorAll('.aumentar').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const qtd = btn.parentElement.querySelector('.qtd-valor');
+        qtd.textContent = parseInt(qtd.textContent) + 1;
+    });
 });
 
-// ==============================================
-// 🛍️ ADICIONAR AO CARRINHO
-// ==============================================
+document.querySelectorAll('.diminuir').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const qtd = btn.parentElement.querySelector('.qtd-valor');
+        if (parseInt(qtd.textContent) > 0) qtd.textContent = parseInt(qtd.textContent) - 1;
+    });
+});
+
+// Adicionar item ao carrinho
 document.querySelectorAll('.add-carrinho').forEach(botao => {
-  botao.addEventListener('click', () => {
-    if (!verificarStatusLoja(true)) return;
+    botao.addEventListener('click', () => {
+        if (!verificarStatusLoja(true)) return;
 
-    const nome = botao.dataset.nome;
-    const preco = parseFloat(botao.dataset.preco);
-    const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
+        const nome = botao.dataset.nome;
+        const preco = parseFloat(botao.dataset.preco);
+        const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
 
-    if (qtd <= 0) {
-      alert('Escolha uma quantidade antes de adicionar!');
-      return;
-    }
+        if (qtd <= 0) {
+            alert('Selecione uma quantidade!');
+            return;
+        }
 
-    const itemExistente = carrinho.find(item => item.nome === nome);
-    if (itemExistente) {
-      itemExistente.quantidade += qtd;
-    } else {
-      carrinho.push({ nome, preco, quantidade: qtd });
-    }
+        const existe = carrinho.find(item => item.nome === nome);
+        if (existe) {
+            existe.quantidade += qtd;
+        } else {
+            carrinho.push({ nome, preco, quantidade: qtd });
+        }
 
-    atualizarCarrinho();
-    botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
+        atualizarCarrinho();
+        botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
 
-    const original = botao.innerHTML;
-    botao.innerHTML = '<i class="fa fa-check"></i> Ok';
-    botao.style.background = '#22c55e';
-    botao.style.color = 'white';
-    setTimeout(() => {
-      botao.innerHTML = original;
-      botao.style.background = '#facc15';
-      botao.style.color = '#111827';
-    }, 1100);
-  });
+        // Feedback visual
+        const original = botao.innerHTML;
+        botao.innerHTML = '<i class="fa fa-check"></i> Adicionado';
+        setTimeout(() => botao.innerHTML = original, 1200);
+    });
 });
 
-// ==============================================
-// 🔄 ATUALIZAR CARRINHO
-// ==============================================
+// Atualizar visual do carrinho
 function atualizarCarrinho() {
-  listaItensCarrinho.innerHTML = '';
-  let total = 0;
-  let qtdTotal = 0;
+    listaItensCarrinho.innerHTML = '';
+    let total = 0;
+    let qtdTotal = 0;
 
-  if (carrinho.length === 0) {
-    valorTotalEl.textContent = '0.00';
-    carrinhoContainer.style.display = 'none';
-    return;
-  }
+    if (carrinho.length === 0) {
+        carrinhoContainer.classList.add('oculto');
+        qtdCarrinhoEl.textContent = '0';
+        return;
+    }
 
-  carrinhoContainer.style.display = 'flex';
+    carrinhoContainer.classList.remove('oculto');
 
-  carrinho.forEach((item, index) => {
-    const totalItem = item.preco * item.quantidade;
-    total += totalItem;
-    qtdTotal += item.quantidade;
+    carrinho.forEach((item, index) => {
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+        qtdTotal += item.quantidade;
 
-    const itemEl = document.createElement('div');
-    itemEl.className = 'item-carrinho';
-    itemEl.innerHTML = `
-      <div>
-        <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
-        <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-        <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
-        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-        <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
-      </div>
-    `;
-    listaItensCarrinho.appendChild(itemEl);
-  });
+        const div = document.createElement('div');
+        div.className = 'flex justify-between items-center border-b pb-2';
+        div.innerHTML = `
+            <div>
+                <p class="font-medium">${item.quantidade}x ${item.nome}</p>
+                <p class="text-sm text-gray-600">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                <button class="text-red-500 text-sm remover-item" data-index="${index}">×</button>
+            </div>
+        `;
+        listaItensCarrinho.appendChild(div);
+    });
 
-  valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
-  qtdCarrinhoEl.textContent = qtdTotal;
-  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+    valorTotalEl.innerHTML = `Total dos itens: <strong>R$ ${total.toFixed(2).replace('.', ',')}</strong>`;
+    qtdCarrinhoEl.textContent = qtdTotal;
 
-  adicionarEventosCarrinho();
+    // Adicionar evento de remoção
+    document.querySelectorAll('.remover-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+            carrinho.splice(parseInt(btn.dataset.index), 1);
+            atualizarCarrinho();
+        });
+    });
 }
 
-function adicionarEventosCarrinho() {
-  document.querySelectorAll('.aumentar-item').forEach(botao => {
-    botao.addEventListener('click', () => {
-      const idx = parseInt(botao.dataset.index);
-      carrinho[idx].quantidade++;
-      atualizarCarrinho();
-    });
-  });
-  document.querySelectorAll('.diminuir-item').forEach(botao => {
-    botao.addEventListener('click', () => {
-      const idx = parseInt(botao.dataset.index);
-      if (carrinho[idx].quantidade > 1) {
-        carrinho[idx].quantidade--;
-      } else {
-        carrinho.splice(idx, 1);
-      }
-      atualizarCarrinho();
-    });
-  });
-}
-
-// ==============================================
-// 📂 ABRIR / FECHAR MODAL
-// ==============================================
+// Abrir e fechar modal
 abrirCarrinhoBtn.addEventListener('click', () => {
-  if (carrinho.length === 0) return;
-  if (!verificarStatusLoja(true)) return;
-  modalCarrinho.classList.remove('oculto');
-  document.body.style.overflow = 'hidden';
+    if (carrinho.length === 0) {
+        alert('Adicione itens ao pedido primeiro!');
+        return;
+    }
+    if (!verificarStatusLoja(true)) return;
+    modalCarrinho.classList.remove('oculto');
+    document.body.style.overflow = 'hidden';
 });
 
-fecharModalBtns.forEach(botao => {
-  botao.addEventListener('click', () => {
-    modalCarrinho.classList.add('oculto');
-    document.body.style.overflow = 'auto';
-  });
-});
-
-// ==============================================
-// 🗂️ FILTRAR POR CATEGORIA
-// ==============================================
-document.querySelectorAll('.categoria-btn').forEach(botao => {
-  botao.addEventListener('click', () => {
-    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
-    botao.classList.add('ativo');
-    const categoria = botao.dataset.categoria;
-
-    document.querySelectorAll('.produto').forEach(produto => {
-      produto.style.display = (categoria === 'todos' || produto.dataset.categoria === categoria) ? 'grid' : 'none';
+fecharModalBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        modalCarrinho.classList.add('oculto');
+        document.body.style.overflow = 'auto';
     });
-    campoBusca.value = '';
-  });
 });
 
-// ==============================================
-// 🔍 BUSCAR PRODUTOS
-// ==============================================
+// Filtrar produtos
 campoBusca.addEventListener('input', () => {
-  const termo = campoBusca.value.toLowerCase().trim();
-  document.querySelectorAll('.produto').forEach(produto => {
-    const nome = produto.dataset.nome.toLowerCase();
-    produto.style.display = nome.includes(termo) ? 'grid' : 'none';
-  });
+    const termo = campoBusca.value.toLowerCase().trim();
+    document.querySelectorAll('.produto').forEach(produto => {
+        const nome = produto.dataset.nome.toLowerCase();
+        produto.style.display = nome.includes(termo) ? 'block' : 'none';
+    });
+});
+
+document.querySelectorAll('.categoria-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo', 'bg-primary', 'text-white').classList.add('bg-gray-200'));
+        btn.classList.remove('bg-gray-200').classList.add('ativo', 'bg-primary', 'text-white');
+        const categoria = btn.dataset.categoria;
+
+        document.querySelectorAll('.produto').forEach(produto => {
+            produto.style.display = (categoria === 'todos' || produto.dataset.categoria === categoria) ? 'block' : 'none';
+        });
+    });
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO — FORMATO IGUAL A COMANDA
+// ✅ FINALIZAR PEDIDO E ENVIAR PARA WHATSAPP
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
-  const agora = new Date();
-  const dataHora = agora.toLocaleString('pt-BR');
+    const agora = new Date();
+    const dataHora = agora.toLocaleString('pt-BR');
 
-  const nome = document.getElementById('nome-cliente').value.trim();
-  const cep = cepEl.value.trim();
-  const numero = document.getElementById('numero-cliente').value.trim();
-  const semNumero = document.getElementById('sn-cliente').checked;
-  const complemento = document.getElementById('complemento-cliente').value.trim();
-  const referencia = document.getElementById('referencia-cliente').value.trim();
-  const rua = ruaEl.value.trim();
-  const bairro = bairroEl.value.trim();
-  const cidade = cidadeEl.value.trim();
-  const uf = ufEl.value.trim().toUpperCase();
-  const pagamento = document.getElementById('forma-pagamento').value;
-  const obs = document.getElementById('observacoes').value.trim();
+    const nome = nomeEl.value.trim();
+    const tipoAtendimento = tipoAtendimentoEl.value;
+    const taxaEntrega = parseFloat(taxaEntregaEl.value.replace(',', '.')) || 0;
+    const pagamento = pagamentoEl.value;
+    const obs = obsEl.value.trim() || 'Nenhuma';
 
-  if (carrinho.length === 0) {
-    alert('Adicione pelo menos um produto antes de finalizar!');
-    return;
-  }
+    // Validações básicas
+    if (!nome) {
+        avisoEndereco.textContent = 'Por favor, informe seu nome!';
+        avisoEndereco.classList.remove('oculto');
+        return;
+    }
 
-  if (!nome || !rua || !bairro || !cidade || !uf || (!numero && !semNumero)) {
-    avisoEndereco.textContent = '⚠️ Preencha: Nome, Rua, Bairro, Cidade, UF e Número ou marque "Sem número"!';
-    avisoEndereco.classList.remove('oculto');
-    return;
-  }
-  avisoEndereco.classList.add('oculto');
+    if (tipoAtendimento === 'entrega') {
+        if (!ruaEl.value.trim() || !bairroEl.value.trim() || !cidadeEl.value.trim() || !ufEl.value.trim() || (!numeroEl.value.trim() && !semNumeroEl.checked)) {
+            avisoEndereco.textContent = 'Preencha todos os dados de entrega!';
+            avisoEndereco.classList.remove('oculto');
+            return;
+        }
+    }
 
-  // Monta endereço completo
-  let enderecoCompleto = `ENDEREÇO: ${rua}, ${semNumero ? 'S/N' : `Nº ${numero}`}`;
-  if (complemento) enderecoCompleto += `\nCOMP.: ${complemento}`;
-  enderecoCompleto += `\nBAIRRO: ${bairro}`;
-  enderecoCompleto += `\nCIDADE: ${cidade} - ${uf}`;
-  if (cep) enderecoCompleto += ` | CEP: ${cep}`;
+    avisoEndereco.classList.add('oculto');
 
-  // Monta mensagem no formato da comanda
-  let mensagem = `━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  mensagem += `*${CONFIG.nomeLoja}*\n`;
-  mensagem += `${CONFIG.subtituloLoja}\n`;
-  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    // Cálculo dos valores
+    const subtotal = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
+    const totalFinal = subtotal + taxaEntrega;
 
-  mensagem += `*📅 DATA / HORA:*\n${dataHora}\n\n`;
+    // Montar endereço
+    let enderecoTexto = '';
+    if (tipoAtendimento === 'entrega') {
+        enderecoTexto = `${ruaEl.value}, ${semNumeroEl.checked ? 'S/N' : `Nº ${numeroEl.value}`}`;
+        if (complementoEl.value) enderecoTexto += `\nComplemento: ${complementoEl.value}`;
+        enderecoTexto += `\nBairro: ${bairroEl.value}\n${cidadeEl.value} - ${ufEl.value.toUpperCase()}`;
+        if (referenciaEl.value) enderecoTexto += `\nReferência: ${referenciaEl.value}`;
+        if (cepEl.value) enderecoTexto += `\nCEP: ${cepEl.value}`;
+    }
 
-  mensagem += `*👤 CLIENTE:*\n${nome}\n\n`;
+    // Montar mensagem formatada
+    let mensagem = `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    mensagem += `PEDIDO Nº ${numeroPedidoAtual}\n`;
+    mensagem += `*${CONFIG.nomeLoja}*\n`;
+    mensagem += `${CONFIG.subtituloLoja}\n`;
+    mensagem += `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-  mensagem += `*📍 ENTREGA:*\n${enderecoCompleto}\n\n`;
+    mensagem += `Data/Hora: ${dataHora}\n\n`;
+    mensagem += `Tipo: ${tipoAtendimento === 'entrega' ? 'Entrega em domicílio' : 'Retirada na loja'}\n\n`;
+    mensagem += `Cliente: ${nome}\n\n`;
 
-  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  mensagem += `*🛒 ITENS DO PEDIDO*\n`;
-  mensagem += `QTD | PRODUTO | VALOR UNIT. | TOTAL\n`;
-  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    if (tipoAtendimento === 'entrega') {
+        mensagem += `Endereço:\n${enderecoTexto}\n\n`;
+    }
 
-  carrinho.forEach(item => {
-    const valorUnit = item.preco.toFixed(2).replace('.', ',');
-    const valorTotalItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
-    mensagem += `${item.quantidade}x | ${item.nome} | R$ ${valorUnit} | R$ ${valorTotalItem}\n`;
-  });
+    mensagem += `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    mensagem += `ITENS DO PEDIDO\n`;
+    mensagem += `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
 
-  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    carrinho.forEach(item => {
+        const totalItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
+        const valorUnit = item.preco.toFixed(2).replace('.', ',');
+        mensagem += `• ${item.quantidade}x ${item.nome}\n  R$ ${valorUnit} cada | Total R$ ${totalItem}\n\n`;
+    });
 
-  mensagem += `*💳 FORMA DE PAGAMENTO:*\n${pagamento}\n\n`;
+    mensagem += `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    mensagem += `Forma de pagamento: ${pagamento}\n\n`;
+    mensagem += `Observações: ${obs}\n\n`;
 
-  if (obs) {
-    mensagem += `*💬 OBSERVAÇÕES:*\n${obs}\n\n`;
-  }
+    mensagem += `Resumo dos valores:\n`;
+    mensagem += `• Subtotal: R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+    if (tipoAtendimento === 'entrega') {
+        mensagem += `• Taxa de entrega: R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
+    }
+    mensagem += `• *TOTAL GERAL: R$ ${totalFinal.toFixed(2).replace('.', ',')}*\n`;
+    mensagem += `━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
-  mensagem += `*💰 VALOR TOTAL DO PEDIDO:*\nR$ ${valorTotalEl.textContent}\n`;
-  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━`;
+    // Enviar para o WhatsApp
+    const url = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
 
-  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-  window.open(urlWhatsApp, '_blank');
+    // Incrementar número do pedido
+    numeroPedidoAtual++;
+
+    // Limpar carrinho após envio
+    carrinho.length = 0;
+    atualizarCarrinho();
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+    document.getElementById('form-pedido').reset();
 });
