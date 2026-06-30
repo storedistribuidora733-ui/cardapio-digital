@@ -17,6 +17,8 @@ const CONFIG = {
 // 🛒 VARIÁVEIS ELEMENTOS
 // ==============================================
 const carrinho = [];
+let metodoPagamentoSelecionado = 'pix'; // Padrão inicial igual à imagem
+let pixTimerInterval = null;
 
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
@@ -50,8 +52,11 @@ const bairroEl = document.getElementById('bairro');
 const cidadeUfEl = document.getElementById('cidade-uf');
 const avisoCepEl = document.getElementById('aviso-cep');
 
-const pagamentoEl = document.getElementById('forma-pagamento');
 const obsEl = document.getElementById('observacoes');
+
+// Novos Elementos do Checkout (Adicionados para corresponder à Imagem)
+const cardInstallmentsEl = document.getElementById('card-installments');
+const pixTimerEl = document.getElementById('pix-timer-count');
 
 // ==============================================
 // 🚀 CONTROLE ENTREGA / RETIRADA
@@ -67,6 +72,7 @@ tipoAtendimentoEl.addEventListener('change', () => {
     taxaEntregaEl.value = '0,00';
     limparCamposEndereco();
   }
+  atualizarCarrinho(); // Recalcula o total com ou sem taxa de entrega
 });
 
 // ==============================================
@@ -101,7 +107,6 @@ cepEl.addEventListener('blur', async () => {
       return;
     }
 
-    // Preenche os campos automaticamente
     ruaEl.value = dados.logradouro || '';
     bairroEl.value = dados.bairro || '';
     cidadeUfEl.value = `${dados.localidade} / ${dados.uf}`;
@@ -128,7 +133,7 @@ function limparCamposEndereco() {
 }
 
 // ==============================================
-// 🕒 STATUS DA LOJA — FUNCIONANDO 100%
+// 🕒 STATUS DA LOJA
 // ==============================================
 function verificarStatusLoja(mostrarAviso = false) {
   const agora = new Date();
@@ -156,7 +161,7 @@ setInterval(verificarStatusLoja, 60000);
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ==============================================
-// ➕ / ➖ CONTROLE DE QUANTIDADE
+// ➕ / ➖ CONTROLE DE QUANTIDADE PRODUTOS
 // ==============================================
 document.querySelectorAll('.qtd-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -207,16 +212,17 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
 });
 
 // ==============================================
-// 🔄 ATUALIZAR CARRINHO
+// 🔄 ATUALIZAR CARRINHO E TOTALIZADORES
 // ==============================================
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
-  let total = 0;
+  let totalItens = 0;
   let qtdTotal = 0;
 
   if (carrinho.length === 0) {
     valorTotalEl.textContent = '0,00';
     carrinhoContainer.style.display = 'none';
+    fecharCronometroPix();
     return;
   }
 
@@ -224,30 +230,35 @@ function atualizarCarrinho() {
 
   carrinho.forEach((item, index) => {
     const totalItem = item.preco * item.quantidade;
-    total += totalItem;
+    totalItens += totalItem;
     qtdTotal += item.quantidade;
 
     const itemEl = document.createElement('div');
     itemEl.className = 'item-carrinho';
     itemEl.innerHTML = `
       <div>
-        <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
+        <h4 style="font-size:13px; margin-bottom:1px; font-weight:600;">${item.nome}</h4>
         <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
       </div>
       <div style="display:flex; align-items:center; gap:8px;">
         <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-        <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
+        <span style="font-weight:600; font-size:13px;">${item.quantidade}</span>
         <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-        <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
+        <span style="font-weight:700; min-width:70px; text-align:right; font-size:13px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
       </div>
     `;
     listaItensCarrinho.appendChild(itemEl);
   });
 
-  valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
-  qtdCarrinhoEl.textContent = qtdTotal;
-  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+  const taxaEntrega = parseFloat(taxaEntregaEl.value.replace(',', '.')) || 0;
+  const totalGeral = totalItens + taxaEntrega;
 
+  valorTotalEl.textContent = totalGeral.toFixed(2).replace('.', ',');
+  qtdCarrinhoEl.textContent = qtdTotal;
+  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${totalGeral.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+
+  // Atualiza as opções dinâmicas do Checkout
+  atualizarParcelasCartao(totalGeral);
   adicionarEventosCarrinho();
 }
 
@@ -273,7 +284,98 @@ function adicionarEventosCarrinho() {
 }
 
 // ==============================================
-// 📂 ABRIR / FECHAR MODAL
+// 💳 INTERATIVIDADE DO CHECKOUT (COMO NA IMAGEM)
+// ==============================================
+
+// Alternar dinamicamente os métodos de pagamento (Accordions)
+function selectPaymentMethod(method) {
+  metodoPagamentoSelecionado = method;
+  
+  const optPix = document.getElementById('option-pix-wrapper');
+  const optCard = document.getElementById('option-card-wrapper');
+  const optCash = document.getElementById('option-cash-wrapper');
+
+  optPix.classList.remove('active');
+  optCard.classList.remove('active-card');
+  optCash.classList.remove('active-card');
+
+  if (method === 'pix') {
+    optPix.classList.add('active');
+    iniciarCronometroPix();
+  } else if (method === 'card') {
+    optCard.classList.add('active-card');
+    fecharCronometroPix();
+  } else if (method === 'cash') {
+    optCash.classList.add('active-card');
+    fecharCronometroPix();
+  }
+}
+
+// Calcula o valor das parcelas do cartão com base no total atual
+function atualizarParcelasCartao(total) {
+  if (!cardInstallmentsEl) return;
+  cardInstallmentsEl.innerHTML = '';
+  
+  for (let i = 1; i <= 12; i++) {
+    let valorParcela = total / i;
+    // Simulação básica de acréscimo de juros (1.5% ao mês a partir de 2x)
+    if (i > 1) {
+        valorParcela = (total * Math.pow(1 + 0.015, i)) / i;
+    }
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = `${i}x de R$ ${valorParcela.toFixed(2).replace('.', ',')} ${i > 1 ? 'com juros' : 'sem juros'}`;
+    cardInstallmentsEl.appendChild(option);
+  }
+}
+
+// Copiar código Pix "Copia e Cola"
+function copyPixCode() {
+  const pixText = document.getElementById('pix-copia-cola-text');
+  pixText.select();
+  pixText.setSelectionRange(0, 99999); // Mobile
+  
+  try {
+    navigator.clipboard.writeText(pixText.value);
+    alert('Código Copia e Cola copiado com sucesso!');
+  } catch (err) {
+    // Fallback caso clipboard API falhe
+    document.execCommand('copy');
+    alert('Código Copia e Cola copiado!');
+  }
+}
+
+// Controle do Temporizador regressivo do PIX (Inicia em 09:45 como na imagem)
+function iniciarCronometroPix() {
+  fecharCronometroPix(); // Limpa se houver algum rodando
+  let tempo = 585; // 9 minutos e 45 segundos em segundos
+
+  pixTimerInterval = setInterval(() => {
+    let minutos = Math.floor(tempo / 60);
+    let segundos = tempo % 60;
+
+    minutos = minutos < 10 ? '0' + minutos : minutos;
+    segundos = segundos < 10 ? '0' + segundos : segundos;
+
+    pixTimerEl.textContent = `${minutos}:${segundos}`;
+
+    if (tempo === 0) {
+      clearInterval(pixTimerInterval);
+      pixTimerEl.textContent = "Expirado";
+      alert("O código Pix expirou! Adicione os itens novamente para gerar outro.");
+    }
+    tempo--;
+  }, 1000);
+}
+
+function fecharCronometroPix() {
+  if (pixTimerInterval) {
+    clearInterval(pixTimerInterval);
+  }
+}
+
+// ==============================================
+// 📂 ABRIR / FECHAR MODAL DO CHECKOUT
 // ==============================================
 abrirCarrinhoBtn.addEventListener('click', () => {
   if (carrinho.length === 0) return;
@@ -281,17 +383,21 @@ abrirCarrinhoBtn.addEventListener('click', () => {
   modalCarrinho.classList.remove('oculto');
   document.body.style.overflow = 'hidden';
   avisoGeral.classList.add('oculto');
+  
+  // Força abrir a aba de Pix por padrão ao abrir o checkout
+  selectPaymentMethod('pix');
 });
 
 fecharModalBtns.forEach(botao => {
   botao.addEventListener('click', () => {
     modalCarrinho.classList.add('oculto');
     document.body.style.overflow = 'auto';
+    fecharCronometroPix();
   });
 });
 
 // ==============================================
-// 🗂️ FILTRAR E BUSCAR
+// 🗂️ FILTRAR E BUSCAR PRODUTOS
 // ==============================================
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -315,12 +421,11 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO E ENVIAR PARA WHATSAPP
+// ✅ CONFIRMAR PEDIDO E ENVIAR PARA WHATSAPP
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
   const nome = nomeEl.value.trim();
-  const pagamento = pagamentoEl.value;
   const obs = obsEl.value.trim();
 
   const tipoAtendimento = tipoAtendimentoEl.value;
@@ -328,7 +433,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   const totalItens = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
   const totalGeral = totalItens + taxaEntrega;
 
-  // Validações básicas
+  // Validações básicas obrigatórias
   if (carrinho.length === 0) {
     avisoGeral.textContent = 'Adicione pelo menos um produto!';
     avisoGeral.classList.remove('oculto');
@@ -340,7 +445,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     return;
   }
 
-  // Validações específicas para entrega
+  // Validações específicas para entrega em domicílio
   if (tipoAtendimento === 'entrega') {
     const cep = cepEl.value.trim();
     const numero = numeroEl.value.trim();
@@ -363,7 +468,21 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     }
   }
 
-  // Monta o endereço completo
+  // Validações adicionais para Cartão de Crédito caso selecionado
+  if (metodoPagamentoSelecionado === 'card') {
+    const cardNum = document.getElementById('card-num').value.trim();
+    const cardName = document.getElementById('card-name').value.trim();
+    const cardExpiry = document.getElementById('card-expiry').value.trim();
+    const cardCvv = document.getElementById('card-cvv').value.trim();
+
+    if (!cardNum || !cardName || !cardExpiry || !cardCvv) {
+      avisoGeral.textContent = 'Por favor, preencha todos os dados do cartão!';
+      avisoGeral.classList.remove('oculto');
+      return;
+    }
+  }
+
+  // Monta o endereço completo para a entrega
   let enderecoCompleto = '';
   if (tipoAtendimento === 'entrega') {
     enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
@@ -372,7 +491,18 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     if (referenciaEl.value.trim()) enderecoCompleto += ` | Referência: ${referenciaEl.value.trim()}`;
   }
 
-  // Monta mensagem do WhatsApp
+  // Define o nome de exibição do pagamento na mensagem
+  let formaPagamentoTexto = '';
+  if (metodoPagamentoSelecionado === 'pix') {
+    formaPagamentoTexto = 'Pix (Pago via QR Code)';
+  } else if (metodoPagamentoSelecionado === 'card') {
+    const parcelaEscolhida = cardInstallmentsEl.options[cardInstallmentsEl.selectedIndex].text;
+    formaPagamentoTexto = `Cartão de Crédito/Débito (${parcelaEscolhida})`;
+  } else {
+    formaPagamentoTexto = 'Dinheiro (Na entrega)';
+  }
+
+  // Monta mensagem amigável para o WhatsApp
   let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
   mensagem += `📋 *Tipo:* ${tipoAtendimento === 'entrega' ? 'Entrega em domicílio' : 'Retirada na loja'}\n`;
   mensagem += `👤 *Nome:* ${nome}\n`;
@@ -381,7 +511,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     mensagem += `🏠 *Endereço:* ${enderecoCompleto}\n`;
   }
 
-  mensagem += `\n💳 *Forma de pagamento:* ${pagamento}\n\n`;
+  mensagem += `\n💳 *Forma de pagamento:* ${formaPagamentoTexto}\n\n`;
   mensagem += `🛒 *Itens do pedido:*\n`;
 
   carrinho.forEach(item => {
@@ -397,7 +527,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
 
   mensagem += `💰 *TOTAL GERAL:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
 
-  // Abre o WhatsApp
+  // Envia e redireciona para o WhatsApp
   const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
 });
