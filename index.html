@@ -33,22 +33,26 @@
             align-items: center;
             gap: 6px;
             font-weight: 600;
-            font-size: 12px; /* ← Tamanho da letra menor */
-            color: #ffffff; /* ← Cor padrão branca para o resto */
+            font-size: 12px; /* Letra menor */
+            color: #ffffff; /* Cor padrão branca */
         }
 
         .ponto-status {
-            width: 8px;
-            height: 8px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-        /* Apenas a palavra muda de cor */
-        .texto-status.aberto {
-            color: #22c55e; /* Verde só para "Aberto" */
+        /* Cores só para a palavra principal */
+        .cor-verde {
+            color: #22c55e !important;
+            font-weight: 700;
         }
-        .texto-status.fechado {
-            color: #dc2626; /* Vermelho só para "Fechado" */
+        .cor-vermelha {
+            color: #dc2626 !important;
+            font-weight: 700;
         }
 
         /* ---------------- CABEÇALHO ---------------- */
@@ -314,7 +318,7 @@
             z-index: 999;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
-            display: none;
+            display: none; /* Só aparece quando tem itens */
         }
 
         .carrinho-conteudo {
@@ -498,7 +502,7 @@
 <!-- STATUS DA LOJA -->
 <div class="status-topo">
     <span class="ponto-status" id="ponto-status"></span>
-    <span id="texto-status" class="texto-status">Aberto até às 22:00</span>
+    <span id="texto-status"></span>
 </div>
 
 <!-- CABEÇALHO -->
