@@ -2,224 +2,711 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALISON BURGER</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Alison Burger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            padding-bottom: 75px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* ---------------- STATUS DA LOJA ---------------- */
+        .status-topo {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .ponto-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .texto-status.aberto {
+            color: #22c55e !important;
+        }
+        .texto-status.fechado {
+            color: #dc2626 !important;
+        }
+
+        /* ---------------- CABEÇALHO ---------------- */
+        .cabecalho-banner {
+            width: 100%;
+            background: #121212;
+            position: relative;
+            padding: 32px 15px 16px;
+            text-align: center;
+            color: #facc15;
+        }
+
+        .logo-canto {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #facc15;
+            object-fit: cover;
+        }
+
+        .marca h1 {
+            font-size: 38px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+        .marca p {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .info-loja {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #ffffff;
+            flex-wrap: wrap;
+        }
+        .info-loja div {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ---------------- CATEGORIAS ---------------- */
+        .categorias {
+            width: 100%;
+            padding: 8px 12px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            background: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+        .categorias::-webkit-scrollbar { display: none; }
+
+        .categoria-btn {
+            padding: 7px 12px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .categoria-btn.ativo {
+            background-color: #facc15;
+            border-color: #facc15;
+            color: #111;
+        }
+
+        /* ---------------- BUSCA ---------------- */
+        .busca {
+            margin: 10px 12px;
+            position: relative;
+        }
+        .busca input {
+            width: 100%;
+            padding: 9px 12px 9px 32px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 12px;
+            background: #ffffff;
+        }
+        .busca i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        /* ---------------- PRODUTOS ---------------- */
+        .container {
+            width: 100%;
+            padding: 0 12px;
+        }
+
+        .lista-produtos {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .produto {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            padding: 8px;
+            display: grid;
+            grid-template-columns: 70px 1fr auto;
+            gap: 9px;
+            align-items: center;
+        }
+
+        .produto-imagem {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .produto-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tag-mais-pedido {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #dc2626;
+            color: white;
+            font-size: 8px;
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 0 0 5px 0;
+        }
+
+        .produto-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .produto-codigo {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ca8a04;
+        }
+
+        .produto-nome {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+        }
+
+        .produto-descricao {
+            font-size: 11px;
+            color: #6b7280;
+            line-height: 1.3;
+        }
+
+        .produto-detalhes {
+            font-size: 10px;
+            color: #78716c;
+            display: flex;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .produto-acoes {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .produto-preco {
+            font-size: 15px;
+            font-weight: 800;
+            color: #dc2626;
+        }
+
+        .controle-qtd {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .qtd-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: #f3f4f6;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .qtd-valor {
+            width: 28px;
+            height: 26px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-carrinho {
+            width: 78px;
+            height: 30px;
+            border: none;
+            border-radius: 5px;
+            background: #facc15;
+            color: #111827;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            cursor: pointer;
+        }
+
+        /* ---------------- CARRINHO E MODAL ---------------- */
+        .carrinho-fixo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #111827;
+            color: white;
+            padding: 8px 12px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+            z-index: 999;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: none;
+        }
+
+        .carrinho-conteudo {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .carrinho-esq {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .badge-qtd {
+            width: 32px;
+            height: 32px;
+            background: #facc15;
+            color: #111827;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .texto-carrinho h4 {
+            font-size: 14px;
+            margin: 0 0 1px 0;
+            font-weight: 600;
+        }
+        .texto-carrinho p {
+            font-size: 11px;
+            color: #b0b3b8;
+            margin: 0;
+        }
+
+        .btn-ver-carrinho {
+            background: #facc15;
+            color: #111827;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 16px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ---------------- OUTROS ---------------- */
+        .oculto { display: none !important; }
+
+        #modal-carrinho {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 12px;
+        }
+
+        .modal-conteudo {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .modal-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fechar-modal {
+            background: none;
+            border: none;
+            font-size: 17px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .item-carrinho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-grupo { margin: 9px 0; }
+        .form-grupo label {
+            display: block;
+            margin-bottom: 3px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        .form-grupo input,
+        .form-grupo select,
+        .form-grupo textarea {
+            width: 100%;
+            padding: 7px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .form-duplo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .aviso-erro { font-size: 11px; color: #dc2626; margin-top: 2px; }
+        .aviso-info { font-size: 11px; color: #2563eb; margin-top: 2px; }
+        .total-texto { font-size: 15px; font-weight: 700; text-align: right; margin: 9px 0; }
+
+        .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
+        .btn-fechar {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #eee;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .btn-finalizar {
+            flex: 2;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #22c55e;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        #alerta-fechado {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            padding: 12px;
+        }
+
+        .alerta-caixa {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 280px;
+        }
+
+        .alerta-caixa h3 { color: #dc2626; margin-bottom: 7px; font-size: 16px; }
+        .alerta-caixa p { font-size: 12px; line-height: 1.4; }
+
+        .btn-entendi {
+            margin-top: 10px;
+            padding: 7px 14px;
+            border: none;
+            border-radius: 5px;
+            background: #dc2626;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- CABEÇALHO -->
-<header class="cabecalho">
-    <div class="cabecalho-conteudo">
-        <img src="logo.png" alt="Logo ALISON BURGER" class="logo-loja">
-        <h1 class="titulo-loja">ALISON BURGER</h1>
-        <div class="status-container">
-            <span id="ponto-status" class="ponto-status"></span>
-            <span id="texto-status" class="texto-status">Carregando status...</span>
-        </div>
-    </div>
-</header>
+<!-- STATUS DA LOJA -->
+<div class="status-topo">
+    <span class="ponto-status" id="ponto-status"></span>
+    <span id="texto-status" class="texto-status"></span>
+</div>
 
-<!-- BUSCA E CATEGORIAS -->
-<div class="busca-categorias-container">
-    <div class="busca-wrapper">
-        <i class="fa fa-search icone-busca"></i>
-        <input type="text" id="campoBusca" placeholder="Buscar no cardápio...">
+<!-- CABEÇALHO -->
+<div class="cabecalho-banner">
+    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
+    <div class="marca">
+        <h1>ALISON</h1>
+        <p>★ BURGER ★</p>
     </div>
-    <div class="categorias-scroll">
-        <button class="categoria-btn ativo" data-categoria="todos">Todos</button>
-        <button class="categoria-btn" data-categoria="burgers">Burgers</button>
-        <button class="categoria-btn" data-categoria="combos">Combos</button>
-        <button class="categoria-btn" data-categoria="porcoes">Porções</button>
-        <button class="categoria-btn" data-categoria="bebidas">Bebidas</button>
+    <div class="info-loja">
+        <div><i class="fa fa-map-marker-alt"></i> NOME DA RUA, 123 - SUA CIDADE</div>
+        <div><i class="fa fa-motorcycle"></i> Entrega: 20-30 min &nbsp;&nbsp; | &nbsp;&nbsp; <i class="fa fa-credit-card"></i> Pagamento na entrega</div>
     </div>
 </div>
 
-<!-- CARDÁPIO -->
-<main class="cardapio">
-    <!-- BURGERS -->
-    <div class="produto" data-categoria="burgers" data-nome="Alison Burger" data-preco="25.00">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60" alt="Alison Burger">
-        <div class="produto-info">
-            <h3>Alison Burger</h3>
-            <p>Pão brioche, blend de 150g, muito queijo prato, alface, tomate e maionese artesanal da casa.</p>
-            <div class="produto-preco-linha">
-                <span class="preco">R$ 25,00</span>
+<!-- CATEGORIAS -->
+<div class="categorias">
+    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
+    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
+    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
+    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
+    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
+</div>
+
+<!-- BUSCA -->
+<div class="busca">
+    <i class="fa fa-search"></i>
+    <input type="text" id="campoBusca" placeholder="Buscar produtos...">
+</div>
+
+<!-- LISTA PRODUTOS -->
+<div class="container">
+    <div class="lista-produtos">
+        <!-- PRODUTO 1 -->
+        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 1">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1">
+                <span class="tag-mais-pedido">★ MAIS</span>
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">01</p>
+                <h3 class="produto-nome">Nome do produto 1</h3>
+                <p class="produto-descricao">Descrição curta e objetiva.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-fire"></i> Muito pedido</span>
+                    <span><i class="fa fa-clock"></i> 20-30 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 10,00</p>
                 <div class="controle-qtd">
                     <button class="qtd-btn diminuir">-</button>
                     <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
+                <button class="add-carrinho" data-nome="Nome do produto 1" data-preco="10.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
             </div>
-            <button class="add-carrinho" data-nome="Alison Burger" data-preco="25.00">Adicionar</button>
         </div>
-    </div>
 
-    <div class="produto" data-categoria="burgers" data-nome="Smash Burger" data-preco="20.00">
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&auto=format&fit=crop&q=60" alt="Smash Burger">
-        <div class="produto-info">
-            <h3>Smash Burger</h3>
-            <p>Pão brioche, blend smash de 80g, queijo cheddar derretido e maionese especial.</p>
-            <div class="produto-preco-linha">
-                <span class="preco">R$ 20,00</span>
+        <!-- PRODUTO 2 -->
+        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 2">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">02</p>
+                <h3 class="produto-nome">Nome do produto 2</h3>
+                <p class="produto-descricao">Descrição curta e objetiva.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-leaf"></i> Vegetariano</span>
+                    <span><i class="fa fa-clock"></i> 20-30 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 12,00</p>
                 <div class="controle-qtd">
                     <button class="qtd-btn diminuir">-</button>
                     <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
+                <button class="add-carrinho" data-nome="Nome do produto 2" data-preco="12.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
             </div>
-            <button class="add-carrinho" data-nome="Smash Burger" data-preco="20.00">Adicionar</button>
         </div>
-    </div>
 
-    <!-- COMBOS -->
-    <div class="produto" data-categoria="combos" data-nome="Combo Família" data-preco="65.00">
-        <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=500&auto=format&fit=crop&q=60" alt="Combo Família">
-        <div class="produto-info">
-            <h3>Combo Família</h3>
-            <p>2 Alison Burgers + 1 Porção de Batata Média + 1 Refrigerante de 1.5L à sua escolha.</p>
-            <div class="produto-preco-linha">
-                <span class="preco">R$ 65,00</span>
+        <!-- PRODUTO 3 -->
+        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 3">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">03</p>
+                <h3 class="produto-nome">Nome do produto 3</h3>
+                <p class="produto-descricao">Descrição curta e objetiva.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-pepper-hot"></i> Picante</span>
+                    <span><i class="fa fa-clock"></i> 20-30 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 15,00</p>
                 <div class="controle-qtd">
                     <button class="qtd-btn diminuir">-</button>
                     <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
+                <button class="add-carrinho" data-nome="Nome do produto 3" data-preco="15.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
             </div>
-            <button class="add-carrinho" data-nome="Combo Família" data-preco="65.00">Adicionar</button>
         </div>
     </div>
+</div>
 
-    <!-- PORÇÕES -->
-    <div class="produto" data-categoria="porcoes" data-nome="Batata Frita Especial" data-preco="18.00">
-        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&auto=format&fit=crop&q=60" alt="Batata Frita Especial">
-        <div class="produto-info">
-            <h3>Batata Frita Especial</h3>
-            <p>Batata frita crocante coberta com cheddar cremoso e bacon bem picadinho.</p>
-            <div class="produto-preco-linha">
-                <span class="preco">R$ 18,00</span>
-                <div class="controle-qtd">
-                    <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">0</span>
-                    <button class="qtd-btn aumentar">+</button>
-                </div>
-            </div>
-            <button class="add-carrinho" data-nome="Batata Frita Especial" data-preco="18.00">Adicionar</button>
+<!-- MODAL CARRINHO - COM CEP E PREENCHIMENTO AUTOMÁTICO -->
+<div id="modal-carrinho" class="oculto">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h3>Meu Carrinho</h3>
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
         </div>
-    </div>
+        <div id="lista-itens-carrinho"></div>
+        <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
 
-    <!-- BEBIDAS -->
-    <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola Lata" data-preco="6.00">
-        <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&auto=format&fit=crop&q=60" alt="Coca-Cola Lata">
-        <div class="produto-info">
-            <h3>Coca-Cola Lata</h3>
-            <p>Lata de 350ml trincando de gelada.</p>
-            <div class="produto-preco-linha">
-                <span class="preco">R$ 6,00</span>
-                <div class="controle-qtd">
-                    <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">0</span>
-                    <button class="qtd-btn aumentar">+</button>
-                </div>
-            </div>
-            <button class="add-carrinho" data-nome="Coca-Cola Lata" data-preco="6.00">Adicionar</button>
-        </div>
-    </div>
-</main>
-
-<!-- MODAL DO CARRINHO -->
-<div id="modal-carrinho" class="modal-container oculto">
-    <div class="modal">
-        <div class="topo-modal">
-            <h2>Seu Pedido</h2>
-            <button id="fechar-modal" class="btn-fechar-topo">&times;</button>
+        <!-- Forma de recebimento -->
+        <div class="form-grupo">
+            <label>Forma de recebimento</label>
+            <select id="tipo-atendimento">
+                <option value="retirada">Retirada na loja</option>
+                <option value="entrega">Entrega em domicílio</option>
+            </select>
         </div>
 
-        <div id="lista-itens-carrinho" class="lista-itens">
-            <!-- Itens adicionados aparecem aqui -->
+        <!-- Taxa de entrega -->
+        <div id="campo-taxa-entrega" class="form-grupo oculto">
+            <label>Taxa de entrega</label>
+            <input type="text" id="taxa-entrega" value="6,00" readonly style="background: #f8f8f8;">
         </div>
 
-        <div class="linha-total">
-            <span>Total Geral:</span>
-            <span class="total-preco">R$ <span id="valor-total">0,00</span></span>
+        <!-- Dados do cliente -->
+        <div class="form-grupo">
+            <label>Nome completo</label>
+            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
         </div>
 
-        <div class="formulario-checkout">
-            <h3>Dados de Entrega</h3>
+        <!-- Campos de endereço - só aparece quando for entrega -->
+        <div id="bloco-endereco" class="oculto">
             <div class="form-grupo">
-                <label>Seu Nome Completo</label>
-                <input type="text" id="nome-cliente" placeholder="Como devemos te chamar?">
+                <label>CEP</label>
+                <input type="text" id="cep" placeholder="Ex: 28300-000" maxlength="9">
+                <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
             </div>
 
-            <div class="form-grupo">
-                <label>Como deseja receber?</label>
-                <select id="tipo-atendimento">
-                    <option value="entrega">Entrega em Domicílio</option>
-                    <option value="retirada">Retirar na Loja</option>
-                </select>
-            </div>
-
-            <!-- BLOCO DE ENDEREÇO (SÓ APARECE SE FOR ENTREGA) -->
-            <div id="bloco-endereco">
-                <div class="form-duplo">
-                    <div class="form-grupo">
-                        <label>CEP</label>
-                        <input type="text" id="cep" placeholder="00000-000" maxlength="9">
-                        <small id="aviso-cep" style="color: #2563eb;">Digite o CEP para buscar</small>
-                    </div>
-                    <div class="form-grupo">
-                        <label>Número</label>
-                        <input type="text" id="numero" placeholder="Nº">
-                    </div>
-                </div>
-
-                <div class="form-duplo">
-                    <div class="form-grupo">
-                        <label>Complemento</label>
-                        <input type="text" id="complemento" placeholder="Apto, Bloco, etc.">
-                    </div>
-                    <div class="form-grupo">
-                        <label>Referência</label>
-                        <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
-                    </div>
-                </div>
-
+            <div class="form-duplo">
                 <div class="form-grupo">
-                    <label>Rua / Logradouro</label>
-                    <input type="text" id="rua" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                    <label>Número</label>
+                    <input type="text" id="numero" placeholder="Ex: 344">
                 </div>
-
-                <div class="form-duplo">
-                    <div class="form-grupo">
-                        <label>Bairro</label>
-                        <input type="text" id="bairro" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
-                    </div>
-                    <div class="form-grupo">
-                        <label>Cidade / UF</label>
-                        <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
-                    </div>
+                <div class="form-grupo">
+                    <label>Complemento</label>
+                    <input type="text" id="complemento" placeholder="Ex: Apto 2, Casa">
                 </div>
             </div>
 
-            <div id="campo-taxa-entrega" class="form-grupo">
-                <label>Taxa de Entrega</label>
-                <input type="text" id="taxa-entrega" value="6,00" readonly style="background: #f8f8f8; font-weight: bold; color: #dc2626;">
+            <div class="form-grupo">
+                <label>Referência</label>
+                <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
             </div>
 
             <div class="form-grupo">
-                <label>Forma de pagamento</label>
-                <select id="forma-pagamento">
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Pix">Pix</option>
-                    <option value="Cartão">Cartão</option>
-                </select>
+                <label>Rua / Logradouro</label>
+                <input type="text" id="rua" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
             </div>
 
-            <div class="form-grupo">
-                <label>Observações</label>
-                <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, troco para R$ 50..."></textarea>
+            <div class="form-duplo">
+                <div class="form-grupo">
+                    <label>Bairro</label>
+                    <input type="text" id="bairro" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                </div>
+                <div class="form-grupo">
+                    <label>Cidade / UF</label>
+                    <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                </div>
             </div>
+        </div>
+
+        <div class="form-grupo">
+            <label>Forma de pagamento</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+            </select>
+        </div>
+
+        <div class="form-grupo">
+            <label>Observações</label>
+            <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, troco para R$ 50..."></textarea>
         </div>
 
         <p id="aviso-geral" class="aviso-erro oculto"></p>
