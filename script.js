@@ -2,7 +2,6 @@
 // ⚙️ CONFIGURAÇÕES GERAIS — ALTERE APENAS AQUI
 // ==============================================
 const CONFIG = {
-  // Horário de funcionamento (formato 0-23)
   horaAbertura: 23,
   horaFechamento: 6,
   textoStatusAberto: "Aberto até às 06:00",
@@ -54,7 +53,6 @@ function verificarStatusLoja(mostrarAviso = false) {
     textoStatusEl.classList.add("fechado");
   }
 
-  // Mostra aviso se solicitado
   if (!lojaAberta && mostrarAviso) {
     alertaFechado.classList.remove("oculto");
   }
@@ -62,11 +60,9 @@ function verificarStatusLoja(mostrarAviso = false) {
   return lojaAberta;
 }
 
-// Verifica status ao carregar e a cada 1 minuto
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 
-// Botão para fechar aviso de loja fechada
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ==============================================
@@ -89,7 +85,6 @@ document.querySelectorAll('.qtd-btn').forEach(botao => {
 // ==============================================
 document.querySelectorAll('.add-carrinho').forEach(botao => {
   botao.addEventListener('click', () => {
-    // Não deixa adicionar se loja estiver fechada
     if (!verificarStatusLoja(true)) return;
 
     const nome = botao.dataset.nome;
@@ -101,7 +96,6 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
       return;
     }
 
-    // Verifica se o item já existe para somar quantidade
     const itemExistente = carrinho.find(item => item.nome === nome);
     if (itemExistente) {
       itemExistente.quantidade += qtd;
@@ -111,10 +105,8 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
 
     atualizarCarrinho();
 
-    // Zera a quantidade depois de adicionar
     botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
 
-    // Feedback visual no botão
     const original = botao.innerHTML;
     botao.innerHTML = '<i class="fa fa-check"></i> Ok';
     botao.style.background = '#22c55e';
@@ -147,7 +139,7 @@ function atualizarCarrinho() {
   carrinho.forEach((item, index) => {
     const totalItem = item.preco * item.quantidade;
     total += totalItem;
-    qtdTotal += item.quantidade; // Linha corrigida!
+    qtdTotal += item.quantidade;
 
     const itemEl = document.createElement('div');
     itemEl.className = 'item-carrinho';
@@ -199,7 +191,7 @@ function adicionarEventosCarrinho() {
 }
 
 // ==============================================
-// 📂 ABRIR E FECHAR MODAL DO CARRINHO
+// 📂 ABRIR / FECHAR MODAL
 // ==============================================
 abrirCarrinhoBtn.addEventListener('click', () => {
   if (carrinho.length === 0) return;
@@ -252,7 +244,15 @@ campoBusca.addEventListener('input', () => {
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
   const nome = document.getElementById('nome-cliente').value.trim();
-  const endereco = document.getElementById('endereco-cliente').value.trim();
+  const cep = document.getElementById('cep-cliente').value.trim();
+  const numero = document.getElementById('numero-cliente').value.trim();
+  const semNumero = document.getElementById('sn-cliente').checked;
+  const complemento = document.getElementById('complemento-cliente').value.trim();
+  const referencia = document.getElementById('referencia-cliente').value.trim();
+  const rua = document.getElementById('rua-cliente').value.trim();
+  const bairro = document.getElementById('bairro-cliente').value.trim();
+  const cidade = document.getElementById('cidade-cliente').value.trim();
+  const uf = document.getElementById('uf-cliente').value.trim().toUpperCase();
   const pagamento = document.getElementById('forma-pagamento').value;
   const obs = document.getElementById('observacoes').value.trim();
   const avisoEndereco = document.getElementById('aviso-endereco');
@@ -262,16 +262,25 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     return;
   }
 
-  if (endereco.length < 8) {
+  // Validação básica
+  if (!nome || !rua || !bairro || !cidade || !uf || (!numero && !semNumero)) {
     avisoEndereco.classList.remove('oculto');
     return;
   }
   avisoEndereco.classList.add('oculto');
 
+  // Monta o endereço completo
+  let enderecoCompleto = `Rua: ${rua}`;
+  enderecoCompleto += semNumero ? ' - S/N' : `, Nº ${numero}`;
+  if (complemento) enderecoCompleto += ` | Complemento: ${complemento}`;
+  if (referencia) enderecoCompleto += ` | Referência: ${referencia}`;
+  enderecoCompleto += `\nBairro: ${bairro} | Cidade: ${cidade}/${uf}`;
+  if (cep) enderecoCompleto += `\nCEP: ${cep}`;
+
   // Monta mensagem formatada
   let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
-  mensagem += `👤 *Nome:* ${nome || 'Não informado'}\n`;
-  mensagem += `🏠 *Endereço:* ${endereco}\n`;
+  mensagem += `👤 *Nome:* ${nome}\n`;
+  mensagem += `🏠 *Endereço:*\n${enderecoCompleto}\n\n`;
   mensagem += `💳 *Forma de pagamento:* ${pagamento}\n\n`;
   mensagem += `🛒 *Itens do pedido:*\n`;
 
