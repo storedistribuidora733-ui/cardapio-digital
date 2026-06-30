@@ -29,18 +29,14 @@ function verificarStatusLoja(mostrarAviso = false) {
     const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
 
     if (aberta) {
-        textoStatusEl.textContent = 'Aberto até às 22:00';
-        textoStatusEl.classList.remove('fechado');
-        textoStatusEl.classList.add('aberto');
-        pontoStatusEl.style.backgroundColor = '#22c55e';
+        pontoStatusEl.style.backgroundColor = "#22c55e";
+        textoStatusEl.innerHTML = `<span class="cor-verde">Aberto</span> até às 22:00`;
     } else {
-        textoStatusEl.textContent = 'Fechado';
-        textoStatusEl.classList.remove('aberto');
-        textoStatusEl.classList.add('fechado');
-        pontoStatusEl.style.backgroundColor = '#dc2626';
+        pontoStatusEl.style.backgroundColor = "#dc2626";
+        textoStatusEl.innerHTML = `<span class="cor-vermelha">Fechado</span>`;
     }
 
-    if (!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
+    if (!aberta && mostrarAviso) alertaFechado.classList.remove("oculto");
     return aberta;
 }
 
