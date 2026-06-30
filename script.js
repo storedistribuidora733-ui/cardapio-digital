@@ -1,5 +1,5 @@
 // ==============================================
-// ⚙️ CONFIGURAÇÕES GERAIS — ALTERE APENAS AQUI
+// ⚙️ CONFIGURAÇÕES — HORÁRIO, VALORES E DADOS
 // ==============================================
 const CONFIG = {
   horaAbertura: 23,
@@ -8,13 +8,13 @@ const CONFIG = {
   textoStatusFechado: "Fechado",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
-  numeroWhatsApp: "5519989021323", // ✅ Seu número
+  numeroWhatsApp: "5519989021323",
   nomeLoja: "ALISON BURGER",
-  taxaEntregaPadrao: 6.00 // ✅ Valor da taxa de entrega padrão
+  taxaEntregaPadrao: 6.00
 };
 
 // ==============================================
-// 🛒 ELEMENTOS DA PÁGINA
+// 🛒 ELEMENTOS
 // ==============================================
 const carrinho = [];
 
@@ -32,20 +32,18 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
-// Campos do formulário
 const nomeEl = document.getElementById('nome-cliente');
 const enderecoEl = document.getElementById('endereco-cliente');
 const avisoEndereco = document.getElementById('aviso-endereco');
 const pagamentoEl = document.getElementById('forma-pagamento');
 const obsEl = document.getElementById('observacoes');
 
-// ✅ NOVOS CAMPOS
 const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
 const campoTaxaEntregaEl = document.getElementById('campo-taxa-entrega');
 const taxaEntregaEl = document.getElementById('taxa-entrega');
 
 // ==============================================
-// 🚀 CONTROLE DE ENTREGA / RETIRADA
+// 🚀 CONTROLE ENTREGA / RETIRADA
 // ==============================================
 tipoAtendimentoEl.addEventListener('change', () => {
   if (tipoAtendimentoEl.value === 'entrega') {
@@ -63,7 +61,7 @@ tipoAtendimentoEl.addEventListener('change', () => {
 });
 
 // ==============================================
-// 🕒 VERIFICAR STATUS DA LOJA
+// 🕒 STATUS DA LOJA — FUNCIONANDO PERFEITAMENTE
 // ==============================================
 function verificarStatusLoja(mostrarAviso = false) {
   const agora = new Date();
@@ -91,7 +89,7 @@ setInterval(verificarStatusLoja, 60000);
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ==============================================
-// ➕ / ➖ CONTROLE DE QUANTIDADE
+// ➕ / ➖ QUANTIDADE
 // ==============================================
 document.querySelectorAll('.qtd-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -225,7 +223,7 @@ fecharModalBtns.forEach(botao => {
 });
 
 // ==============================================
-// 🗂️ FILTRAR POR CATEGORIA
+// 🗂️ FILTRAR E BUSCAR
 // ==============================================
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -240,9 +238,6 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
   });
 });
 
-// ==============================================
-// 🔍 BUSCAR PRODUTOS
-// ==============================================
 campoBusca.addEventListener('input', () => {
   const termo = campoBusca.value.toLowerCase().trim();
   document.querySelectorAll('.produto').forEach(produto => {
@@ -252,7 +247,7 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO — ATUALIZADO
+// ✅ FINALIZAR PEDIDO
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
   const nome = nomeEl.value.trim();
@@ -284,7 +279,6 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
 
   avisoEndereco.classList.add('oculto');
 
-  // Monta mensagem para WhatsApp
   let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
   mensagem += `📋 *Tipo:* ${tipoAtendimento === 'entrega' ? 'Entrega em domicílio' : 'Retirada na loja'}\n`;
   mensagem += `👤 *Nome:* ${nome}\n`;
