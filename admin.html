@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Painel Admin</title>
-<style>
-body { font-family: Arial; padding:20px; }
-#loginBox, #adminBox { max-width:400px; margin:auto; }
-input, button, textarea { width:100%; padding:10px; margin:5px 0; }
-#adminBox { display:none; }
-.product-item { border:1px solid #ccc; padding:10px; margin:10px 0; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Alison Burger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4">🔧 Painel de Produtos</h1>
 
-<h1>Painel Administrativo</h1>
+        <div id="tela-login" class="bg-white p-4 rounded shadow mb-6">
+            <h3 class="font-semibold mb-2">Acesso Restrito</h3>
+            <input type="password" id="senha" placeholder="Digite sua senha" class="w-full p-2 border rounded mb-2">
+            <button onclick="entrar()" class="bg-yellow-500 px-4 py-2 rounded font-bold">Entrar</button>
+        </div>
 
-<div id="loginBox">
-    <h3>Login</h3>
-    <input id="user" placeholder="Usuário">
-    <input id="pass" placeholder="Senha" type="password">
-    <button onclick="login()">Entrar</button>
-</div>
-
-<div id="adminBox">
-    <h2>Editar Produtos</h2>
-    <p>Selecione um item para editar:</p>
-    <div id="products"></div>
-</div>
-
-<script src="admin.js"></script>
+        <div id="tela-admin" class="hidden">
+            <div class="flex gap-3 mb-4">
+                <button onclick="salvar()" class="bg-green-600 text-white px-4 py-2 rounded">💾 Salvar Alterações</button>
+                <button onclick="novo()" class="bg-blue-600 text-white px-4 py-2 rounded">➕ Novo Produto</button>
+            </div>
+            <div id="lista-admin" class="space-y-4"></div>
+        </div>
+    </div>
+    <script src="admin.js"></script>
 </body>
 </html>
