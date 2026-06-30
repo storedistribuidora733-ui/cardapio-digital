@@ -9,12 +9,11 @@ const valorTotalEl = document.getElementById('valor-total');
 const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
-const btnVerCarrinhoEl = document.querySelector('.btn-ver-carrinho'); // Novo elemento
+const btnVerCarrinhoEl = document.querySelector('.btn-ver-carrinho');
+const textoStatusEl = document.getElementById('texto-status'); // Adaptado ao novo HTML
+const campoBusca = document.getElementById('campoBusca'); // Adicionado busca
 
-// Elemento do status visual (será atualizado automaticamente)
-const statusLojaEl = document.getElementById('statusLoja');
-
-// Horário de funcionamento
+// Horário de funcionamento — mantive o seu: 6h às 24h
 const HORA_ABERTURA = 6;
 const HORA_FECHAMENTO = 24;
 
@@ -27,15 +26,9 @@ function verificarStatusLoja(mostrarAviso = false) {
     const fechamentoMin = HORA_FECHAMENTO * 60;
     const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
 
-    // Atualiza o texto e cor do status visível na tela
-    if (statusLojaEl) {
-        if (aberta) {
-            statusLojaEl.textContent = 'Aberto';
-            statusLojaEl.className = 'status-loja status-aberto';
-        } else {
-            statusLojaEl.textContent = 'Fechado';
-            statusLojaEl.className = 'status-loja status-fechado';
-        }
+    // Atualiza o texto do status no novo layout
+    if (textoStatusEl) {
+        textoStatusEl.textContent = aberta ? 'Aberto até às 24:00' : 'Fechado';
     }
 
     if (!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
@@ -54,7 +47,6 @@ document.querySelectorAll('.qtd-btn').forEach(botao => {
         const valorEl = botao.parentElement.querySelector('.qtd-valor');
         let valor = parseInt(valorEl.textContent);
         if (botao.classList.contains('aumentar')) valor++;
-        // Agora permite diminuir até 0
         if (botao.classList.contains('diminuir') && valor > 0) valor--;
         valorEl.textContent = valor;
     });
@@ -69,7 +61,6 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
         const preco = parseFloat(botao.dataset.preco);
         const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
 
-        // Bloqueia adição com quantidade 0
         if (qtd <= 0) {
             alert('Escolha uma quantidade antes de adicionar!');
             return;
@@ -84,7 +75,7 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
 
         atualizarCarrinho();
 
-        // Zera a quantidade do produto após adicionar
+        // Zera a quantidade após adicionar
         botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
 
         // Feedback visual
@@ -107,13 +98,12 @@ function atualizarCarrinho() {
     let qtdTotal = 0;
 
     if (carrinho.length === 0) {
-        listaItensCarrinho.innerHTML = '<p style="text-align:center; padding:20px 0; color:#777; font-size:14px;">Seu carrinho está vazio</p>';
+        listaItensCarrinho.innerHTML = '<p style="text-align:center; padding:25px 0; color:#777; font-size:15px;">Seu carrinho está vazio</p>';
         valorTotalEl.textContent = '0.00';
         
-        // Esconde contador e botão quando vazio
         qtdCarrinhoEl.classList.add('oculto');
         btnVerCarrinhoEl.classList.add('oculto');
-        abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = 'Nenhum item adicionado &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
+        abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Seguro';
         return;
     }
 
@@ -126,14 +116,14 @@ function atualizarCarrinho() {
         itemEl.className = 'item-carrinho';
         itemEl.innerHTML = `
             <div>
-                <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
+                <h4 style="font-size:15px; margin-bottom:4px;">${item.nome}</h4>
                 <p style="font-size:12px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
+            <div style="display:flex; align-items:center; gap:10px;">
                 <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-                <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
+                <span style="font-weight:600; font-size:15px;">${item.quantidade}</span>
                 <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-                <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2)}</span>
+                <span style="font-weight:700; min-width:80px; text-align:right; font-size:15px;">R$ ${totalItem.toFixed(2)}</span>
             </div>
         `;
         listaItensCarrinho.appendChild(itemEl);
@@ -142,10 +132,9 @@ function atualizarCarrinho() {
     valorTotalEl.textContent = total.toFixed(2);
     qtdCarrinhoEl.textContent = qtdTotal;
     
-    // Mostra contador e botão quando tem itens
     qtdCarrinhoEl.classList.remove('oculto');
     btnVerCarrinhoEl.classList.remove('oculto');
-    abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+    abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Seguro`;
 
     adicionarEventosCarrinho();
 }
@@ -173,7 +162,6 @@ function adicionarEventosCarrinho() {
 
 // ---------------- ABRIR / FECHAR MODAL ----------------
 abrirCarrinhoBtn.addEventListener('click', () => {
-    // Só abre se tiver itens
     if (carrinho.length === 0) return;
     if (!verificarStatusLoja(true)) return;
     modalCarrinho.classList.remove('oculto');
@@ -201,6 +189,16 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
                 produto.style.display = 'none';
             }
         });
+        campoBusca.value = ''; // Limpa busca ao trocar categoria
+    });
+});
+
+// ---------------- BUSCA DE PRODUTOS ----------------
+campoBusca.addEventListener('input', () => {
+    const termo = campoBusca.value.toLowerCase().trim();
+    document.querySelectorAll('.produto').forEach(produto => {
+        const nome = produto.dataset.nome.toLowerCase();
+        produto.style.display = nome.includes(termo) ? 'grid' : 'none';
     });
 });
 
@@ -223,7 +221,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     }
     avisoEndereco.classList.add('oculto');
 
-    let mensagem = `📦 *NOVO PEDIDO*\n\n`;
+    let mensagem = `📦 *NOVO PEDIDO - ALISON BURGER*\n\n`;
     mensagem += `👤 *Nome:* ${nome || 'Não informado'}\n`;
     mensagem += `🏠 *Endereço:* ${endereco}\n`;
     mensagem += `💳 *Forma de pagamento:* ${pagamento}\n\n`;
@@ -239,4 +237,4 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     const numeroWhatsApp = '5519989021323';
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, '_blank');
-}); 
+});
