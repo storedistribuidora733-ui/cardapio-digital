@@ -2,737 +2,264 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Alison Burger</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALISON BURGER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f59e0b',
+                        secondary: '#1f2937',
+                        success: '#10b981',
+                        danger: '#ef4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
         }
-
-        body {
-            background-color: #f8f9fa;
-            padding-bottom: 75px;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-
-        /* ---------------- STATUS DA LOJA ---------------- */
-        .status-topo {
-            position: absolute;
-            top: 10px;
-            left: 12px;
-            z-index: 99;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #ffffff;
-        }
-
-        .ponto-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-
-        .texto-status.aberto {
-            color: #22c55e !important;
-        }
-        .texto-status.fechado {
-            color: #dc2626 !important;
-        }
-
-        /* ---------------- CABEÇALHO ---------------- */
-        .cabecalho-banner {
-            width: 100%;
-            background: #121212;
-            position: relative;
-            padding: 32px 15px 16px;
-            text-align: center;
-            color: #facc15;
-        }
-
-        .logo-canto {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid #facc15;
-            object-fit: cover;
-        }
-
-        .marca h1 {
-            font-size: 38px;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 2px;
-        }
-        .marca p {
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-
-        .info-loja {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #ffffff;
-            flex-wrap: wrap;
-        }
-        .info-loja div {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* ---------------- CATEGORIAS ---------------- */
-        .categorias {
-            width: 100%;
-            padding: 8px 12px;
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            background: #ffffff;
-            border-bottom: 1px solid #eee;
-        }
-        .categorias::-webkit-scrollbar { display: none; }
-
-        .categoria-btn {
-            padding: 7px 12px;
-            border-radius: 6px;
-            border: 1px solid #e5e7eb;
-            background: #ffffff;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-        .categoria-btn.ativo {
-            background-color: #facc15;
-            border-color: #facc15;
-            color: #111;
-        }
-
-        /* ---------------- BUSCA ---------------- */
-        .busca {
-            margin: 10px 12px;
-            position: relative;
-        }
-        .busca input {
-            width: 100%;
-            padding: 9px 12px 9px 32px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 12px;
-            background: #ffffff;
-        }
-        .busca i {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-            font-size: 13px;
-        }
-
-        /* ---------------- PRODUTOS ---------------- */
-        .container {
-            width: 100%;
-            padding: 0 12px;
-        }
-
-        .lista-produtos {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 10px 0;
-        }
-
-        .produto {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            padding: 8px;
-            display: grid;
-            grid-template-columns: 70px 1fr auto;
-            gap: 9px;
-            align-items: center;
-        }
-
-        .produto-imagem {
-            position: relative;
-            width: 70px;
-            height: 70px;
-            border-radius: 6px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .produto-imagem img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .tag-mais-pedido {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #dc2626;
-            color: white;
-            font-size: 8px;
-            font-weight: 600;
-            padding: 2px 4px;
-            border-radius: 0 0 5px 0;
-        }
-
-        .produto-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .produto-codigo {
-            font-size: 12px;
-            font-weight: 700;
-            color: #ca8a04;
-        }
-
-        .produto-nome {
-            font-size: 14px;
-            font-weight: 700;
-            color: #111827;
-            line-height: 1.2;
-        }
-
-        .produto-descricao {
-            font-size: 11px;
-            color: #6b7280;
-            line-height: 1.3;
-        }
-
-        .produto-detalhes {
-            font-size: 10px;
-            color: #78716c;
-            display: flex;
-            gap: 8px;
-            margin-top: 2px;
-        }
-
-        .produto-acoes {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 6px;
-        }
-
-        .produto-preco {
-            font-size: 15px;
-            font-weight: 800;
-            color: #dc2626;
-        }
-
-        .controle-qtd {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .qtd-btn {
-            width: 26px;
-            height: 26px;
-            border: none;
-            background: #f3f4f6;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .qtd-valor {
-            width: 28px;
-            height: 26px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .add-carrinho {
-            width: 78px;
-            height: 30px;
-            border: none;
-            border-radius: 5px;
-            background: #facc15;
-            color: #111827;
-            font-weight: 700;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            cursor: pointer;
-        }
-
-        /* ---------------- CARRINHO ---------------- */
-        .carrinho-fixo {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #111827;
-            color: white;
-            padding: 8px 12px;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
-            z-index: 999;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            display: none;
-        }
-
-        .carrinho-conteudo {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .carrinho-esq {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-
-        .badge-qtd {
-            width: 32px;
-            height: 32px;
-            background: #facc15;
-            color: #111827;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
-
-        .texto-carrinho h4 {
-            font-size: 14px;
-            margin: 0 0 1px 0;
-            font-weight: 600;
-        }
-        .texto-carrinho p {
-            font-size: 11px;
-            color: #b0b3b8;
-            margin: 0;
-        }
-
-        .btn-ver-carrinho {
-            background: #facc15;
-            color: #111827;
-            border: none;
-            border-radius: 6px;
-            padding: 9px 16px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* ---------------- OUTROS ---------------- */
-        .oculto { display: none !important; }
-
-        #modal-carrinho {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.65);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 12px;
-        }
-
-        .modal-conteudo {
-            background: white;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            border-radius: 10px;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        .modal-cabecalho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .fechar-modal {
-            background: none;
-            border: none;
-            font-size: 17px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .item-carrinho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 7px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .form-grupo { margin: 9px 0; width: 100%; }
-        .form-grupo label {
-            display: block;
-            margin-bottom: 3px;
-            font-weight: 500;
-            font-size: 12px;
-        }
-        .form-grupo input,
-        .form-grupo select,
-        .form-grupo textarea {
-            width: 100%;
-            padding: 7px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-        .linha-form {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .metade { flex: 1 1 calc(50% - 5px); }
-        .dois-tercos { flex: 2 1 calc(66% - 5px); }
-        .um-terco { flex: 1 1 calc(33% - 5px); }
-
-        .aviso-erro { font-size: 11px; color: #dc2626; margin-top: 2px; }
-        .total-texto { font-size: 15px; font-weight: 700; text-align: right; margin: 9px 0; }
-
-        .botoes-modal { display: flex; gap: 7px; margin-top: 15px; }
-        .btn-fechar {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            background: #eee;
-            font-weight: 600;
-            font-size: 12px;
-        }
-        .btn-finalizar {
-            flex: 2;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            background: #22c55e;
-            color: white;
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        #alerta-fechado {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            padding: 12px;
-        }
-
-        .alerta-caixa {
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 280px;
-        }
-
-        .alerta-caixa h3 { color: #dc2626; margin-bottom: 7px; font-size: 16px; }
-        .alerta-caixa p { font-size: 12px; line-height: 1.4; }
-
-        .btn-entendi {
-            margin-top: 10px;
-            padding: 7px 14px;
-            border: none;
-            border-radius: 5px;
-            background: #dc2626;
-            color: white;
-            font-weight: 600;
-            font-size: 12px;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .oculto {
+                display: none !important;
+            }
+            .status-aberto {
+                color: #10b981;
+            }
+            .status-fechado {
+                color: #ef4444;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
 
-<!-- STATUS DA LOJA -->
-<div class="status-topo">
-    <span class="ponto-status" id="ponto-status"></span>
-    <span id="texto-status" class="texto-status"></span>
-</div>
-
-<!-- CABEÇALHO -->
-<div class="cabecalho-banner">
-    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
-    <div class="marca">
-        <h1>ALISON</h1>
-        <p>★ BURGER ★</p>
-    </div>
-    <div class="info-loja">
-        <div><i class="fa fa-map-marker-alt"></i> NOME DA RUA, 123 - SUA CIDADE</div>
-        <div><i class="fa fa-motorcycle"></i> Entrega: 20-30 min &nbsp;&nbsp; | &nbsp;&nbsp; <i class="fa fa-credit-card"></i> Pagamento na entrega</div>
-    </div>
-</div>
-
-<!-- CATEGORIAS -->
-<div class="categorias">
-    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
-    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
-    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
-    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
-    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
-</div>
-
-<!-- BUSCA -->
-<div class="busca">
-    <i class="fa fa-search"></i>
-    <input type="text" id="campoBusca" placeholder="Buscar produtos...">
-</div>
-
-<!-- LISTA PRODUTOS -->
-<div class="container">
-    <div class="lista-produtos">
-        <!-- PRODUTO 1 -->
-        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 1">
-            <div class="produto-imagem">
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1">
-                <span class="tag-mais-pedido">★ MAIS</span>
+    <!-- Cabeçalho -->
+    <header class="bg-secondary text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold">ALISON BURGER</h1>
+                <p class="text-sm text-gray-300">Sabor de verdade!</p>
             </div>
-            <div class="produto-info">
-                <p class="produto-codigo">01</p>
-                <h3 class="produto-nome">Nome do produto 1</h3>
-                <p class="produto-descricao">Descrição curta e objetiva.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-fire"></i> Muito pedido</span>
-                    <span><i class="fa fa-clock"></i> 20-30 min</span>
-                </div>
-            </div>
-            <div class="produto-acoes">
-                <p class="produto-preco">R$ 10,00</p>
-                <div class="controle-qtd">
-                    <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">0</span>
-                    <button class="qtd-btn aumentar">+</button>
-                </div>
-                <button class="add-carrinho" data-nome="Nome do produto 1" data-preco="10.00">
-                    <i class="fa fa-shopping-cart"></i> Add
+            <div class="flex items-center gap-3">
+                <div id="ponto-status" class="w-3 h-3 rounded-full bg-green-500"></div>
+                <span id="texto-status" class="text-sm font-medium">Aberto até às 06:00</span>
+                <button id="abrir-carrinho" class="relative bg-primary hover:bg-amber-500 text-white px-4 py-2 rounded-lg transition">
+                    <i class="fa fa-shopping-cart mr-1"></i> Pedido
+                    <span id="qtd-carrinho" class="absolute -top-2 -right-2 bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
                 </button>
             </div>
         </div>
+    </header>
 
-        <!-- PRODUTO 2 -->
-        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 2">
-            <div class="produto-imagem">
-                <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2">
-            </div>
-            <div class="produto-info">
-                <p class="produto-codigo">02</p>
-                <h3 class="produto-nome">Nome do produto 2</h3>
-                <p class="produto-descricao">Descrição curta e objetiva.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-leaf"></i> Vegetariano</span>
-                    <span><i class="fa fa-clock"></i> 20-30 min</span>
-                </div>
-            </div>
-            <div class="produto-acoes">
-                <p class="produto-preco">R$ 12,00</p>
-                <div class="controle-qtd">
-                    <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">0</span>
-                    <button class="qtd-btn aumentar">+</button>
-                </div>
-                <button class="add-carrinho" data-nome="Nome do produto 2" data-preco="12.00">
-                    <i class="fa fa-shopping-cart"></i> Add
-                </button>
-            </div>
+    <!-- Barra de busca -->
+    <div class="container mx-auto px-4 py-4">
+        <input type="text" id="campoBusca" placeholder="Buscar produto..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+    </div>
+
+    <!-- Categorias -->
+    <div class="container mx-auto px-4 mb-6">
+        <div class="flex flex-wrap gap-2">
+            <button class="categoria-btn ativo bg-primary text-white px-4 py-1 rounded-full text-sm" data-categoria="todos">Todos</button>
+            <button class="categoria-btn bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full text-sm" data-categoria="hamburgueres">Hambúrgueres</button>
+            <button class="categoria-btn bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full text-sm" data-categoria="bebidas">Bebidas</button>
+            <button class="categoria-btn bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full text-sm" data-categoria="porcoes">Porções</button>
         </div>
+    </div>
 
-        <!-- PRODUTO 3 -->
-        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 3">
-            <div class="produto-imagem">
-                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3">
-            </div>
-            <div class="produto-info">
-                <p class="produto-codigo">03</p>
-                <h3 class="produto-nome">Nome do produto 3</h3>
-                <p class="produto-descricao">Descrição curta e objetiva.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-pepper-hot"></i> Picante</span>
-                    <span><i class="fa fa-clock"></i> 20-30 min</span>
+    <!-- Lista de Produtos -->
+    <main class="container mx-auto px-4 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Exemplo de Produto -->
+            <div class="produto bg-white rounded-lg shadow-md overflow-hidden" data-categoria="hamburgueres" data-nome="Hambúrguer Artesanal">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2">Hambúrguer Artesanal</h3>
+                    <p class="text-gray-600 text-sm mb-3">Pão artesanal, carne 180g, queijo, alface e tomate</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-lg text-primary">R$ 18,00</span>
+                        <div class="flex items-center gap-2">
+                            <button class="diminuir w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button>
+                            <span class="qtd-valor w-6 text-center">0</span>
+                            <button class="aumentar w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
+                        </div>
+                    </div>
+                    <button class="add-carrinho w-full mt-4 bg-primary hover:bg-amber-500 text-white py-2 rounded-lg transition" data-nome="Hambúrguer Artesanal" data-preco="18.00">Adicionar</button>
                 </div>
             </div>
-            <div class="produto-acoes">
-                <p class="produto-preco">R$ 15,00</p>
-                <div class="controle-qtd">
-                    <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">0</span>
-                    <button class="qtd-btn aumentar">+</button>
+
+            <div class="produto bg-white rounded-lg shadow-md overflow-hidden" data-categoria="bebidas" data-nome="Refrigerante 500ml">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2">Refrigerante 500ml</h3>
+                    <p class="text-gray-600 text-sm mb-3">Diversas marcas e sabores</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-lg text-primary">R$ 6,00</span>
+                        <div class="flex items-center gap-2">
+                            <button class="diminuir w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button>
+                            <span class="qtd-valor w-6 text-center">0</span>
+                            <button class="aumentar w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
+                        </div>
+                    </div>
+                    <button class="add-carrinho w-full mt-4 bg-primary hover:bg-amber-500 text-white py-2 rounded-lg transition" data-nome="Refrigerante 500ml" data-preco="6.00">Adicionar</button>
                 </div>
-                <button class="add-carrinho" data-nome="Nome do produto 3" data-preco="15.00">
-                    <i class="fa fa-shopping-cart"></i> Add
-                </button>
+            </div>
+
+            <div class="produto bg-white rounded-lg shadow-md overflow-hidden" data-categoria="porcoes" data-nome="Porção de Batata Frita">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2">Porção de Batata Frita</h3>
+                    <p class="text-gray-600 text-sm mb-3">Batata sequinha com sal e temperos</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-lg text-primary">R$ 12,00</span>
+                        <div class="flex items-center gap-2">
+                            <button class="diminuir w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button>
+                            <span class="qtd-valor w-6 text-center">0</span>
+                            <button class="aumentar w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
+                        </div>
+                    </div>
+                    <button class="add-carrinho w-full mt-4 bg-primary hover:bg-amber-500 text-white py-2 rounded-lg transition" data-nome="Porção de Batata Frita" data-preco="12.00">Adicionar</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal do Carrinho -->
+    <div id="modal-carrinho" class="oculto fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-5 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-xl font-bold">Seu Pedido</h2>
+                <button id="fechar-modal" class="text-gray-500 hover:text-gray-800 text-xl">&times;</button>
+            </div>
+
+            <div class="p-5">
+                <div id="carrinho-container" class="mb-5 oculto">
+                    <h3 class="font-semibold mb-3">Itens Selecionados</h3>
+                    <div id="lista-itens-carrinho" class="space-y-3 mb-4"></div>
+                    <div id="resumo-carrinho" class="text-right font-semibold text-lg">Total: R$ 0,00</div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Formulário do Cliente -->
+                <h3 class="font-semibold mb-4">Dados do Pedido</h3>
+
+                <!-- Forma de recebimento -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Forma de recebimento:</label>
+                    <select id="tipo-atendimento" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="retirada">Retirada na loja</option>
+                        <option value="entrega">Entrega em domicílio</option>
+                    </select>
+                </div>
+
+                <!-- Taxa de entrega -->
+                <div id="campo-taxa-entrega" class="oculto mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Taxa de entrega:</label>
+                    <input type="text" id="taxa-entrega" value="6,00" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+
+                <!-- Nome do cliente -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome completo:</label>
+                    <input type="text" id="nome-cliente" placeholder="Digite seu nome" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+
+                <!-- CEP -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CEP:</label>
+                    <input type="text" id="cep-cliente" placeholder="00000-000" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+
+                <!-- Rua e Número -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Rua:</label>
+                        <input type="text" id="rua-cliente" placeholder="Nome da rua" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Número:</label>
+                        <input type="text" id="numero-cliente" placeholder="Nº" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                        <label class="inline-flex items-center mt-1">
+                            <input type="checkbox" id="sn-cliente" class="mr-1">
+                            <span class="text-xs">Sem número</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Complemento e Bairro -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Complemento:</label>
+                        <input type="text" id="complemento-cliente" placeholder="Apto, casa, etc" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Bairro:</label>
+                        <input type="text" id="bairro-cliente" placeholder="Seu bairro" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                </div>
+
+                <!-- Cidade e UF -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Cidade:</label>
+                        <input type="text" id="cidade-cliente" placeholder="Sua cidade" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">UF:</label>
+                        <input type="text" id="uf-cliente" placeholder="SP" maxlength="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                </div>
+
+                <!-- Ponto de referência -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ponto de referência:</label>
+                    <input type="text" id="referencia-cliente" placeholder="Perto de onde?" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+
+                <!-- Forma de pagamento -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Forma de pagamento:</label>
+                    <select id="forma-pagamento" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Cartão de Débito">Cartão de Débito</option>
+                        <option value="Pix">Pix</option>
+                    </select>
+                </div>
+
+                <!-- Observações -->
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Observações:</label>
+                    <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, ponto da carne..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"></textarea>
+                </div>
+
+                <!-- Aviso de erro -->
+                <div id="aviso-endereco" class="oculto p-3 mb-4 rounded bg-red-50 text-red-700 text-sm"></div>
+
+                <!-- Botão Finalizar -->
+                <button id="btn-finalizar" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">Finalizar Pedido</button>
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODAL CARRINHO -->
-<div id="modal-carrinho" class="oculto">
-    <div class="modal-conteudo">
-        <div class="modal-cabecalho">
-            <h3>Meu Carrinho</h3>
-            <button id="fechar-modal" class="fechar-modal">&times;</button>
-        </div>
-        <div id="lista-itens-carrinho"></div>
-        <p class="total-texto">Total: R$ <span id="valor-total">0.00</span></p>
-
-        <!-- FORMULÁRIO DE ENDEREÇO SEPARADO -->
-        <div class="form-grupo">
-            <label>Nome completo</label>
-            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
-        </div>
-
-        <div class="form-grupo">
-            <label>CEP</label>
-            <input type="text" id="cep-cliente" placeholder="00000-000" maxlength="9">
-        </div>
-
-        <div class="linha-form">
-            <div class="form-grupo metade">
-                <label>Número</label>
-                <input type="text" id="numero-cliente" placeholder="Ex: 123">
-            </div>
-            <div class="form-grupo metade">
-                <label><input type="checkbox" id="sn-cliente"> Sem número</label>
-            </div>
-        </div>
-
-        <div class="form-grupo">
-            <label>Complemento</label>
-            <input type="text" id="complemento-cliente" placeholder="Ex: Apto 201, Bloco B">
-        </div>
-
-        <div class="form-grupo">
-            <label>Ponto de referência</label>
-            <input type="text" id="referencia-cliente" placeholder="Próximo ao mercado...">
-        </div>
-
-        <div class="form-grupo">
-            <label>Rua / Logradouro</label>
-            <input type="text" id="rua-cliente" placeholder="Nome da rua">
-        </div>
-
-        <div class="form-grupo">
-            <label>Bairro</label>
-            <input type="text" id="bairro-cliente" placeholder="Nome do bairro">
-        </div>
-
-        <div class="linha-form">
-            <div class="form-grupo dois-tercos">
-                <label>Cidade</label>
-                <input type="text" id="cidade-cliente" placeholder="Nome da cidade">
-            </div>
-            <div class="form-grupo um-terco">
-                <label>UF</label>
-                <input type="text" id="uf-cliente" placeholder="Ex: SP" maxlength="2">
-            </div>
-        </div>
-
-        <div class="form-grupo">
-            <label>Forma de pagamento</label>
-            <select id="forma-pagamento">
-                <option value="Dinheiro">Dinheiro</option>
-                <option value="Pix">Pix</option>
-                <option value="Cartão">Cartão</option>
-            </select>
-        </div>
-
-        <div class="form-grupo">
-            <label>Observações</label>
-            <textarea id="observacoes" rows="2" placeholder="Ex: sem cebola, troco para R$50..."></textarea>
-        </div>
-
-        <p id="aviso-endereco" class="aviso-erro oculto">⚠️ Preencha os campos obrigatórios!</p>
-
-        <div class="botoes-modal">
-            <button id="btn-fechar" class="btn-fechar">Fechar</button>
-            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
+    <!-- Aviso de loja fechada -->
+    <div id="alerta-fechado" class="oculto fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full text-center">
+            <h3 class="text-xl font-bold text-red-600 mb-3">Loja Fechada</h3>
+            <p class="mb-4">No momento estamos fora do nosso horário de atendimento. Voltamos a atender às 23:00.</p>
+            <button id="btn-entendi" class="bg-gray-700 text-white px-5 py-2 rounded-lg">Entendi</button>
         </div>
     </div>
-</div>
 
-<!-- ALERTA FECHADO -->
-<div id="alerta-fechado" class="oculto">
-    <div class="alerta-caixa">
-        <h3>Loja Fechada</h3>
-        <p>Atendimento das 23:00 às 06:00. Volte mais tarde!</p>
-        <button id="btn-entendi" class="btn-entendi">Entendi</button>
-    </div>
-</div>
-
-<!-- CARRINHO FIXO -->
-<div class="carrinho-fixo" id="carrinho-container">
-    <div class="carrinho-conteudo">
-        <div class="carrinho-esq">
-            <span class="badge-qtd" id="qtd-carrinho">0</span>
-            <div class="texto-carrinho">
-                <h4>Seu carrinho</h4>
-                <p id="resumo-carrinho">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</p>
-            </div>
-        </div>
-        <button class="btn-ver-carrinho" id="abrir-carrinho">Ver →</button>
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <!-- Arquivo JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
