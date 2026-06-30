@@ -8,7 +8,7 @@ const CONFIG = {
   textoStatusFechado: "Fechado",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
-  numeroWhatsApp: "5519989021323", // ✅ Seu número correto
+  numeroWhatsApp: "5519989021323", // ✅ Seu número
   nomeLoja: "ALISON BURGER",
   taxaEntregaPadrao: 6.00 // ✅ Valor da taxa de entrega padrão
 };
@@ -32,78 +32,33 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
-// Campos do endereço
-const cepEl = document.getElementById('cep-cliente');
-const ruaEl = document.getElementById('rua-cliente');
-const bairroEl = document.getElementById('bairro-cliente');
-const cidadeEl = document.getElementById('cidade-cliente');
-const ufEl = document.getElementById('uf-cliente');
+// Campos do formulário
+const nomeEl = document.getElementById('nome-cliente');
+const enderecoEl = document.getElementById('endereco-cliente');
 const avisoEndereco = document.getElementById('aviso-endereco');
+const pagamentoEl = document.getElementById('forma-pagamento');
+const obsEl = document.getElementById('observacoes');
 
-// ✅ NOVOS CAMPOS ADICIONADOS
+// ✅ NOVOS CAMPOS
 const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
 const campoTaxaEntregaEl = document.getElementById('campo-taxa-entrega');
 const taxaEntregaEl = document.getElementById('taxa-entrega');
 
 // ==============================================
-// 🚀 FUNÇÃO BUSCAR CEP AUTOMÁTICA
+// 🚀 CONTROLE DE ENTREGA / RETIRADA
 // ==============================================
-async function buscarCEP(cep) {
-  cep = cep.replace(/\D/g, ''); // Remove tudo que não é número
-  if (cep.length !== 8) return;
-
-  try {
-    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const dados = await resposta.json();
-
-    if (dados.erro) {
-      avisoEndereco.textContent = '❌ CEP não encontrado!';
-      avisoEndereco.classList.remove('oculto');
-      return;
-    }
-
-    // Preenche os campos automaticamente
-    ruaEl.value = dados.logradouro || '';
-    bairroEl.value = dados.bairro || '';
-    cidadeEl.value = dados.localidade || '';
-    ufEl.value = dados.uf || '';
-    avisoEndereco.classList.add('oculto');
-
-  } catch (erro) {
-    avisoEndereco.textContent = '⚠️ Erro ao buscar CEP, preencha manualmente.';
-    avisoEndereco.classList.remove('oculto');
-  }
-}
-
-// Ativa a busca quando o usuário digita o CEP e sai do campo
-cepEl.addEventListener('blur', () => buscarCEP(cepEl.value));
-
-// ✅ NOVA FUNÇÃO: Mostrar/ocultar taxa e campos de endereço
 tipoAtendimentoEl.addEventListener('change', () => {
   if (tipoAtendimentoEl.value === 'entrega') {
     campoTaxaEntregaEl.classList.remove('oculto');
     taxaEntregaEl.value = CONFIG.taxaEntregaPadrao.toFixed(2).replace('.', ',');
-    cepEl.disabled = false;
-    ruaEl.disabled = false;
-    bairroEl.disabled = false;
-    cidadeEl.disabled = false;
-    ufEl.disabled = false;
-    document.getElementById('numero-cliente').disabled = false;
-    document.getElementById('sn-cliente').disabled = false;
-    document.getElementById('complemento-cliente').disabled = false;
-    document.getElementById('referencia-cliente').disabled = false;
+    enderecoEl.disabled = false;
+    enderecoEl.placeholder = "Rua, número, bairro, cidade";
   } else {
     campoTaxaEntregaEl.classList.add('oculto');
     taxaEntregaEl.value = '0,00';
-    cepEl.disabled = true;
-    ruaEl.disabled = true;
-    bairroEl.disabled = true;
-    cidadeEl.disabled = true;
-    ufEl.disabled = true;
-    document.getElementById('numero-cliente').disabled = true;
-    document.getElementById('sn-cliente').disabled = true;
-    document.getElementById('complemento-cliente').disabled = true;
-    document.getElementById('referencia-cliente').disabled = true;
+    enderecoEl.disabled = true;
+    enderecoEl.value = '';
+    enderecoEl.placeholder = "Não necessário para retirada";
   }
 });
 
@@ -195,7 +150,7 @@ function atualizarCarrinho() {
   let qtdTotal = 0;
 
   if (carrinho.length === 0) {
-    valorTotalEl.textContent = '0.00';
+    valorTotalEl.textContent = '0,00';
     carrinhoContainer.style.display = 'none';
     return;
   }
@@ -212,19 +167,19 @@ function atualizarCarrinho() {
     itemEl.innerHTML = `
       <div>
         <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
-        <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
+        <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
       </div>
       <div style="display:flex; align-items:center; gap:8px;">
         <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
         <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
         <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-        <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2)}</span>
+        <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
       </div>
     `;
     listaItensCarrinho.appendChild(itemEl);
   });
 
-  valorTotalEl.textContent = total.toFixed(2);
+  valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
   qtdCarrinhoEl.textContent = qtdTotal;
   resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
 
@@ -297,68 +252,45 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO — ATUALIZADO COM ENTREGA/RETIRADA E TAXA
+// ✅ FINALIZAR PEDIDO — ATUALIZADO
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
-  const nome = document.getElementById('nome-cliente').value.trim();
-  const cep = cepEl.value.trim();
-  const numero = document.getElementById('numero-cliente').value.trim();
-  const semNumero = document.getElementById('sn-cliente').checked;
-  const complemento = document.getElementById('complemento-cliente').value.trim();
-  const referencia = document.getElementById('referencia-cliente').value.trim();
-  const rua = ruaEl.value.trim();
-  const bairro = bairroEl.value.trim();
-  const cidade = cidadeEl.value.trim();
-  const uf = ufEl.value.trim().toUpperCase();
-  const pagamento = document.getElementById('forma-pagamento').value;
-  const obs = document.getElementById('observacoes').value.trim();
+  const nome = nomeEl.value.trim();
+  const endereco = enderecoEl.value.trim();
+  const pagamento = pagamentoEl.value;
+  const obs = obsEl.value.trim();
 
-  // ✅ NOVOS VALORES
   const tipoAtendimento = tipoAtendimentoEl.value;
   const taxaEntrega = parseFloat(taxaEntregaEl.value.replace(',', '.')) || 0;
+  const totalItens = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
+  const totalGeral = totalItens + taxaEntrega;
 
   if (carrinho.length === 0) {
     alert('Adicione pelo menos um produto antes de finalizar!');
     return;
   }
 
-  // ✅ VALIDAÇÃO INTELIGENTE
   if (!nome) {
     avisoEndereco.textContent = '⚠️ Informe o nome do cliente!';
     avisoEndereco.classList.remove('oculto');
     return;
   }
 
-  if (tipoAtendimento === 'entrega' && (!rua || !bairro || !cidade || !uf || (!numero && !semNumero))) {
-    avisoEndereco.textContent = '⚠️ Para entrega, preencha: Rua, Bairro, Cidade, UF e Número ou marque "Sem número"!';
+  if (tipoAtendimento === 'entrega' && !endereco) {
+    avisoEndereco.textContent = '⚠️ Para entrega, informe o endereço completo!';
     avisoEndereco.classList.remove('oculto');
     return;
   }
 
   avisoEndereco.classList.add('oculto');
 
-  // ✅ CÁLCULO DOS VALORES
-  const totalItens = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
-  const totalGeral = totalItens + taxaEntrega;
-
-  // ✅ MONTAR ENDEREÇO SÓ SE FOR ENTREGA
-  let enderecoCompleto = '';
-  if (tipoAtendimento === 'entrega') {
-    enderecoCompleto = `Rua: ${rua}`;
-    enderecoCompleto += semNumero ? ' - S/N' : `, Nº ${numero}`;
-    if (complemento) enderecoCompleto += ` | Complemento: ${complemento}`;
-    if (referencia) enderecoCompleto += ` | Referência: ${referencia}`;
-    enderecoCompleto += `\nBairro: ${bairro} | Cidade: ${cidade}/${uf}`;
-    if (cep) enderecoCompleto += `\nCEP: ${cep}`;
-  }
-
-  // ✅ MENSAGEM PARA WHATSAPP ATUALIZADA
+  // Monta mensagem para WhatsApp
   let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
   mensagem += `📋 *Tipo:* ${tipoAtendimento === 'entrega' ? 'Entrega em domicílio' : 'Retirada na loja'}\n`;
   mensagem += `👤 *Nome:* ${nome}\n`;
 
   if (tipoAtendimento === 'entrega') {
-    mensagem += `🏠 *Endereço:*\n${enderecoCompleto}\n`;
+    mensagem += `🏠 *Endereço:* ${endereco}\n`;
   }
 
   mensagem += `\n💳 *Forma de pagamento:* ${pagamento}\n\n`;
