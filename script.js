@@ -19,7 +19,7 @@ const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 const HORA_ABERTURA = 6;
 const HORA_FECHAMENTO = 22;
 
-// ---------------- STATUS DA LOJA - FUNÇÃO CORRIGIDA ----------------
+// ---------------- STATUS DA LOJA - CORRIGIDO ----------------
 function verificarStatusLoja(mostrarAviso = false) {
     const agora = new Date();
     const hora = agora.getHours();
@@ -29,13 +29,11 @@ function verificarStatusLoja(mostrarAviso = false) {
     const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
 
     if (aberta) {
-        // Aberto: bolinha verde + palavra Aberto verde
         pontoStatusEl.style.backgroundColor = "#22c55e";
         textoStatusEl.textContent = "Aberto até às 22:00";
         textoStatusEl.classList.remove("fechado");
         textoStatusEl.classList.add("aberto");
     } else {
-        // Fechado: bolinha vermelha + palavra Fechado vermelha
         pontoStatusEl.style.backgroundColor = "#dc2626";
         textoStatusEl.textContent = "Fechado";
         textoStatusEl.classList.remove("aberto");
@@ -49,7 +47,7 @@ function verificarStatusLoja(mostrarAviso = false) {
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 
-btnEntendi.addEventListener('click', () => alertaFechado.classList.add('oculto'));
+btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ---------------- CONTROLE DE QUANTIDADE ----------------
 document.querySelectorAll('.qtd-btn').forEach(botao => {
@@ -116,20 +114,20 @@ function atualizarCarrinho() {
     carrinho.forEach((item, index) => {
         const totalItem = item.preco * item.quantidade;
         total += totalItem;
-        qtdTotal += item.quantidade;
+        qtdTotal += item.quantidadeTotal += item.quantidade;
 
         const itemEl = document.createElement('div');
         itemEl.className = 'item-carrinho';
         itemEl.innerHTML = `
             <div>
-                <h4 style="font-size:15px; margin-bottom:4px;">${item.nome}</h4>
-                <p style="font-size:12px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
+                <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
+                <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
             </div>
-            <div style="display:flex; align-items:center; gap:10px;">
+            <div style="display:flex; align-items:center; gap:8px;">
                 <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-                <span style="font-weight:600; font-size:15px;">${item.quantidade}</span>
+                <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
                 <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-                <span style="font-weight:700; min-width:80px; text-align:right; font-size:15px;">R$ ${totalItem.toFixed(2)}</span>
+                <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2)}</span>
             </div>
         `;
         listaItensCarrinho.appendChild(itemEl);
