@@ -9,7 +9,8 @@ const CONFIG = {
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323", // ✅ Seu número correto
-  nomeLoja: "ALISON BURGER"
+  nomeLoja: "ALISON BURGER",
+  subtituloLoja: "Sabor de verdade!" // ✅ Igual da foto
 };
 
 // ==============================================
@@ -40,10 +41,20 @@ const ufEl = document.getElementById('uf-cliente');
 const avisoEndereco = document.getElementById('aviso-endereco');
 
 // ==============================================
-// 🚀 FUNÇÃO BUSCAR CEP AUTOMÁTICA
+// 🚀 FUNÇÃO BUSCAR CEP AUTOMÁTICA + MÁSCARA
 // ==============================================
+function aplicarMascaraCEP(valor) {
+  valor = valor.replace(/\D/g, '');
+  if (valor.length > 5) valor = valor.replace(/^(\d{5})(\d)/, '$1-$2');
+  return valor;
+}
+
+cepEl.addEventListener('input', () => {
+  cepEl.value = aplicarMascaraCEP(cepEl.value);
+});
+
 async function buscarCEP(cep) {
-  cep = cep.replace(/\D/g, ''); // Remove tudo que não é número
+  cep = cep.replace(/\D/g, '');
   if (cep.length !== 8) return;
 
   try {
@@ -56,7 +67,6 @@ async function buscarCEP(cep) {
       return;
     }
 
-    // Preenche os campos automaticamente
     ruaEl.value = dados.logradouro || '';
     bairroEl.value = dados.bairro || '';
     cidadeEl.value = dados.localidade || '';
@@ -69,7 +79,6 @@ async function buscarCEP(cep) {
   }
 }
 
-// Ativa a busca quando o usuário digita o CEP e sai do campo
 cepEl.addEventListener('blur', () => buscarCEP(cepEl.value));
 
 // ==============================================
@@ -177,19 +186,19 @@ function atualizarCarrinho() {
     itemEl.innerHTML = `
       <div>
         <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
-        <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
+        <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
       </div>
       <div style="display:flex; align-items:center; gap:8px;">
         <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
         <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
         <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-        <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2)}</span>
+        <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
       </div>
     `;
     listaItensCarrinho.appendChild(itemEl);
   });
 
-  valorTotalEl.textContent = total.toFixed(2);
+  valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
   qtdCarrinhoEl.textContent = qtdTotal;
   resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
 
@@ -262,9 +271,12 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO — CORRIGIDO E FUNCIONANDO
+// ✅ FINALIZAR PEDIDO — FORMATO IGUAL A COMANDA
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
+  const agora = new Date();
+  const dataHora = agora.toLocaleString('pt-BR');
+
   const nome = document.getElementById('nome-cliente').value.trim();
   const cep = cepEl.value.trim();
   const numero = document.getElementById('numero-cliente').value.trim();
@@ -290,26 +302,47 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   }
   avisoEndereco.classList.add('oculto');
 
-  let enderecoCompleto = `Rua: ${rua}`;
-  enderecoCompleto += semNumero ? ' - S/N' : `, Nº ${numero}`;
-  if (complemento) enderecoCompleto += ` | Complemento: ${complemento}`;
-  if (referencia) enderecoCompleto += ` | Referência: ${referencia}`;
-  enderecoCompleto += `\nBairro: ${bairro} | Cidade: ${cidade}/${uf}`;
-  if (cep) enderecoCompleto += `\nCEP: ${cep}`;
+  // Monta endereço completo
+  let enderecoCompleto = `ENDEREÇO: ${rua}, ${semNumero ? 'S/N' : `Nº ${numero}`}`;
+  if (complemento) enderecoCompleto += `\nCOMP.: ${complemento}`;
+  enderecoCompleto += `\nBAIRRO: ${bairro}`;
+  enderecoCompleto += `\nCIDADE: ${cidade} - ${uf}`;
+  if (cep) enderecoCompleto += ` | CEP: ${cep}`;
 
-  let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
-  mensagem += `👤 *Nome:* ${nome}\n`;
-  mensagem += `🏠 *Endereço:*\n${enderecoCompleto}\n\n`;
-  mensagem += `💳 *Forma de pagamento:* ${pagamento}\n\n`;
-  mensagem += `🛒 *Itens:*\n`;
+  // Monta mensagem no formato da comanda
+  let mensagem = `━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  mensagem += `*${CONFIG.nomeLoja}*\n`;
+  mensagem += `${CONFIG.subtituloLoja}\n`;
+  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+  mensagem += `*📅 DATA / HORA:*\n${dataHora}\n\n`;
+
+  mensagem += `*👤 CLIENTE:*\n${nome}\n\n`;
+
+  mensagem += `*📍 ENTREGA:*\n${enderecoCompleto}\n\n`;
+
+  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  mensagem += `*🛒 ITENS DO PEDIDO*\n`;
+  mensagem += `QTD | PRODUTO | VALOR UNIT. | TOTAL\n`;
+  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
 
   carrinho.forEach(item => {
-    mensagem += `• ${item.nome} | ${item.quantidade}x | R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
+    const valorUnit = item.preco.toFixed(2).replace('.', ',');
+    const valorTotalItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
+    mensagem += `${item.quantidade}x | ${item.nome} | R$ ${valorUnit} | R$ ${valorTotalItem}\n`;
   });
 
-  mensagem += `\n💬 *Observações:* ${obs || 'Nenhuma'}\n`;
-  mensagem += `💰 *Total:* R$ ${valorTotalEl.textContent.replace('.', ',')}`;
+  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+  mensagem += `*💳 FORMA DE PAGAMENTO:*\n${pagamento}\n\n`;
+
+  if (obs) {
+    mensagem += `*💬 OBSERVAÇÕES:*\n${obs}\n\n`;
+  }
+
+  mensagem += `*💰 VALOR TOTAL DO PEDIDO:*\nR$ ${valorTotalEl.textContent}\n`;
+  mensagem += `━━━━━━━━━━━━━━━━━━━━━━━`;
 
   const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
-}); 
+});
