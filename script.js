@@ -9,6 +9,7 @@ const valorTotalEl = document.getElementById('valor-total');
 const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
+const btnVerCarrinhoEl = document.querySelector('.btn-ver-carrinho'); // Novo elemento
 
 // Elemento do status visual (será atualizado automaticamente)
 const statusLojaEl = document.getElementById('statusLoja');
@@ -53,7 +54,8 @@ document.querySelectorAll('.qtd-btn').forEach(botao => {
         const valorEl = botao.parentElement.querySelector('.qtd-valor');
         let valor = parseInt(valorEl.textContent);
         if (botao.classList.contains('aumentar')) valor++;
-        if (botao.classList.contains('diminuir') && valor > 1) valor--;
+        // Agora permite diminuir até 0
+        if (botao.classList.contains('diminuir') && valor > 0) valor--;
         valorEl.textContent = valor;
     });
 });
@@ -67,6 +69,12 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
         const preco = parseFloat(botao.dataset.preco);
         const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
 
+        // Bloqueia adição com quantidade 0
+        if (qtd <= 0) {
+            alert('Escolha uma quantidade antes de adicionar!');
+            return;
+        }
+
         const itemExistente = carrinho.find(item => item.nome === nome);
         if (itemExistente) {
             itemExistente.quantidade += qtd;
@@ -75,6 +83,9 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
         }
 
         atualizarCarrinho();
+
+        // Zera a quantidade do produto após adicionar
+        botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
 
         // Feedback visual
         const original = botao.innerHTML;
@@ -98,8 +109,11 @@ function atualizarCarrinho() {
     if (carrinho.length === 0) {
         listaItensCarrinho.innerHTML = '<p style="text-align:center; padding:20px 0; color:#777; font-size:14px;">Seu carrinho está vazio</p>';
         valorTotalEl.textContent = '0.00';
-        qtdCarrinhoEl.textContent = '0';
-        abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
+        
+        // Esconde contador e botão quando vazio
+        qtdCarrinhoEl.classList.add('oculto');
+        btnVerCarrinhoEl.classList.add('oculto');
+        abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = 'Nenhum item adicionado &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
         return;
     }
 
@@ -127,6 +141,10 @@ function atualizarCarrinho() {
 
     valorTotalEl.textContent = total.toFixed(2);
     qtdCarrinhoEl.textContent = qtdTotal;
+    
+    // Mostra contador e botão quando tem itens
+    qtdCarrinhoEl.classList.remove('oculto');
+    btnVerCarrinhoEl.classList.remove('oculto');
     abrirCarrinhoBtn.querySelector('.texto-seguro').innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
 
     adicionarEventosCarrinho();
@@ -155,6 +173,8 @@ function adicionarEventosCarrinho() {
 
 // ---------------- ABRIR / FECHAR MODAL ----------------
 abrirCarrinhoBtn.addEventListener('click', () => {
+    // Só abre se tiver itens
+    if (carrinho.length === 0) return;
     if (!verificarStatusLoja(true)) return;
     modalCarrinho.classList.remove('oculto');
     document.body.style.overflow = 'hidden';
@@ -219,4 +239,4 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     const numeroWhatsApp = '5519989021323';
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, '_blank');
-}); 
+});
