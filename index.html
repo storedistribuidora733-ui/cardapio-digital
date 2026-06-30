@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alison Burger</title>
+
+    <!-- Fontes e Ícones -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Estilos - Não precisa mexer aqui -->
     <style>
         * {
             margin: 0;
@@ -23,7 +27,7 @@
             line-height: 1.4;
         }
 
-        /* ---------------- STATUS DA LOJA ---------------- */
+        /* Status da Loja */
         .status-topo {
             position: absolute;
             top: 10px;
@@ -36,7 +40,6 @@
             font-size: 14px;
             color: #ffffff;
         }
-
         .ponto-status {
             width: 10px;
             height: 10px;
@@ -44,15 +47,10 @@
             display: inline-block;
             flex-shrink: 0;
         }
+        .texto-status.aberto { color: #22c55e !important; }
+        .texto-status.fechado { color: #dc2626 !important; }
 
-        .texto-status.aberto {
-            color: #22c55e !important;
-        }
-        .texto-status.fechado {
-            color: #dc2626 !important;
-        }
-
-        /* ---------------- CABEÇALHO ---------------- */
+        /* Cabeçalho */
         .cabecalho-banner {
             width: 100%;
             background: #121212;
@@ -61,7 +59,6 @@
             text-align: center;
             color: #facc15;
         }
-
         .logo-canto {
             position: absolute;
             top: 10px;
@@ -72,7 +69,6 @@
             border: 2px solid #facc15;
             object-fit: cover;
         }
-
         .marca h1 {
             font-size: 38px;
             font-weight: 800;
@@ -85,7 +81,6 @@
             letter-spacing: 1px;
             margin-bottom: 12px;
         }
-
         .info-loja {
             display: flex;
             justify-content: center;
@@ -102,7 +97,7 @@
             gap: 4px;
         }
 
-        /* ---------------- CATEGORIAS ---------------- */
+        /* Categorias */
         .categorias {
             width: 100%;
             padding: 8px 12px;
@@ -114,7 +109,6 @@
             border-bottom: 1px solid #eee;
         }
         .categorias::-webkit-scrollbar { display: none; }
-
         .categoria-btn {
             padding: 7px 12px;
             border-radius: 6px;
@@ -135,7 +129,7 @@
             color: #111;
         }
 
-        /* ---------------- BUSCA ---------------- */
+        /* Busca */
         .busca {
             margin: 10px 12px;
             position: relative;
@@ -157,19 +151,17 @@
             font-size: 13px;
         }
 
-        /* ---------------- PRODUTOS ---------------- */
+        /* Produtos */
         .container {
             width: 100%;
             padding: 0 12px;
         }
-
         .lista-produtos {
             display: flex;
             flex-direction: column;
             gap: 8px;
             margin: 10px 0;
         }
-
         .produto {
             background: #ffffff;
             border-radius: 8px;
@@ -180,7 +172,6 @@
             gap: 9px;
             align-items: center;
         }
-
         .produto-imagem {
             position: relative;
             width: 70px;
@@ -189,13 +180,11 @@
             overflow: hidden;
             flex-shrink: 0;
         }
-
         .produto-imagem img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .tag-mais-pedido {
             position: absolute;
             top: 0;
@@ -207,32 +196,27 @@
             padding: 2px 4px;
             border-radius: 0 0 5px 0;
         }
-
         .produto-info {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
-
         .produto-codigo {
             font-size: 12px;
             font-weight: 700;
             color: #ca8a04;
         }
-
         .produto-nome {
             font-size: 14px;
             font-weight: 700;
             color: #111827;
             line-height: 1.2;
         }
-
         .produto-descricao {
             font-size: 11px;
             color: #6b7280;
             line-height: 1.3;
         }
-
         .produto-detalhes {
             font-size: 10px;
             color: #78716c;
@@ -240,26 +224,22 @@
             gap: 8px;
             margin-top: 2px;
         }
-
         .produto-acoes {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             gap: 6px;
         }
-
         .produto-preco {
             font-size: 15px;
             font-weight: 800;
             color: #dc2626;
         }
-
         .controle-qtd {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-
         .qtd-btn {
             width: 26px;
             height: 26px;
@@ -273,7 +253,6 @@
             justify-content: center;
             cursor: pointer;
         }
-
         .qtd-valor {
             width: 28px;
             height: 26px;
@@ -285,7 +264,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .add-carrinho {
             width: 78px;
             height: 30px;
@@ -302,7 +280,7 @@
             cursor: pointer;
         }
 
-        /* ---------------- CARRINHO E MODAL ---------------- */
+        /* Carrinho e Modal */
         .carrinho-fixo {
             position: fixed;
             bottom: 0;
@@ -317,20 +295,17 @@
             border-top-right-radius: 10px;
             display: none;
         }
-
         .carrinho-conteudo {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
         .carrinho-esq {
             display: flex;
             align-items: center;
             gap: 9px;
         }
-
         .badge-qtd {
             width: 32px;
             height: 32px;
@@ -344,7 +319,6 @@
             font-size: 13px;
             flex-shrink: 0;
         }
-
         .texto-carrinho h4 {
             font-size: 14px;
             margin: 0 0 1px 0;
@@ -355,7 +329,6 @@
             color: #b0b3b8;
             margin: 0;
         }
-
         .btn-ver-carrinho {
             background: #facc15;
             color: #111827;
@@ -369,10 +342,7 @@
             align-items: center;
             gap: 4px;
         }
-
-        /* ---------------- OUTROS ---------------- */
         .oculto { display: none !important; }
-
         #modal-carrinho {
             position: fixed;
             inset: 0;
@@ -383,7 +353,6 @@
             z-index: 1000;
             padding: 12px;
         }
-
         .modal-conteudo {
             background: white;
             width: 100%;
@@ -393,7 +362,6 @@
             padding: 15px;
             overflow-y: auto;
         }
-
         .modal-cabecalho {
             display: flex;
             justify-content: space-between;
@@ -402,7 +370,6 @@
             padding-bottom: 8px;
             border-bottom: 1px solid #eee;
         }
-
         .fechar-modal {
             background: none;
             border: none;
@@ -410,7 +377,6 @@
             cursor: pointer;
             color: #666;
         }
-
         .item-carrinho {
             display: flex;
             justify-content: space-between;
@@ -418,7 +384,6 @@
             padding: 7px 0;
             border-bottom: 1px solid #eee;
         }
-
         .form-grupo { margin: 9px 0; }
         .form-grupo label {
             display: block;
@@ -440,11 +405,9 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
-
         .aviso-erro { font-size: 11px; color: #dc2626; margin-top: 2px; }
         .aviso-info { font-size: 11px; color: #2563eb; margin-top: 2px; }
         .total-texto { font-size: 15px; font-weight: 700; text-align: right; margin: 9px 0; }
-
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
         .btn-fechar {
             flex: 1;
@@ -465,7 +428,6 @@
             font-weight: 600;
             font-size: 12px;
         }
-
         #alerta-fechado {
             position: fixed;
             inset: 0;
@@ -476,7 +438,6 @@
             z-index: 1001;
             padding: 12px;
         }
-
         .alerta-caixa {
             background: white;
             padding: 16px;
@@ -484,10 +445,8 @@
             text-align: center;
             max-width: 280px;
         }
-
         .alerta-caixa h3 { color: #dc2626; margin-bottom: 7px; font-size: 16px; }
         .alerta-caixa p { font-size: 12px; line-height: 1.4; }
-
         .btn-entendi {
             margin-top: 10px;
             padding: 7px 14px;
@@ -502,13 +461,12 @@
 </head>
 <body>
 
-<!-- STATUS DA LOJA -->
+<!-- ==================== INFORMAÇÕES DA LOJA ==================== -->
 <div class="status-topo">
     <span class="ponto-status" id="ponto-status"></span>
     <span id="texto-status" class="texto-status"></span>
 </div>
 
-<!-- CABEÇALHO -->
 <div class="cabecalho-banner">
     <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
     <div class="marca">
@@ -521,7 +479,7 @@
     </div>
 </div>
 
-<!-- CATEGORIAS -->
+<!-- ==================== CATEGORIAS ==================== -->
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
     <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
@@ -530,25 +488,26 @@
     <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
 </div>
 
-<!-- BUSCA -->
+<!-- ==================== CAMPO DE BUSCA ==================== -->
 <div class="busca">
     <i class="fa fa-search"></i>
     <input type="text" id="campoBusca" placeholder="Buscar produtos...">
 </div>
 
-<!-- LISTA PRODUTOS -->
+<!-- ==================== LISTA DE PRODUTOS ==================== -->
 <div class="container">
     <div class="lista-produtos">
-        <!-- PRODUTO 1 -->
-        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 1">
+
+        <!-- 🔹 HAMBÚRGUERES -->
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples">
             <div class="produto-imagem">
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 1">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Simples">
                 <span class="tag-mais-pedido">★ MAIS</span>
             </div>
             <div class="produto-info">
                 <p class="produto-codigo">01</p>
-                <h3 class="produto-nome">Nome do produto 1</h3>
-                <p class="produto-descricao">Descrição curta e objetiva.</p>
+                <h3 class="produto-nome">Hambúrguer Simples</h3>
+                <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
                 <div class="produto-detalhes">
                     <span><i class="fa fa-fire"></i> Muito pedido</span>
                     <span><i class="fa fa-clock"></i> 20-30 min</span>
@@ -561,23 +520,22 @@
                     <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
-                <button class="add-carrinho" data-nome="Nome do produto 1" data-preco="10.00">
+                <button class="add-carrinho" data-nome="Hambúrguer Simples" data-preco="10.00">
                     <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
 
-        <!-- PRODUTO 2 -->
-        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 2">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo">
             <div class="produto-imagem">
-                <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 2">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Duplo">
             </div>
             <div class="produto-info">
                 <p class="produto-codigo">02</p>
-                <h3 class="produto-nome">Nome do produto 2</h3>
-                <p class="produto-descricao">Descrição curta e objetiva.</p>
+                <h3 class="produto-nome">Hambúrguer Duplo</h3>
+                <p class="produto-descricao">Duas carnes, queijo especial e molho da casa.</p>
                 <div class="produto-detalhes">
-                    <span><i class="fa fa-leaf"></i> Vegetariano</span>
+                    <span><i class="fa fa-leaf"></i> Saboroso</span>
                     <span><i class="fa fa-clock"></i> 20-30 min</span>
                 </div>
             </div>
@@ -588,21 +546,20 @@
                     <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
-                <button class="add-carrinho" data-nome="Nome do produto 2" data-preco="12.00">
+                <button class="add-carrinho" data-nome="Hambúrguer Duplo" data-preco="12.00">
                     <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
 
-        <!-- PRODUTO 3 -->
-        <div class="produto" data-categoria="hamburgueres" data-nome="Nome do produto 3">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Picante">
             <div class="produto-imagem">
-                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Produto 3">
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Picante">
             </div>
             <div class="produto-info">
                 <p class="produto-codigo">03</p>
-                <h3 class="produto-nome">Nome do produto 3</h3>
-                <p class="produto-descricao">Descrição curta e objetiva.</p>
+                <h3 class="produto-nome">Hambúrguer Picante</h3>
+                <p class="produto-descricao">Carne especial, molho apimentado e pimenta calabresa.</p>
                 <div class="produto-detalhes">
                     <span><i class="fa fa-pepper-hot"></i> Picante</span>
                     <span><i class="fa fa-clock"></i> 20-30 min</span>
@@ -615,15 +572,171 @@
                     <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
-                <button class="add-carrinho" data-nome="Nome do produto 3" data-preco="15.00">
+                <button class="add-carrinho" data-nome="Hambúrguer Picante" data-preco="15.00">
                     <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
+
+        <!-- 🔹 ACOMPANHAMENTOS -->
+        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Tradicional">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Frita">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">04</p>
+                <h3 class="produto-nome">Batata Frita Tradicional</h3>
+                <p class="produto-descricao">Porção grande, crocante e temperada.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-fire"></i> Quente</span>
+                    <span><i class="fa fa-clock"></i> 10-15 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 12,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">0</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Batata Frita Tradicional" data-preco="12.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
+            </div>
+        </div>
+
+        <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Anéis de Cebola">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">05</p>
+                <h3 class="produto-nome">Anéis de Cebola</h3>
+                <p class="produto-descricao">Empanados, crocantes e saborosos.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-thumbs-up"></i> Crocante</span>
+                    <span><i class="fa fa-clock"></i> 10-15 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 14,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">0</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Anéis de Cebola" data-preco="14.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
+            </div>
+        </div>
+
+        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata com Cheddar e Bacon">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Cheddar">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">06</p>
+                <h3 class="produto-nome">Batata com Cheddar e Bacon</h3>
+                <p class="produto-descricao">Coberta com molho de queijo e bacon picado.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-star"></i> Mais pedida</span>
+                    <span><i class="fa fa-clock"></i> 12-18 min</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 18,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">0</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Batata com Cheddar e Bacon" data-preco="18.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
+            </div>
+        </div>
+
+        <!-- 🔹 BEBIDAS -->
+        <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 350ml">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca-Cola">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">07</p>
+                <h3 class="produto-nome">Coca-Cola 350ml</h3>
+                <p class="produto-descricao">Lata gelada, sabor original.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-tint"></i> Refrigerante</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 6,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">0</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Coca-Cola 350ml" data-preco="6.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
+            </div>
+        </div>
+
+        <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica 350ml">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Guaraná">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">08</p>
+                <h3 class="produto-nome">Guaraná Antarctica 350ml</h3>
+                <p class="produto-descricao">Lata bem gelada, sabor tradicional.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-tint"></i> Refrigerante</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 6,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">0</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Guaraná Antarctica 350ml" data-preco="6.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
+            </div>
+        </div>
+
+        <div class="produto" data-categoria="bebidas" data-nome="Suco de Laranja Natural 500ml">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Suco de Laranja">
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">09</p>
+                <h3 class="produto-nome">Suco de Laranja Natural 500ml</h3>
+                <p class="produto-descricao">100% fruta, sem açúcar.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-leaf"></i> Natural</span>
+                </div>
+            </div>
+            <div class="produto-acoes">
+                <p class="produto-preco">R$ 9,00</p>
+                <div class="controle-qtd">
+                    <button class="qtd-btn diminuir">-</button>
+                    <span class="qtd-valor">0</span>
+                    <button class="qtd-btn aumentar">+</button>
+                </div>
+                <button class="add-carrinho" data-nome="Suco de Laranja Natural 500ml" data-preco="9.00">
+                    <i class="fa fa-shopping-cart"></i> Add
+                </button>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<!-- MODAL CARRINHO - COM CEP E PREENCHIMENTO AUTOMÁTICO -->
+<!-- ==================== CARRINHO E FINALIZAÇÃO ==================== -->
 <div id="modal-carrinho" class="oculto">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
@@ -633,7 +746,6 @@
         <div id="lista-itens-carrinho"></div>
         <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
 
-        <!-- Forma de recebimento -->
         <div class="form-grupo">
             <label>Forma de recebimento</label>
             <select id="tipo-atendimento">
@@ -642,47 +754,40 @@
             </select>
         </div>
 
-        <!-- Taxa de entrega -->
         <div id="campo-taxa-entrega" class="form-grupo oculto">
             <label>Taxa de entrega</label>
             <input type="text" id="taxa-entrega" value="6,00" readonly style="background: #f8f8f8;">
         </div>
 
-        <!-- Dados do cliente -->
         <div class="form-grupo">
             <label>Nome completo</label>
             <input type="text" id="nome-cliente" placeholder="Digite seu nome">
         </div>
 
-        <!-- Campos de endereço - só aparece quando for entrega -->
         <div id="bloco-endereco" class="oculto">
             <div class="form-grupo">
                 <label>CEP</label>
-                <input type="text" id="cep" placeholder="Ex: 28300-000" maxlength="9">
+                <input type="text" id="cep" placeholder="Ex: 00000-000" maxlength="9">
                 <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
             </div>
-
             <div class="form-duplo">
                 <div class="form-grupo">
                     <label>Número</label>
-                    <input type="text" id="numero" placeholder="Ex: 344">
+                    <input type="text" id="numero" placeholder="Ex: 123">
                 </div>
                 <div class="form-grupo">
                     <label>Complemento</label>
-                    <input type="text" id="complemento" placeholder="Ex: Apto 2, Casa">
+                    <input type="text" id="complemento" placeholder="Ex: Apto 1">
                 </div>
             </div>
-
             <div class="form-grupo">
                 <label>Referência</label>
                 <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
             </div>
-
             <div class="form-grupo">
                 <label>Rua / Logradouro</label>
                 <input type="text" id="rua" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
             </div>
-
             <div class="form-duplo">
                 <div class="form-grupo">
                     <label>Bairro</label>
@@ -718,7 +823,7 @@
     </div>
 </div>
 
-<!-- ALERTA FECHADO -->
+<!-- ==================== OUTROS ELEMENTOS ==================== -->
 <div id="alerta-fechado" class="oculto">
     <div class="alerta-caixa">
         <h3>Loja Fechada</h3>
@@ -727,7 +832,6 @@
     </div>
 </div>
 
-<!-- CARRINHO FIXO -->
 <div class="carrinho-fixo" id="carrinho-container">
     <div class="carrinho-conteudo">
         <div class="carrinho-esq">
@@ -741,6 +845,7 @@
     </div>
 </div>
 
+<!-- ==================== ARQUIVO DE FUNÇÕES ==================== -->
 <script src="script.js"></script>
 </body>
 </html>
