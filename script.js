@@ -16,7 +16,7 @@ const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
 // Horário de funcionamento
-const HORA_ABERTURA = 22;
+const HORA_ABERTURA = 23;
 const HORA_FECHAMENTO = 6;
 
 // ---------------- STATUS DA LOJA - CORRIGIDO ----------------
