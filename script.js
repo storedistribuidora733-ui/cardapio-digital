@@ -1,6 +1,23 @@
+// ==============================================
+// ⚙️ CONFIGURAÇÕES GERAIS — ALTERE APENAS AQUI
+// ==============================================
+const CONFIG = {
+  // Horário de funcionamento (formato 0-23)
+  horaAbertura: 23,
+  horaFechamento: 6,
+  textoStatusAberto: "Aberto até às 06:00",
+  textoStatusFechado: "Fechado",
+  corStatusAberto: "#22c55e",
+  corStatusFechado: "#dc2626",
+  numeroWhatsApp: "5519989021323",
+  nomeLoja: "ALISON BURGER"
+};
+
+// ==============================================
+// 🛒 VARIÁVEIS ELEMENTOS DA PÁGINA
+// ==============================================
 const carrinho = [];
 
-// Elementos gerais
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
 const fecharModalBtns = [document.getElementById('fechar-modal'), document.getElementById('btn-fechar')];
@@ -15,227 +32,257 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
-// Horário de funcionamento
-const HORA_ABERTURA = 23;
-const HORA_FECHAMENTO = 6;
-
-// ---------------- STATUS DA LOJA - CORRIGIDO ----------------
+// ==============================================
+// 🕒 VERIFICAR SE A LOJA ESTÁ ABERTA
+// ==============================================
 function verificarStatusLoja(mostrarAviso = false) {
-    const agora = new Date();
-    const hora = agora.getHours();
-    const totalMinutos = hora * 60 + agora.getMinutes();
-    const aberturaMin = HORA_ABERTURA * 60;
-    const fechamentoMin = HORA_FECHAMENTO * 60;
-    const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
+  const agora = new Date();
+  const horaAtual = agora.getHours();
 
-    if (aberta) {
-        pontoStatusEl.style.backgroundColor = "#22c55e";
-        textoStatusEl.textContent = "Aberto até às 22:00";
-        textoStatusEl.classList.remove("fechado");
-        textoStatusEl.classList.add("aberto");
-    } else {
-        pontoStatusEl.style.backgroundColor = "#dc2626";
-        textoStatusEl.textContent = "Fechado";
-        textoStatusEl.classList.remove("aberto");
-        textoStatusEl.classList.add("fechado");
-    }
+  // Lógica corrigida para horário que passa da meia-noite
+  const lojaAberta = horaAtual >= CONFIG.horaAbertura || horaAtual < CONFIG.horaFechamento;
 
-    if (!aberta && mostrarAviso) alertaFechado.classList.remove("oculto");
-    return aberta;
+  if (lojaAberta) {
+    pontoStatusEl.style.backgroundColor = CONFIG.corStatusAberto;
+    textoStatusEl.textContent = CONFIG.textoStatusAberto;
+    textoStatusEl.classList.remove("fechado");
+    textoStatusEl.classList.add("aberto");
+  } else {
+    pontoStatusEl.style.backgroundColor = CONFIG.corStatusFechado;
+    textoStatusEl.textContent = CONFIG.textoStatusFechado;
+    textoStatusEl.classList.remove("aberto");
+    textoStatusEl.classList.add("fechado");
+  }
+
+  // Mostra aviso se solicitado
+  if (!lojaAberta && mostrarAviso) {
+    alertaFechado.classList.remove("oculto");
+  }
+
+  return lojaAberta;
 }
 
+// Verifica status ao carregar e a cada 1 minuto
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 
+// Botão para fechar aviso de loja fechada
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
-// ---------------- CONTROLE DE QUANTIDADE ----------------
+// ==============================================
+// ➕ / ➖ CONTROLE DE QUANTIDADE DOS PRODUTOS
+// ==============================================
 document.querySelectorAll('.qtd-btn').forEach(botao => {
-    botao.addEventListener('click', () => {
-        const valorEl = botao.parentElement.querySelector('.qtd-valor');
-        let valor = parseInt(valorEl.textContent);
-        if (botao.classList.contains('aumentar')) valor++;
-        if (botao.classList.contains('diminuir') && valor > 0) valor--;
-        valorEl.textContent = valor;
-    });
+  botao.addEventListener('click', () => {
+    const valorEl = botao.parentElement.querySelector('.qtd-valor');
+    let valor = parseInt(valorEl.textContent);
+
+    if (botao.classList.contains('aumentar')) valor++;
+    if (botao.classList.contains('diminuir') && valor > 0) valor--;
+
+    valorEl.textContent = valor;
+  });
 });
 
-// ---------------- ADICIONAR AO CARRINHO ----------------
+// ==============================================
+// 🛍️ ADICIONAR PRODUTO AO CARRINHO
+// ==============================================
 document.querySelectorAll('.add-carrinho').forEach(botao => {
-    botao.addEventListener('click', () => {
-        if (!verificarStatusLoja(true)) return;
+  botao.addEventListener('click', () => {
+    // Não deixa adicionar se loja estiver fechada
+    if (!verificarStatusLoja(true)) return;
 
-        const nome = botao.dataset.nome;
-        const preco = parseFloat(botao.dataset.preco);
-        const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
+    const nome = botao.dataset.nome;
+    const preco = parseFloat(botao.dataset.preco);
+    const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
 
-        if (qtd <= 0) {
-            alert('Escolha uma quantidade antes de adicionar!');
-            return;
-        }
-
-        const itemExistente = carrinho.find(item => item.nome === nome);
-        if (itemExistente) {
-            itemExistente.quantidade += qtd;
-        } else {
-            carrinho.push({ nome, preco, quantidade: qtd });
-        }
-
-        atualizarCarrinho();
-
-        botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
-
-        const original = botao.innerHTML;
-        botao.innerHTML = '<i class="fa fa-check"></i> Ok';
-        botao.style.background = '#22c55e';
-        botao.style.color = 'white';
-        setTimeout(() => {
-            botao.innerHTML = original;
-            botao.style.background = '#facc15';
-            botao.style.color = '#111827';
-        }, 1100);
-    });
-});
-
-// ---------------- ATUALIZAR CARRINHO ----------------
-function atualizarCarrinho() {
-    listaItensCarrinho.innerHTML = '';
-    let total = 0;
-    let qtdTotal = 0;
-
-    if (carrinho.length === 0) {
-        valorTotalEl.textContent = '0.00';
-        carrinhoContainer.style.display = 'none';
-        return;
+    if (qtd <= 0) {
+      alert('Escolha uma quantidade antes de adicionar!');
+      return;
     }
 
-    carrinhoContainer.style.display = 'flex';
+    // Verifica se o item já existe para somar quantidade
+    const itemExistente = carrinho.find(item => item.nome === nome);
+    if (itemExistente) {
+      itemExistente.quantidade += qtd;
+    } else {
+      carrinho.push({ nome, preco, quantidade: qtd });
+    }
 
-    carrinho.forEach((item, index) => {
-        const totalItem = item.preco * item.quantidade;
-        total += totalItem;
-        qtdTotal += item.quantidadeTotal += item.quantidade;
+    atualizarCarrinho();
 
-        const itemEl = document.createElement('div');
-        itemEl.className = 'item-carrinho';
-        itemEl.innerHTML = `
-            <div>
-                <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
-                <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-                <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-                <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
-                <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-                <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2)}</span>
-            </div>
-        `;
-        listaItensCarrinho.appendChild(itemEl);
-    });
+    // Zera a quantidade depois de adicionar
+    botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
 
-    valorTotalEl.textContent = total.toFixed(2);
-    qtdCarrinhoEl.textContent = qtdTotal;
-    resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+    // Feedback visual no botão
+    const original = botao.innerHTML;
+    botao.innerHTML = '<i class="fa fa-check"></i> Ok';
+    botao.style.background = '#22c55e';
+    botao.style.color = 'white';
 
-    adicionarEventosCarrinho();
+    setTimeout(() => {
+      botao.innerHTML = original;
+      botao.style.background = '#facc15';
+      botao.style.color = '#111827';
+    }, 1100);
+  });
+});
+
+// ==============================================
+// 🔄 ATUALIZAR TELA DO CARRINHO
+// ==============================================
+function atualizarCarrinho() {
+  listaItensCarrinho.innerHTML = '';
+  let total = 0;
+  let qtdTotal = 0;
+
+  if (carrinho.length === 0) {
+    valorTotalEl.textContent = '0.00';
+    carrinhoContainer.style.display = 'none';
+    return;
+  }
+
+  carrinhoContainer.style.display = 'flex';
+
+  carrinho.forEach((item, index) => {
+    const totalItem = item.preco * item.quantidade;
+    total += totalItem;
+    qtdTotal += item.quantidade; // Linha corrigida!
+
+    const itemEl = document.createElement('div');
+    itemEl.className = 'item-carrinho';
+    itemEl.innerHTML = `
+      <div>
+        <h4 style="font-size:14px; margin-bottom:3px;">${item.nome}</h4>
+        <p style="font-size:11px; color:#666;">R$ ${item.preco.toFixed(2)} cada</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
+        <span style="font-weight:600; font-size:14px;">${item.quantidade}</span>
+        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
+        <span style="font-weight:700; min-width:75px; text-align:right; font-size:14px;">R$ ${totalItem.toFixed(2)}</span>
+      </div>
+    `;
+    listaItensCarrinho.appendChild(itemEl);
+  });
+
+  valorTotalEl.textContent = total.toFixed(2);
+  qtdCarrinhoEl.textContent = qtdTotal;
+  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+
+  adicionarEventosCarrinho();
 }
 
+// ==============================================
+// ➕ / ➖ ALTERAR QUANTIDADE DENTRO DO CARRINHO
+// ==============================================
 function adicionarEventosCarrinho() {
-    document.querySelectorAll('.aumentar-item').forEach(botao => {
-        botao.addEventListener('click', () => {
-            const idx = parseInt(botao.dataset.index);
-            carrinho[idx].quantidade++;
-            atualizarCarrinho();
-        });
+  document.querySelectorAll('.aumentar-item').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const idx = parseInt(botao.dataset.index);
+      carrinho[idx].quantidade++;
+      atualizarCarrinho();
     });
-    document.querySelectorAll('.diminuir-item').forEach(botao => {
-        botao.addEventListener('click', () => {
-            const idx = parseInt(botao.dataset.index);
-            if (carrinho[idx].quantidade > 1) {
-                carrinho[idx].quantidade--;
-            } else {
-                carrinho.splice(idx, 1);
-            }
-            atualizarCarrinho();
-        });
+  });
+
+  document.querySelectorAll('.diminuir-item').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const idx = parseInt(botao.dataset.index);
+      if (carrinho[idx].quantidade > 1) {
+        carrinho[idx].quantidade--;
+      } else {
+        carrinho.splice(idx, 1);
+      }
+      atualizarCarrinho();
     });
+  });
 }
 
-// ---------------- ABRIR / FECHAR MODAL ----------------
+// ==============================================
+// 📂 ABRIR E FECHAR MODAL DO CARRINHO
+// ==============================================
 abrirCarrinhoBtn.addEventListener('click', () => {
-    if (carrinho.length === 0) return;
-    if (!verificarStatusLoja(true)) return;
-    modalCarrinho.classList.remove('oculto');
-    document.body.style.overflow = 'hidden';
+  if (carrinho.length === 0) return;
+  if (!verificarStatusLoja(true)) return;
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
 });
 
 fecharModalBtns.forEach(botao => {
-    botao.addEventListener('click', () => {
-        modalCarrinho.classList.add('oculto');
-        document.body.style.overflow = 'auto';
-    });
+  botao.addEventListener('click', () => {
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+  });
 });
 
-// ---------------- FILTRO POR CATEGORIAS ----------------
+// ==============================================
+// 🗂️ FILTRAR PRODUTOS POR CATEGORIA
+// ==============================================
 document.querySelectorAll('.categoria-btn').forEach(botao => {
-    botao.addEventListener('click', () => {
-        document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
-        botao.classList.add('ativo');
-        const categoria = botao.dataset.categoria;
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    const categoria = botao.dataset.categoria;
 
-        document.querySelectorAll('.produto').forEach(produto => {
-            if (categoria === 'todos' || produto.dataset.categoria === categoria) {
-                produto.style.display = 'grid';
-            } else {
-                produto.style.display = 'none';
-            }
-        });
-        campoBusca.value = '';
-    });
-});
-
-// ---------------- BUSCA DE PRODUTOS ----------------
-campoBusca.addEventListener('input', () => {
-    const termo = campoBusca.value.toLowerCase().trim();
     document.querySelectorAll('.produto').forEach(produto => {
-        const nome = produto.dataset.nome.toLowerCase();
-        produto.style.display = nome.includes(termo) ? 'grid' : 'none';
+      if (categoria === 'todos' || produto.dataset.categoria === categoria) {
+        produto.style.display = 'grid';
+      } else {
+        produto.style.display = 'none';
+      }
     });
+
+    campoBusca.value = '';
+  });
 });
 
-// ---------------- FINALIZAR PEDIDO NO WHATSAPP ----------------
+// ==============================================
+// 🔍 BUSCAR PRODUTOS PELO NOME
+// ==============================================
+campoBusca.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(produto => {
+    const nome = produto.dataset.nome.toLowerCase();
+    produto.style.display = nome.includes(termo) ? 'grid' : 'none';
+  });
+});
+
+// ==============================================
+// 📤 FINALIZAR PEDIDO NO WHATSAPP
+// ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
-    const nome = document.getElementById('nome-cliente').value.trim();
-    const endereco = document.getElementById('endereco-cliente').value.trim();
-    const pagamento = document.getElementById('forma-pagamento').value;
-    const obs = document.getElementById('observacoes').value.trim();
-    const avisoEndereco = document.getElementById('aviso-endereco');
+  const nome = document.getElementById('nome-cliente').value.trim();
+  const endereco = document.getElementById('endereco-cliente').value.trim();
+  const pagamento = document.getElementById('forma-pagamento').value;
+  const obs = document.getElementById('observacoes').value.trim();
+  const avisoEndereco = document.getElementById('aviso-endereco');
 
-    if (carrinho.length === 0) {
-        alert('Adicione itens ao carrinho primeiro!');
-        return;
-    }
+  if (carrinho.length === 0) {
+    alert('Adicione itens ao carrinho primeiro!');
+    return;
+  }
 
-    if (endereco.length < 8) {
-        avisoEndereco.classList.remove('oculto');
-        return;
-    }
-    avisoEndereco.classList.add('oculto');
+  if (endereco.length < 8) {
+    avisoEndereco.classList.remove('oculto');
+    return;
+  }
+  avisoEndereco.classList.add('oculto');
 
-    let mensagem = `📦 *NOVO PEDIDO - ALISON BURGER*\n\n`;
-    mensagem += `👤 *Nome:* ${nome || 'Não informado'}\n`;
-    mensagem += `🏠 *Endereço:* ${endereco}\n`;
-    mensagem += `💳 *Forma de pagamento:* ${pagamento}\n\n`;
-    mensagem += `🛒 *Itens do pedido:*\n`;
+  // Monta mensagem formatada
+  let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
+  mensagem += `👤 *Nome:* ${nome || 'Não informado'}\n`;
+  mensagem += `🏠 *Endereço:* ${endereco}\n`;
+  mensagem += `💳 *Forma de pagamento:* ${pagamento}\n\n`;
+  mensagem += `🛒 *Itens do pedido:*\n`;
 
-    carrinho.forEach(item => {
-        mensagem += `• ${item.nome} | ${item.quantidade}x | R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
-    });
+  carrinho.forEach(item => {
+    mensagem += `• ${item.nome} | ${item.quantidade}x | R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
+  });
 
-    mensagem += `\n💬 *Observações:* ${obs || 'Nenhuma observação'}\n`;
-    mensagem += `💰 *Total:* R$ ${valorTotalEl.textContent}`;
+  mensagem += `\n💬 *Observações:* ${obs || 'Nenhuma observação'}\n`;
+  mensagem += `💰 *Total:* R$ ${valorTotalEl.textContent}`;
 
-    const numeroWhatsApp = '5519989021323';
-    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-    window.open(url, '_blank');
-}); 
+  // Abre WhatsApp
+  const url = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, '_blank');
+});
