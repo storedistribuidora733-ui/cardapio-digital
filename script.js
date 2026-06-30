@@ -312,4 +312,4 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
 
   const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
-});
+}); 
