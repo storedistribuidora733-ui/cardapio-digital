@@ -90,7 +90,7 @@
             color: #111;
         }
 
-        /* ---------------- LISTA DE PRODUTOS - AGORA BEM MENOR ---------------- */
+        /* ---------------- LISTA DE PRODUTOS ---------------- */
         .container {
             width: 100%;
             padding: 0 12px;
@@ -99,7 +99,7 @@
         .lista-produtos {
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Menor espaço entre os produtos */
+            gap: 8px;
             margin: 10px 0;
         }
 
@@ -107,12 +107,12 @@
             background: #ffffff;
             border-radius: 8px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-            padding: 8px; /* Menor espaço interno */
+            padding: 8px;
             display: grid;
-            grid-template-columns: 65px 1fr auto; /* Imagem ainda menor */
+            grid-template-columns: 65px 1fr auto;
             gap: 10px;
-            align-items: center; /* Tudo alinhado ao centro */
-            min-height: 75px; /* Altura bem reduzida */
+            align-items: center;
+            min-height: 75px;
         }
 
         .produto-imagem {
@@ -167,7 +167,7 @@
             line-height: 1.2;
             margin: 0;
             display: -webkit-box;
-            -webkit-line-clamp: 1; /* Apenas 1 linha de descrição */
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -210,6 +210,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
 
         .qtd-valor {
@@ -237,6 +238,7 @@
             align-items: center;
             justify-content: center;
             gap: 2px;
+            cursor: pointer;
         }
 
         /* ---------------- RODAPÉ CARRINHO ---------------- */
@@ -282,6 +284,9 @@
             font-size: 13px;
         }
 
+        /* Classe para esconder elementos */
+        .oculto { display: none !important; }
+
         .texto-carrinho h4 { font-size: 14px; margin-bottom: 1px; }
         .texto-seguro { font-size: 11px; color: #9ca3af; }
 
@@ -295,7 +300,7 @@
             font-size: 12px;
         }
 
-        /* ---------------- RESTO DO CÓDIGO SEM ALTERAÇÃO ---------------- */
+        /* ---------------- RESTO ---------------- */
         #modal-carrinho {
             position: fixed;
             inset: 0;
@@ -415,8 +420,6 @@
             font-weight: 600;
             font-size: 12px;
         }
-
-        .oculto { display: none !important; }
     </style>
 </head>
 <body>
@@ -440,7 +443,7 @@
     <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
 </div>
 
-<!-- LISTA DE PRODUTOS - AGORA BEM COMPACTA -->
+<!-- LISTA DE PRODUTOS -->
 <div class="container">
     <div class="lista-produtos">
         <!-- PRODUTO 1 -->
@@ -462,7 +465,7 @@
                 <p class="produto-preco">R$ 10,00</p>
                 <div class="controle-qtd">
                     <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">1</span>
+                    <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Nome do produto 1" data-preco="10.00">
@@ -489,7 +492,7 @@
                 <p class="produto-preco">R$ 12,00</p>
                 <div class="controle-qtd">
                     <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">1</span>
+                    <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Nome do produto 2" data-preco="12.00">
@@ -516,7 +519,7 @@
                 <p class="produto-preco">R$ 15,00</p>
                 <div class="controle-qtd">
                     <button class="qtd-btn diminuir">-</button>
-                    <span class="qtd-valor">1</span>
+                    <span class="qtd-valor">0</span>
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Nome do produto 3" data-preco="15.00">
@@ -577,13 +580,13 @@
 <div class="carrinho-fixo">
     <button id="abrir-carrinho" class="carrinho-btn">
         <div class="carrinho-esq">
-            <span class="badge-qtd" id="qtd-carrinho">0</span>
+            <span class="badge-qtd oculto" id="qtd-carrinho">0</span>
             <div class="texto-carrinho">
                 <h4>Seu carrinho</h4>
-                <div class="texto-seguro">0 itens • R$ 0,00 | 🔒 Seguro</div>
+                <div class="texto-seguro">Nenhum item adicionado</div>
             </div>
         </div>
-        <div class="btn-ver-carrinho">Ver →</div>
+        <div class="btn-ver-carrinho oculto">Ver →</div>
     </button>
 </div>
 
