@@ -1,5 +1,5 @@
 // ==============================================
-// ⚙️ CONFIGURAÇÕES — AJUSTE OS HORÁRIOS AQUI
+// ⚙️ CONFIGURAÇÕES — AJUSTE AQUI SE PRECISAR
 // ==============================================
 const CONFIG = {
   horaAbertura: 23,       // 23h = 23:00
@@ -14,11 +14,10 @@ const CONFIG = {
 };
 
 // ==============================================
-// 🛒 VARIÁVEIS GERAIS
+// 🛒 VARIÁVEIS ELEMENTOS
 // ==============================================
 const carrinho = [];
 
-// Elementos da página
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
 const fecharModalBtns = [document.getElementById('fechar-modal'), document.getElementById('btn-fechar')];
@@ -34,14 +33,25 @@ const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
 const nomeEl = document.getElementById('nome-cliente');
-const enderecoEl = document.getElementById('endereco-cliente');
-const avisoEndereco = document.getElementById('aviso-endereco');
-const pagamentoEl = document.getElementById('forma-pagamento');
-const obsEl = document.getElementById('observacoes');
+const avisoGeral = document.getElementById('aviso-geral');
 
 const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
 const campoTaxaEntregaEl = document.getElementById('campo-taxa-entrega');
+const blocoEnderecoEl = document.getElementById('bloco-endereco');
 const taxaEntregaEl = document.getElementById('taxa-entrega');
+
+// Campos de endereço
+const cepEl = document.getElementById('cep');
+const numeroEl = document.getElementById('numero');
+const complementoEl = document.getElementById('complemento');
+const referenciaEl = document.getElementById('referencia');
+const ruaEl = document.getElementById('rua');
+const bairroEl = document.getElementById('bairro');
+const cidadeUfEl = document.getElementById('cidade-uf');
+const avisoCepEl = document.getElementById('aviso-cep');
+
+const pagamentoEl = document.getElementById('forma-pagamento');
+const obsEl = document.getElementById('observacoes');
 
 // ==============================================
 // 🚀 CONTROLE ENTREGA / RETIRADA
@@ -49,17 +59,73 @@ const taxaEntregaEl = document.getElementById('taxa-entrega');
 tipoAtendimentoEl.addEventListener('change', () => {
   if (tipoAtendimentoEl.value === 'entrega') {
     campoTaxaEntregaEl.classList.remove('oculto');
+    blocoEnderecoEl.classList.remove('oculto');
     taxaEntregaEl.value = CONFIG.taxaEntregaPadrao.toFixed(2).replace('.', ',');
-    enderecoEl.disabled = false;
-    enderecoEl.placeholder = "Rua, número, bairro, cidade";
   } else {
     campoTaxaEntregaEl.classList.add('oculto');
+    blocoEnderecoEl.classList.add('oculto');
     taxaEntregaEl.value = '0,00';
-    enderecoEl.disabled = true;
-    enderecoEl.value = '';
-    enderecoEl.placeholder = "Não necessário para retirada";
+    limparCamposEndereco();
   }
 });
+
+// ==============================================
+// 🔍 BUSCA DE CEP E PREENCHIMENTO AUTOMÁTICO
+// ==============================================
+cepEl.addEventListener('input', () => {
+  let cep = cepEl.value.replace(/\D/g, '');
+  if (cep.length > 5) cep = cep.replace(/^(\d{5})(\d)/, '$1-$2');
+  cepEl.value = cep;
+});
+
+cepEl.addEventListener('blur', async () => {
+  const cepNumeros = cepEl.value.replace(/\D/g, '');
+  if (cepNumeros.length !== 8) {
+    avisoCepEl.textContent = 'CEP inválido! Digite 8 dígitos.';
+    avisoCepEl.style.color = '#dc2626';
+    limparCamposEndereco();
+    return;
+  }
+
+  avisoCepEl.textContent = 'Buscando endereço...';
+  avisoCepEl.style.color = '#2563eb';
+
+  try {
+    const resposta = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
+    const dados = await resposta.json();
+
+    if (dados.erro) {
+      avisoCepEl.textContent = 'CEP não encontrado!';
+      avisoCepEl.style.color = '#dc2626';
+      limparCamposEndereco();
+      return;
+    }
+
+    // Preenche os campos automaticamente
+    ruaEl.value = dados.logradouro || '';
+    bairroEl.value = dados.bairro || '';
+    cidadeUfEl.value = `${dados.localidade} / ${dados.uf}`;
+    avisoCepEl.textContent = 'Endereço preenchido!';
+    avisoCepEl.style.color = '#22c55e';
+
+  } catch (erro) {
+    avisoCepEl.textContent = 'Erro ao buscar CEP. Tente novamente.';
+    avisoCepEl.style.color = '#dc2626';
+    limparCamposEndereco();
+  }
+});
+
+function limparCamposEndereco() {
+  cepEl.value = '';
+  numeroEl.value = '';
+  complementoEl.value = '';
+  referenciaEl.value = '';
+  ruaEl.value = '';
+  bairroEl.value = '';
+  cidadeUfEl.value = '';
+  avisoCepEl.textContent = 'Digite o CEP para preencher automaticamente';
+  avisoCepEl.style.color = '#2563eb';
+}
 
 // ==============================================
 // 🕒 STATUS DA LOJA — FUNCIONANDO 100%
@@ -85,7 +151,6 @@ function verificarStatusLoja(mostrarAviso = false) {
   return lojaAberta;
 }
 
-// Executa na hora que carrega e atualiza a cada 1 minuto
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
@@ -215,6 +280,7 @@ abrirCarrinhoBtn.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
   modalCarrinho.classList.remove('oculto');
   document.body.style.overflow = 'hidden';
+  avisoGeral.classList.add('oculto');
 });
 
 fecharModalBtns.forEach(botao => {
@@ -249,11 +315,11 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO
+// ✅ FINALIZAR PEDIDO E ENVIAR PARA WHATSAPP
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
+  avisoGeral.classList.add('oculto');
   const nome = nomeEl.value.trim();
-  const endereco = enderecoEl.value.trim();
   const pagamento = pagamentoEl.value;
   const obs = obsEl.value.trim();
 
@@ -262,35 +328,61 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   const totalItens = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
   const totalGeral = totalItens + taxaEntrega;
 
+  // Validações básicas
   if (carrinho.length === 0) {
-    alert('Adicione pelo menos um produto antes de finalizar!');
+    avisoGeral.textContent = 'Adicione pelo menos um produto!';
+    avisoGeral.classList.remove('oculto');
     return;
   }
-
   if (!nome) {
-    avisoEndereco.textContent = '⚠️ Informe o nome do cliente!';
-    avisoEndereco.classList.remove('oculto');
+    avisoGeral.textContent = 'Informe seu nome completo!';
+    avisoGeral.classList.remove('oculto');
     return;
   }
 
-  if (tipoAtendimento === 'entrega' && !endereco) {
-    avisoEndereco.textContent = '⚠️ Para entrega, informe o endereço completo!';
-    avisoEndereco.classList.remove('oculto');
-    return;
+  // Validações específicas para entrega
+  if (tipoAtendimento === 'entrega') {
+    const cep = cepEl.value.trim();
+    const numero = numeroEl.value.trim();
+    const rua = ruaEl.value.trim();
+
+    if (!cep || cep.replace(/\D/g, '').length !== 8) {
+      avisoGeral.textContent = 'Informe um CEP válido!';
+      avisoGeral.classList.remove('oculto');
+      return;
+    }
+    if (!rua) {
+      avisoGeral.textContent = 'Digite o CEP e aguarde o preenchimento do endereço!';
+      avisoGeral.classList.remove('oculto');
+      return;
+    }
+    if (!numero) {
+      avisoGeral.textContent = 'Informe o número da residência!';
+      avisoGeral.classList.remove('oculto');
+      return;
+    }
   }
 
-  avisoEndereco.classList.add('oculto');
+  // Monta o endereço completo
+  let enderecoCompleto = '';
+  if (tipoAtendimento === 'entrega') {
+    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
+    if (complementoEl.value.trim()) enderecoCompleto += ` - ${complementoEl.value.trim()}`;
+    enderecoCompleto += ` | Bairro: ${bairroEl.value} | ${cidadeUfEl.value} | CEP: ${cepEl.value}`;
+    if (referenciaEl.value.trim()) enderecoCompleto += ` | Referência: ${referenciaEl.value.trim()}`;
+  }
 
+  // Monta mensagem do WhatsApp
   let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
   mensagem += `📋 *Tipo:* ${tipoAtendimento === 'entrega' ? 'Entrega em domicílio' : 'Retirada na loja'}\n`;
   mensagem += `👤 *Nome:* ${nome}\n`;
 
   if (tipoAtendimento === 'entrega') {
-    mensagem += `🏠 *Endereço:* ${endereco}\n`;
+    mensagem += `🏠 *Endereço:* ${enderecoCompleto}\n`;
   }
 
   mensagem += `\n💳 *Forma de pagamento:* ${pagamento}\n\n`;
-  mensagem += `🛒 *Itens:*\n`;
+  mensagem += `🛒 *Itens do pedido:*\n`;
 
   carrinho.forEach(item => {
     mensagem += `• ${item.nome} | ${item.quantidade}x | R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
@@ -305,6 +397,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
 
   mensagem += `💰 *TOTAL GERAL:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
 
+  // Abre o WhatsApp
   const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
 });
