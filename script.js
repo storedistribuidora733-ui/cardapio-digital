@@ -8,12 +8,12 @@ const CONFIG = {
   textoStatusFechado: "Fechado",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
-  numeroWhatsApp: "5519989021323",
+  numeroWhatsApp: "5519989021323", // ✅ Seu número correto
   nomeLoja: "ALISON BURGER"
 };
 
 // ==============================================
-// 🛒 VARIÁVEIS ELEMENTOS DA PÁGINA
+// 🛒 ELEMENTOS DA PÁGINA
 // ==============================================
 const carrinho = [];
 
@@ -31,14 +31,53 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
+// Campos do endereço
+const cepEl = document.getElementById('cep-cliente');
+const ruaEl = document.getElementById('rua-cliente');
+const bairroEl = document.getElementById('bairro-cliente');
+const cidadeEl = document.getElementById('cidade-cliente');
+const ufEl = document.getElementById('uf-cliente');
+const avisoEndereco = document.getElementById('aviso-endereco');
+
 // ==============================================
-// 🕒 VERIFICAR SE A LOJA ESTÁ ABERTA
+// 🚀 FUNÇÃO BUSCAR CEP AUTOMÁTICA
+// ==============================================
+async function buscarCEP(cep) {
+  cep = cep.replace(/\D/g, ''); // Remove tudo que não é número
+  if (cep.length !== 8) return;
+
+  try {
+    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const dados = await resposta.json();
+
+    if (dados.erro) {
+      avisoEndereco.textContent = '❌ CEP não encontrado!';
+      avisoEndereco.classList.remove('oculto');
+      return;
+    }
+
+    // Preenche os campos automaticamente
+    ruaEl.value = dados.logradouro || '';
+    bairroEl.value = dados.bairro || '';
+    cidadeEl.value = dados.localidade || '';
+    ufEl.value = dados.uf || '';
+    avisoEndereco.classList.add('oculto');
+
+  } catch (erro) {
+    avisoEndereco.textContent = '⚠️ Erro ao buscar CEP, preencha manualmente.';
+    avisoEndereco.classList.remove('oculto');
+  }
+}
+
+// Ativa a busca quando o usuário digita o CEP e sai do campo
+cepEl.addEventListener('blur', () => buscarCEP(cepEl.value));
+
+// ==============================================
+// 🕒 VERIFICAR STATUS DA LOJA
 // ==============================================
 function verificarStatusLoja(mostrarAviso = false) {
   const agora = new Date();
   const horaAtual = agora.getHours();
-
-  // Lógica corrigida para horário que passa da meia-noite
   const lojaAberta = horaAtual >= CONFIG.horaAbertura || horaAtual < CONFIG.horaFechamento;
 
   if (lojaAberta) {
@@ -53,35 +92,29 @@ function verificarStatusLoja(mostrarAviso = false) {
     textoStatusEl.classList.add("fechado");
   }
 
-  if (!lojaAberta && mostrarAviso) {
-    alertaFechado.classList.remove("oculto");
-  }
-
+  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
   return lojaAberta;
 }
 
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
-
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ==============================================
-// ➕ / ➖ CONTROLE DE QUANTIDADE DOS PRODUTOS
+// ➕ / ➖ CONTROLE DE QUANTIDADE
 // ==============================================
 document.querySelectorAll('.qtd-btn').forEach(botao => {
   botao.addEventListener('click', () => {
     const valorEl = botao.parentElement.querySelector('.qtd-valor');
     let valor = parseInt(valorEl.textContent);
-
     if (botao.classList.contains('aumentar')) valor++;
     if (botao.classList.contains('diminuir') && valor > 0) valor--;
-
     valorEl.textContent = valor;
   });
 });
 
 // ==============================================
-// 🛍️ ADICIONAR PRODUTO AO CARRINHO
+// 🛍️ ADICIONAR AO CARRINHO
 // ==============================================
 document.querySelectorAll('.add-carrinho').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -104,14 +137,12 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
     }
 
     atualizarCarrinho();
-
     botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
 
     const original = botao.innerHTML;
     botao.innerHTML = '<i class="fa fa-check"></i> Ok';
     botao.style.background = '#22c55e';
     botao.style.color = 'white';
-
     setTimeout(() => {
       botao.innerHTML = original;
       botao.style.background = '#facc15';
@@ -121,7 +152,7 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
 });
 
 // ==============================================
-// 🔄 ATUALIZAR TELA DO CARRINHO
+// 🔄 ATUALIZAR CARRINHO
 // ==============================================
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
@@ -165,9 +196,6 @@ function atualizarCarrinho() {
   adicionarEventosCarrinho();
 }
 
-// ==============================================
-// ➕ / ➖ ALTERAR QUANTIDADE DENTRO DO CARRINHO
-// ==============================================
 function adicionarEventosCarrinho() {
   document.querySelectorAll('.aumentar-item').forEach(botao => {
     botao.addEventListener('click', () => {
@@ -176,7 +204,6 @@ function adicionarEventosCarrinho() {
       atualizarCarrinho();
     });
   });
-
   document.querySelectorAll('.diminuir-item').forEach(botao => {
     botao.addEventListener('click', () => {
       const idx = parseInt(botao.dataset.index);
@@ -208,7 +235,7 @@ fecharModalBtns.forEach(botao => {
 });
 
 // ==============================================
-// 🗂️ FILTRAR PRODUTOS POR CATEGORIA
+// 🗂️ FILTRAR POR CATEGORIA
 // ==============================================
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -217,19 +244,14 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
     const categoria = botao.dataset.categoria;
 
     document.querySelectorAll('.produto').forEach(produto => {
-      if (categoria === 'todos' || produto.dataset.categoria === categoria) {
-        produto.style.display = 'grid';
-      } else {
-        produto.style.display = 'none';
-      }
+      produto.style.display = (categoria === 'todos' || produto.dataset.categoria === categoria) ? 'grid' : 'none';
     });
-
     campoBusca.value = '';
   });
 });
 
 // ==============================================
-// 🔍 BUSCAR PRODUTOS PELO NOME
+// 🔍 BUSCAR PRODUTOS
 // ==============================================
 campoBusca.addEventListener('input', () => {
   const termo = campoBusca.value.toLowerCase().trim();
@@ -240,36 +262,34 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// 📤 FINALIZAR PEDIDO NO WHATSAPP
+// ✅ FINALIZAR PEDIDO — CORRIGIDO E FUNCIONANDO
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
   const nome = document.getElementById('nome-cliente').value.trim();
-  const cep = document.getElementById('cep-cliente').value.trim();
+  const cep = cepEl.value.trim();
   const numero = document.getElementById('numero-cliente').value.trim();
   const semNumero = document.getElementById('sn-cliente').checked;
   const complemento = document.getElementById('complemento-cliente').value.trim();
   const referencia = document.getElementById('referencia-cliente').value.trim();
-  const rua = document.getElementById('rua-cliente').value.trim();
-  const bairro = document.getElementById('bairro-cliente').value.trim();
-  const cidade = document.getElementById('cidade-cliente').value.trim();
-  const uf = document.getElementById('uf-cliente').value.trim().toUpperCase();
+  const rua = ruaEl.value.trim();
+  const bairro = bairroEl.value.trim();
+  const cidade = cidadeEl.value.trim();
+  const uf = ufEl.value.trim().toUpperCase();
   const pagamento = document.getElementById('forma-pagamento').value;
   const obs = document.getElementById('observacoes').value.trim();
-  const avisoEndereco = document.getElementById('aviso-endereco');
 
   if (carrinho.length === 0) {
-    alert('Adicione itens ao carrinho primeiro!');
+    alert('Adicione pelo menos um produto antes de finalizar!');
     return;
   }
 
-  // Validação básica
   if (!nome || !rua || !bairro || !cidade || !uf || (!numero && !semNumero)) {
+    avisoEndereco.textContent = '⚠️ Preencha: Nome, Rua, Bairro, Cidade, UF e Número ou marque "Sem número"!';
     avisoEndereco.classList.remove('oculto');
     return;
   }
   avisoEndereco.classList.add('oculto');
 
-  // Monta o endereço completo
   let enderecoCompleto = `Rua: ${rua}`;
   enderecoCompleto += semNumero ? ' - S/N' : `, Nº ${numero}`;
   if (complemento) enderecoCompleto += ` | Complemento: ${complemento}`;
@@ -277,21 +297,19 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   enderecoCompleto += `\nBairro: ${bairro} | Cidade: ${cidade}/${uf}`;
   if (cep) enderecoCompleto += `\nCEP: ${cep}`;
 
-  // Monta mensagem formatada
   let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
   mensagem += `👤 *Nome:* ${nome}\n`;
   mensagem += `🏠 *Endereço:*\n${enderecoCompleto}\n\n`;
   mensagem += `💳 *Forma de pagamento:* ${pagamento}\n\n`;
-  mensagem += `🛒 *Itens do pedido:*\n`;
+  mensagem += `🛒 *Itens:*\n`;
 
   carrinho.forEach(item => {
     mensagem += `• ${item.nome} | ${item.quantidade}x | R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
   });
 
-  mensagem += `\n💬 *Observações:* ${obs || 'Nenhuma observação'}\n`;
-  mensagem += `💰 *Total:* R$ ${valorTotalEl.textContent}`;
+  mensagem += `\n💬 *Observações:* ${obs || 'Nenhuma'}\n`;
+  mensagem += `💰 *Total:* R$ ${valorTotalEl.textContent.replace('.', ',')}`;
 
-  // Abre WhatsApp
-  const url = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, '_blank');
+  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(urlWhatsApp, '_blank');
 });
