@@ -10,12 +10,12 @@ const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 const btnVerCarrinhoEl = document.querySelector('.btn-ver-carrinho');
-const textoStatusEl = document.getElementById('texto-status'); // Adaptado ao novo HTML
-const campoBusca = document.getElementById('campoBusca'); // Adicionado busca
+const textoStatusEl = document.getElementById('texto-status');
+const campoBusca = document.getElementById('campoBusca');
 
-// Horário de funcionamento — mantive o seu: 6h às 24h
+// Horário de funcionamento
 const HORA_ABERTURA = 6;
-const HORA_FECHAMENTO = 24;
+const HORA_FECHAMENTO = 22;
 
 // ---------------- STATUS DA LOJA ----------------
 function verificarStatusLoja(mostrarAviso = false) {
@@ -26,16 +26,14 @@ function verificarStatusLoja(mostrarAviso = false) {
     const fechamentoMin = HORA_FECHAMENTO * 60;
     const aberta = totalMinutos >= aberturaMin && totalMinutos < fechamentoMin;
 
-    // Atualiza o texto do status no novo layout
     if (textoStatusEl) {
-        textoStatusEl.textContent = aberta ? 'Aberto até às 24:00' : 'Fechado';
+        textoStatusEl.textContent = aberta ? 'Aberto até às 22:00' : 'Fechado';
     }
 
     if (!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
     return aberta;
 }
 
-// Executa na abertura da página e atualiza a cada 1 minuto
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 
@@ -75,10 +73,8 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
 
         atualizarCarrinho();
 
-        // Zera a quantidade após adicionar
         botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
 
-        // Feedback visual
         const original = botao.innerHTML;
         botao.innerHTML = '<i class="fa fa-check"></i> Adicionado';
         botao.style.background = '#22c55e';
@@ -189,7 +185,7 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
                 produto.style.display = 'none';
             }
         });
-        campoBusca.value = ''; // Limpa busca ao trocar categoria
+        campoBusca.value = '';
     });
 });
 
