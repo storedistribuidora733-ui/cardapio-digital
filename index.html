@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Estilos - Não precisa mexer aqui -->
+    <!-- Estilos -->
     <style>
         * {
             margin: 0;
@@ -50,51 +50,23 @@
         .texto-status.aberto { color: #22c55e !important; }
         .texto-status.fechado { color: #dc2626 !important; }
 
-        /* Cabeçalho */
+        /* Cabeçalho com BANNER */
         .cabecalho-banner {
             width: 100%;
+            height: auto;
+            min-height: 220px;
             background: #121212;
             position: relative;
-            padding: 32px 15px 16px;
-            text-align: center;
-            color: #facc15;
-        }
-        .logo-canto {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid #facc15;
-            object-fit: cover;
-        }
-        .marca h1 {
-            font-size: 38px;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 2px;
-        }
-        .marca p {
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-        .info-loja {
+            overflow: hidden;
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
-            gap: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #ffffff;
-            flex-wrap: wrap;
         }
-        .info-loja div {
-            display: flex;
-            align-items: center;
-            gap: 4px;
+        .imagem-banner {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
 
         /* Categorias */
@@ -457,6 +429,13 @@
             font-weight: 600;
             font-size: 12px;
         }
+
+        /* Ajuste para telas maiores */
+        @media (min-width: 768px) {
+            .cabecalho-banner {
+                min-height: 280px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -467,16 +446,9 @@
     <span id="texto-status" class="texto-status"></span>
 </div>
 
+<!-- ==================== BANNER PRINCIPAL ==================== -->
 <div class="cabecalho-banner">
-    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
-    <div class="marca">
-        <h1>ALISON</h1>
-        <p>★ BURGER ★</p>
-    </div>
-    <div class="info-loja">
-        <div><i class="fa fa-map-marker-alt"></i> NOME DA RUA, 123 - SUA CIDADE</div>
-        <div><i class="fa fa-motorcycle"></i> Entrega: 20-30 min &nbsp;&nbsp; | &nbsp;&nbsp; <i class="fa fa-credit-card"></i> Pagamento na entrega</div>
-    </div>
+    <img src="https://i.imgur.com/9J8qGzL.png" alt="Banner Alison Burger" class="imagem-banner">
 </div>
 
 <!-- ==================== CATEGORIAS ==================== -->
