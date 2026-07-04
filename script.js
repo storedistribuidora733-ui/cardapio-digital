@@ -9,8 +9,8 @@ const CONFIG = {
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
-  nomeLoja: "ALISON BURGER",
-  taxaEntregaPadrao: 6.00
+  nomeLoja: "Nome da loja",
+  taxaEntregaPadrao:8.00
 };
 
 // ==============================================
