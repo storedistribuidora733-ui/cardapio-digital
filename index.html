@@ -27,6 +27,15 @@
             line-height: 1.4;
         }
 
+        /* ==============================================
+           REGRA ADICIONADA: OCULTA SOMENTE O CABEÇALHO SUPERIOR
+           CATEGORIAS, BUSCA E TODO O RESTANTE FICAM VISÍVEIS!
+           ============================================== */
+        .status-topo,
+        .cabecalho-banner {
+            display: none !important;
+        }
+
         /* Status da Loja */
         .status-topo {
             position: absolute;
@@ -97,7 +106,7 @@
             gap: 4px;
         }
 
-        /* Categorias */
+        /* Categorias - MANTIDAS VISÍVEIS */
         .categorias {
             width: 100%;
             padding: 8px 12px;
@@ -129,7 +138,7 @@
             color: #111;
         }
 
-        /* Busca */
+        /* Busca - MANTIDA VISÍVEL */
         .busca {
             margin: 10px 12px;
             position: relative;
@@ -479,7 +488,7 @@
     </div>
 </div>
 
-<!-- ==================== CATEGORIAS ==================== -->
+<!-- ==================== CATEGORIAS - VISÍVEIS ==================== -->
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
     <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
@@ -488,7 +497,7 @@
     <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
 </div>
 
-<!-- ==================== CAMPO DE BUSCA ==================== -->
+<!-- ==================== CAMPO DE BUSCA - VISÍVEL ==================== -->
 <div class="busca">
     <i class="fa fa-search"></i>
     <input type="text" id="campoBusca" placeholder="Buscar produtos...">
@@ -860,4 +869,4 @@
 <!-- ==================== ARQUIVO DE FUNÇÕES ==================== -->
 <script src="script.js"></script>
 </body>
-</html> 
+</html>
