@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Estilos - Não precisa mexer aqui -->
     <style>
         * {
             margin: 0;
@@ -27,16 +26,11 @@
             line-height: 1.4;
         }
 
-        /* ==============================================
-           REGRA ADICIONADA: OCULTA SOMENTE O CABEÇALHO SUPERIOR
-           CATEGORIAS, BUSCA E TODO O RESTANTE FICAM VISÍVEIS!
-           ============================================== */
         .status-topo,
         .cabecalho-banner {
             display: none !important;
         }
 
-        /* Status da Loja */
         .status-topo {
             position: absolute;
             top: 10px;
@@ -59,7 +53,6 @@
         .texto-status.aberto { color: #22c55e !important; }
         .texto-status.fechado { color: #dc2626 !important; }
 
-        /* Cabeçalho */
         .cabecalho-banner {
             width: 100%;
             background: #121212;
@@ -106,7 +99,6 @@
             gap: 4px;
         }
 
-        /* Categorias - MANTIDAS VISÍVEIS */
         .categorias {
             width: 100%;
             padding: 8px 12px;
@@ -138,7 +130,6 @@
             color: #111;
         }
 
-        /* Busca - MANTIDA VISÍVEL */
         .busca {
             margin: 10px 12px;
             position: relative;
@@ -160,7 +151,6 @@
             font-size: 13px;
         }
 
-        /* Produtos */
         .container {
             width: 100%;
             padding: 0 12px;
@@ -289,7 +279,6 @@
             cursor: pointer;
         }
 
-        /* Carrinho e Modal */
         .carrinho-fixo {
             position: fixed;
             bottom: 0;
@@ -470,7 +459,6 @@
 </head>
 <body>
 
-<!-- ==================== INFORMAÇÕES DA LOJA ==================== -->
 <div class="status-topo">
     <span class="ponto-status" id="ponto-status"></span>
     <span id="texto-status" class="texto-status"></span>
@@ -488,7 +476,6 @@
     </div>
 </div>
 
-<!-- ==================== CATEGORIAS - VISÍVEIS ==================== -->
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
     <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
@@ -497,24 +484,21 @@
     <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
 </div>
 
-<!-- ==================== CAMPO DE BUSCA - VISÍVEL ==================== -->
 <div class="busca">
     <i class="fa fa-search"></i>
     <input type="text" id="campoBusca" placeholder="Buscar produtos...">
 </div>
 
-<!-- ==================== LISTA DE PRODUTOS ==================== -->
 <div class="container">
     <div class="lista-produtos">
 
-        <!-- 🔹 HAMBÚRGUERES -->
         <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples">
             <div class="produto-imagem">
                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Simples">
                 <span class="tag-mais-pedido">★ MAIS</span>
             </div>
             <div class="produto-info">
-                <p class="produto-codigo"</p>
+                <p class="produto-codigo"></p>
                 <h2 class="produto-nome">Hambúrguer Simples</h2>
                 <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
                 <div class="produto-detalhes">
@@ -530,9 +514,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Hambúrguer Simples" data-preco="10.00">
-                    
                     <i class="fa fa-shopping-cart"></i> 
-                    
                 </button>
             </div>
         </div>
@@ -558,9 +540,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Hambúrguer Duplo" data-preco="12.00">
-                    
                     <i class="fa fa-shopping-cart"></i> 
-                    
                 </button>
             </div>
         </div>
@@ -586,14 +566,11 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Hambúrguer Picante" data-preco="15.00">
-                    
                     <i class="fa fa-shopping-cart"></i> 
-                    
                 </button>
             </div>
         </div>
 
-        <!-- 🔹 ACOMPANHAMENTOS -->
         <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Tradicional">
             <div class="produto-imagem">
                 <img src="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Frita">
@@ -615,9 +592,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Batata Frita Tradicional" data-preco="12.00">
-                    
                     <i class="fa fa-shopping-cart"></i> 
-                    
                 </button>
             </div>
         </div>
@@ -643,9 +618,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Anéis de Cebola" data-preco="14.00">
-                    
                     <i class="fa fa-shopping-cart"></i> 
-                    
                 </button>
             </div>
         </div>
@@ -671,14 +644,11 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Batata com Cheddar e Bacon" data-preco="18.00">
-                    
                     <i class="fa fa-shopping-cart"></i> 
-                    
                 </button>
             </div>
         </div>
 
-        <!-- 🔹 BEBIDAS -->
         <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 350ml">
             <div class="produto-imagem">
                 <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca-Cola">
@@ -757,7 +727,6 @@
     </div>
 </div>
 
-<!-- ==================== CARRINHO E FINALIZAÇÃO ==================== -->
 <div id="modal-carrinho" class="oculto">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
@@ -789,7 +758,7 @@
             <div class="form-grupo">
                 <label>CEP</label>
                 <input type="text" id="cep" placeholder="Ex: 00000-000" maxlength="9">
-                <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
+                <p id="aviso-cep" class="aviso-info">💡 Digite o CEP ou preencha os dados abaixo manualmente</p>
             </div>
             <div class="form-duplo">
                 <div class="form-grupo">
@@ -807,16 +776,16 @@
             </div>
             <div class="form-grupo">
                 <label>Rua / Logradouro</label>
-                <input type="text" id="rua" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                <input type="text" id="rua" placeholder="Digite o nome da rua">
             </div>
             <div class="form-duplo">
                 <div class="form-grupo">
                     <label>Bairro</label>
-                    <input type="text" id="bairro" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                    <input type="text" id="bairro" placeholder="Digite o bairro">
                 </div>
                 <div class="form-grupo">
                     <label>Cidade / UF</label>
-                    <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente" readonly style="background: #f8f8f8;">
+                    <input type="text" id="cidade-uf" placeholder="Ex: Mogi Mirim - SP">
                 </div>
             </div>
         </div>
@@ -844,7 +813,6 @@
     </div>
 </div>
 
-<!-- ==================== OUTROS ELEMENTOS ==================== -->
 <div id="alerta-fechado" class="oculto">
     <div class="alerta-caixa">
         <h2>Loja Fechada</h2>
@@ -866,7 +834,6 @@
     </div>
 </div>
 
-<!-- ==================== ARQUIVO DE FUNÇÕES ==================== -->
 <script src="script.js"></script>
 </body>
 </html>
