@@ -5,456 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alison Burger</title>
 
-    <!-- Fontes e Ícones -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f8f9fa; padding-bottom: 75px; font-size: 13px; line-height: 1.4; }
 
-        body {
-            background-color: #f8f9fa;
-            padding-bottom: 75px;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-
-        .status-topo,
-        .cabecalho-banner {
-            display: none !important;
-        }
-
-        .status-topo {
-            position: absolute;
-            top: 10px;
-            left: 12px;
-            z-index: 99;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #ffffff;
-        }
-        .ponto-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-        .texto-status.aberto { color: #22c55e !important; }
-        .texto-status.fechado { color: #dc2626 !important; }
-
-        .cabecalho-banner {
-            width: 100%;
-            background: #121212;
-            position: relative;
-            padding: 32px 15px 16px;
-            text-align: center;
-            color: #facc15;
-        }
-        .logo-canto {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid #facc15;
-            object-fit: cover;
-        }
-        .marca h1 {
-            font-size: 38px;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 2px;
-        }
-        .marca p {
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-        .info-loja {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #ffffff;
-            flex-wrap: wrap;
-        }
-        .info-loja div {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .categorias {
-            width: 100%;
-            padding: 8px 12px;
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            background: #ffffff;
-            border-bottom: 1px solid #eee;
-        }
+        .status-topo, .cabecalho-banner { display: none !important; }
+        .categorias { width: 100%; padding: 8px 12px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; background: #fff; border-bottom: 1px solid #eee; }
         .categorias::-webkit-scrollbar { display: none; }
-        .categoria-btn {
-            padding: 7px 12px;
-            border-radius: 6px;
-            border: 1px solid #e5e7eb;
-            background: #ffffff;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-        .categoria-btn.ativo {
-            background-color: #facc15;
-            border-color: #facc15;
-            color: #111;
-        }
-
-        .busca {
-            margin: 10px 12px;
-            position: relative;
-        }
-        .busca input {
-            width: 100%;
-            padding: 9px 12px 9px 32px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 12px;
-            background: #ffffff;
-        }
-        .busca i {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-            font-size: 13px;
-        }
-
-        .container {
-            width: 100%;
-            padding: 0 12px;
-        }
-        .lista-produtos {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 10px 0;
-        }
-        .produto {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            padding: 6px;
-            display: grid;
-            grid-template-columns: 70px 1fr auto;
-            gap: 9px;
-            align-items: center;
-        }
-        .produto-imagem {
-            position: relative;
-            width: 73px;
-            height: 73px;
-            border-radius: 6px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .produto-imagem img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .tag-mais-pedido {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #dc2626;
-            color: white;
-            font-size: 8px;
-            font-weight: 600;
-            padding: 2px 4px;
-            border-radius: 0 0 5px 0;
-        }
-        .produto-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .produto-codigo {
-            font-size: 12px;
-            font-weight: 700;
-            color: #ca8a04;
-        }
-        .produto-nome {
-            font-size: 14px;
-            font-weight: 700;
-            color: #111827;
-            line-height: 1.2;
-        }
-        .produto-descricao {
-            font-size: 10px;
-            color: #6b7280;
-            line-height: 1.3;
-        }
-        .produto-detalhes {
-            font-size: 10px;
-            color: #78716c;
-            display: flex;
-            gap: 8px;
-            margin-top: 2px;
-        }
-        .produto-acoes {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 6px;
-        }
-        .produto-preco {
-            font-size: 15px;
-            font-weight: 800;
-            color: #dc2626;
-        }
-        .controle-qtd {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .qtd-btn {
-            width: 26px;
-            height: 26px;
-            border: none;
-            background: #f3f4f6;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        .qtd-valor {
-            width: 28px;
-            height: 26px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .add-carrinho {
-            width: 70px;
-            height: 30px;
-            border: none;
-            border-radius: 5px;
-            background: #facc15;
-            color: #111827;
-            font-weight: 700;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            cursor: pointer;
-        }
-
-        .carrinho-fixo {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #111827;
-            color: white;
-            padding: 8px 12px;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
-            z-index: 999;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            display: none;
-        }
-        .carrinho-conteudo {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .carrinho-esq {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-        .badge-qtd {
-            width: 30px;
-            height: 32px;
-            background: #facc15;
-            color: #111827;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
-        .texto-carrinho h4 {
-            font-size: 14px;
-            margin: 0 0 1px 0;
-            font-weight: 600;
-        }
-        .texto-carrinho p {
-            font-size: 11px;
-            color: #b0b3b8;
-            margin: 0;
-        }
-        .btn-ver-carrinho {
-            background: #facc15;
-            color: #111827;
-            border: none;
-            border-radius: 6px;
-            padding: 9px 16px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .categoria-btn { padding: 7px 12px; border-radius: 6px; border: 1px solid #e5e7eb; background: #fff; font-weight: 600; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; transition: 0.2s; }
+        .categoria-btn.ativo { background: #facc15; border-color: #facc15; color: #111; }
+        .busca { margin: 10px 12px; position: relative; }
+        .busca input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 12px; background: #fff; }
+        .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 13px; }
+        .container { width: 100%; padding: 0 12px; }
+        .lista-produtos { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+        .produto { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 6px; display: grid; grid-template-columns: 70px 1fr auto; gap: 9px; align-items: center; }
+        .produto-imagem { position: relative; width: 73px; height: 73px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
+        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; }
+        .tag-mais-pedido { position: absolute; top: 0; left: 0; background: #dc2626; color: #fff; font-size: 8px; font-weight: 600; padding: 2px 4px; border-radius: 0 0 5px 0; }
+        .produto-info { display: flex; flex-direction: column; gap: 2px; }
+        .produto-codigo { font-size: 12px; font-weight: 700; color: #ca8a04; }
+        .produto-nome { font-size: 14px; font-weight: 700; color: #111827; line-height: 1.2; }
+        .produto-descricao { font-size: 10px; color: #6b7280; line-height: 1.3; }
+        .produto-detalhes { font-size: 10px; color: #78716c; display: flex; gap: 8px; margin-top: 2px; }
+        .produto-acoes { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+        .produto-preco { font-size: 15px; font-weight: 800; color: #dc2626; }
+        .controle-qtd { display: flex; align-items: center; gap: 4px; }
+        .qtd-btn { width: 26px; height: 26px; border: none; background: #f3f4f6; font-size: 14px; font-weight: 600; border-radius: 5px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .qtd-valor { width: 28px; height: 26px; text-align: center; font-weight: 600; font-size: 13px; background: #fff; display: flex; align-items: center; justify-content: center; }
+        .add-carrinho { width: 70px; height: 30px; border: none; border-radius: 5px; background: #facc15; color: #111827; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 3px; cursor: pointer; }
+        .carrinho-fixo { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: #fff; padding: 8px 12px; box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; }
+        .carrinho-conteudo { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        .carrinho-esq { display: flex; align-items: center; gap: 9px; }
+        .badge-qtd { width: 30px; height: 32px; background: #facc15; color: #111827; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+        .texto-carrinho h4 { font-size: 14px; margin: 0 0 1px 0; font-weight: 600; }
+        .texto-carrinho p { font-size: 11px; color: #b0b3b8; margin: 0; }
+        .btn-ver-carrinho { background: #facc15; color: #111827; border: none; border-radius: 6px; padding: 9px 16px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
         .oculto { display: none !important; }
-        #modal-carrinho {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.65);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 12px;
-        }
-        .modal-conteudo {
-            background: white;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            border-radius: 10px;
-            padding: 15px;
-            overflow-y: auto;
-        }
-        .modal-cabecalho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-        }
-        .fechar-modal {
-            background: none;
-            border: none;
-            font-size: 17px;
-            cursor: pointer;
-            color: #666;
-        }
-        .item-carrinho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 7px 0;
-            border-bottom: 1px solid #eee;
-        }
+        #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 12px; }
+        .modal-conteudo { background: #fff; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 10px; padding: 15px; overflow-y: auto; }
+        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .fechar-modal { background: none; border: none; font-size: 17px; cursor: pointer; color: #666; }
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; }
         .form-grupo { margin: 9px 0; }
-        .form-grupo label {
-            display: block;
-            margin-bottom: 3px;
-            font-weight: 500;
-            font-size: 12px;
-        }
-        .form-grupo input,
-        .form-grupo select,
-        .form-grupo textarea {
-            width: 100%;
-            padding: 7px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-        .form-duplo {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .form-grupo label { display: block; margin-bottom: 3px; font-weight: 500; font-size: 12px; }
+        .form-grupo input, .form-grupo select, .form-grupo textarea { width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 12px; }
+        .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .aviso-erro { font-size: 11px; color: #dc2626; margin-top: 2px; }
         .aviso-info { font-size: 11px; color: #2563eb; margin-top: 2px; }
         .total-texto { font-size: 15px; font-weight: 700; text-align: right; margin: 9px 0; }
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
-        .btn-fechar {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            background: #eee;
-            font-weight: 600;
-            font-size: 12px;
-        }
-        .btn-finalizar {
-            flex: 2;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            background: #22c55e;
-            color: white;
-            font-weight: 600;
-            font-size: 12px;
-        }
-        #alerta-fechado {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            padding: 12px;
-        }
-        .alerta-caixa {
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 280px;
-        }
+        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 12px; cursor: pointer; }
+        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: #fff; font-weight: 600; font-size: 12px; cursor: pointer; }
+        #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 12px; }
+        .alerta-caixa { background: #fff; padding: 16px; border-radius: 8px; text-align: center; max-width: 280px; }
         .alerta-caixa h3 { color: #dc2626; margin-bottom: 7px; font-size: 16px; }
         .alerta-caixa p { font-size: 12px; line-height: 1.4; }
-        .btn-entendi {
-            margin-top: 10px;
-            padding: 7px 14px;
-            border: none;
-            border-radius: 5px;
-            background: #dc2626;
-            color: white;
-            font-weight: 600;
-            font-size: 12px;
-        }
+        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: #fff; font-weight: 600; font-size: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -498,7 +110,7 @@
                 <span class="tag-mais-pedido">★ MAIS</span>
             </div>
             <div class="produto-info">
-                <p class="produto-codigo"></p>
+                <p class="produto-codigo">01</p>
                 <h2 class="produto-nome">Hambúrguer Simples</h2>
                 <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
                 <div class="produto-detalhes">
@@ -514,7 +126,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Hambúrguer Simples" data-preco="10.00">
-                    <i class="fa fa-shopping-cart"></i> 
+                    <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
@@ -540,7 +152,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Hambúrguer Duplo" data-preco="12.00">
-                    <i class="fa fa-shopping-cart"></i> 
+                    <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
@@ -566,7 +178,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Hambúrguer Picante" data-preco="15.00">
-                    <i class="fa fa-shopping-cart"></i> 
+                    <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
@@ -592,7 +204,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Batata Frita Tradicional" data-preco="12.00">
-                    <i class="fa fa-shopping-cart"></i> 
+                    <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
@@ -618,7 +230,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Anéis de Cebola" data-preco="14.00">
-                    <i class="fa fa-shopping-cart"></i> 
+                    <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
@@ -644,7 +256,7 @@
                     <button class="qtd-btn aumentar">+</button>
                 </div>
                 <button class="add-carrinho" data-nome="Batata com Cheddar e Bacon" data-preco="18.00">
-                    <i class="fa fa-shopping-cart"></i> 
+                    <i class="fa fa-shopping-cart"></i> Add
                 </button>
             </div>
         </div>
@@ -739,8 +351,8 @@
         <div class="form-grupo">
             <label>Forma de recebimento</label>
             <select id="tipo-atendimento">
-                <option value="retirada">Retirada </option>
-                <option value="entrega">Entrega </option>
+                <option value="retirada">Retirada</option>
+                <option value="entrega">Entrega</option>
             </select>
         </div>
 
@@ -816,7 +428,7 @@
 <div id="alerta-fechado" class="oculto">
     <div class="alerta-caixa">
         <h2>Loja Fechada</h2>
-        <p>Atendimento das 23:00 às 06:00. Volte mais tarde!</p>
+        <p>Atendimento das 07:00 às 23:00. Volte mais tarde!</p>
         <button id="btn-entendi" class="btn-entendi">Entendi</button>
     </div>
 </div>
@@ -827,10 +439,10 @@
             <span class="badge-qtd" id="qtd-carrinho">0</span>
             <div class="texto-carrinho">
                 <h3>Meu carrinho</h3>
-                <p id="resumo-carrinho">0 itens  R$ 0,00 &nbsp; | &nbsp;       </p>
+                <p id="resumo-carrinho">0 itens • R$ 0,00</p>
             </div>
         </div>
-        <button class="btn-ver-carrinho" id="abrir-carrinho"> Ver </button>
+        <button class="btn-ver-carrinho" id="abrir-carrinho">Ver</button>
     </div>
 </div>
 
