@@ -400,4 +400,4 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   // Abre o WhatsApp
   const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
-}); 
+});
