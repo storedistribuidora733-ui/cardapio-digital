@@ -1,13 +1,13 @@
 const CONFIG = {
   horaAbertura: 7,
   horaFechamento: 23,
-  textoStatusAberto: "Aberto até às 06:00",
+  textoStatusAberto: "Aberto até às 23:00",
   textoStatusFechado: "Fechado",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
-  nomeLoja: "Nome da loja",
-  taxaEntregaPadrao:8.00
+  nomeLoja: "Alison Burger",
+  taxaEntregaPadrao: 8.00
 };
 
 const carrinho = [];
@@ -113,7 +113,7 @@ function limparCamposEndereco() {
 function verificarStatusLoja(mostrarAviso = false) {
   const agora = new Date();
   const horaAtual = agora.getHours();
-  const lojaAberta = horaAtual >= CONFIG.horaAbertura || horaAtual < CONFIG.horaFechamento;
+  const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
 
   if (lojaAberta) {
     pontoStatusEl.style.backgroundColor = CONFIG.corStatusAberto;
@@ -215,4 +215,114 @@ function atualizarCarrinho() {
     listaItensCarrinho.appendChild(itemEl);
   });
 
-  valorTotalEl
+  valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
+  qtdCarrinhoEl.textContent = qtdTotal;
+  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')}`;
+
+  adicionarEventosCarrinho();
+}
+
+function adicionarEventosCarrinho() {
+  document.querySelectorAll('.aumentar-item').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const idx = parseInt(botao.dataset.index);
+      carrinho[idx].quantidade++;
+      atualizarCarrinho();
+    });
+  });
+  document.querySelectorAll('.diminuir-item').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const idx = parseInt(botao.dataset.index);
+      if (carrinho[idx].quantidade > 1) {
+        carrinho[idx].quantidade--;
+      } else {
+        carrinho.splice(idx, 1);
+      }
+      atualizarCarrinho();
+    });
+  });
+}
+
+abrirCarrinhoBtn.addEventListener('click', () => {
+  if (carrinho.length === 0) return;
+  if (!verificarStatusLoja(true)) return;
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+  avisoGeral.classList.add('oculto');
+});
+
+fecharModalBtns.forEach(botao => {
+  botao.addEventListener('click', () => {
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+  });
+});
+
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    const categoria = botao.dataset.categoria;
+
+    document.querySelectorAll('.produto').forEach(produto => {
+      produto.style.display = (categoria === 'todos' || produto.dataset.categoria === categoria) ? 'grid' : 'none';
+    });
+    campoBusca.value = '';
+  });
+});
+
+campoBusca.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(produto => {
+    const nome = produto.dataset.nome.toLowerCase();
+    produto.style.display = nome.includes(termo) ? 'grid' : 'none';
+  });
+});
+
+document.getElementById('btn-finalizar').addEventListener('click', () => {
+  avisoGeral.classList.add('oculto');
+  const nome = nomeEl.value.trim();
+  const pagamento = pagamentoEl.value;
+  const obs = obsEl.value.trim();
+
+  const tipoAtendimento = tipoAtendimentoEl.value;
+  const taxaEntrega = parseFloat(taxaEntregaEl.value.replace(',', '.')) || 0;
+  const totalItens = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
+  const totalGeral = totalItens + taxaEntrega;
+
+  if (carrinho.length === 0) {
+    avisoGeral.textContent = 'Adicione pelo menos um produto!';
+    avisoGeral.classList.remove('oculto');
+    return;
+  }
+  if (!nome) {
+    avisoGeral.textContent = 'Informe seu nome completo!';
+    avisoGeral.classList.remove('oculto');
+    return;
+  }
+
+  if (tipoAtendimento === 'entrega') {
+    const rua = ruaEl.value.trim();
+    const numero = numeroEl.value.trim();
+
+    if (!rua) {
+      avisoGeral.textContent = 'Preencha o endereço! Você pode usar o CEP ou digitar manualmente.';
+      avisoGeral.classList.remove('oculto');
+      return;
+    }
+    if (!numero) {
+      avisoGeral.textContent = 'Informe o número da residência!';
+      avisoGeral.classList.remove('oculto');
+      return;
+    }
+  }
+
+  let enderecoCompleto = '';
+  if (tipoAtendimento === 'entrega') {
+    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
+    if (complementoEl.value.trim()) enderecoCompleto += ` - ${complementoEl.value.trim()}`;
+    enderecoCompleto += ` | Bairro: ${bairroEl.value} | ${cidadeUfEl.value} | CEP: ${cepEl.value}`;
+    if (referenciaEl.value.trim()) enderecoCompleto += ` | Referência: ${referenciaEl.value.trim()}`;
+  }
+
+  let mensagem = `
