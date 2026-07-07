@@ -20,7 +20,8 @@ const carrinho = [];
 
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
-const fecharModalBtns = [document.getElementById('fechar-modal'), document.getElementById('btn-fechar')];
+const fecharModalBtns = [document.getElementById('fechar-modal')]; // Mantive apenas o X como botão de fechar normal
+const btnLimparCarrinho = document.getElementById('btn-limpar'); // Novo botão Limpar
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
 const valorTotalEl = document.getElementById('valor-total');
 const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
@@ -52,6 +53,43 @@ const avisoCepEl = document.getElementById('aviso-cep');
 
 const pagamentoEl = document.getElementById('forma-pagamento');
 const obsEl = document.getElementById('observacoes');
+
+// ==============================================
+// 🗑️ FUNÇÃO LIMPAR CARRINHO TOTAL
+// ==============================================
+function limparTudoCarrinho() {
+  // Esvazia o array do carrinho
+  carrinho.length = 0;
+  
+  // Limpa a lista visual
+  listaItensCarrinho.innerHTML = '';
+  valorTotalEl.textContent = '0,00';
+  qtdCarrinhoEl.textContent = '0';
+  resumoCarrinhoEl.innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
+  
+  // Esconde a barra inferior do carrinho
+  carrinhoContainer.style.display = 'none';
+  
+  // Limpa todos os campos preenchidos
+  nomeEl.value = '';
+  tipoAtendimentoEl.value = 'retirada';
+  taxaEntregaEl.value = '8,00';
+  pagamentoEl.value = 'Dinheiro';
+  obsEl.value = '';
+  avisoGeral.classList.add('oculto');
+  
+  // Limpa endereço e oculta blocos
+  limparCamposEndereco();
+  campoTaxaEntregaEl.classList.add('oculto');
+  blocoEnderecoEl.classList.add('oculto');
+  
+  // Fecha a janela do carrinho
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+}
+
+// Ação do botão Limpar Carrinho
+btnLimparCarrinho.addEventListener('click', limparTudoCarrinho);
 
 // ==============================================
 // 🚀 CONTROLE ENTREGA / RETIRADA
@@ -283,6 +321,7 @@ abrirCarrinhoBtn.addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
 });
 
+// Apenas o X fecha sem apagar nada
 fecharModalBtns.forEach(botao => {
   botao.addEventListener('click', () => {
     modalCarrinho.classList.add('oculto');
