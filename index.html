@@ -16,19 +16,63 @@
 
         .status-topo, .cabecalho-banner { display: none !important; }
 
+        /* ✅ CATEGORIAS COM ANIMAÇÃO */
         .categorias { width: 100%; padding: 8px 12px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #eee; }
         .categorias::-webkit-scrollbar { display: none; }
-        .categoria-btn { padding: 7px 12px; border-radius: 6px; border: 1px solid #e5e7eb; background: #ffffff; font-weight: 600; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; transition: all 0.2s; }
-        .categoria-btn.ativo { background-color: #facc15; border-color: #facc15; color: #111; }
+        .categoria-btn { 
+            padding: 7px 12px; 
+            border-radius: 6px; 
+            border: 1px solid #e5e7eb; 
+            background: #ffffff; 
+            font-weight: 600; 
+            font-size: 12px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+            white-space: nowrap; 
+            /* ANIMAÇÃO IGUAL DOS PRODUTOS */
+            transform: translateZ(0);
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .categoria-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            border-color: #facc15;
+        }
+        .categoria-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        .categoria-btn.ativo { 
+            background-color: #facc15; 
+            border-color: #facc15; 
+            color: #111; 
+            box-shadow: 0 2px 8px rgba(250,204,21,0.3);
+        }
 
+        /* ✅ CAMPO DE BUSCA COM ANIMAÇÃO */
         .busca { margin: 10px 12px; position: relative; }
-        .busca input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 12px; background: #ffffff; }
+        .busca input { 
+            width: 100%; 
+            padding: 9px 12px 9px 32px; 
+            border: 1px solid #e5e7eb; 
+            border-radius: 8px; 
+            font-size: 12px; 
+            background: #ffffff;
+            transition: all 0.25s ease;
+        }
+        .busca input:focus {
+            outline: none;
+            border-color: #facc15;
+            box-shadow: 0 0 0 3px rgba(250,204,21,0.15);
+            transform: translateY(-1px);
+        }
         .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 13px; }
 
         .container { width: 100%; padding: 0 12px; }
         .lista-produtos { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
         
-        /* ✅ PRODUTO COM ANIMAÇÕES ADICIONADAS */
+        /* ✅ PRODUTO COM ANIMAÇÕES */
         .produto { 
             background: #ffffff; 
             border-radius: 8px; 
@@ -38,23 +82,19 @@
             align-items: center; 
             gap: 12px; 
             cursor: pointer; 
-            /* Configurações das animações */
             transform: translateZ(0);
             transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        /* Efeito ao passar o mouse */
         .produto:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.12), 0 5px 10px rgba(0,0,0,0.08);
         }
-        /* Efeito ao clicar/tocar */
         .produto:active {
             transform: translateY(-1px) scale(0.99);
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
         .produto-imagem { position: relative; width: 80px; height: 80px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
-        /* Animação suave na imagem */
         .produto-imagem img { 
             width: 100%; 
             height: 100%; 
@@ -81,40 +121,163 @@
         }
         .produto-acoes, .controle-qtd, .add-carrinho { display: none !important; }
 
+        /* ✅ BOTÃO VER CARRINHO COM ANIMAÇÃO */
         .carrinho-fixo { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 8px 12px; box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; }
         .carrinho-conteudo { width: 100%; display: flex; justify-content: space-between; align-items: center; }
         .carrinho-esq { display: flex; align-items: center; gap: 9px; }
         .badge-qtd { width: 30px; height: 32px; background: #facc15; color: #111827; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
         .texto-carrinho h4 { font-size: 14px; margin: 0; font-weight: 600; }
         .texto-carrinho p { font-size: 11px; color: #b0b3b8; margin: 0; }
-        .btn-ver-carrinho { background: #facc15; color: #111827; border: none; border-radius: 6px; padding: 9px 16px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .btn-ver-carrinho { 
+            background: #facc15; 
+            color: #111827; 
+            border: none; 
+            border-radius: 6px; 
+            padding: 9px 16px; 
+            font-weight: 700; 
+            font-size: 13px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+        .btn-ver-carrinho:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(250,204,21,0.4);
+        }
+        .btn-ver-carrinho:active {
+            transform: translateY(0) scale(0.97);
+        }
 
         .oculto { display: none !important; }
         #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 12px; }
         .modal-conteudo { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 10px; padding: 15px; overflow-y: auto; }
         .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
-        .fechar-modal { background: none; border: none; font-size: 17px; cursor: pointer; color: #666; }
+        .fechar-modal { 
+            background: none; 
+            border: none; 
+            font-size: 17px; 
+            cursor: pointer; 
+            color: #666;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .fechar-modal:hover {
+            background: #f3f4f6;
+            color: #111;
+            transform: rotate(90deg);
+        }
         .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; }
         .form-grupo { margin: 9px 0; }
         .form-grupo label { display: block; margin-bottom: 3px; font-weight: 500; font-size: 12px; }
-        .form-grupo input, .form-grupo select { width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 12px; }
+        .form-grupo input, .form-grupo select { 
+            width: 100%; 
+            padding: 7px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        .form-grupo input:focus, .form-grupo select:focus {
+            outline: none;
+            border-color: #facc15;
+            box-shadow: 0 0 0 2px rgba(250,204,21,0.15);
+        }
         .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .aviso-erro { font-size: 11px; color: #dc2626; margin-top: 2px; }
         .aviso-info { font-size: 11px; color: #2563eb; margin-top: 2px; }
         .total-texto { font-size: 15px; font-weight: 700; text-align: right; margin: 9px 0; }
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
-        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 12px; cursor: pointer; }
-        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 12px; cursor: pointer; }
+        .btn-fechar { 
+            flex: 1; 
+            padding: 8px; 
+            border: none; 
+            border-radius: 5px; 
+            background: #eee; 
+            font-weight: 600; 
+            font-size: 12px; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-fechar:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+        .btn-fechar:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .btn-finalizar { 
+            flex: 2; 
+            padding: 8px; 
+            border: none; 
+            border-radius: 5px; 
+            background: #22c55e; 
+            color: white; 
+            font-weight: 600; 
+            font-size: 12px; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-finalizar:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+        }
+        .btn-finalizar:active {
+            transform: translateY(0) scale(0.97);
+        }
 
         #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 12px; }
         .alerta-caixa { background: white; padding: 16px; border-radius: 8px; text-align: center; max-width: 280px; }
         .alerta-caixa h3 { color: #dc2626; margin-bottom: 7px; font-size: 16px; }
         .alerta-caixa p { font-size: 12px; line-height: 1.4; }
-        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 12px; cursor: pointer; }
+        .btn-entendi { 
+            margin-top: 10px; 
+            padding: 7px 14px; 
+            border: none; 
+            border-radius: 5px; 
+            background: #dc2626; 
+            color: white; 
+            font-weight: 600; 
+            font-size: 12px; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-entendi:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
 
         #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
         .cabecalho-detalhe { position: relative; width: 100%; height: 320px; background: #f3f4f6; }
-        #btn-voltar { position: absolute; top: 20px; left: 20px; width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); font-size: 24px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
+        #btn-voltar { 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            border: none; 
+            background: rgba(255,255,255,0.9); 
+            font-size: 24px; 
+            cursor: pointer; 
+            z-index: 10; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        #btn-voltar:hover {
+            background: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
         #img-detalhe { width: 100%; height: 100%; object-fit: cover; }
         .faixa-status { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); background: #fff; padding: 10px 20px; border-radius: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
         .conteudo-detalhe { padding: 40px 20px 140px; }
@@ -130,17 +293,71 @@
         .adicional-item { padding: 15px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
         .adicional-nome { font-size: 18px; font-weight: 500; margin-bottom: 2px; }
         .adicional-preco { font-size: 15px; color: #4b5563; }
-        .btn-add-adicional { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .btn-add-adicional { 
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%; 
+            border: 2px solid #dc2626; 
+            background: #fff; 
+            color: #dc2626; 
+            font-size: 20px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: all 0.2s ease;
+        }
+        .btn-add-adicional:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(220,38,38,0.3);
+        }
         .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
         .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 15px 20px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 20px; }
         .qtd-detalhe { display: flex; align-items: center; gap: 20px; }
-        .qtd-detalhe button { font-size: 28px; border: none; background: none; cursor: pointer; color: #dc2626; font-weight: 700; }
+        .qtd-detalhe button { 
+            font-size: 28px; 
+            border: none; 
+            background: none; 
+            cursor: pointer; 
+            color: #dc2626; 
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qtd-detalhe button:hover {
+            background: #fef2f2;
+            transform: scale(1.1);
+        }
         #qtd-atual { font-size: 22px; font-weight: 600; min-width: 25px; text-align: center; }
-        #btn-adicionar-detalhe { flex: 1; padding: 16px; border: none; border-radius: 10px; background: #dc2626; color: white; font-size: 18px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        #btn-adicionar-detalhe:hover { background: #b91c1c; }
+        #btn-adicionar-detalhe { 
+            flex: 1; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 10px; 
+            background: #dc2626; 
+            color: white; 
+            font-size: 18px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+        }
+        #btn-adicionar-detalhe:hover { 
+            background: #b91c1c; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220,38,38,0.3);
+        }
+        #btn-adicionar-detalhe:active {
+            transform: translateY(0) scale(0.98);
+        }
 
         html, body { overflow-x: hidden; touch-action: manipulation; }
-        .produto { -webkit-tap-highlight-color: transparent; }
+        .produto, .categoria-btn, .btn-ver-carrinho, button { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
