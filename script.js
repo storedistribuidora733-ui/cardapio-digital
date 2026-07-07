@@ -207,7 +207,7 @@ document.querySelectorAll('.qtd-btn').forEach(botao => {
 });
 
 // ==============================================
-// 🛍️ ADICIONAR AO CARRINHO
+// 🛍️ ADICIONAR AO CARRINHO COM MENSAGEM PERSONALIZADA VERMELHA
 // ==============================================
 document.querySelectorAll('.add-carrinho').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -218,7 +218,51 @@ document.querySelectorAll('.add-carrinho').forEach(botao => {
     const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
 
     if (qtd <= 0) {
-      alert('Escolha uma quantidade antes de adicionar!');
+      // ✅ MENSAGEM BONITA, VERMELHA, SEM NOME DO SITE
+      const aviso = document.createElement('div');
+      aviso.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #ffffff;
+        padding: 32px 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(220, 38, 38, 0.15);
+        z-index: 99999;
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+        min-width: 300px;
+        border: 2px solid #fecaca;
+      `;
+
+      aviso.innerHTML = `
+        <p style="
+          font-size: 18px;
+          font-weight: 600;
+          color: #dc2626;
+          margin: 0 0 24px 0;
+          line-height: 1.5;
+        ">
+          Escolha uma quantidade<br>antes de adicionar!
+        </p>
+        <button style="
+          background: #dc2626;
+          color: white;
+          border: none;
+          padding: 12px 32px;
+          border-radius: 10px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s;
+        " onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
+          Entendi
+        </button>
+      `;
+
+      document.body.appendChild(aviso);
+      aviso.querySelector('button').addEventListener('click', () => aviso.remove());
       return;
     }
 
