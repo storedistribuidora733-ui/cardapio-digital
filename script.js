@@ -177,8 +177,7 @@ btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto")
 // 📂 ABRIR TELA DE DETALHES AO CLICAR NO PRODUTO
 // ==============================================
 document.querySelectorAll('.produto').forEach(produto => {
-  produto.addEventListener('click', (e) => {
-    if (e.target.closest('.add-carrinho')) return;
+  produto.addEventListener('click', () => {
     if (!verificarStatusLoja(true)) return;
 
     // Carrega dados do produto
@@ -301,46 +300,6 @@ btnAdicionarDetalhe.addEventListener('click', () => {
 });
 
 // ==============================================
-// 🛍️ ADICIONAR DIRETO DA LISTA (MANTIDO)
-// ==============================================
-document.querySelectorAll('.add-carrinho').forEach(botao => {
-  botao.addEventListener('click', () => {
-    if (!verificarStatusLoja(true)) return;
-    const nome = botao.dataset.nome;
-    const preco = parseFloat(botao.dataset.preco);
-    const qtd = parseInt(botao.closest('.produto').querySelector('.qtd-valor').textContent);
-
-    if (qtd <= 0) {
-      const aviso = document.createElement('div');
-      aviso.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:32px 40px;border-radius:16px;box-shadow:0 10px 40px rgba(220,38,38,0.15);z-index:99999;text-align:center;min-width:300px;border:2px solid #fecaca;`;
-      aviso.innerHTML = `
-        <p style="font-size:18px;font-weight:600;color:#dc2626;margin:0 0 24px 0;">Escolha uma quantidade<br>antes de adicionar!</p>
-        <button style="background:#dc2626;color:white;border:none;padding:12px 32px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">Entendi</button>
-      `;
-      document.body.appendChild(aviso);
-      aviso.querySelector('button').addEventListener('click', () => aviso.remove());
-      return;
-    }
-
-    const itemExistente = carrinho.find(item => item.nome === nome);
-    if (itemExistente) itemExistente.quantidade += qtd;
-    else carrinho.push({ nome, preco, quantidade: qtd });
-
-    atualizarCarrinho();
-    botao.closest('.produto').querySelector('.qtd-valor').textContent = '0';
-    const original = botao.innerHTML;
-    botao.innerHTML = '<i class="fa fa-check"></i> Ok';
-    botao.style.background = '#22c55e';
-    botao.style.color = 'white';
-    setTimeout(() => {
-      botao.innerHTML = original;
-      botao.style.background = '#facc15';
-      botao.style.color = '#111827';
-    }, 1100);
-  });
-});
-
-// ==============================================
 // 🔄 ATUALIZAR CARRINHO
 // ==============================================
 function atualizarCarrinho() {
@@ -410,7 +369,7 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
     botao.classList.add('ativo');
     const cat = botao.dataset.categoria;
     document.querySelectorAll('.produto').forEach(p => {
-      p.style.display = (cat === 'todos' || p.dataset.categoria === cat) ? 'grid' : 'none';
+      p.style.display = (cat === 'todos' || p.dataset.categoria === cat) ? 'flex' : 'none';
     });
     campoBusca.value = '';
   });
@@ -418,7 +377,7 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
 campoBusca.addEventListener('input', () => {
   const termo = campoBusca.value.toLowerCase().trim();
   document.querySelectorAll('.produto').forEach(p => {
-    p.style.display = p.dataset.nome.toLowerCase().includes(termo) ? 'grid' : 'none';
+    p.style.display = p.dataset.nome.toLowerCase().includes(termo) ? 'flex' : 'none';
   });
 });
 
