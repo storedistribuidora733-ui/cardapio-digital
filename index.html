@@ -33,7 +33,7 @@
 
         .status-topo, .cabecalho-banner { display: none !important; }
 
-        /* ✅ ALTERAÇÃO AQUI: CATEGORIAS FIXAS NO TOPO */
+        /* ✅ CATEGORIAS COM ANIMAÇÃO SUAVE */
         .categorias { 
             width: 100%; 
             padding: 7px 10px; 
@@ -46,6 +46,13 @@
             position: sticky;
             top: 0;
             z-index: 99;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 0 rgba(0,0,0,0);
+        }
+        .categorias.sticky-visivel {
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            padding-top: 9px;
+            padding-bottom: 9px;
         }
         .categorias::-webkit-scrollbar { display: none; }
         .categoria-btn { 
@@ -147,10 +154,11 @@
         .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
         .form-grupo { margin: 8px 0; }
         .form-grupo label { display: block; margin-bottom: 3px; font-weight: 500; font-size: 0.85rem; }
-        .form-grupo input, .form-grupo select { 
+        .form-grupo input, .form-grupo select, .form-grupo textarea { 
             width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; transition: all 0.2s ease;
         }
-        .form-grupo input:focus, .form-grupo select:focus { outline: none; border-color: #facc15; box-shadow: 0 0 0 2px rgba(250,204,21,0.15); }
+        .form-grupo textarea { resize: vertical; min-height: 60px; }
+        .form-grupo input:focus, .form-grupo select:focus, .form-grupo textarea:focus { outline: none; border-color: #facc15; box-shadow: 0 0 0 2px rgba(250,204,21,0.15); }
         .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .aviso-erro, .aviso-info { font-size: 0.8rem; margin-top: 2px; }
         .aviso-erro { color: #dc2626; }
@@ -169,7 +177,7 @@
         #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
         .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
         .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
-        .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; }
+        .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
         .btn-entendi { 
             margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;
         }
@@ -454,6 +462,12 @@
             </select>
         </div>
 
+        <!-- ✅ CAMPO DE OBSERVAÇÕES ADICIONADO -->
+        <div class="form-grupo">
+            <label>Observações</label>
+            <textarea id="observacao" placeholder="Alguma observação ou pedido especial? Ex: sem pimenta, ponto da carne, etc."></textarea>
+        </div>
+
         <p id="aviso-geral" class="aviso-erro oculto"></p>
 
         <div class="botoes-modal">
@@ -466,7 +480,7 @@
 <div id="alerta-fechado" class="oculto">
     <div class="alerta-caixa">
         <h2>Loja Fechada</h2>
-        <p>Atendimento das 23:00 às 06:00. Volte mais tarde!</p>
+        <p>Atendimento das 07:00 às 23:00. Volte mais tarde!</p>
         <button id="btn-entendi" class="btn-entendi">Entendi</button>
     </div>
 </div>
@@ -477,7 +491,7 @@
             <span class="badge-qtd" id="qtd-carrinho">0</span>
             <div class="texto-carrinho">
                 <h3>Meu carrinho</h3>
-                <p id="resumo-carrinho">0 itens  R$ 0,00 &nbsp; | &nbsp;</p>
+                <p id="resumo-carrinho">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</p>
             </div>
         </div>
         <button class="btn-ver-carrinho" id="abrir-carrinho"> Ver </button>
