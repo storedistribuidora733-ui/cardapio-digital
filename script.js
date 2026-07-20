@@ -393,6 +393,11 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
   const totalGeral = totalItens + taxaEntrega;
 
+  // Dados do pedido (número e data iguais ao exemplo)
+  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
+  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+  // Validações mantidas exatamente como no seu código
   if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
   if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
   if (tipoAtendimento === 'entrega') {
@@ -402,23 +407,61 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
   }
 
+  // Endereço quebrado em linhas separadas (não passa da tela)
   let enderecoCompleto = '';
   if (tipoAtendimento === 'entrega') {
     enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
-    if (complementoEl.value.trim()) enderecoCompleto += ` - ${complementoEl.value.trim()}`;
-    enderecoCompleto += ` | Bairro: ${bairroEl.value} | ${cidadeUfEl.value} | CEP: ${cepEl.value}`;
-    if (referenciaEl.value.trim()) enderecoCompleto += ` | Referência: ${referenciaEl.value.trim()}`;
+    if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
+    enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
+    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
+    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
+    if (referenciaEl.value.trim()) enderecoCompleto += `\n  Referência: ${referenciaEl.value.trim()}`;
   }
 
-  let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
-  mensagem += `📋 *Tipo:* ${tipoAtendimento === 'entrega' ? 'Entrega' : 'Retirada'}\n`;
-  mensagem += `👤 *Nome:* ${nome}\n`;
-  if (tipoAtendimento === 'entrega') mensagem += `🏠 *Endereço:* ${enderecoCompleto}\n`;
-  mensagem += `\n💳 *Pagamento:* ${pagamento}\n\n🛒 *Itens:*\n`;
-  carrinho.forEach(i => mensagem += `• ${i.nome} | ${i.quantidade}x | R$ ${(i.preco * i.quantidade).toFixed(2).replace('.', ',')}\n`);
-  mensagem += `\n🧾 *Subtotal:* R$ ${totalItens.toFixed(2).replace('.', ',')}\n`;
-  if (tipoAtendimento === 'entrega') mensagem += `🚚 *Entrega:* R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
-  mensagem += `💰 *TOTAL:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+  // ✨ MENSAGEM EXATAMENTE IGUAL À COMANDA QUE VOCÊ MOSTROU ✨
+  let mensagem = `=====================================\n`;
+  mensagem += `          PEDIDO — ${CONFIG.nomeLoja}\n`;
+  mensagem += `=====================================\n`;
+  mensagem += `Nº ${numeroPedido}  |  ${dataPedido}\n\n`;
+
+  mensagem += `Tipo de atendimento: ${tipoAtendimento === 'entrega' ? 'Entrega' : 'Retirada'}\n`;
+  mensagem += `Cliente:            ${nome}\n`;
+
+  if (tipoAtendimento === 'entrega') {
+    mensagem += `Endereço:\n  ${enderecoCompleto}\n`;
+  }
+
+  mensagem += `Pagamento:          ${pagamento}\n\n`;
+
+  mensagem += `-------------------------------------\n`;
+  mensagem += `PRODUTO                QTD   VALOR\n`;
+  mensagem += `-------------------------------------\n`;
+
+  carrinho.forEach(i => {
+    const totalItem = (i.preco * i.quantidade).toFixed(2).replace('.', ',');
+    mensagem += `${i.nome.padEnd(20)} ${String(i.quantidade).padStart(3)}  R$ ${totalItem}\n`;
+  });
+
+  mensagem += `-------------------------------------\n`;
+  mensagem += `Subtotal............ R$ ${totalItens.toFixed(2).replace('.', ',')}\n`;
+
+  if (tipoAtendimento === 'entrega') {
+    mensagem += `Entrega............. R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
+  }
+
+  mensagem += `\nVALOR TOTAL......... R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
+
+  // Observação aparece só se for preenchida, no lugar certo
+  const observacao = observacaoEl ? observacaoEl.value.trim() : '';
+  if (observacao) {
+    mensagem += `\n-------------------------------------\n`;
+    mensagem += `Observação: ${observacao}\n`;
+  }
+
+  mensagem += `=====================================\n`;
+  mensagem += `Confirmaremos o pedido em breve.\n`;
+  mensagem += `Obrigado pela preferência!\n`;
+  mensagem += `=====================================`;
 
   window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`, '_blank');
 });
