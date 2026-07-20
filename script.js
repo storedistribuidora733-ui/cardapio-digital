@@ -393,11 +393,14 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
   const totalGeral = totalItens + taxaEntrega;
 
-  // Dados do pedido (número e data iguais ao exemplo)
   const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
   const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-  // Validações mantidas exatamente como no seu código
+  // 📝 Observação (funciona se tiver o campo no HTML com id="observacao")
+  const observacaoEl = document.getElementById('observacao');
+  const observacao = observacaoEl ? observacaoEl.value.trim() : '';
+
+  // Validações mantidas
   if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
   if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
   if (tipoAtendimento === 'entrega') {
@@ -407,7 +410,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
   }
 
-  // Endereço quebrado em linhas separadas (não passa da tela)
+  // Endereço só aparece quando for Entrega
   let enderecoCompleto = '';
   if (tipoAtendimento === 'entrega') {
     enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
@@ -418,7 +421,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     if (referenciaEl.value.trim()) enderecoCompleto += `\n  Referência: ${referenciaEl.value.trim()}`;
   }
 
-  // ✨ MENSAGEM EXATAMENTE IGUAL À COMANDA QUE VOCÊ MOSTROU ✨
+  // 📄 COMANDO PADRÃO
   let mensagem = `=====================================\n`;
   mensagem += `          PEDIDO — ${CONFIG.nomeLoja}\n`;
   mensagem += `=====================================\n`;
@@ -451,8 +454,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
 
   mensagem += `\nVALOR TOTAL......... R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
 
-  // Observação aparece só se for preenchida, no lugar certo
-  const observacao = observacaoEl ? observacaoEl.value.trim() : '';
+  // 📝 OBSERVAÇÃO: aparece só se for preenchida
   if (observacao) {
     mensagem += `\n-------------------------------------\n`;
     mensagem += `Observação: ${observacao}\n`;
