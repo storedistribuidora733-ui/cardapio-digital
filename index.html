@@ -33,8 +33,19 @@
 
         .status-topo, .cabecalho-banner { display: none !important; }
 
+        /* ✅ ALTERAÇÃO AQUI: CATEGORIAS FIXAS NO TOPO */
         .categorias { 
-            width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #eee; 
+            width: 100%; 
+            padding: 7px 10px; 
+            display: flex; 
+            gap: 5px; 
+            overflow-x: auto; 
+            scrollbar-width: none; 
+            background: #ffffff; 
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 99;
         }
         .categorias::-webkit-scrollbar { display: none; }
         .categoria-btn { 
@@ -307,8 +318,8 @@
             <p class="produto-preco">R$ 9,00</p>
         </div>
 
-        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Normal" data-preco="12.00" data-descricao="Garrafa grande, sabor original, bem gelada para toda a família." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20e22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20e22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Normal"></div>
+        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Normal" data-preco="12.00" data-descricao="Garrafa grande, sabor original, bem gelada para toda a família." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Normal"></div>
             <div class="produto-info">
                 <p class="produto-codigo">10</p>
                 <h3 class="produto-nome">Coca‑Cola 2 L Normal</h3>
