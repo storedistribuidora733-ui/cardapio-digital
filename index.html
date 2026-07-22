@@ -13,12 +13,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
-        body { 
-            background-color: #f8f9fa; 
-            padding-bottom: 60px; 
-            line-height: 1.4; 
-            overflow-x: hidden;
-        }
+        body { background-color: #f8f9fa; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
 
         @media (min-width: 768px) {
             html { font-size: 15px; }
@@ -33,30 +28,17 @@
 
         .status-topo, .cabecalho-banner { display: none !important; }
 
-        /* ✅ CATEGORIAS COM ANIMAÇÃO SUAVE */
         .categorias { 
-            width: 100%; 
-            padding: 7px 10px; 
-            display: flex; 
-            gap: 5px; 
-            overflow-x: auto; 
-            scrollbar-width: none; 
-            background: #F5F7FA; 
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 99;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 0 rgba(0,0,0,0);
+            width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
+            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 99;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 0 rgba(0,0,0,0);
         }
-        .categorias.sticky-visivel {
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-            padding-top: 9px;
-            padding-bottom: 9px;
-        }
+        .categorias.sticky-visivel { box-shadow: 0 3px 12px rgba(0,0,0,0.08); padding-top: 9px; padding-bottom: 9px; }
         .categorias::-webkit-scrollbar { display: none; }
         .categoria-btn { 
-            padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; background: #ffffff; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; background: #ffffff; font-weight: 600; 
+            font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; 
+            transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
         }
         .categoria-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-color: #facc15; }
         .categoria-btn:active { transform: translateY(-1px) scale(0.98); }
@@ -64,7 +46,8 @@
 
         .busca { margin: 8px 10px; position: relative; }
         .busca input { 
-            width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; background: #ffffff; transition: all 0.25s ease; 
+            width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; 
+            background: #ffffff; transition: all 0.25s ease; 
         }
         .busca input:focus { outline: none; border-color: #facc15; box-shadow: 0 0 0 2px rgba(250,204,21,0.15); transform: translateY(-1px); }
         .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem; }
@@ -73,7 +56,8 @@
         .lista-produtos { display: flex; flex-direction: column; gap: 7px; margin: 8px 0; }
         
         .produto { 
-            background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; align-items: center; gap: 10px; cursor: pointer; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; 
+            align-items: center; gap: 10px; cursor: pointer; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
         }
         .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
         .produto:active { transform: translateY(-1px) scale(0.99); }
@@ -93,7 +77,8 @@
         .produto-acoes, .controle-qtd, .add-carrinho { display: none !important; }
 
         .carrinho-fixo { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 6px 10px; box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 6px 10px; 
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; 
         }
         .carrinho-conteudo { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
         .carrinho-esq { display: flex; align-items: center; gap: 7px; flex: 1; }
@@ -101,7 +86,8 @@
         .texto-carrinho h3 { font-size: 0.95rem; margin: 0; font-weight: 600; white-space: nowrap; }
         .texto-carrinho p { font-size: 0.75rem; color: #b0b3b8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .btn-ver-carrinho { 
-            background: #facc15; color: #111827; border: none; border-radius: 6px; padding: 7px 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0; transition: all 0.2s ease; 
+            background: #facc15; color: #111827; border: none; border-radius: 6px; padding: 7px 12px; font-weight: 700; 
+            font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0; transition: all 0.2s ease; 
         }
         .btn-ver-carrinho:hover { transform: translateY(-1px); }
 
@@ -109,46 +95,63 @@
         #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
         .cabecalho-detalhe { position: relative; width: 100%; height: 220px; background: #f3f4f6; }
         #btn-voltar { 
-            position: absolute; top: 15px; left: 15px; width: 42px; height: 42px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); font-size: 1.3rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; 
+            position: absolute; top: 15px; left: 15px; width: 42px; height: 42px; border-radius: 50%; border: none; 
+            background: rgba(255,255,255,0.9); font-size: 1.3rem; cursor: pointer; z-index: 10; display: flex; 
+            align-items: center; justify-content: center; transition: all 0.2s ease; 
         }
         #btn-voltar:hover { background: #fff; transform: scale(1.05); }
         #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
-        .faixa-status { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #fff; padding: 8px 16px; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 500; }
-        .conteudo-detalhe { padding: 30px 15px 120px; }
-        #nome-detalhe { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; color: #111; }
-        #descricao-detalhe { font-size: 1.1rem; color: #4b5563; line-height: 1.4; margin-bottom: 15px; }
-        .precos { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; }
-        .preco-original { font-size: 1.3rem; color: #9ca3af; text-decoration: line-through; }
-        .preco-promocional { font-size: 1.8rem; font-weight: 700; color: #7e22ce; }
-        .quero-btn { margin-left: auto; font-size: 1.1rem; color: #dc2626; font-weight: 600; cursor: pointer; }
-        .secao-adicionais { margin-bottom: 25px; }
-        .secao-adicionais h3 { font-size: 1.3rem; font-weight: 600; color: #6b7280; margin-bottom: 4px; }
-        .secao-adicionais p { font-size: 0.95rem; color: #9ca3af; margin-bottom: 15px; }
-        .adicional-item { padding: 10px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
+
+        .faixa-status { 
+            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #ffffff; 
+            padding: 8px 22px; border-radius: 50px; border: 2px solid #dc2626; font-size: clamp(17px, 3.5vw, 19px); 
+            font-weight: 600; color: #dc2626; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; 
+        }
+
+        .conteudo-detalhe { padding: 35px 15px 130px; }
+        #nome-detalhe { font-size: clamp(32px, 6.5vw, 42px); font-weight: 800; margin-bottom: 12px; color: #111; }
+        #descricao-detalhe { font-size: clamp(18px, 3.8vw, 22px); color: #666; line-height: 1.5; margin-bottom: 20px; }
+
+        .precos { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; }
+        .preco-original { font-size: clamp(20px, 4.2vw, 26px); color: #999; text-decoration: line-through; }
+        .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #9333ea; }
+        .quero-btn { margin-left: auto; font-size: clamp(18px, 3.8vw, 22px); color: #dc2626; font-weight: 700; cursor: pointer; }
+
+        .secao-adicionais { margin-bottom: 30px; }
+        .secao-adicionais h3 { font-size: clamp(24px, 5vw, 30px); font-weight: 700; color: #111; margin-bottom: 6px; }
+        .secao-adicionais p { font-size: clamp(16px, 3.2vw, 19px); color: #888; margin-bottom: 20px; }
+
+        .adicional-item { padding: 12px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
         .adicional-nome { font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
         .adicional-preco { font-size: 0.95rem; color: #4b5563; }
+
         .btn-add-adicional { 
-            width: 28px; height: 28px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; 
+            font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
         }
         .btn-add-adicional:hover { transform: scale(1.05); }
         .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
-        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 12px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
-        .qtd-detalhe { display: flex; align-items: center; gap: 15px; }
+
+        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 15px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
+        .qtd-detalhe { display: flex; align-items: center; gap: 20px; }
         .qtd-detalhe button { 
-            font-size: 1.8rem; border: none; background: none; cursor: pointer; color: #dc2626; font-weight: 700; transition: all 0.2s ease; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            font-size: clamp(24px, 5.5vw, 32px); border: none; background: none; cursor: pointer; color: #dc2626; 
+            font-weight: 700; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
         }
         .qtd-detalhe button:hover { background: #fef2f2; }
-        #qtd-atual { font-size: 1.4rem; font-weight: 600; min-width: 20px; text-align: center; }
+        #qtd-atual { font-size: clamp(22px, 5vw, 30px); font-weight: 700; min-width: 24px; text-align: center; }
         #btn-adicionar-detalhe { 
-            flex: 1; padding: 12px; border: none; border-radius: 10px; background: #dc2626; color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+            flex: 1; padding: clamp(14px, 3.5vw, 18px); border: none; border-radius: 12px; background: #dc2626; 
+            color: white; font-size: clamp(20px, 4.5vw, 26px); font-weight: 700; cursor: pointer; transition: background 0.2s ease;
         }
-        #btn-adicionar-detalhe:hover { background: #b91c1c; transform: translateY(-1px); }
+        #btn-adicionar-detalhe:hover { background: #b91c1c; }
 
         #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 10px; }
         .modal-conteudo { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 10px; padding: 12px; overflow-y: auto; }
         .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
         .fechar-modal { 
-            background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666; transition: all 0.2s ease; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666; transition: all 0.2s ease; 
+            border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
         }
         .fechar-modal:hover { background: #f3f4f6; color: #111; transform: rotate(90deg); }
         .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
@@ -165,22 +168,16 @@
         .aviso-info { color: #2563eb; }
         .total-texto { font-size: 1rem; font-weight: 700; text-align: right; margin: 8px 0; }
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
-        .btn-fechar { 
-            flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;
-        }
+        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-fechar:hover { background: #e5e7eb; }
-        .btn-finalizar { 
-            flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;
-        }
+        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-finalizar:hover { background: #16a34a; }
 
         #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
         .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
         .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
         .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
-        .btn-entendi { 
-            margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;
-        }
+        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-entendi:hover { background: #b91c1c; }
 
         html, body { overflow-x: hidden; touch-action: manipulation; }
@@ -462,7 +459,6 @@
             </select>
         </div>
 
-        <!-- ✅ CAMPO DE OBSERVAÇÕES ADICIONADO -->
         <div class="form-grupo">
             <label>Observações</label>
             <textarea id="observacao" placeholder="Alguma observação ou pedido especial? Ex: sem pimenta, ponto da carne, etc."></textarea>
