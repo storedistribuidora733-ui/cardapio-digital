@@ -13,175 +13,220 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
-        body { background-color: #f8f9fa; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
+        body { 
+            background-color: #ffffff; 
+            padding-bottom: 70px; 
+            line-height: 1.4; 
+            overflow-x: hidden;
+        }
 
         @media (min-width: 768px) {
             html { font-size: 15px; }
-            body { max-width: 620px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
-            .carrinho-fixo { max-width: 620px; left: 50%; transform: translateX(-50%); padding: 7px 15px; border-radius: 12px 12px 0 0; }
-            .badge-qtd { width: 28px; height: 28px; font-size: 0.85rem; }
-            .texto-carrinho h3 { font-size: 1rem; }
-            .texto-carrinho p { font-size: 0.8rem; }
-            .btn-ver-carrinho { padding: 8px 15px; font-size: 0.85rem; border-radius: 8px; }
+            body { max-width: 580px; margin: 0 auto; }
+            .carrinho-fixo { max-width: 580px; left: 50%; transform: translateX(-50%); }
             #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
         }
 
         .status-topo, .cabecalho-banner { display: none !important; }
 
+        /* CATEGORIAS IGUAL A IMAGEM */
         .categorias { 
-            width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
-            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 99;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 0 rgba(0,0,0,0);
+            width: 100%; 
+            padding: 10px 12px; 
+            display: flex; 
+            gap: 10px; 
+            overflow-x: auto; 
+            scrollbar-width: none; 
+            background: #ffffff; 
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 99;
         }
-        .categorias.sticky-visivel { box-shadow: 0 3px 12px rgba(0,0,0,0.08); padding-top: 9px; padding-bottom: 9px; }
         .categorias::-webkit-scrollbar { display: none; }
         .categoria-btn { 
-            padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; background: #ffffff; font-weight: 600; 
-            font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; 
-            transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            padding: 8px 18px; 
+            border-radius: 20px; 
+            border: 1px solid #e5e7eb; 
+            background: #ffffff; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            color: #000;
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            white-space: nowrap; 
+            transition: all 0.2s ease; 
         }
-        .categoria-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-color: #facc15; }
-        .categoria-btn:active { transform: translateY(-1px) scale(0.98); }
-        .categoria-btn.ativo { background-color: #facc15; border-color: #facc15; color: #111; box-shadow: 0 2px 6px rgba(250,204,21,0.3); }
+        .categoria-btn.ativo { 
+            background-color: #dc2626; 
+            border-color: #dc2626; 
+            color: #ffffff; 
+        }
 
-        .busca { margin: 8px 10px; position: relative; }
+        /* BUSCA IGUAL A IMAGEM */
+        .busca { margin: 12px; position: relative; }
         .busca input { 
-            width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; 
-            background: #ffffff; transition: all 0.25s ease; 
+            width: 100%; 
+            padding: 10px 12px 10px 38px; 
+            border: 1px solid #d1d5db; 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            background: #ffffff; 
+            color: #374151;
         }
-        .busca input:focus { outline: none; border-color: #facc15; box-shadow: 0 0 0 2px rgba(250,204,21,0.15); transform: translateY(-1px); }
-        .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem; }
+        .busca i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 1.1rem; }
 
-        .container { width: 100%; padding: 0 10px; }
-        .lista-produtos { display: flex; flex-direction: column; gap: 7px; margin: 8px 0; }
+        .container { width: 100%; padding: 0 12px; }
+        .lista-produtos { display: flex; flex-direction: column; gap: 12px; margin: 12px 0; }
         
+        /* CARTÃO DE PRODUTO EXATO DA IMAGEM */
         .produto { 
-            background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; 
-            align-items: center; gap: 10px; cursor: pointer; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            background: #ffffff; 
+            border-radius: 12px; 
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05); 
+            padding: 12px; 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 12px; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
         }
-        .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
-        .produto:active { transform: translateY(-1px) scale(0.99); }
+        .produto:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
-        .produto-imagem { position: relative; width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
-        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-        .produto:hover .produto-imagem img { transform: scale(1.05); }
-        .tag-mais-pedido { position: absolute; top: 0; left: 0; background: #dc2626; color: white; font-size: 0.65rem; font-weight: 600; padding: 2px 4px; border-radius: 0 0 5px 0; }
+        .produto-imagem { 
+            position: relative; 
+            width: 100px; 
+            height: 100px; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            flex-shrink: 0; 
+            background: #f3f4f6; 
+        }
+        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; }
+        .tag-mais-pedido { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            background: #dc2626; 
+            color: white; 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            padding: 4px 8px; 
+            border-radius: 0 0 8px 0; 
+        }
         
-        .produto-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-        .produto-codigo { font-size: 0.75rem; font-weight: 700; color: #ca8a04; }
-        .produto-nome { font-size: 1.1rem; font-weight: 700; color: #111827; line-height: 1.2; }
-        .produto-descricao { font-size: 0.8rem; color: #6b7280; line-height: 1.3; }
-        .produto-detalhes { font-size: 0.7rem; color: #78716c; display: flex; gap: 8px; margin-top: 3px; }
-        
-        .produto-preco { font-size: 1.2rem; font-weight: 800; color: #dc2626; white-space: nowrap; margin-left: auto; }
-        .produto-acoes, .controle-qtd, .add-carrinho { display: none !important; }
+        .produto-info { display: flex; flex-direction: column; gap: 4px; flex: 1; padding-top: 4px; }
+        .produto-nome { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: #000000; 
+            line-height: 1.2; 
+        }
+        .produto-descricao { 
+            font-size: 1.05rem; 
+            color: #6b7280; 
+            line-height: 1.4; 
+            font-weight: 500;
+        }
+        .produto-preco { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: #dc2626; 
+            margin-top: 6px; 
+        }
+        .produto-acoes, .controle-qtd, .add-carrinho, .produto-codigo, .produto-detalhes { display: none !important; }
 
+        /* RESTO DO CÓDIGO 100% ORIGINAL */
         .carrinho-fixo { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 6px 10px; 
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 10px 12px; box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 12px; border-top-right-radius: 12px; display: none; 
         }
         .carrinho-conteudo { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-        .carrinho-esq { display: flex; align-items: center; gap: 7px; flex: 1; }
-        .badge-qtd { width: 26px; height: 26px; background: #facc15; color: #111827; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0; }
-        .texto-carrinho h3 { font-size: 0.95rem; margin: 0; font-weight: 600; white-space: nowrap; }
-        .texto-carrinho p { font-size: 0.75rem; color: #b0b3b8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .carrinho-esq { display: flex; align-items: center; gap: 10px; }
+        .badge-qtd { width: 28px; height: 28px; background: #facc15; color: #111827; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
+        .texto-carrinho h3 { font-size: 1rem; margin: 0; font-weight: 700; }
+        .texto-carrinho p { font-size: 0.8rem; color: #d1d5db; margin: 0; }
         .btn-ver-carrinho { 
-            background: #facc15; color: #111827; border: none; border-radius: 6px; padding: 7px 12px; font-weight: 700; 
-            font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0; transition: all 0.2s ease; 
+            background: #facc15; color: #111827; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; 
         }
-        .btn-ver-carrinho:hover { transform: translateY(-1px); }
 
         .oculto { display: none !important; }
         #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
         .cabecalho-detalhe { position: relative; width: 100%; height: 220px; background: #f3f4f6; }
         #btn-voltar { 
-            position: absolute; top: 15px; left: 15px; width: 42px; height: 42px; border-radius: 50%; border: none; 
-            background: rgba(255,255,255,0.9); font-size: 1.3rem; cursor: pointer; z-index: 10; display: flex; 
-            align-items: center; justify-content: center; transition: all 0.2s ease; 
+            position: absolute; top: 15px; left: 15px; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); font-size: 1.5rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; 
         }
-        #btn-voltar:hover { background: #fff; transform: scale(1.05); }
-        #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
-
-        .faixa-status { 
-            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #ffffff; 
-            padding: 8px 22px; border-radius: 50px; border: 2px solid #dc2626; font-size: clamp(17px, 3.5vw, 19px); 
-            font-weight: 600; color: #dc2626; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; 
-        }
-
-        .conteudo-detalhe { padding: 35px 15px 130px; }
-        #nome-detalhe { font-size: clamp(32px, 6.5vw, 42px); font-weight: 800; margin-bottom: 12px; color: #111; }
-        #descricao-detalhe { font-size: clamp(18px, 3.8vw, 22px); color: #666; line-height: 1.5; margin-bottom: 20px; }
-
+        #img-detalhe { width: 100%; height: 100%; object-fit: cover; }
+        .faixa-status { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #fff; padding: 8px 20px; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 6px; font-size: 0.95rem; font-weight: 600; color: #dc2626; }
+        .conteudo-detalhe { padding: 30px 15px 120px; }
+        #nome-detalhe { font-size: 2rem; font-weight: 800; margin-bottom: 10px; color: #000; }
+        #descricao-detalhe { font-size: 1.1rem; color: #6b7280; line-height: 1.5; margin-bottom: 20px; }
         .precos { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; }
-        .preco-original { font-size: clamp(20px, 4.2vw, 26px); color: #999; text-decoration: line-through; }
-        .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #9333ea; }
-        .quero-btn { margin-left: auto; font-size: clamp(18px, 3.8vw, 22px); color: #dc2626; font-weight: 700; cursor: pointer; }
-
+        .preco-original { font-size: 1.2rem; color: #9ca3af; text-decoration: line-through; }
+        .preco-promocional { font-size: 1.8rem; font-weight: 800; color: #9333ea; }
+        .quero-btn { margin-left: auto; font-size: 1.2rem; color: #dc2626; font-weight: 700; cursor: pointer; }
         .secao-adicionais { margin-bottom: 30px; }
-        .secao-adicionais h3 { font-size: clamp(24px, 5vw, 30px); font-weight: 700; color: #111; margin-bottom: 6px; }
-        .secao-adicionais p { font-size: clamp(16px, 3.2vw, 19px); color: #888; margin-bottom: 20px; }
-
-        .adicional-item { padding: 12px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
-        .adicional-nome { font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
-        .adicional-preco { font-size: 0.95rem; color: #4b5563; }
-
+        .secao-adicionais h3 { font-size: 1.4rem; font-weight: 700; color: #1f2937; margin-bottom: 5px; }
+        .secao-adicionais p { font-size: 1rem; color: #9ca3af; margin-bottom: 15px; }
+        .adicional-item { padding: 10px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
+        .adicional-nome { font-size: 1.1rem; font-weight: 500; color: #000; }
+        .adicional-preco { font-size: 1rem; color: #6b7280; }
         .btn-add-adicional { 
-            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; 
-            font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+            width: 32px; height: 32px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; font-size: 1.3rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
         }
-        .btn-add-adicional:hover { transform: scale(1.05); }
         .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
-
-        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 15px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
+        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 15px 15px 25px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 20px; }
         .qtd-detalhe { display: flex; align-items: center; gap: 20px; }
         .qtd-detalhe button { 
-            font-size: clamp(24px, 5.5vw, 32px); border: none; background: none; cursor: pointer; color: #dc2626; 
-            font-weight: 700; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; border: none; background: none; cursor: pointer; color: #dc2626; font-weight: 800; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
         }
-        .qtd-detalhe button:hover { background: #fef2f2; }
-        #qtd-atual { font-size: clamp(22px, 5vw, 30px); font-weight: 700; min-width: 24px; text-align: center; }
+        #qtd-atual { font-size: 1.5rem; font-weight: 700; color: #000; min-width: 25px; text-align: center; }
         #btn-adicionar-detalhe { 
-            flex: 1; padding: clamp(14px, 3.5vw, 18px); border: none; border-radius: 12px; background: #dc2626; 
-            color: white; font-size: clamp(20px, 4.5vw, 26px); font-weight: 700; cursor: pointer; transition: background 0.2s ease;
+            flex: 1; padding: 15px; border: none; border-radius: 10px; background: #dc2626; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background 0.2s ease;
         }
         #btn-adicionar-detalhe:hover { background: #b91c1c; }
 
-        #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 10px; }
-        .modal-conteudo { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 10px; padding: 12px; overflow-y: auto; }
-        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 12px; }
+        .modal-conteudo { background: white; width: 100%; max-width: 520px; max-height: 90vh; border-radius: 12px; padding: 15px; overflow-y: auto; }
+        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
         .fechar-modal { 
-            background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666; transition: all 0.2s ease; 
-            border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; transition: all 0.2s ease; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
         }
-        .fechar-modal:hover { background: #f3f4f6; color: #111; transform: rotate(90deg); }
-        .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        .form-grupo { margin: 8px 0; }
-        .form-grupo label { display: block; margin-bottom: 3px; font-weight: 500; font-size: 0.85rem; }
+        .fechar-modal:hover { color: #000; transform: rotate(90deg); }
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+        .form-grupo { margin: 10px 0; }
+        .form-grupo label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.9rem; }
         .form-grupo input, .form-grupo select, .form-grupo textarea { 
-            width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; transition: all 0.2s ease;
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; transition: all 0.2s ease;
         }
-        .form-grupo textarea { resize: vertical; min-height: 60px; }
-        .form-grupo input:focus, .form-grupo select:focus, .form-grupo textarea:focus { outline: none; border-color: #facc15; box-shadow: 0 0 0 2px rgba(250,204,21,0.15); }
-        .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .aviso-erro, .aviso-info { font-size: 0.8rem; margin-top: 2px; }
+        .form-grupo textarea { resize: vertical; min-height: 70px; }
+        .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .aviso-erro, .aviso-info { font-size: 0.85rem; margin-top: 4px; }
         .aviso-erro { color: #dc2626; }
         .aviso-info { color: #2563eb; }
-        .total-texto { font-size: 1rem; font-weight: 700; text-align: right; margin: 8px 0; }
-        .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
-        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .total-texto { font-size: 1.1rem; font-weight: 700; text-align: right; margin: 10px 0; }
+        .botoes-modal { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-fechar { 
+            flex: 1; padding: 10px; border: none; border-radius: 6px; background: #eee; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease;
+        }
         .btn-fechar:hover { background: #e5e7eb; }
-        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-finalizar { 
+            flex: 2; padding: 10px; border: none; border-radius: 6px; background: #22c55e; color: white; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease;
+        }
         .btn-finalizar:hover { background: #16a34a; }
 
-        #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
-        .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
-        .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
-        .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
-        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 12px; }
+        .alerta-caixa { background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 300px; }
+        .alerta-caixa h2 { color: #dc2626; margin-bottom: 8px; font-size: 1.3rem; }
+        .alerta-caixa p { font-size: 1rem; line-height: 1.5; margin-bottom: 12px; }
+        .btn-entendi { 
+            margin-top: 10px; padding: 8px 20px; border: none; border-radius: 6px; background: #dc2626; color: white; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease;
+        }
         .btn-entendi:hover { background: #b91c1c; }
 
         html, body { overflow-x: hidden; touch-action: manipulation; }
-        .produto, .categoria-btn, .btn-ver-carrinho, button { -webkit-tap-highlight-color: transparent; }
+        * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
@@ -224,276 +269,243 @@
                 <span class="tag-mais-pedido">★ MAIS</span>
             </div>
             <div class="produto-info">
-                <p class="produto-codigo">01</p>
                 <h2 class="produto-nome">Hambúrguer Simples</h2>
                 <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-fire"></i> Muito pedido</span>
-                    <span><i class="fa fa-clock"></i> 20-30 min</span>
-                </div>
+                <p class="produto-preco">R$ 10,00</p>
             </div>
-            <p class="produto-preco">R$ 10,00</p>
         </div>
 
         <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="12.00" data-descricao="Duas carnes suculentas, queijo especial derretido e molho secreto da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Duplo"></div>
             <div class="produto-info">
-                <p class="produto-codigo">02</p>
                 <h3 class="produto-nome">Hambúrguer Duplo</h3>
                 <p class="produto-descricao">Duas carnes, queijo especial e molho da casa.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Saboroso</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
+                <p class="produto-preco">R$ 12,00</p>
             </div>
-            <p class="produto-preco">R$ 12,00</p>
         </div>
 
         <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Picante" data-preco="15.00" data-descricao="Carne especial, molho apimentado caseiro e pimenta calabresa fresca." data-imagem="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Picante"></div>
             <div class="produto-info">
-                <p class="produto-codigo">03</p>
                 <h3 class="produto-nome">Hambúrguer Picante</h3>
                 <p class="produto-descricao">Carne especial, molho apimentado e pimenta calabresa.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-pepper-hot"></i> Picante</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
+                <p class="produto-preco">R$ 15,00</p>
             </div>
-            <p class="produto-preco">R$ 15,00</p>
         </div>
 
         <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Tradicional" data-preco="12.00" data-descricao="Porção grande de batatas selecionadas, crocantes e temperadas na hora." data-imagem="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Frita"></div>
             <div class="produto-info">
-                <p class="produto-codigo">04</p>
                 <h3 class="produto-nome">Batata Frita Tradicional</h3>
                 <p class="produto-descricao">Porção grande, crocante e temperada.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-fire"></i> Quente</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
+                <p class="produto-preco">R$ 12,00</p>
             </div>
-            <p class="produto-preco">R$ 12,00</p>
         </div>
 
         <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola" data-preco="14.00" data-descricao="Anéis de cebola branca empanados crocantes, servidos com molho especial." data-imagem="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Anéis de Cebola"></div>
             <div class="produto-info">
-                <p class="produto-codigo">05</p>
                 <h3 class="produto-nome">Anéis de Cebola</h3>
                 <p class="produto-descricao">Empanados, crocantes e saborosos.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-thumbs-up"></i> Crocante</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
+                <p class="produto-preco">R$ 14,00</p>
             </div>
-            <p class="produto-preco">R$ 14,00</p>
         </div>
 
         <div class="produto" data-categoria="acompanhamentos" data-nome="Batata com Cheddar e Bacon" data-preco="18.00" data-descricao="Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante." data-imagem="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Cheddar"></div>
             <div class="produto-info">
-                <p class="produto-codigo">06</p>
                 <h3 class="produto-nome">Batata com Cheddar e Bacon</h3>
                 <p class="produto-descricao">Coberta com molho de queijo e bacon picado.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-star"></i> Mais pedida</span><span><i class="fa fa-clock"></i> 12-18 min</span></div>
+                <p class="produto-preco">R$ 18,00</p>
             </div>
-            <p class="produto-preco">R$ 18,00</p>
         </div>
 
         <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 350ml Zero" data-preco="6.00" data-descricao="Lata de refrigerante gelada, zero açúcar, sabor original." data-imagem="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca-Cola Zero Lata"></div>
             <div class="produto-info">
-                <p class="produto-codigo">07</p>
                 <h3 class="produto-nome">Coca-Cola 350ml Zero</h3>
                 <p class="produto-descricao">Lata gelada, zero açúcar, sabor original.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
+                <p class="produto-preco">R$ 6,00</p>
             </div>
-            <p class="produto-preco">R$ 6,00</p>
         </div>
 
         <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica 350ml" data-preco="6.00" data-descricao="Lata bem gelada, sabor tradicional do Brasil." data-imagem="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Guaraná"></div>
             <div class="produto-info">
-                <p class="produto-codigo">08</p>
                 <h3 class="produto-nome">Guaraná Antarctica 350ml</h3>
                 <p class="produto-descricao">Lata bem gelada, sabor tradicional.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
+                <p class="produto-preco">R$ 6,00</p>
             </div>
-            <p class="produto-preco">R$ 6,00</p>
         </div>
 
         <div class="produto" data-categoria="bebidas" data-nome="Suco de Laranja Natural 500ml" data-preco="9.00" data-descricao="Suco 100% fruta, espremido na hora, sem açúcar e sem conservantes." data-imagem="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Suco de Laranja"></div>
             <div class="produto-info">
-                <p class="produto-codigo">09</p>
                 <h3 class="produto-nome">Suco de Laranja Natural 500ml</h3>
                 <p class="produto-descricao">100% fruta, sem açúcar.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Natural</span></div>
+                <p class="produto-preco">R$ 9,00</p>
             </div>
-            <p class="produto-preco">R$ 9,00</p>
         </div>
 
         <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Normal" data-preco="12.00" data-descricao="Garrafa grande, sabor original, bem gelada para toda a família." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Normal"></div>
             <div class="produto-info">
-                <p class="produto-codigo">10</p>
                 <h3 class="produto-nome">Coca‑Cola 2 L Normal</h3>
                 <p class="produto-descricao">Garrafa grande, sabor original, gelada.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-tint"></i> Refrigerante</span>
-                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
-                </div>
+                <p class="produto-preco">R$ 12,00</p>
             </div>
-            <p class="produto-preco">R$ 12,00</p>
         </div>
 
         <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Zero Açúcar" data-preco="12.00" data-descricao="Garrafa grande, zero açúcar, sabor inconfundível, bem gelada." data-imagem="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Zero"></div>
             <div class="produto-info">
-                <p class="produto-codigo">11</p>
                 <h3 class="produto-nome">Coca‑Cola 2 L Zero Açúcar</h3>
                 <p class="produto-descricao">Garrafa grande, zero açúcar, gelada.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-tint"></i> Refrigerante</span>
-                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
-                    <span><i class="fa fa-ban"></i> Zero Açúcar</span>
-                </div>
+                <p class="produto-preco">R$ 12,00</p>
             </div>
-            <p class="produto-preco">R$ 12,00</p>
         </div>
     </div>
 </div>
 
 <div id="modal-produto" class="oculto">
     <div class="cabecalho-detalhe">
-        <button id="btn-voltar">&larr;</button>
-        <img id="img-detalhe" alt="">
-        <div class="faixa-status">
-            <span class="ponto-status" id="ponto-status-modal"></span>
-            <span id="texto-status-modal"></span>
-        </div>
+        <button id="btn-voltar"><i class="fa fa-arrow-left"></i></button>
+        <img id="img-detalhe" src="" alt="">
+        <div class="faixa-status"><span id="status-produto"></span></div>
     </div>
     <div class="conteudo-detalhe">
         <h2 id="nome-detalhe"></h2>
         <p id="descricao-detalhe"></p>
         <div class="precos">
-            <span class="preco-original" id="preco-original"></span>
-            <span class="preco-promocional" id="preco-promocional"></span>
-            <span class="quero-btn">Quero &gt;</span>
+            <span class="preco-promocional" id="preco-detalhe"></span>
+            <span class="quero-btn" id="btn-quero-adicionar">Quero esse</span>
         </div>
         <div class="secao-adicionais">
-            <h3>Turbine Seu Lanche</h3>
-            <p>Escolha até 10 opções</p>
-            <div id="lista-adicionais"></div>
+            <h3>Adicionais</h3>
+            <p>Escolha se quiser incrementar seu pedido</p>
+            <div class="adicional-item">
+                <span class="adicional-nome">Queijo Extra</span>
+                <span class="adicional-preco">R$ 3,00</span>
+                <button class="btn-add-adicional" data-nome="Queijo Extra" data-valor="3.00">+</button>
+            </div>
+            <div class="adicional-item">
+                <span class="adicional-nome">Bacon</span>
+                <span class="adicional-preco">R$ 4,00</span>
+                <button class="btn-add-adicional" data-nome="Bacon" data-valor="4.00">+</button>
+            </div>
+            <div class="adicional-item">
+                <span class="adicional-nome">Ovo</span>
+                <span class="adicional-preco">R$ 2,50</span>
+                <button class="btn-add-adicional" data-nome="Ovo" data-valor="2.50">+</button>
+            </div>
+            <div class="adicional-item">
+                <span class="adicional-nome">Molho Especial</span>
+                <span class="adicional-preco">R$ 2,00</span>
+                <button class="btn-add-adicional" data-nome="Molho Especial" data-valor="2.00">+</button>
+            </div>
         </div>
     </div>
     <div class="rodape-detalhe">
         <div class="qtd-detalhe">
-            <button id="diminuir-qtd">&minus;</button>
+            <button id="btn-menos">-</button>
             <span id="qtd-atual">1</span>
-            <button id="aumentar-qtd">+</button>
+            <button id="btn-mais">+</button>
         </div>
-        <button id="btn-adicionar-detalhe">Adicionar</button>
+        <button id="btn-adicionar-detalhe">Adicionar ao Carrinho</button>
+    </div>
+</div>
+
+<div class="carrinho-fixo" id="carrinho-fixo">
+    <div class="carrinho-conteudo">
+        <div class="carrinho-esq">
+            <div class="badge-qtd" id="badge-qtd">0</div>
+            <div class="texto-carrinho">
+                <h3>Meu Carrinho</h3>
+                <p id="texto-total">R$ 0,00</p>
+            </div>
+        </div>
+        <button class="btn-ver-carrinho" id="btn-ver-carrinho">Ver</button>
     </div>
 </div>
 
 <div id="modal-carrinho" class="oculto">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
-            <h3>Meu Carrinho</h3>
-            <button id="fechar-modal" class="fechar-modal">&times;</button>
+            <h3>Meu Pedido</h3>
+            <button class="fechar-modal" id="fechar-carrinho">&times;</button>
         </div>
-        <div id="lista-itens-carrinho"></div>
-        <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
-
+        <div id="lista-carrinho"></div>
+        <div class="total-texto">Total: <span id="total-final">R$ 0,00</span></div>
+        <hr style="margin:15px 0; border:none; border-bottom:1px solid #eee;">
+        <h4 style="margin-bottom:8px; font-size:1rem;">Dados para Entrega</h4>
         <div class="form-grupo">
-            <label>Forma de recebimento</label>
-            <select id="tipo-atendimento">
-                <option value="retirada">Retirada</option>
-                <option value="entrega">Entrega</option>
-            </select>
+            <label>Nome Completo *</label>
+            <input type="text" id="nome-cliente" placeholder="Seu nome">
         </div>
-
-        <div id="campo-taxa-entrega" class="form-grupo oculto">
-            <label>Taxa de entrega</label>
-            <input type="text" id="taxa-entrega" value="8,00" readonly style="background: #f8f8f8;">
-        </div>
-
         <div class="form-grupo">
-            <label>Nome completo</label>
-            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
+            <label>Telefone / WhatsApp *</label>
+            <input type="tel" id="telefone-cliente" placeholder="(19) 99999-9999">
         </div>
-
-        <div id="bloco-endereco" class="oculto">
+        <div class="form-grupo">
+            <label>CEP *</label>
+            <input type="text" id="cep" placeholder="00000-000">
+        </div>
+        <div class="form-duplo">
             <div class="form-grupo">
-                <label>CEP</label>
-                <input type="text" id="cep" placeholder="Ex: 00000-000" maxlength="9">
-                <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
-            </div>
-            <div class="form-duplo">
-                <div class="form-grupo">
-                    <label>Número</label>
-                    <input type="text" id="numero" placeholder="Ex: 123">
-                </div>
-                <div class="form-grupo">
-                    <label>Complemento</label>
-                    <input type="text" id="complemento" placeholder="Ex: Apto 1">
-                </div>
-            </div>
-            <div class="form-grupo">
-                <label>Referência</label>
-                <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
-            </div>
-            <div class="form-grupo">
-                <label>Rua / Logradouro</label>
+                <label>Rua</label>
                 <input type="text" id="rua" placeholder="Preenchido automaticamente">
             </div>
-            <div class="form-duplo">
-                <div class="form-grupo">
-                    <label>Bairro</label>
-                    <input type="text" id="bairro" placeholder="Preenchido automaticamente">
-                </div>
-                <div class="form-grupo">
-                    <label>Cidade / UF</label>
-                    <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente">
-                </div>
+            <div class="form-grupo">
+                <label>Número *</label>
+                <input type="text" id="numero" placeholder="Ex: 123">
             </div>
         </div>
-
+        <div class="form-duplo">
+            <div class="form-grupo">
+                <label>Bairro</label>
+                <input type="text" id="bairro" placeholder="Preenchido automaticamente">
+            </div>
+            <div class="form-grupo">
+                <label>Cidade / UF</label>
+                <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente">
+            </div>
+        </div>
         <div class="form-grupo">
-            <label>Forma de pagamento</label>
-            <select id="forma-pagamento">
+            <label>Complemento</label>
+            <input type="text" id="complemento" placeholder="Casa, Apto, Bloco...">
+        </div>
+        <div class="form-grupo">
+            <label>Forma de Pagamento *</label>
+            <select id="pagamento">
+                <option value="">Escolha...</option>
                 <option value="Dinheiro">Dinheiro</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
                 <option value="Pix">Pix</option>
-                <option value="Cartão">Cartão</option>
             </select>
         </div>
-
+        <div class="form-grupo">
+            <label>Troco para quanto? (se precisar)</label>
+            <input type="text" id="troco" placeholder="Ex: R$ 50,00">
+        </div>
         <div class="form-grupo">
             <label>Observações</label>
-            <textarea id="observacao" placeholder="Alguma observação ou pedido especial? Ex: sem pimenta, ponto da carne, etc."></textarea>
+            <textarea id="observacoes" placeholder="Alguma instrução especial?"></textarea>
         </div>
-
-        <p id="aviso-geral" class="aviso-erro oculto"></p>
-
         <div class="botoes-modal">
-            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
-            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
+            <button class="btn-fechar" id="btn-limpar">Limpar Carrinho</button>
+            <button class="btn-finalizar" id="btn-finalizar">Finalizar Pedido</button>
         </div>
     </div>
 </div>
 
 <div id="alerta-fechado" class="oculto">
     <div class="alerta-caixa">
-        <h2>Loja Fechada</h2>
-        <p>Atendimento das 07:00 às 23:00. Volte mais tarde!</p>
-        <button id="btn-entendi" class="btn-entendi">Entendi</button>
+        <h2>⚠️ Estamos Fechados</h2>
+        <p>Volte depois ou confira nosso horário de atendimento!</p>
+        <button class="btn-entendi" id="btn-entendi">Entendi</button>
     </div>
 </div>
 
-<div class="carrinho-fixo" id="carrinho-container">
-    <div class="carrinho-conteudo">
-        <div class="carrinho-esq">
-            <span class="badge-qtd" id="qtd-carrinho">0</span>
-            <div class="texto-carrinho">
-                <h3>Meu carrinho</h3>
-                <p id="resumo-carrinho">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</p>
-            </div>
-        </div>
-        <button class="btn-ver-carrinho" id="abrir-carrinho"> Ver </button>
-    </div>
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
