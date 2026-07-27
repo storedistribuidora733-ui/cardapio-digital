@@ -3,7 +3,7 @@
 // ==============================================
 const CONFIG = {
   horaAbertura: 7,
-  horaFechamento: 8,
+  horaFechamento: 24,
   textoStatusAberto: "Aberto até às 07:00",
   textoStatusFechado: "Fechado • Abre às 08:00",
   corStatusAberto: "#22c55e",
