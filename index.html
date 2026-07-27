@@ -93,13 +93,10 @@
 
         .oculto { display: none !important; }
 
-        /* =====================================
-           ✅ MODAL AJUSTADO EXATAMENTE COMO NA FOTO
-           ===================================== */
+        /* === MODAL EXATO COMO NA IMAGEM === */
         #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
         .cabecalho-detalhe { position: relative; width: 100%; height: 280px; background: #f3f4f6; }
 
-        /* Botão voltar igual à imagem */
         #btn-voltar { 
             position: absolute; top: 12px; left: 12px; width: 44px; height: 44px; border-radius: 50%; 
             border: none; background: rgba(255,255,255,0.95); font-size: 1.2rem; cursor: pointer; z-index: 10; 
@@ -110,24 +107,22 @@
 
         #img-detalhe { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Faixa de status exata */
         .faixa-status { 
             position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); 
             background: #ffffff; padding: 10px 28px; border-radius: 50px; border: 2px solid #dc2626; 
             font-size: 1.2rem; font-weight: 600; color: #dc2626; white-space: nowrap;
         }
+        .faixa-status.aberto { border-color: #22c55e; color: #22c55e; }
 
         .conteudo-detalhe { padding: 40px 20px 140px; }
         #nome-detalhe { font-size: 2.8rem; font-weight: 800; margin-bottom: 10px; color: #000; line-height: 1.1; }
         #descricao-detalhe { font-size: 1.3rem; color: #666; line-height: 1.5; margin-bottom: 25px; }
 
-        /* Preços exatos: riscado + roxo */
         .precos { display: flex; align-items: baseline; gap: 18px; margin-bottom: 30px; }
         .preco-original { font-size: 1.5rem; color: #999; text-decoration: line-through; }
         .preco-promocional { font-size: 2.2rem; font-weight: 800; color: #9333ea; }
         .quero-btn { margin-left: auto; font-size: 1.5rem; color: #dc2626; font-weight: 700; cursor: pointer; }
 
-        /* Seção adicionais igual à referência */
         .secao-adicionais { margin-bottom: 35px; }
         .secao-adicionais h3 { font-size: 1.8rem; font-weight: 700; color: #000; margin-bottom: 5px; }
         .secao-adicionais p { font-size: 1.1rem; color: #888; margin-bottom: 20px; }
@@ -144,7 +139,6 @@
         .btn-add-adicional:hover { background: #fef2f2; }
         .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
 
-        /* Rodapé exato */
         .rodape-detalhe { 
             position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 18px 20px; 
             border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 25px; 
@@ -235,7 +229,7 @@
 
 <div class="container">
     <div class="lista-produtos">
-        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-descricao="Pão, carne, queijo, alface e tomate, tudo fresquinho e preparado na hora." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-descricao="Pão, carne, queijo, alface e tomate, tudo fresquinho e preparado na hora." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" data-preco-original="12.00">
             <div class="produto-imagem">
                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Simples">
                 <span class="tag-mais-pedido">★ MAIS</span>
@@ -252,119 +246,13 @@
             <p class="produto-preco">R$ 10,00</p>
         </div>
 
-        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="12.00" data-descricao="Duas carnes suculentas, queijo especial derretido e molho secreto da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="12.00" data-descricao="Duas carnes suculentas, queijo especial derretido e molho secreto da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" data-preco-original="14.00">
             <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Duplo"></div>
             <div class="produto-info">
                 <p class="produto-codigo">02</p>
                 <h3 class="produto-nome">Hambúrguer Duplo</h3>
                 <p class="produto-descricao">Duas carnes, queijo especial e molho da casa.</p>
                 <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Saboroso</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
-
-        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Picante" data-preco="15.00" data-descricao="Carne especial, molho apimentado caseiro e pimenta calabresa fresca." data-imagem="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Picante"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">03</p>
-                <h3 class="produto-nome">Hambúrguer Picante</h3>
-                <p class="produto-descricao">Carne especial, molho apimentado e pimenta calabresa.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-pepper-hot"></i> Picante</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 15,00</p>
-        </div>
-
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Tradicional" data-preco="12.00" data-descricao="Porção grande de batatas selecionadas, crocantes e temperadas na hora." data-imagem="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Frita"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">04</p>
-                <h3 class="produto-nome">Batata Frita Tradicional</h3>
-                <p class="produto-descricao">Porção grande, crocante e temperada.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-fire"></i> Quente</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
-
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola" data-preco="14.00" data-descricao="Anéis de cebola branca empanados crocantes, servidos com molho especial." data-imagem="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Anéis de Cebola"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">05</p>
-                <h3 class="produto-nome">Anéis de Cebola</h3>
-                <p class="produto-descricao">Empanados, crocantes e saborosos.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-thumbs-up"></i> Crocante</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 14,00</p>
-        </div>
-
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata com Cheddar e Bacon" data-preco="18.00" data-descricao="Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante." data-imagem="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Cheddar"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">06</p>
-                <h3 class="produto-nome">Batata com Cheddar e Bacon</h3>
-                <p class="produto-descricao">Coberta com molho de queijo e bacon picado.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-star"></i> Mais pedida</span><span><i class="fa fa-clock"></i> 12-18 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 18,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 350ml Zero" data-preco="6.00" data-descricao="Lata de refrigerante gelada, zero açúcar, sabor original." data-imagem="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca-Cola Zero Lata"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">07</p>
-                <h3 class="produto-nome">Coca-Cola 350ml Zero</h3>
-                <p class="produto-descricao">Lata gelada, zero açúcar, sabor original.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
-            </div>
-            <p class="produto-preco">R$ 6,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica 350ml" data-preco="6.00" data-descricao="Lata bem gelada, sabor tradicional do Brasil." data-imagem="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Guaraná"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">08</p>
-                <h3 class="produto-nome">Guaraná Antarctica 350ml</h3>
-                <p class="produto-descricao">Lata bem gelada, sabor tradicional.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
-            </div>
-            <p class="produto-preco">R$ 6,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Suco de Laranja Natural 500ml" data-preco="9.00" data-descricao="Suco 100% fruta, espremido na hora, sem açúcar e sem conservantes." data-imagem="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Suco de Laranja"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">09</p>
-                <h3 class="produto-nome">Suco de Laranja Natural 500ml</h3>
-                <p class="produto-descricao">100% fruta, sem açúcar.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Natural</span></div>
-            </div>
-            <p class="produto-preco">R$ 9,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Normal" data-preco="12.00" data-descricao="Garrafa grande, sabor original, bem gelada para toda a família." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Normal"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">10</p>
-                <h3 class="produto-nome">Coca‑Cola 2 L Normal</h3>
-                <p class="produto-descricao">Garrafa grande, sabor original, gelada.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-tint"></i> Refrigerante</span>
-                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
-                </div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Zero Açúcar" data-preco="12.00" data-descricao="Garrafa grande, zero açúcar, sabor inconfundível, bem gelada." data-imagem="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Zero"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">11</p>
-                <h3 class="produto-nome">Coca‑Cola 2 L Zero Açúcar</h3>
-                <p class="produto-descricao">Garrafa grande, zero açúcar, gelada.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-tint"></i> Refrigerante</span>
-                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
-                    <span><i class="fa fa-ban"></i> Zero Açúcar</span>
-                </div>
             </div>
             <p class="produto-preco">R$ 12,00</p>
         </div>
@@ -375,9 +263,7 @@
     <div class="cabecalho-detalhe">
         <button id="btn-voltar"><i class="fa fa-arrow-left"></i></button>
         <img id="img-detalhe" alt="">
-        <div class="faixa-status">
-            <span id="texto-status-modal"></span>
-        </div>
+        <div class="faixa-status" id="faixa-status-modal"></div>
     </div>
     <div class="conteudo-detalhe">
         <h2 id="nome-detalhe"></h2>
@@ -390,7 +276,15 @@
         <div class="secao-adicionais">
             <h3>Turbine Seu Lanche</h3>
             <p>Escolha até 10 opções</p>
-            <div id="lista-adicionais"></div>
+            <div id="lista-adicionais">
+                <div class="adicional-item">
+                    <div>
+                        <div class="adicional-nome">Bacon Suculento</div>
+                        <div class="adicional-preco">+ R$ 2,90</div>
+                    </div>
+                    <button class="btn-add-adicional" data-nome="Bacon Suculento" data-valor="2.90">+</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="rodape-detalhe">
