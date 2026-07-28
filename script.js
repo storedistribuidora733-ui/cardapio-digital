@@ -1,359 +1,503 @@
-// ==============================================
-// ⚙️ CONFIGURAÇÕES — AJUSTE AQUI SE PRECISAR
-// ==============================================
-const CONFIG = {
-  horaAbertura: 5,
-  horaFechamento: 24,
-  textoStatusAberto: "Aberto até às 24:00",
-  textoStatusFechado: "Fechado • Abre às 05:00",
-  corStatusAberto: "#22c55e",
-  corStatusFechado: "#dc2626",
-  numeroWhatsApp: "5519989021323",
-  nomeLoja: "Alison Burger",
-  taxaEntregaPadrao: 8.00
-};
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Alison Burger</title>
 
-// ==============================================
-// 🛒 VARIÁVEIS GERAIS
-// ==============================================
-let carrinho = [];
-let produtoAtual = null;
-let qtdSelecionada = 1;
-let adicionaisSelecionados = [];
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-// ==============================================
-// 🚀 INICIALIZAÇÃO
-// ==============================================
-document.addEventListener('DOMContentLoaded', () => {
-  atualizarStatusLoja();
-  configurarCategorias();
-  configurarBusca();
-  configurarCliqueProdutos();
-  configurarModalProduto();
-  configurarCarrinho();
-  configurarCEP();
-  configurarRolagemCategorias();
-});
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html { font-size: 14px; }
+        body { background-color: #f8f9fa; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
 
-// ==============================================
-// ⏰ STATUS DA LOJA
-// ==============================================
-function atualizarStatusLoja() {
-  const agora = new Date();
-  const hora = agora.getHours();
-  const minutos = agora.getMinutes();
-  const horaTotal = hora + (minutos / 60);
+        @media (min-width: 768px) {
+            html { font-size: 15px; }
+            body { max-width: 620px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+            .carrinho-fixo { max-width: 620px; left: 50%; transform: translateX(-50%); padding: 7px 15px; border-radius: 12px 12px 0 0; }
+            .badge-qtd { width: 28px; height: 28px; font-size: 0.85rem; }
+            .texto-carrinho h3 { font-size: 1rem; }
+            .texto-carrinho p { font-size: 0.8rem; }
+            .btn-ver-carrinho { padding: 8px 15px; font-size: 0.85rem; border-radius: 8px; }
+            #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
+        }
 
-  let aberto = false;
-  if (CONFIG.horaAbertura < CONFIG.horaFechamento) {
-    aberto = horaTotal >= CONFIG.horaAbertura && horaTotal < CONFIG.horaFechamento;
-  } else {
-    aberto = horaTotal >= CONFIG.horaAbertura || horaTotal < CONFIG.horaFechamento;
-  }
+        .status-topo, .cabecalho-banner { display: none !important; }
 
-  const pontos = document.querySelectorAll('.ponto-status');
-  const textos = document.querySelectorAll('#texto-status, #texto-status-modal');
+        .categorias { 
+            width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
+            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 99;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 0 rgba(0,0,0,0);
+        }
+        .categorias.sticky-visivel { box-shadow: 0 3px 12px rgba(0,0,0,0.08); padding-top: 9px; padding-bottom: 9px; }
+        .categorias::-webkit-scrollbar { display: none; }
+        .categoria-btn { 
+            padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; background: #ffffff; font-weight: 600; 
+            font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; 
+            transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        .categoria-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-color: #dc2626; }
+        .categoria-btn:active { transform: translateY(-1px) scale(0.98); }
+        .categoria-btn.ativo { background-color: #dc2626; border-color: #dc2626; color: #ffffff; box-shadow: 0 2px 6px rgba(220,38,38,0.3); }
 
-  pontos.forEach(p => p.style.backgroundColor = aberto ? CONFIG.corStatusAberto : CONFIG.corStatusFechado);
-  textos.forEach(t => {
-    t.textContent = aberto ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
-    t.style.color = aberto ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
-  });
-}
+        .busca { margin: 8px 10px; position: relative; }
+        .busca input { 
+            width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; 
+            background: #ffffff; transition: all 0.25s ease; 
+        }
+        .busca input:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.15); transform: translateY(-1px); }
+        .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem; }
 
-// ==============================================
-// 📂 CATEGORIAS
-// ==============================================
-function configurarCategorias() {
-  const botoes = document.querySelectorAll('.categoria-btn');
-  const produtos = document.querySelectorAll('.produto');
+        .container { width: 100%; padding: 0 10px; }
+        .lista-produtos { display: flex; flex-direction: column; gap: 7px; margin: 8px 0; }
+        
+        .produto { 
+            background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; 
+            align-items: center; gap: 10px; cursor: pointer; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .produto:active { transform: translateY(-1px) scale(0.99); }
 
-  botoes.forEach(btn => {
-    btn.addEventListener('click', () => {
-      botoes.forEach(b => b.classList.remove('ativo'));
-      btn.classList.add('ativo');
+        .produto-imagem { position: relative; width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
+        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .produto:hover .produto-imagem img { transform: scale(1.05); }
+        .tag-mais-pedido { position: absolute; top: 0; left: 0; background: #dc2626; color: white; font-size: 0.65rem; font-weight: 600; padding: 2px 4px; border-radius: 0 0 5px 0; }
+        
+        .produto-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        .produto-codigo { font-size: 0.75rem; font-weight: 700; color: #dc2626; }
+        .produto-nome { font-size: 1.1rem; font-weight: 700; color: #111827; line-height: 1.2; }
+        .produto-descricao { font-size: 0.8rem; color: #6b7280; line-height: 1.3; }
+        .produto-detalhes { font-size: 0.7rem; color: #78716c; display: flex; gap: 8px; margin-top: 3px; }
+        
+        .produto-preco { font-size: 1.2rem; font-weight: 800; color: #dc2626; white-space: nowrap; margin-left: auto; }
+        .produto-acoes, .controle-qtd, .add-carrinho { display: none !important; }
 
-      const cat = btn.dataset.categoria;
-      produtos.forEach(p => {
-        p.classList.toggle('oculto', cat !== 'todos' && p.dataset.categoria !== cat);
-      });
-    });
-  });
-}
+        .carrinho-fixo { 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 6px 10px; 
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; 
+        }
+        .carrinho-conteudo { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .carrinho-esq { display: flex; align-items: center; gap: 7px; flex: 1; }
+        .badge-qtd { width: 26px; height: 26px; background: #dc2626; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0; }
+        .texto-carrinho h3 { font-size: 0.95rem; margin: 0; font-weight: 600; white-space: nowrap; }
+        .texto-carrinho p { font-size: 0.75rem; color: #b0b3b8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .btn-ver-carrinho { 
+            background: #dc2626; color: #ffffff; border: none; border-radius: 6px; padding: 7px 12px; font-weight: 700; 
+            font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0; transition: all 0.2s ease; 
+        }
+        .btn-ver-carrinho:hover { transform: translateY(-1px); }
 
-// ==============================================
-// 🔍 BUSCA
-// ==============================================
-function configurarBusca() {
-  const campo = document.getElementById('campoBusca');
-  const produtos = document.querySelectorAll('.produto');
+        .oculto { display: none !important; }
+        #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
+        .cabecalho-detalhe { position: relative; width: 100%; height: 180px; background: #f3f4f6; }
+        /* ✅ SETA AJUSTADA: menor e mais bonita */
+        #btn-voltar { 
+            position: absolute; top: 12px; left: 12px; width: 30px; height: 30px; border-radius: 50%; border: none; 
+            background: rgba(255,255,255,0.95); font-size: 1.1rem; font-weight: bold; cursor: pointer; z-index: 10; 
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        #btn-voltar:hover { background: #fff; transform: scale(1.08); }
+        #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
 
-  campo.addEventListener('input', () => {
-    const termo = campo.value.toLowerCase();
-    produtos.forEach(p => {
-      const nome = p.dataset.nome.toLowerCase();
-      const desc = p.dataset.descricao.toLowerCase();
-      p.classList.toggle('oculto', !(nome.includes(termo) || desc.includes(termo)));
-    });
-  });
-}
+        .faixa-status { 
+            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #ffffff; 
+            padding: 6px 18px; border-radius: 50px; border: 2px solid #dc2626; font-size: clamp(15px, 3vw, 17px); 
+            font-weight: 600; color: #dc2626; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; 
+        }
 
-// ==============================================
-// 🖱️ CLIQUE NOS PRODUTOS — CORRIGIDO!
-// ==============================================
-function configurarCliqueProdutos() {
-  const produtos = document.querySelectorAll('.produto');
-  const modal = document.getElementById('modal-produto');
+        .conteudo-detalhe { padding: 25px 15px 110px; }
+        #nome-detalhe { font-size: clamp(24px, 5vw, 32px); font-weight: 800; margin-bottom: 8px; color: #111; }
+        #descricao-detalhe { font-size: clamp(15px, 3vw, 18px); color: #666; line-height: 1.5; margin-bottom: 15px; }
 
-  produtos.forEach(prod => {
-    prod.addEventListener('click', () => {
-      // VERIFICA SE LOJA ESTÁ ABERTA
-      const agora = new Date();
-      const horaTotal = agora.getHours() + (agora.getMinutes() / 60);
-      let aberto = CONFIG.horaAbertura < CONFIG.horaFechamento 
-        ? (horaTotal >= CONFIG.horaAbertura && horaTotal < CONFIG.horaFechamento)
-        : (horaTotal >= CONFIG.horaAbertura || horaTotal < CONFIG.horaFechamento);
+        .precos { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; }
+        .preco-original { font-size: clamp(20px, 4.2vw, 26px); color: #999; text-decoration: line-through; }
+        /* ✅ VALOR MUDADO DE ROXO PARA VERMELHO */
+        .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #dc2626; }
+        .quero-btn { margin-left: auto; font-size: clamp(18px, 3.8vw, 22px); color: #dc2626; font-weight: 700; cursor: pointer; }
 
-      if (!aberto) {
-        document.getElementById('alerta-fechado').classList.remove('oculto');
-        return;
-      }
+        .secao-adicionais { margin-bottom: 30px; }
+        .secao-adicionais h3 { font-size: clamp(24px, 5vw, 30px); font-weight: 700; color: #111; margin-bottom: 6px; }
+        .secao-adicionais p { font-size: clamp(16px, 3.2vw, 19px); color: #888; margin-bottom: 20px; }
 
-      // CARREGA DADOS E ABRE SOMENTE ESSE MODAL
-      produtoAtual = {
-        nome: prod.dataset.nome,
-        preco: parseFloat(prod.dataset.preco),
-        descricao: prod.dataset.descricao,
-        imagem: prod.dataset.imagem
-      };
+        .adicional-item { padding: 12px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
+        .adicional-nome { font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
+        .adicional-preco { font-size: 0.95rem; color: #4b5563; }
 
-      qtdSelecionada = 1;
-      adicionaisSelecionados = [];
+        .btn-add-adicional { 
+            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; 
+            font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        .btn-add-adicional:hover { transform: scale(1.05); }
+        .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
 
-      document.getElementById('img-detalhe').src = produtoAtual.imagem;
-      document.getElementById('nome-detalhe').textContent = produtoAtual.nome;
-      document.getElementById('descricao-detalhe').textContent = produtoAtual.descricao;
-      document.getElementById('preco-promocional').textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
-      document.getElementById('preco-original').textContent = '';
-      document.getElementById('qtd-atual').textContent = qtdSelecionada;
-      document.getElementById('lista-adicionais').innerHTML = '';
+        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 12px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
+        .qtd-detalhe { display: flex; align-items: center; gap: 20px; }
+        .qtd-detalhe button { 
+            font-size: clamp(24px, 5.5vw, 32px); border: none; background: none; cursor: pointer; color: #dc2626; 
+            font-weight: 700; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+        }
+        .qtd-detalhe button:hover { background: #fef2f2; }
+        #qtd-atual { font-size: clamp(22px, 5vw, 30px); font-weight: 700; min-width: 24px; text-align: center; }
+        /* ✅ BOTÃO ADICIONAR AJUSTADO: menor e proporcional */
+        #btn-adicionar-detalhe { 
+            flex: 1; padding: 10px 15px; border: none; border-radius: 10px; background: #dc2626; 
+            color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+        }
+        #btn-adicionar-detalhe:hover { background: #b91c1c; }
 
-      // ABRE O MODAL DE PRODUTO — FECHA QUALQUER OUTRO
-      document.getElementById('modal-carrinho').classList.add('oculto');
-      modal.classList.remove('oculto');
-      document.body.style.overflow = 'hidden';
-    });
-  });
-}
+        #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 10px; }
+        .modal-conteudo { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 10px; padding: 12px; overflow-y: auto; }
+        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .fechar-modal { 
+            background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666; transition: all 0.2s ease; 
+            border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+        }
+        .fechar-modal:hover { background: #f3f4f6; color: #111; transform: rotate(90deg); }
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .form-grupo { margin: 8px 0; }
+        .form-grupo label { display: block; margin-bottom: 3px; font-weight: 500; font-size: 0.85rem; }
+        .form-grupo input, .form-grupo select, .form-grupo textarea { 
+            width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; transition: all 0.2s ease;
+        }
+        .form-grupo textarea { resize: vertical; min-height: 60px; }
+        .form-grupo input:focus, .form-grupo select:focus, .form-grupo textarea:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.15); }
+        .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .aviso-erro, .aviso-info { font-size: 0.8rem; margin-top: 2px; }
+        .aviso-erro { color: #dc2626; }
+        .aviso-info { color: #2563eb; }
+        .total-texto { font-size: 1rem; font-weight: 700; text-align: right; margin: 8px 0; }
+        .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
+        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-fechar:hover { background: #e5e7eb; }
+        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-finalizar:hover { background: #16a34a; }
 
-// ==============================================
-// 📦 MODAL DE DETALHES DO PRODUTO
-// ==============================================
-function configurarModalProduto() {
-  const modal = document.getElementById('modal-produto');
-  const btnVoltar = document.getElementById('btn-voltar');
-  const btnAdicionar = document.getElementById('btn-adicionar-detalhe');
-  const btnMais = document.getElementById('aumentar-qtd');
-  const btnMenos = document.getElementById('diminuir-qtd');
+        #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
+        .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
+        .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
+        .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
+        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-entendi:hover { background: #b91c1c; }
 
-  btnVoltar.addEventListener('click', () => {
-    modal.classList.add('oculto');
-    document.body.style.overflow = 'auto';
-  });
+        html, body { overflow-x: hidden; touch-action: manipulation; }
+        .produto, .categoria-btn, .btn-ver-carrinho, button { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body>
 
-  btnMais.addEventListener('click', () => {
-    qtdSelecionada++;
-    document.getElementById('qtd-atual').textContent = qtdSelecionada;
-  });
+<div class="status-topo">
+    <span class="ponto-status" id="ponto-status"></span>
+    <span id="texto-status" class="texto-status"></span>
+</div>
 
-  btnMenos.addEventListener('click', () => {
-    if (qtdSelecionada > 1) {
-      qtdSelecionada--;
-      document.getElementById('qtd-atual').textContent = qtdSelecionada;
-    }
-  });
+<div class="cabecalho-banner">
+    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
+    <div class="marca">
+        <h1>ALISON</h1>
+        <p>★ BURGER ★</p>
+    </div>
+    <div class="info-loja">
+        <div><i class="fa fa-map-marker-alt"></i> NOME DA RUA, 123 - SUA CIDADE</div>
+        <div><i class="fa fa-motorcycle"></i> Entrega: 20-30 min &nbsp;&nbsp; | &nbsp;&nbsp; <i class="fa fa-credit-card"></i> Pagamento na entrega</div>
+    </div>
+</div>
 
-  btnAdicionar.addEventListener('click', () => {
-    if (!produtoAtual) return;
+<div class="categorias">
+    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
+    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
+    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
+    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
+    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
+</div>
 
-    const item = {
-      ...produtoAtual,
-      quantidade: qtdSelecionada,
-      adicionais: [...adicionaisSelecionados]
-    };
+<div class="busca">
+    <i class="fa fa-search"></i>
+    <input type="text" id="campoBusca" placeholder="Buscar produtos...">
+</div>
 
-    carrinho.push(item);
-    atualizarCarrinhoTela();
+<div class="container">
+    <div class="lista-produtos">
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-descricao="Pão, carne, queijo, alface e tomate, tudo fresquinho e preparado na hora." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Simples">
+                <span class="tag-mais-pedido">★ MAIS</span>
+            </div>
+            <div class="produto-info">
+                <p class="produto-codigo">01</p>
+                <h2 class="produto-nome">Hambúrguer Simples</h2>
+                <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-fire"></i> Muito pedido</span>
+                    <span><i class="fa fa-clock"></i> 20-30 min</span>
+                </div>
+            </div>
+            <p class="produto-preco">R$ 10,00</p>
+        </div>
 
-    modal.classList.add('oculto');
-    document.body.style.overflow = 'auto';
-  });
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="12.00" data-descricao="Duas carnes suculentas, queijo especial derretido e molho secreto da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Duplo"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">02</p>
+                <h3 class="produto-nome">Hambúrguer Duplo</h3>
+                <p class="produto-descricao">Duas carnes, queijo especial e molho da casa.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Saboroso</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
+            </div>
+            <p class="produto-preco">R$ 12,00</p>
+        </div>
 
-  document.getElementById('btn-entendi').addEventListener('click', () => {
-    document.getElementById('alerta-fechado').classList.add('oculto');
-  });
-}
+        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Picante" data-preco="15.00" data-descricao="Carne especial, molho apimentado caseiro e pimenta calabresa fresca." data-imagem="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Picante"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">03</p>
+                <h3 class="produto-nome">Hambúrguer Picante</h3>
+                <p class="produto-descricao">Carne especial, molho apimentado e pimenta calabresa.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-pepper-hot"></i> Picante</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
+            </div>
+            <p class="produto-preco">R$ 15,00</p>
+        </div>
 
-// ==============================================
-// 🛒 CARRINHO
-// ==============================================
-function configurarCarrinho() {
-  const btnAbrir = document.getElementById('abrir-carrinho');
-  const btnFechar = document.getElementById('fechar-modal');
-  const btnLimpar = document.getElementById('btn-limpar');
-  const btnFinalizar = document.getElementById('btn-finalizar');
-  const selectTipo = document.getElementById('tipo-atendimento');
+        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Tradicional" data-preco="12.00" data-descricao="Porção grande de batatas selecionadas, crocantes e temperadas na hora." data-imagem="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Frita"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">04</p>
+                <h3 class="produto-nome">Batata Frita Tradicional</h3>
+                <p class="produto-descricao">Porção grande, crocante e temperada.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-fire"></i> Quente</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
+            </div>
+            <p class="produto-preco">R$ 12,00</p>
+        </div>
 
-  btnAbrir.addEventListener('click', () => {
-    document.getElementById('modal-carrinho').classList.remove('oculto');
-    document.body.style.overflow = 'hidden';
-  });
+        <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola" data-preco="14.00" data-descricao="Anéis de cebola branca empanados crocantes, servidos com molho especial." data-imagem="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Anéis de Cebola"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">05</p>
+                <h3 class="produto-nome">Anéis de Cebola</h3>
+                <p class="produto-descricao">Empanados, crocantes e saborosos.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-thumbs-up"></i> Crocante</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
+            </div>
+            <p class="produto-preco">R$ 14,00</p>
+        </div>
 
-  btnFechar.addEventListener('click', () => {
-    document.getElementById('modal-carrinho').classList.add('oculto');
-    document.body.style.overflow = 'auto';
-  });
+        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata com Cheddar e Bacon" data-preco="18.00" data-descricao="Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante." data-imagem="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Cheddar"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">06</p>
+                <h3 class="produto-nome">Batata com Cheddar e Bacon</h3>
+                <p class="produto-descricao">Coberta com molho de queijo e bacon picado.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-star"></i> Mais pedida</span><span><i class="fa fa-clock"></i> 12-18 min</span></div>
+            </div>
+            <p class="produto-preco">R$ 18,00</p>
+        </div>
 
-  btnLimpar.addEventListener('click', () => {
-    carrinho = [];
-    atualizarCarrinhoTela();
-  });
+        <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 350ml Zero" data-preco="6.00" data-descricao="Lata de refrigerante gelada, zero açúcar, sabor original." data-imagem="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca-Cola Zero Lata"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">07</p>
+                <h3 class="produto-nome">Coca-Cola 350ml Zero</h3>
+                <p class="produto-descricao">Lata gelada, zero açúcar, sabor original.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
+            </div>
+            <p class="produto-preco">R$ 6,00</p>
+        </div>
 
-  selectTipo.addEventListener('change', () => {
-    const entrega = selectTipo.value === 'entrega';
-    document.getElementById('bloco-endereco').classList.toggle('oculto', !entrega);
-    document.getElementById('campo-taxa-entrega').classList.toggle('oculto', !entrega);
-    calcularTotal();
-  });
+        <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica 350ml" data-preco="6.00" data-descricao="Lata bem gelada, sabor tradicional do Brasil." data-imagem="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Guaraná"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">08</p>
+                <h3 class="produto-nome">Guaraná Antarctica 350ml</h3>
+                <p class="produto-descricao">Lata bem gelada, sabor tradicional.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
+            </div>
+            <p class="produto-preco">R$ 6,00</p>
+        </div>
 
-  btnFinalizar.addEventListener('click', enviarPedidoWhatsApp);
-}
+        <div class="produto" data-categoria="bebidas" data-nome="Suco de Laranja Natural 500ml" data-preco="9.00" data-descricao="Suco 100% fruta, espremido na hora, sem açúcar e sem conservantes." data-imagem="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Suco de Laranja"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">09</p>
+                <h3 class="produto-nome">Suco de Laranja Natural 500ml</h3>
+                <p class="produto-descricao">100% fruta, sem açúcar.</p>
+                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Natural</span></div>
+            </div>
+            <p class="produto-preco">R$ 9,00</p>
+        </div>
 
-function atualizarCarrinhoTela() {
-  const container = document.getElementById('carrinho-container');
-  const lista = document.getElementById('lista-itens-carrinho');
-  const qtdBadge = document.getElementById('qtd-carrinho');
-  const resumo = document.getElementById('resumo-carrinho');
+        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Normal" data-preco="12.00" data-descricao="Garrafa grande, sabor original, bem gelada para toda a família." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Normal"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">10</p>
+                <h3 class="produto-nome">Coca‑Cola 2 L Normal</h3>
+                <p class="produto-descricao">Garrafa grande, sabor original, gelada.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-tint"></i> Refrigerante</span>
+                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
+                </div>
+            </div>
+            <p class="produto-preco">R$ 12,00</p>
+        </div>
 
-  if (carrinho.length === 0) {
-    container.classList.add('oculto');
-    return;
-  }
+        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Zero Açúcar" data-preco="12.00" data-descricao="Garrafa grande, zero açúcar, sabor inconfundível, bem gelada." data-imagem="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
+            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Zero"></div>
+            <div class="produto-info">
+                <p class="produto-codigo">11</p>
+                <h3 class="produto-nome">Coca‑Cola 2 L Zero Açúcar</h3>
+                <p class="produto-descricao">Garrafa grande, zero açúcar, gelada.</p>
+                <div class="produto-detalhes">
+                    <span><i class="fa fa-tint"></i> Refrigerante</span>
+                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
+                    <span><i class="fa fa-ban"></i> Zero Açúcar</span>
+                </div>
+            </div>
+            <p class="produto-preco">R$ 12,00</p>
+        </div>
+    </div>
+</div>
 
-  container.classList.remove('oculto');
-  qtdBadge.textContent = carrinho.length;
+<div id="modal-produto" class="oculto">
+    <div class="cabecalho-detalhe">
+        <button id="btn-voltar">&larr;</button>
+        <img id="img-detalhe" alt="">
+        <div class="faixa-status">
+            <span class="ponto-status" id="ponto-status-modal"></span>
+            <span id="texto-status-modal"></span>
+        </div>
+    </div>
+    <div class="conteudo-detalhe">
+        <h2 id="nome-detalhe"></h2>
+        <p id="descricao-detalhe"></p>
+        <div class="precos">
+            <span class="preco-original" id="preco-original"></span>
+            <span class="preco-promocional" id="preco-promocional"></span>
+            <span class="quero-btn">!Quero &gt;</span>
+        </div>
+        <div class="secao-adicionais">
+            <h3>Turbine Seu Lanche</h3>
+            <p>Escolha até 4 opções</p>
+            <div id="lista-adicionais"></div>
+        </div>
+    </div>
+    <div class="rodape-detalhe">
+        <div class="qtd-detalhe">
+            <button id="diminuir-qtd">&minus;</button>
+            <span id="qtd-atual">1</span>
+            <button id="aumentar-qtd">+</button>
+        </div>
+        <button id="btn-adicionar-detalhe">Adicionar</button>
+    </div>
+</div>
 
-  let totalGeral = 0;
-  lista.innerHTML = '';
+<div id="modal-carrinho" class="oculto">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h3>Meu Carrinho</h3>
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
+        </div>
+        <div id="lista-itens-carrinho"></div>
+        <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
 
-  carrinho.forEach((item, idx) => {
-    totalGeral += item.preco * item.quantidade;
-    const div = document.createElement('div');
-    div.className = 'item-carrinho';
-    div.innerHTML = `
-      <div>
-        <strong>${item.nome}</strong>
-        <br>Qtd: ${item.quantidade} • R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}
-      </div>
-      <button style="color:red;border:none;background:none;cursor:pointer;" data-idx="${idx}">&times;</button>
-    `;
-    lista.appendChild(div);
-  });
+        <div class="form-grupo">
+            <label>Forma de recebimento</label>
+            <select id="tipo-atendimento">
+                <option value="retirada">Retirada</option>
+                <option value="entrega">Entrega</option>
+            </select>
+        </div>
 
-  resumo.innerHTML = `${carrinho.length} itens • R$ ${totalGeral.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
-  calcularTotal();
+        <div id="campo-taxa-entrega" class="form-grupo oculto">
+            <label>Taxa de entrega</label>
+            <input type="text" id="taxa-entrega" value="8,00" readonly style="background: #f8f8f8;">
+        </div>
 
-  lista.querySelectorAll('[data-idx]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      carrinho.splice(parseInt(e.target.dataset.idx), 1);
-      atualizarCarrinhoTela();
-    });
-  });
-}
+        <div class="form-grupo">
+            <label>Nome completo</label>
+            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
+        </div>
 
-function calcularTotal() {
-  let total = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
-  if (document.getElementById('tipo-atendimento').value === 'entrega') {
-    total += CONFIG.taxaEntregaPadrao;
-  }
-  document.getElementById('valor-total').textContent = total.toFixed(2).replace('.', ',');
-}
+        <div id="bloco-endereco" class="oculto">
+            <div class="form-grupo">
+                <label>CEP</label>
+                <input type="text" id="cep" placeholder="Ex: 00000-000" maxlength="9">
+                <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
+            </div>
+            <div class="form-duplo">
+                <div class="form-grupo">
+                    <label>Número</label>
+                    <input type="text" id="numero" placeholder="Ex: 123">
+                </div>
+                <div class="form-grupo">
+                    <label>Complemento</label>
+                    <input type="text" id="complemento" placeholder="Ex: Apto 1">
+                </div>
+            </div>
+            <div class="form-grupo">
+                <label>Referência</label>
+                <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
+            </div>
+            <div class="form-grupo">
+                <label>Rua / Logradouro</label>
+                <input type="text" id="rua" placeholder="Preenchido automaticamente">
+            </div>
+            <div class="form-duplo">
+                <div class="form-grupo">
+                    <label>Bairro</label>
+                    <input type="text" id="bairro" placeholder="Preenchido automaticamente">
+                </div>
+                <div class="form-grupo">
+                    <label>Cidade / UF</label>
+                    <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente">
+                </div>
+            </div>
+        </div>
 
-// ==============================================
-// 📬 CEP
-// ==============================================
-function configurarCEP() {
-  const campo = document.getElementById('cep');
-  campo.addEventListener('blur', async () => {
-    const cep = campo.value.replace(/\D/g, '');
-    if (cep.length !== 8) return;
+        <div class="form-grupo">
+            <label>Forma de pagamento</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+            </select>
+        </div>
 
-    try {
-      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const dados = await res.json();
-      if (dados.erro) throw Error();
+        <div class="form-grupo">
+            <label>Observações</label>
+            <textarea id="observacao" placeholder="Alguma observação ou pedido especial? Ex: sem pimenta, ponto da carne, etc."></textarea>
+        </div>
 
-      document.getElementById('rua').value = dados.logradouro;
-      document.getElementById('bairro').value = dados.bairro;
-      document.getElementById('cidade-uf').value = `${dados.localidade} / ${dados.uf}`;
-      document.getElementById('aviso-cep').textContent = 'Endereço preenchido! Confira e complete.';
-      document.getElementById('aviso-cep').className = 'aviso-info';
-    } catch {
-      document.getElementById('aviso-cep').textContent = 'CEP não encontrado. Preencha manualmente.';
-      document.getElementById('aviso-cep').className = 'aviso-erro';
-    }
-  });
-}
+        <p id="aviso-geral" class="aviso-erro oculto"></p>
 
-// ==============================================
-// 📤 ENVIAR PEDIDO
-// ==============================================
-function enviarPedidoWhatsApp() {
-  if (carrinho.length === 0) {
-    document.getElementById('aviso-geral').textContent = 'Adicione itens ao carrinho!';
-    document.getElementById('aviso-geral').classList.remove('oculto');
-    return;
-  }
+        <div class="botoes-modal">
+            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
+            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
+        </div>
+    </div>
+</div>
 
-  let texto = `📋 *PEDIDO - ${CONFIG.nomeLoja}*\n\n`;
-  let total = 0;
+<div id="alerta-fechado" class="oculto">
+    <div class="alerta-caixa">
+        <h2>Loja Fechada</h2>
+        <p>Atendimento mostra o horario de atendimento da loja!</p>
+        <button id="btn-entendi" class="btn-entendi">Entendi</button>
+    </div>
+</div>
 
-  carrinho.forEach(i => {
-    texto += `• ${i.nome} x${i.quantidade} = R$ ${(i.preco*i.quantidade).toFixed(2).replace('.',',')}\n`;
-    total += i.preco * i.quantidade;
-  });
+<div class="carrinho-fixo" id="carrinho-container">
+    <div class="carrinho-conteudo">
+        <div class="carrinho-esq">
+            <span class="badge-qtd" id="qtd-carrinho">0</span>
+            <div class="texto-carrinho">
+                <h3>Meu carrinho</h3>
+                <p id="resumo-carrinho">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</p>
+            </div>
+        </div>
+        <button class="btn-ver-carrinho" id="abrir-carrinho"> Ver </button>
+    </div>
+</div>
 
-  const tipo = document.getElementById('tipo-atendimento').value;
-  if (tipo === 'entrega') {
-    total += CONFIG.taxaEntregaPadrao;
-    texto += `\n🚚 Entrega: R$ ${CONFIG.taxaEntregaPadrao.toFixed(2).replace('.',',')}`;
-    texto += `\n📍 Endereço: ${document.getElementById('rua').value}, ${document.getElementById('numero').value} - ${document.getElementById('bairro').value}`;
-    texto += `\n${document.getElementById('cidade-uf').value} | ${document.getElementById('complemento').value || 'Sem complemento'}`;
-    texto += `\n📞 Referência: ${document.getElementById('referencia').value || 'Não informada'}`;
-  } else {
-    texto += `\n✅ Retirada na loja`;
-  }
-
-  texto += `\n👤 Nome: ${document.getElementById('nome-cliente').value || 'Não informado'}`;
-  texto += `\n💳 Pagamento: ${document.getElementById('forma-pagamento').value}`;
-  texto += `\n📝 Observação: ${document.getElementById('observacao').value || 'Nenhuma'}`;
-  texto += `\n\n💰 *TOTAL: R$ ${total.toFixed(2).replace('.',',')}*`;
-
-  const url = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
-  window.open(url, '_blank');
-  document.getElementById('modal-carrinho').classList.add('oculto');
-  document.body.style.overflow = 'auto';
-}
-
-// ==============================================
-// 📜 ROLAGEM CATEGORIAS
-// ==============================================
-function configurarRolagemCategorias() {
-  const categorias = document.querySelector('.categorias');
-  window.addEventListener('scroll', () => {
-    categorias.classList.toggle('sticky-visivel', window.scrollY > 20);
-  });
-}
-
-// ATUALIZA STATUS A CADA 1 MINUTO
-setInterval(atualizarStatusLoja, 60000);
+<script src="script.js"></script>
+</body>
+</html>
