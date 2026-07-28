@@ -94,14 +94,27 @@
         .oculto { display: none !important; }
         #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
         .cabecalho-detalhe { position: relative; width: 100%; height: 180px; background: #f3f4f6; }
-        /* ✅ SETA AJUSTADA: menor e mais bonita */
+
+        /* ✅ SETA EXATAMENTE COMO NA IMAGEM — UM POUCO MENOR */
         #btn-voltar { 
-            position: absolute; top: 12px; left: 12px; width: 36px; height: 36px; border-radius: 50%; border: none; 
-            background: rgba(255,255,255,0.95); font-size: 1.1rem; font-weight: bold; cursor: pointer; z-index: 10; 
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            position: absolute; top: 10px; left: 10px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.9);
+            color: #222;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
         }
         #btn-voltar:hover { background: #fff; transform: scale(1.08); }
+
         #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
 
         .faixa-status { 
@@ -116,7 +129,6 @@
 
         .precos { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; }
         .preco-original { font-size: clamp(20px, 4.2vw, 26px); color: #999; text-decoration: line-through; }
-        /* ✅ VALOR MUDADO DE ROXO PARA VERMELHO */
         .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #dc2626; }
         .quero-btn { margin-left: auto; font-size: clamp(18px, 3.8vw, 22px); color: #dc2626; font-weight: 700; cursor: pointer; }
 
@@ -143,7 +155,6 @@
         }
         .qtd-detalhe button:hover { background: #fef2f2; }
         #qtd-atual { font-size: clamp(22px, 5vw, 30px); font-weight: 700; min-width: 24px; text-align: center; }
-        /* ✅ BOTÃO ADICIONAR AJUSTADO: menor e proporcional */
         #btn-adicionar-detalhe { 
             flex: 1; padding: 10px 15px; border: none; border-radius: 10px; background: #dc2626; 
             color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
