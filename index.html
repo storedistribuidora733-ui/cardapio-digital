@@ -56,10 +56,10 @@
         .lista-produtos { display: flex; flex-direction: column; gap: 7px; margin: 8px 0; }
         
         .produto { 
-            background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; 
+            background: #ffffff; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; 
             align-items: center; gap: 10px; cursor: pointer; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
         }
-        .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); border-color: #dc2626; }
         .produto:active { transform: translateY(-1px) scale(0.99); }
 
         .produto-imagem { position: relative; width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
@@ -89,13 +89,13 @@
             background: #dc2626; color: #ffffff; border: none; border-radius: 6px; padding: 7px 12px; font-weight: 700; 
             font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0; transition: all 0.2s ease; 
         }
-        .btn-ver-carrinho:hover { transform: translateY(-1px); }
+        .btn-ver-carrinho:hover { transform: translateY(-1px); background: #b91c1c; }
 
         .oculto { display: none !important; }
         #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
         .cabecalho-detalhe { position: relative; width: 100%; height: 180px; background: #f3f4f6; }
 
-        /* ✅ SETA EXATA COMO NA IMAGEM — MENOR, FUNDO BRANCO REDONDO, ÍCONE PRETO */
+        /* ✅ SETA EXATA COMO PEDIU */
         #btn-voltar { 
             position: absolute; top: 12px; left: 12px;
             width: 36px; height: 36px;
@@ -116,8 +116,6 @@
         #btn-voltar:hover { background: #f5f5f5; transform: scale(1.05); }
 
         #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
-
-        /* ✅ REMOVIDO COMPLETAMENTE A FAIXA DE STATUS / ABERTO ATÉ AS 23 */
 
         .conteudo-detalhe { padding: 20px 15px 110px; }
         #nome-detalhe { font-size: clamp(24px, 5vw, 32px); font-weight: 800; margin-bottom: 8px; color: #111; }
@@ -197,23 +195,6 @@
 </head>
 <body>
 
-<div class="status-topo">
-    <span class="ponto-status" id="ponto-status"></span>
-    <span id="texto-status" class="texto-status"></span>
-</div>
-
-<div class="cabecalho-banner">
-    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
-    <div class="marca">
-        <h1>ALISON</h1>
-        <p>★ BURGER ★</p>
-    </div>
-    <div class="info-loja">
-        <div><i class="fa fa-map-marker-alt"></i> NOME DA RUA, 123 - SUA CIDADE</div>
-        <div><i class="fa fa-motorcycle"></i> Entrega: 20-30 min &nbsp;&nbsp; | &nbsp;&nbsp; <i class="fa fa-credit-card"></i> Pagamento na entrega</div>
-    </div>
-</div>
-
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
     <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
@@ -255,83 +236,6 @@
                 <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Saboroso</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
             </div>
             <p class="produto-preco">R$ 12,00</p>
-        </div>
-
-        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Picante" data-preco="15.00" data-descricao="Carne especial, molho apimentado caseiro e pimenta calabresa fresca." data-imagem="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Picante"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">03</p>
-                <h3 class="produto-nome">Hambúrguer Picante</h3>
-                <p class="produto-descricao">Carne especial, molho apimentado e pimenta calabresa.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-pepper-hot"></i> Picante</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 15,00</p>
-        </div>
-
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Tradicional" data-preco="12.00" data-descricao="Porção grande de batatas selecionadas, crocantes e temperadas na hora." data-imagem="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Frita"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">04</p>
-                <h3 class="produto-nome">Batata Frita Tradicional</h3>
-                <p class="produto-descricao">Porção grande, crocante e temperada.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-fire"></i> Quente</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
-
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola" data-preco="14.00" data-descricao="Anéis de cebola branca empanados crocantes, servidos com molho especial." data-imagem="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Anéis de Cebola"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">05</p>
-                <h3 class="produto-nome">Anéis de Cebola</h3>
-                <p class="produto-descricao">Empanados, crocantes e saborosos.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-thumbs-up"></i> Crocante</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 14,00</p>
-        </div>
-
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata com Cheddar e Bacon" data-preco="18.00" data-descricao="Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante." data-imagem="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Cheddar"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">06</p>
-                <h3 class="produto-nome">Batata com Cheddar e Bacon</h3>
-                <p class="produto-descricao">Coberta com molho de queijo e bacon picado.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-star"></i> Mais pedida</span><span><i class="fa fa-clock"></i> 12-18 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 18,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 350ml Zero" data-preco="6.00" data-descricao="Lata de refrigerante gelada, zero açúcar, sabor original." data-imagem="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca-Cola Zero Lata"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">07</p>
-                <h3 class="produto-nome">Coca-Cola 350ml Zero</h3>
-                <p class="produto-descricao">Lata gelada, zero açúcar, sabor original.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
-            </div>
-            <p class="produto-preco">R$ 6,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica 350ml" data-preco="6.00" data-descricao="Lata bem gelada, sabor tradicional do Brasil." data-imagem="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Guaraná"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">08</p>
-                <h3 class="produto-nome">Guaraná Antarctica 350ml</h3>
-                <p class="produto-descricao">Lata bem gelada, sabor tradicional.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
-            </div>
-            <p class="produto-preco">R$ 6,00</p>
-        </div>
-
-        <div class="produto" data-categoria="bebidas" data-nome="Suco de Laranja Natural 500ml" data-preco="9.00" data-descricao="Suco 100% fruta, espremido na hora, sem açúcar e sem conservantes." data-imagem="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Suco de Laranja"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">09</p>
-                <h3 class="produto-nome">Suco de Laranja Natural 500ml</h3>
-                <p class="produto-descricao">100% fruta, sem açúcar.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Natural</span></div>
-            </div>
-            <p class="produto-preco">R$ 9,00</p>
         </div>
 
         <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Normal" data-preco="12.00" data-descricao="Garrafa grande, sabor original, bem gelada para toda a família." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
@@ -376,11 +280,9 @@
         <div class="precos">
             <span class="preco-original" id="preco-original"></span>
             <span class="preco-promocional" id="preco-promocional"></span>
-            <span class="quero-btn">Quero &gt;</span>
         </div>
         <div class="secao-adicionais">
-            <h3>Turbine Seu Lanche</h3>
-            <p>Escolha até 10 opções</p>
+            <h3>Adicionais</h3>
             <div id="lista-adicionais"></div>
         </div>
     </div>
@@ -468,7 +370,7 @@
 
         <div class="form-grupo">
             <label>Observações</label>
-            <textarea id="observacao" placeholder="Alguma observação ou pedido especial? Ex: sem pimenta, ponto da carne, etc."></textarea>
+            <textarea id="observacao" placeholder="Alguma observação?"></textarea>
         </div>
 
         <p id="aviso-geral" class="aviso-erro oculto"></p>
@@ -494,7 +396,7 @@
             <span class="badge-qtd" id="qtd-carrinho">0</span>
             <div class="texto-carrinho">
                 <h3>Meu carrinho</h3>
-                <p id="resumo-carrinho">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</p>
+                <p id="resumo-carrinho">0 itens • R$ 0,00</p>
             </div>
         </div>
         <button class="btn-ver-carrinho" id="abrir-carrinho"> Ver </button>
