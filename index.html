@@ -93,28 +93,31 @@
 
         .oculto { display: none !important; }
         #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
-        .cabecalho-detalhe { position: relative; width: 100%; height: 220px; background: #f3f4f6; }
+        .cabecalho-detalhe { position: relative; width: 100%; height: 180px; background: #f3f4f6; }
+        /* ✅ SETA AJUSTADA: menor e mais bonita */
         #btn-voltar { 
-            position: absolute; top: 15px; left: 15px; width: 42px; height: 42px; border-radius: 50%; border: none; 
-            background: rgba(255,255,255,0.9); font-size: 1.3rem; cursor: pointer; z-index: 10; display: flex; 
-            align-items: center; justify-content: center; transition: all 0.2s ease; 
+            position: absolute; top: 12px; left: 12px; width: 36px; height: 36px; border-radius: 50%; border: none; 
+            background: rgba(255,255,255,0.95); font-size: 1.1rem; font-weight: bold; cursor: pointer; z-index: 10; 
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-        #btn-voltar:hover { background: #fff; transform: scale(1.05); }
+        #btn-voltar:hover { background: #fff; transform: scale(1.08); }
         #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
 
         .faixa-status { 
             position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #ffffff; 
-            padding: 8px 22px; border-radius: 50%; border: 2px solid #dc2626; font-size: clamp(17px, 3.5vw, 19px); 
+            padding: 6px 18px; border-radius: 50px; border: 2px solid #dc2626; font-size: clamp(15px, 3vw, 17px); 
             font-weight: 600; color: #dc2626; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; 
         }
 
-        .conteudo-detalhe { padding: 35px 15px 130px; }
-        #nome-detalhe { font-size: clamp(32px, 6.5vw, 42px); font-weight: 800; margin-bottom: 12px; color: #111; }
-        #descricao-detalhe { font-size: clamp(18px, 3.8vw, 22px); color: #666; line-height: 1.5; margin-bottom: 20px; }
+        .conteudo-detalhe { padding: 25px 15px 110px; }
+        #nome-detalhe { font-size: clamp(24px, 5vw, 32px); font-weight: 800; margin-bottom: 8px; color: #111; }
+        #descricao-detalhe { font-size: clamp(15px, 3vw, 18px); color: #666; line-height: 1.5; margin-bottom: 15px; }
 
         .precos { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; }
         .preco-original { font-size: clamp(20px, 4.2vw, 26px); color: #999; text-decoration: line-through; }
-        .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #9333ea; }
+        /* ✅ VALOR MUDADO DE ROXO PARA VERMELHO */
+        .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #dc2626; }
         .quero-btn { margin-left: auto; font-size: clamp(18px, 3.8vw, 22px); color: #dc2626; font-weight: 700; cursor: pointer; }
 
         .secao-adicionais { margin-bottom: 30px; }
@@ -132,7 +135,7 @@
         .btn-add-adicional:hover { transform: scale(1.05); }
         .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
 
-        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 15px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
+        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 12px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
         .qtd-detalhe { display: flex; align-items: center; gap: 20px; }
         .qtd-detalhe button { 
             font-size: clamp(24px, 5.5vw, 32px); border: none; background: none; cursor: pointer; color: #dc2626; 
@@ -140,9 +143,10 @@
         }
         .qtd-detalhe button:hover { background: #fef2f2; }
         #qtd-atual { font-size: clamp(22px, 5vw, 30px); font-weight: 700; min-width: 24px; text-align: center; }
+        /* ✅ BOTÃO ADICIONAR AJUSTADO: menor e proporcional */
         #btn-adicionar-detalhe { 
-            flex: 1; padding: clamp(14px, 3.5vw, 18px); border: none; border-radius: 12px; background: #dc2626; 
-            color: white; font-size: clamp(20px, 4.5vw, 26px); font-weight: 700; cursor: pointer; transition: background 0.2s ease;
+            flex: 1; padding: 10px 15px; border: none; border-radius: 10px; background: #dc2626; 
+            color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
         }
         #btn-adicionar-detalhe:hover { background: #b91c1c; }
 
