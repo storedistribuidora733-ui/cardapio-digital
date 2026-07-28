@@ -1,503 +1,469 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Alison Burger</title>
+ // ==============================================
+// ⚙️ CONFIGURAÇÕES — AJUSTE AQUI SE PRECISAR
+// ==============================================
+const CONFIG = {
+  horaAbertura: 23,
+  horaFechamento: 14,
+  textoStatusAberto: "Aberto até às 23:00",
+  textoStatusFechado: "Fechado • Abre às 08:00",
+  corStatusAberto: "#22c55e",
+  corStatusFechado: "#dc2626",
+  numeroWhatsApp: "5519989021323",
+  nomeLoja: "Alison Burger",
+  taxaEntregaPadrao: 8.00
+};
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+// ==============================================
+// 🛒 VARIÁVEIS GERAIS
+// ==============================================
+const carrinho = [];
+let produtoAtual = null;
+let quantidadeAtual = 1;
+let adicionaisSelecionados = [];
 
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        html { font-size: 14px; }
-        body { background-color: #f8f9fa; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
+// Elementos originais
+const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
+const modalCarrinho = document.getElementById('modal-carrinho');
+const fecharModalBtns = [document.getElementById('fechar-modal')];
+const btnLimparCarrinho = document.getElementById('btn-limpar');
+const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
+const valorTotalEl = document.getElementById('valor-total');
+const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
+const alertaFechado = document.getElementById('alerta-fechado');
+const btnEntendi = document.getElementById('btn-entendi');
+const textoStatusEl = document.getElementById('texto-status');
+const pontoStatusEl = document.getElementById('ponto-status');
+const campoBusca = document.getElementById('campoBusca');
+const carrinhoContainer = document.getElementById('carrinho-container');
+const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
-        @media (min-width: 768px) {
-            html { font-size: 15px; }
-            body { max-width: 620px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
-            .carrinho-fixo { max-width: 620px; left: 50%; transform: translateX(-50%); padding: 7px 15px; border-radius: 12px 12px 0 0; }
-            .badge-qtd { width: 28px; height: 28px; font-size: 0.85rem; }
-            .texto-carrinho h3 { font-size: 1rem; }
-            .texto-carrinho p { font-size: 0.8rem; }
-            .btn-ver-carrinho { padding: 8px 15px; font-size: 0.85rem; border-radius: 8px; }
-            #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
-        }
+const nomeEl = document.getElementById('nome-cliente');
+const avisoGeral = document.getElementById('aviso-geral');
+const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
+const campoTaxaEntregaEl = document.getElementById('campo-taxa-entrega');
+const blocoEnderecoEl = document.getElementById('bloco-endereco');
+const taxaEntregaEl = document.getElementById('taxa-entrega');
+const cepEl = document.getElementById('cep');
+const numeroEl = document.getElementById('numero');
+const complementoEl = document.getElementById('complemento');
+const referenciaEl = document.getElementById('referencia');
+const ruaEl = document.getElementById('rua');
+const bairroEl = document.getElementById('bairro');
+const cidadeUfEl = document.getElementById('cidade-uf');
+const avisoCepEl = document.getElementById('aviso-cep');
+const pagamentoEl = document.getElementById('forma-pagamento');
 
-        .status-topo, .cabecalho-banner { display: none !important; }
+// Elementos da tela de detalhes
+const modalProduto = document.getElementById('modal-produto');
+const btnVoltarLista = document.getElementById('btn-voltar');
+const imgDetalhe = document.getElementById('img-detalhe');
+const nomeDetalhe = document.getElementById('nome-detalhe');
+const descricaoDetalhe = document.getElementById('descricao-detalhe');
+const precoOriginalEl = document.getElementById('preco-original');
+const precoPromocionalEl = document.getElementById('preco-promocional');
+const listaAdicionaisEl = document.getElementById('lista-adicionais');
+const qtdAtualEl = document.getElementById('qtd-atual');
+const diminuirQtdBtn = document.getElementById('diminuir-qtd');
+const aumentarQtdBtn = document.getElementById('aumentar-qtd');
+const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
+const pontoStatusModal = document.getElementById('ponto-status-modal');
+const textoStatusModal = document.getElementById('texto-status-modal');
 
-        .categorias { 
-            width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
-            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 99;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 0 rgba(0,0,0,0);
-        }
-        .categorias.sticky-visivel { box-shadow: 0 3px 12px rgba(0,0,0,0.08); padding-top: 9px; padding-bottom: 9px; }
-        .categorias::-webkit-scrollbar { display: none; }
-        .categoria-btn { 
-            padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; background: #ffffff; font-weight: 600; 
-            font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; 
-            transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-        }
-        .categoria-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-color: #dc2626; }
-        .categoria-btn:active { transform: translateY(-1px) scale(0.98); }
-        .categoria-btn.ativo { background-color: #dc2626; border-color: #dc2626; color: #ffffff; box-shadow: 0 2px 6px rgba(220,38,38,0.3); }
+// ==============================================
+// 🗑️ LIMPAR CARRINHO
+// ==============================================
+function limparTudoCarrinho() {
+  carrinho.length = 0;
+  listaItensCarrinho.innerHTML = '';
+  valorTotalEl.textContent = '0,00';
+  qtdCarrinhoEl.textContent = '0';
+  resumoCarrinhoEl.innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
+  carrinhoContainer.style.display = 'none';
+  nomeEl.value = '';
+  tipoAtendimentoEl.value = 'retirada';
+  taxaEntregaEl.value = '8,00';
+  pagamentoEl.value = 'Dinheiro';
+  avisoGeral.classList.add('oculto');
+  limparCamposEndereco();
+  campoTaxaEntregaEl.classList.add('oculto');
+  blocoEnderecoEl.classList.add('oculto');
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+}
+btnLimparCarrinho.addEventListener('click', limparTudoCarrinho);
 
-        .busca { margin: 8px 10px; position: relative; }
-        .busca input { 
-            width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; 
-            background: #ffffff; transition: all 0.25s ease; 
-        }
-        .busca input:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.15); transform: translateY(-1px); }
-        .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem; }
+// ==============================================
+// 🚀 CONTROLE ENTREGA / RETIRADA
+// ==============================================
+tipoAtendimentoEl.addEventListener('change', () => {
+  if (tipoAtendimentoEl.value === 'entrega') {
+    campoTaxaEntregaEl.classList.remove('oculto');
+    blocoEnderecoEl.classList.remove('oculto');
+    taxaEntregaEl.value = CONFIG.taxaEntregaPadrao.toFixed(2).replace('.', ',');
+  } else {
+    campoTaxaEntregaEl.classList.add('oculto');
+    blocoEnderecoEl.classList.add('oculto');
+    taxaEntregaEl.value = '0,00';
+    limparCamposEndereco();
+  }
+});
 
-        .container { width: 100%; padding: 0 10px; }
-        .lista-produtos { display: flex; flex-direction: column; gap: 7px; margin: 8px 0; }
-        
-        .produto { 
-            background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; 
-            align-items: center; gap: 10px; cursor: pointer; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-        }
-        .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
-        .produto:active { transform: translateY(-1px) scale(0.99); }
+// ==============================================
+// 🔍 BUSCA DE CEP
+// ==============================================
+cepEl.addEventListener('input', () => {
+  let cep = cepEl.value.replace(/\D/g, '');
+  if (cep.length > 5) cep = cep.replace(/^(\d{5})(\d)/, '$1-$2');
+  cepEl.value = cep;
+});
 
-        .produto-imagem { position: relative; width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
-        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-        .produto:hover .produto-imagem img { transform: scale(1.05); }
-        .tag-mais-pedido { position: absolute; top: 0; left: 0; background: #dc2626; color: white; font-size: 0.65rem; font-weight: 600; padding: 2px 4px; border-radius: 0 0 5px 0; }
-        
-        .produto-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-        .produto-codigo { font-size: 0.75rem; font-weight: 700; color: #dc2626; }
-        .produto-nome { font-size: 1.1rem; font-weight: 700; color: #111827; line-height: 1.2; }
-        .produto-descricao { font-size: 0.8rem; color: #6b7280; line-height: 1.3; }
-        .produto-detalhes { font-size: 0.7rem; color: #78716c; display: flex; gap: 8px; margin-top: 3px; }
-        
-        .produto-preco { font-size: 1.2rem; font-weight: 800; color: #dc2626; white-space: nowrap; margin-left: auto; }
-        .produto-acoes, .controle-qtd, .add-carrinho { display: none !important; }
+cepEl.addEventListener('blur', async () => {
+  const cepNumeros = cepEl.value.replace(/\D/g, '');
+  if (cepNumeros.length !== 8) {
+    avisoCepEl.textContent = 'CEP inválido! Digite 8 dígitos.';
+    avisoCepEl.style.color = '#dc2626';
+    limparCamposEndereco();
+    return;
+  }
+  avisoCepEl.textContent = 'Buscando endereço...';
+  avisoCepEl.style.color = '#2563eb';
+  try {
+    const resposta = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
+    const dados = await resposta.json();
+    if (dados.erro) throw new Error();
+    ruaEl.value = dados.logradouro || '';
+    bairroEl.value = dados.bairro || '';
+    cidadeUfEl.value = `${dados.localidade} / ${dados.uf}`;
+    avisoCepEl.textContent = 'Endereço preenchido!';
+    avisoCepEl.style.color = '#22c55e';
+  } catch {
+    avisoCepEl.textContent = 'CEP não encontrado!';
+    avisoCepEl.style.color = '#dc2626';
+    limparCamposEndereco();
+  }
+});
 
-        .carrinho-fixo { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 6px 10px; 
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; 
-        }
-        .carrinho-conteudo { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-        .carrinho-esq { display: flex; align-items: center; gap: 7px; flex: 1; }
-        .badge-qtd { width: 26px; height: 26px; background: #dc2626; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0; }
-        .texto-carrinho h3 { font-size: 0.95rem; margin: 0; font-weight: 600; white-space: nowrap; }
-        .texto-carrinho p { font-size: 0.75rem; color: #b0b3b8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .btn-ver-carrinho { 
-            background: #dc2626; color: #ffffff; border: none; border-radius: 6px; padding: 7px 12px; font-weight: 700; 
-            font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0; transition: all 0.2s ease; 
-        }
-        .btn-ver-carrinho:hover { transform: translateY(-1px); }
+function limparCamposEndereco() {
+  cepEl.value = ''; numeroEl.value = ''; complementoEl.value = ''; referenciaEl.value = '';
+  ruaEl.value = ''; bairroEl.value = ''; cidadeUfEl.value = '';
+  avisoCepEl.textContent = 'Digite o CEP para preencher automaticamente';
+  avisoCepEl.style.color = '#2563eb';
+}
 
-        .oculto { display: none !important; }
-        #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
-        .cabecalho-detalhe { position: relative; width: 100%; height: 180px; background: #f3f4f6; }
-        /* ✅ SETA AJUSTADA: menor e mais bonita */
-        #btn-voltar { 
-            position: absolute; top: 12px; left: 12px; width: 30px; height: 30px; border-radius: 50%; border: none; 
-            background: rgba(255,255,255,0.95); font-size: 1.1rem; font-weight: bold; cursor: pointer; z-index: 10; 
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        #btn-voltar:hover { background: #fff; transform: scale(1.08); }
-        #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
+// ==============================================
+// 🕒 STATUS DA LOJA (ATUALIZA AMBAS AS TELAS)
+// ==============================================
+function verificarStatusLoja(mostrarAviso = false) {
+  const agora = new Date();
+  const horaAtual = agora.getHours();
+  const lojaAberta = horaAtual >= CONFIG.horaAbertura || horaAtual < CONFIG.horaFechamento;
 
-        .faixa-status { 
-            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #ffffff; 
-            padding: 6px 18px; border-radius: 50px; border: 2px solid #dc2626; font-size: clamp(15px, 3vw, 17px); 
-            font-weight: 600; color: #dc2626; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; 
-        }
+  // Tela principal
+  pontoStatusEl.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
+  textoStatusEl.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
 
-        .conteudo-detalhe { padding: 25px 15px 110px; }
-        #nome-detalhe { font-size: clamp(24px, 5vw, 32px); font-weight: 800; margin-bottom: 8px; color: #111; }
-        #descricao-detalhe { font-size: clamp(15px, 3vw, 18px); color: #666; line-height: 1.5; margin-bottom: 15px; }
+  // Tela de detalhes
+  pontoStatusModal.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
+  textoStatusModal.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
 
-        .precos { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; }
-        .preco-original { font-size: clamp(20px, 4.2vw, 26px); color: #999; text-decoration: line-through; }
-        /* ✅ VALOR MUDADO DE ROXO PARA VERMELHO */
-        .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #dc2626; }
-        .quero-btn { margin-left: auto; font-size: clamp(18px, 3.8vw, 22px); color: #dc2626; font-weight: 700; cursor: pointer; }
+  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
+  return lojaAberta;
+}
+verificarStatusLoja();
+setInterval(verificarStatusLoja, 60000);
+btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
-        .secao-adicionais { margin-bottom: 30px; }
-        .secao-adicionais h3 { font-size: clamp(24px, 5vw, 30px); font-weight: 700; color: #111; margin-bottom: 6px; }
-        .secao-adicionais p { font-size: clamp(16px, 3.2vw, 19px); color: #888; margin-bottom: 20px; }
+// ==============================================
+// 📂 ABRIR TELA DE DETALHES AO CLICAR NO PRODUTO
+// ==============================================
+document.querySelectorAll('.produto').forEach(produto => {
+  produto.addEventListener('click', () => {
+    if (!verificarStatusLoja(true)) return;
 
-        .adicional-item { padding: 12px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
-        .adicional-nome { font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
-        .adicional-preco { font-size: 0.95rem; color: #4b5563; }
+    // Carrega dados do produto
+    produtoAtual = {
+      nome: produto.dataset.nome,
+      preco: parseFloat(produto.dataset.preco),
+      descricao: produto.dataset.descricao || 'Sem descrição.',
+      imagem: produto.dataset.imagem || '',
+      adicionais: [
+        { nome: 'Bacon Suculento', preco: 2.90 },
+        { nome: 'Queijo Extra', preco: 2.50 },
+        { nome: 'Catupiry', preco: 2.00 },
+        { nome: 'Ovo', preco: 1.50 }
+      ]
+    };
 
-        .btn-add-adicional { 
-            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; 
-            font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
-        }
-        .btn-add-adicional:hover { transform: scale(1.05); }
-        .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
+    // Reseta valores
+    quantidadeAtual = 1;
+    adicionaisSelecionados = [];
+    qtdAtualEl.textContent = quantidadeAtual;
 
-        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 12px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
-        .qtd-detalhe { display: flex; align-items: center; gap: 20px; }
-        .qtd-detalhe button { 
-            font-size: clamp(24px, 5.5vw, 32px); border: none; background: none; cursor: pointer; color: #dc2626; 
-            font-weight: 700; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-        }
-        .qtd-detalhe button:hover { background: #fef2f2; }
-        #qtd-atual { font-size: clamp(22px, 5vw, 30px); font-weight: 700; min-width: 24px; text-align: center; }
-        /* ✅ BOTÃO ADICIONAR AJUSTADO: menor e proporcional */
-        #btn-adicionar-detalhe { 
-            flex: 1; padding: 10px 15px; border: none; border-radius: 10px; background: #dc2626; 
-            color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
-        }
-        #btn-adicionar-detalhe:hover { background: #b91c1c; }
+    // Preenche tela
+    imgDetalhe.src = produtoAtual.imagem;
+    nomeDetalhe.textContent = produtoAtual.nome;
+    descricaoDetalhe.textContent = produtoAtual.descricao;
+    precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
+    precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
+    atualizarTotalDetalhe();
 
-        #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 10px; }
-        .modal-conteudo { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 10px; padding: 12px; overflow-y: auto; }
-        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
-        .fechar-modal { 
-            background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666; transition: all 0.2s ease; 
-            border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-        }
-        .fechar-modal:hover { background: #f3f4f6; color: #111; transform: rotate(90deg); }
-        .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        .form-grupo { margin: 8px 0; }
-        .form-grupo label { display: block; margin-bottom: 3px; font-weight: 500; font-size: 0.85rem; }
-        .form-grupo input, .form-grupo select, .form-grupo textarea { 
-            width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; transition: all 0.2s ease;
-        }
-        .form-grupo textarea { resize: vertical; min-height: 60px; }
-        .form-grupo input:focus, .form-grupo select:focus, .form-grupo textarea:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.15); }
-        .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .aviso-erro, .aviso-info { font-size: 0.8rem; margin-top: 2px; }
-        .aviso-erro { color: #dc2626; }
-        .aviso-info { color: #2563eb; }
-        .total-texto { font-size: 1rem; font-weight: 700; text-align: right; margin: 8px 0; }
-        .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
-        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
-        .btn-fechar:hover { background: #e5e7eb; }
-        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
-        .btn-finalizar:hover { background: #16a34a; }
-
-        #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
-        .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
-        .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
-        .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
-        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
-        .btn-entendi:hover { background: #b91c1c; }
-
-        html, body { overflow-x: hidden; touch-action: manipulation; }
-        .produto, .categoria-btn, .btn-ver-carrinho, button { -webkit-tap-highlight-color: transparent; }
-    </style>
-</head>
-<body>
-
-<div class="status-topo">
-    <span class="ponto-status" id="ponto-status"></span>
-    <span id="texto-status" class="texto-status"></span>
-</div>
-
-<div class="cabecalho-banner">
-    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
-    <div class="marca">
-        <h1>ALISON</h1>
-        <p>★ BURGER ★</p>
-    </div>
-    <div class="info-loja">
-        <div><i class="fa fa-map-marker-alt"></i> NOME DA RUA, 123 - SUA CIDADE</div>
-        <div><i class="fa fa-motorcycle"></i> Entrega: 20-30 min &nbsp;&nbsp; | &nbsp;&nbsp; <i class="fa fa-credit-card"></i> Pagamento na entrega</div>
-    </div>
-</div>
-
-<div class="categorias">
-    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
-    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
-    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
-    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
-    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
-</div>
-
-<div class="busca">
-    <i class="fa fa-search"></i>
-    <input type="text" id="campoBusca" placeholder="Buscar produtos...">
-</div>
-
-<div class="container">
-    <div class="lista-produtos">
-        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-descricao="Pão, carne, queijo, alface e tomate, tudo fresquinho e preparado na hora." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem">
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Simples">
-                <span class="tag-mais-pedido">★ MAIS</span>
-            </div>
-            <div class="produto-info">
-                <p class="produto-codigo">01</p>
-                <h2 class="produto-nome">Hambúrguer Simples</h2>
-                <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-fire"></i> Muito pedido</span>
-                    <span><i class="fa fa-clock"></i> 20-30 min</span>
-                </div>
-            </div>
-            <p class="produto-preco">R$ 10,00</p>
+    // Carrega adicionais
+    listaAdicionaisEl.innerHTML = '';
+    produtoAtual.adicionais.forEach((add, idx) => {
+      const addEl = document.createElement('div');
+      addEl.className = 'adicional-item';
+      addEl.innerHTML = `
+        <div>
+          <div class="adicional-nome">${add.nome}</div>
+          <div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div>
         </div>
+        <button class="btn-add-adicional" data-idx="${idx}">+</button>
+      `;
+      listaAdicionaisEl.appendChild(addEl);
+    });
 
-        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="12.00" data-descricao="Duas carnes suculentas, queijo especial derretido e molho secreto da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Duplo"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">02</p>
-                <h3 class="produto-nome">Hambúrguer Duplo</h3>
-                <p class="produto-descricao">Duas carnes, queijo especial e molho da casa.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Saboroso</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
+    // Abre tela
+    modalProduto.classList.remove('oculto');
+    document.body.style.overflow = 'hidden';
+  });
+});
 
-        <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Picante" data-preco="15.00" data-descricao="Carne especial, molho apimentado caseiro e pimenta calabresa fresca." data-imagem="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hambúrguer Picante"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">03</p>
-                <h3 class="produto-nome">Hambúrguer Picante</h3>
-                <p class="produto-descricao">Carne especial, molho apimentado e pimenta calabresa.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-pepper-hot"></i> Picante</span><span><i class="fa fa-clock"></i> 20-30 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 15,00</p>
-        </div>
+// Voltar para lista
+btnVoltarLista.addEventListener('click', () => {
+  modalProduto.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
 
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Tradicional" data-preco="12.00" data-descricao="Porção grande de batatas selecionadas, crocantes e temperadas na hora." data-imagem="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Frita"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">04</p>
-                <h3 class="produto-nome">Batata Frita Tradicional</h3>
-                <p class="produto-descricao">Porção grande, crocante e temperada.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-fire"></i> Quente</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
+// ==============================================
+// ➕ / ➖ QUANTIDADE E ADICIONAIS NA TELA DETALHES
+// ==============================================
+diminuirQtdBtn.addEventListener('click', () => {
+  if (quantidadeAtual > 1) {
+    quantidadeAtual--;
+    qtdAtualEl.textContent = quantidadeAtual;
+    atualizarTotalDetalhe();
+  }
+});
+aumentarQtdBtn.addEventListener('click', () => {
+  quantidadeAtual++;
+  qtdAtualEl.textContent = quantidadeAtual;
+  atualizarTotalDetalhe();
+});
 
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola" data-preco="14.00" data-descricao="Anéis de cebola branca empanados crocantes, servidos com molho especial." data-imagem="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Anéis de Cebola"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">05</p>
-                <h3 class="produto-nome">Anéis de Cebola</h3>
-                <p class="produto-descricao">Empanados, crocantes e saborosos.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-thumbs-up"></i> Crocante</span><span><i class="fa fa-clock"></i> 10-15 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 14,00</p>
-        </div>
+listaAdicionaisEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('.btn-add-adicional');
+  if (!btn) return;
+  const idx = parseInt(btn.dataset.idx);
+  const adicional = produtoAtual.adicionais[idx];
+  const posicao = adicionaisSelecionados.findIndex(a => a.nome === adicional.nome);
 
-        <div class="produto" data-categoria="acompanhamentos" data-nome="Batata com Cheddar e Bacon" data-preco="18.00" data-descricao="Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante." data-imagem="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batata Cheddar"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">06</p>
-                <h3 class="produto-nome">Batata com Cheddar e Bacon</h3>
-                <p class="produto-descricao">Coberta com molho de queijo e bacon picado.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-star"></i> Mais pedida</span><span><i class="fa fa-clock"></i> 12-18 min</span></div>
-            </div>
-            <p class="produto-preco">R$ 18,00</p>
-        </div>
+  if (posicao === -1) {
+    adicionaisSelecionados.push(adicional);
+    btn.textContent = '✓';
+    btn.classList.add('selecionado');
+  } else {
+    adicionaisSelecionados.splice(posicao, 1);
+    btn.textContent = '+';
+    btn.classList.remove('selecionado');
+  }
+  atualizarTotalDetalhe();
+});
 
-        <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 350ml Zero" data-preco="6.00" data-descricao="Lata de refrigerante gelada, zero açúcar, sabor original." data-imagem="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca-Cola Zero Lata"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">07</p>
-                <h3 class="produto-nome">Coca-Cola 350ml Zero</h3>
-                <p class="produto-descricao">Lata gelada, zero açúcar, sabor original.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
-            </div>
-            <p class="produto-preco">R$ 6,00</p>
-        </div>
+function atualizarTotalDetalhe() {
+  const totalAdicionais = adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
+  const total = (produtoAtual.preco + totalAdicionais) * quantidadeAtual;
+  btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
+}
 
-        <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica 350ml" data-preco="6.00" data-descricao="Lata bem gelada, sabor tradicional do Brasil." data-imagem="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Guaraná"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">08</p>
-                <h3 class="produto-nome">Guaraná Antarctica 350ml</h3>
-                <p class="produto-descricao">Lata bem gelada, sabor tradicional.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-tint"></i> Refrigerante</span></div>
-            </div>
-            <p class="produto-preco">R$ 6,00</p>
-        </div>
+// ==============================================
+// ✅ ADICIONAR DO DETALHES PARA O CARRINHO
+// ==============================================
+btnAdicionarDetalhe.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
 
-        <div class="produto" data-categoria="bebidas" data-nome="Suco de Laranja Natural 500ml" data-preco="9.00" data-descricao="Suco 100% fruta, espremido na hora, sem açúcar e sem conservantes." data-imagem="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Suco de Laranja"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">09</p>
-                <h3 class="produto-nome">Suco de Laranja Natural 500ml</h3>
-                <p class="produto-descricao">100% fruta, sem açúcar.</p>
-                <div class="produto-detalhes"><span><i class="fa fa-leaf"></i> Natural</span></div>
-            </div>
-            <p class="produto-preco">R$ 9,00</p>
-        </div>
+  const nomeCompleto = adicionaisSelecionados.length 
+    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
+    : produtoAtual.nome;
 
-        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Normal" data-preco="12.00" data-descricao="Garrafa grande, sabor original, bem gelada para toda a família." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Normal"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">10</p>
-                <h3 class="produto-nome">Coca‑Cola 2 L Normal</h3>
-                <p class="produto-descricao">Garrafa grande, sabor original, gelada.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-tint"></i> Refrigerante</span>
-                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
-                </div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
+  const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
 
-        <div class="produto" data-categoria="bebidas" data-nome="Coca‑Cola 2 L Zero Açúcar" data-preco="12.00" data-descricao="Garrafa grande, zero açúcar, sabor inconfundível, bem gelada." data-imagem="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80">
-            <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coca‑Cola 2 L Zero"></div>
-            <div class="produto-info">
-                <p class="produto-codigo">11</p>
-                <h3 class="produto-nome">Coca‑Cola 2 L Zero Açúcar</h3>
-                <p class="produto-descricao">Garrafa grande, zero açúcar, gelada.</p>
-                <div class="produto-detalhes">
-                    <span><i class="fa fa-tint"></i> Refrigerante</span>
-                    <span><i class="fa fa-bottle-water"></i> 2 Litros</span>
-                    <span><i class="fa fa-ban"></i> Zero Açúcar</span>
-                </div>
-            </div>
-            <p class="produto-preco">R$ 12,00</p>
-        </div>
-    </div>
-</div>
+  const itemExistente = carrinho.find(i => i.nome === nomeCompleto);
+  if (itemExistente) {
+    itemExistente.quantidade += quantidadeAtual;
+  } else {
+    carrinho.push({ nome: nomeCompleto, preco: precoTotal, quantidade: quantidadeAtual });
+  }
 
-<div id="modal-produto" class="oculto">
-    <div class="cabecalho-detalhe">
-        <button id="btn-voltar">&larr;</button>
-        <img id="img-detalhe" alt="">
-        <div class="faixa-status">
-            <span class="ponto-status" id="ponto-status-modal"></span>
-            <span id="texto-status-modal"></span>
-        </div>
-    </div>
-    <div class="conteudo-detalhe">
-        <h2 id="nome-detalhe"></h2>
-        <p id="descricao-detalhe"></p>
-        <div class="precos">
-            <span class="preco-original" id="preco-original"></span>
-            <span class="preco-promocional" id="preco-promocional"></span>
-            <span class="quero-btn">!Quero &gt;</span>
-        </div>
-        <div class="secao-adicionais">
-            <h3>Turbine Seu Lanche</h3>
-            <p>Escolha até 4 opções</p>
-            <div id="lista-adicionais"></div>
-        </div>
-    </div>
-    <div class="rodape-detalhe">
-        <div class="qtd-detalhe">
-            <button id="diminuir-qtd">&minus;</button>
-            <span id="qtd-atual">1</span>
-            <button id="aumentar-qtd">+</button>
-        </div>
-        <button id="btn-adicionar-detalhe">Adicionar</button>
-    </div>
-</div>
+  atualizarCarrinho();
+  modalProduto.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
 
-<div id="modal-carrinho" class="oculto">
-    <div class="modal-conteudo">
-        <div class="modal-cabecalho">
-            <h3>Meu Carrinho</h3>
-            <button id="fechar-modal" class="fechar-modal">&times;</button>
-        </div>
-        <div id="lista-itens-carrinho"></div>
-        <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
+// ==============================================
+// 🔄 ATUALIZAR CARRINHO
+// ==============================================
+function atualizarCarrinho() {
+  listaItensCarrinho.innerHTML = '';
+  let total = 0; let qtdTotal = 0;
+  if (carrinho.length === 0) {
+    valorTotalEl.textContent = '0,00';
+    carrinhoContainer.style.display = 'none';
+    return;
+  }
+  carrinhoContainer.style.display = 'flex';
+  carrinho.forEach((item, index) => {
+    const totalItem = item.preco * item.quantidade;
+    total += totalItem; qtdTotal += item.quantidade;
+    const itemEl = document.createElement('div');
+    itemEl.className = 'item-carrinho';
+    itemEl.innerHTML = `
+      <div><h4 style="font-size:14px;margin-bottom:3px;">${item.nome}</h4><p style="font-size:11px;color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
+        <span style="font-weight:600;font-size:14px;">${item.quantidade}</span>
+        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
+        <span style="font-weight:700;min-width:75px;text-align:right;font-size:14px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
+      </div>
+    `;
+    listaItensCarrinho.appendChild(itemEl);
+  });
+  valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
+  qtdCarrinhoEl.textContent = qtdTotal;
+  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+  adicionarEventosCarrinho();
+}
 
-        <div class="form-grupo">
-            <label>Forma de recebimento</label>
-            <select id="tipo-atendimento">
-                <option value="retirada">Retirada</option>
-                <option value="entrega">Entrega</option>
-            </select>
-        </div>
+function adicionarEventosCarrinho() {
+  document.querySelectorAll('.aumentar-item').forEach(b => b.addEventListener('click', () => {
+    const idx = parseInt(b.dataset.index); carrinho[idx].quantidade++; atualizarCarrinho();
+  }));
+  document.querySelectorAll('.diminuir-item').forEach(b => b.addEventListener('click', () => {
+    const idx = parseInt(b.dataset.index);
+    if (carrinho[idx].quantidade > 1) carrinho[idx].quantidade--;
+    else carrinho.splice(idx, 1);
+    atualizarCarrinho();
+  }));
+}
 
-        <div id="campo-taxa-entrega" class="form-grupo oculto">
-            <label>Taxa de entrega</label>
-            <input type="text" id="taxa-entrega" value="8,00" readonly style="background: #f8f8f8;">
-        </div>
+// ==============================================
+// 📂 ABRIR / FECHAR CARRINHO
+// ==============================================
+abrirCarrinhoBtn.addEventListener('click', () => {
+  if (carrinho.length === 0) return;
+  if (!verificarStatusLoja(true)) return;
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+  avisoGeral.classList.add('oculto');
+});
+fecharModalBtns.forEach(b => b.addEventListener('click', () => {
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+}));
 
-        <div class="form-grupo">
-            <label>Nome completo</label>
-            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
-        </div>
+// ==============================================
+// 🗂️ FILTRAR E BUSCAR
+// ==============================================
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    const cat = botao.dataset.categoria;
+    document.querySelectorAll('.produto').forEach(p => {
+      p.style.display = (cat === 'todos' || p.dataset.categoria === cat) ? 'flex' : 'none';
+    });
+    campoBusca.value = '';
+  });
+});
+campoBusca.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(p => {
+    p.style.display = p.dataset.nome.toLowerCase().includes(termo) ? 'flex' : 'none';
+  });
+});
 
-        <div id="bloco-endereco" class="oculto">
-            <div class="form-grupo">
-                <label>CEP</label>
-                <input type="text" id="cep" placeholder="Ex: 00000-000" maxlength="9">
-                <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
-            </div>
-            <div class="form-duplo">
-                <div class="form-grupo">
-                    <label>Número</label>
-                    <input type="text" id="numero" placeholder="Ex: 123">
-                </div>
-                <div class="form-grupo">
-                    <label>Complemento</label>
-                    <input type="text" id="complemento" placeholder="Ex: Apto 1">
-                </div>
-            </div>
-            <div class="form-grupo">
-                <label>Referência</label>
-                <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
-            </div>
-            <div class="form-grupo">
-                <label>Rua / Logradouro</label>
-                <input type="text" id="rua" placeholder="Preenchido automaticamente">
-            </div>
-            <div class="form-duplo">
-                <div class="form-grupo">
-                    <label>Bairro</label>
-                    <input type="text" id="bairro" placeholder="Preenchido automaticamente">
-                </div>
-                <div class="form-grupo">
-                    <label>Cidade / UF</label>
-                    <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente">
-                </div>
-            </div>
-        </div>
+// ==============================================
+// ✅ FINALIZAR PEDIDO (SEM OBSERVAÇÕES)
+// ==============================================
+document.getElementById('btn-finalizar').addEventListener('click', () => {
+  avisoGeral.classList.add('oculto');
+  const nome = nomeEl.value.trim();
+  const pagamento = pagamentoEl.value;
+  const tipoAtendimento = tipoAtendimentoEl.value;
+  const taxaEntrega = parseFloat(taxaEntregaEl.value.replace(',', '.')) || 0;
+  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
+  const totalGeral = totalItens + taxaEntrega;
 
-        <div class="form-grupo">
-            <label>Forma de pagamento</label>
-            <select id="forma-pagamento">
-                <option value="Dinheiro">Dinheiro</option>
-                <option value="Pix">Pix</option>
-                <option value="Cartão">Cartão</option>
-            </select>
-        </div>
+  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
+  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-        <div class="form-grupo">
-            <label>Observações</label>
-            <textarea id="observacao" placeholder="Alguma observação ou pedido especial? Ex: sem pimenta, ponto da carne, etc."></textarea>
-        </div>
+  // 📝 Observação (funciona se tiver o campo no HTML com id="observacao")
+  const observacaoEl = document.getElementById('observacao');
+  const observacao = observacaoEl ? observacaoEl.value.trim() : '';
 
-        <p id="aviso-geral" class="aviso-erro oculto"></p>
+  // Validações mantidas
+  if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
+  if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
+  if (tipoAtendimento === 'entrega') {
+    const cepValido = cepEl.value.trim().replace(/\D/g, '').length === 8;
+    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Aguarde o preenchimento do endereço!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
+  }
 
-        <div class="botoes-modal">
-            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
-            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
-        </div>
-    </div>
-</div>
+  // Endereço só aparece quando for Entrega
+  let enderecoCompleto = '';
+  if (tipoAtendimento === 'entrega') {
+    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
+    if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
+    enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
+    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
+    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
+    if (referenciaEl.value.trim()) enderecoCompleto += `\n  Referência: ${referenciaEl.value.trim()}`;
+  }
 
-<div id="alerta-fechado" class="oculto">
-    <div class="alerta-caixa">
-        <h2>Loja Fechada</h2>
-        <p>Atendimento mostra o horario de atendimento da loja!</p>
-        <button id="btn-entendi" class="btn-entendi">Entendi</button>
-    </div>
-</div>
+  // 📄 COMANDO PADRÃO
+  let mensagem = `=====================================\n`;
+  mensagem += `          PEDIDO — ${CONFIG.nomeLoja}\n`;
+  mensagem += `=====================================\n`;
+  mensagem += `Nº ${numeroPedido}  |  ${dataPedido}\n\n`;
 
-<div class="carrinho-fixo" id="carrinho-container">
-    <div class="carrinho-conteudo">
-        <div class="carrinho-esq">
-            <span class="badge-qtd" id="qtd-carrinho">0</span>
-            <div class="texto-carrinho">
-                <h3>Meu carrinho</h3>
-                <p id="resumo-carrinho">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</p>
-            </div>
-        </div>
-        <button class="btn-ver-carrinho" id="abrir-carrinho"> Ver </button>
-    </div>
-</div>
+  mensagem += `Tipo de atendimento: ${tipoAtendimento === 'entrega' ? 'Entrega' : 'Retirada'}\n`;
+  mensagem += `Cliente:            ${nome}\n`;
 
-<script src="script.js"></script>
-</body>
-</html>
+  if (tipoAtendimento === 'entrega') {
+    mensagem += `Endereço:\n  ${enderecoCompleto}\n`;
+  }
+
+  mensagem += `Pagamento:          ${pagamento}\n\n`;
+
+  mensagem += `-------------------------------------\n`;
+  mensagem += `PRODUTO                QTD   VALOR\n`;
+  mensagem += `-------------------------------------\n`;
+
+  carrinho.forEach(i => {
+    const totalItem = (i.preco * i.quantidade).toFixed(2).replace('.', ',');
+    mensagem += `${i.nome.padEnd(20)} ${String(i.quantidade).padStart(3)}  R$ ${totalItem}\n`;
+  });
+
+  mensagem += `-------------------------------------\n`;
+  mensagem += `Subtotal............ R$ ${totalItens.toFixed(2).replace('.', ',')}\n`;
+
+  if (tipoAtendimento === 'entrega') {
+    mensagem += `Entrega............. R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
+  }
+
+  mensagem += `\nVALOR TOTAL......... R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
+
+  // 📝 OBSERVAÇÃO: aparece só se for preenchida
+  if (observacao) {
+    mensagem += `\n-------------------------------------\n`;
+    mensagem += `Observação: ${observacao}\n`;
+  }
+
+  mensagem += `=====================================\n`;
+  mensagem += `Confirmaremos o pedido em breve.\n`;
+  mensagem += `Obrigado pela preferência!\n`;
+  mensagem += `=====================================`;
+
+  window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`, '_blank');
+});
