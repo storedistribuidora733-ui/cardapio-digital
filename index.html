@@ -64,7 +64,7 @@
         .produto.oculto { display: none !important; }
 
         .produto-imagem { position: relative; width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
-        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; transition: transform: 0.3s ease; }
+        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
         .produto:hover .produto-imagem img { transform: scale(1.05); }
         .tag-mais-pedido { position: absolute; top: 0; left: 0; background: #dc2626; color: white; font-size: 0.65rem; font-weight: 600; padding: 2px 4px; border-radius: 0 0 5px 0; }
         
@@ -176,6 +176,7 @@
             width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; transition: all 0.2s ease;
         }
         .form-grupo textarea { resize: vertical; min-height: 60px; }
+        .form-grupo input:focus, .form-grupo select:focus, .form-grupo textarea:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.15); }
         .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .aviso-erro, .aviso-info { font-size: 0.8rem; margin-top: 2px; }
         .aviso-erro { color: #dc2626; }
@@ -232,7 +233,7 @@
 
 <div class="container">
     <div class="lista-produtos" id="lista-produtos">
-        <!-- Produtos carregados do arquivo global produtos.json -->
+        <!-- Produtos carregados DINAMICAMENTE do painel -->
     </div>
 </div>
 
@@ -309,7 +310,7 @@
                 </div>
                 <div class="form-grupo">
                     <label>Complemento</label>
-                    <input type="text" id="complemento" placeholder="Apto 1">
+                    <input type="text" id="complemento" placeholder="Ex: Apto 1">
                 </div>
             </div>
             <div class="form-grupo">
@@ -378,4 +379,4 @@
 
 <script src="script.js"></script>
 </body>
-</html>
+</html> 
