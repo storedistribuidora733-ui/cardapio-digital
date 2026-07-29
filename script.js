@@ -14,7 +14,6 @@ let carrinho = [];
 let qtdAtual = 1;
 let adicionaisEscolhidos = [];
 
-// ========== ATUALIZA STATUS NO CABEÇALHO (PRINCIPAL CORREÇÃO) ==========
 function atualizarStatusLoja() {
   const agora = new Date();
   const hora = agora.getHours();
@@ -39,7 +38,6 @@ function atualizarStatusLoja() {
   return aberto;
 }
 
-// ========== BUSCA E FILTRO CATEGORIAS ==========
 const listaProdutosEl = document.querySelector('.lista-produtos');
 const botoesCategoria = document.querySelectorAll('.categoria-btn');
 const campoBusca = document.getElementById('campoBusca');
@@ -65,7 +63,6 @@ function filtrarProdutos(categoria, termo) {
   });
 }
 
-// ========== MODAL PRODUTO ==========
 const modalProduto = document.getElementById('modal-produto');
 document.querySelectorAll('.produto').forEach(prod => {
   prod.addEventListener('click', () => {
@@ -91,7 +88,6 @@ document.getElementById('btn-adicionar-detalhe').addEventListener('click', () =>
   modalProduto.classList.add('oculto');
 });
 
-// ========== CARRINHO ==========
 const modalCarrinho = document.getElementById('modal-carrinho');
 document.getElementById('abrir-carrinho').addEventListener('click', () => modalCarrinho.classList.remove('oculto'));
 document.getElementById('fechar-modal').addEventListener('click', () => modalCarrinho.classList.add('oculto'));
@@ -122,7 +118,6 @@ function atualizarCarrinhoTela() {
   container.style.display = totalItens>0 ? 'block' : 'none';
 }
 
-// ========== ENDEREÇO / CEP / ENTREGA ==========
 const tipoAtend = document.getElementById('tipo-atendimento');
 const blocoEnd = document.getElementById('bloco-endereco');
 const campoTaxa = document.getElementById('campo-taxa-entrega');
@@ -145,7 +140,6 @@ document.getElementById('cep').addEventListener('blur', async function() {
   }catch(e){}
 });
 
-// ========== FINALIZAR / WHATSAPP / ALERTA FECHADO ==========
 const alertaFechado = document.getElementById('alerta-fechado');
 document.getElementById('btn-entendi').addEventListener('click', () => alertaFechado.classList.add('oculto'));
 document.getElementById('btn-finalizar').addEventListener('click', () => {
@@ -190,8 +184,7 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   carrinho=[]; atualizarCarrinhoTela();
 });
 
-// ========== INICIALIZAÇÃO ==========
 window.addEventListener('DOMContentLoaded', () => {
-  atualizarStatusLoja(); // Roda logo ao carregar e GARANTE exibição
+  atualizarStatusLoja();
   atualizarCarrinhoTela();
 });
