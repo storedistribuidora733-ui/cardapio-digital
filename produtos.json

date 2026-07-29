@@ -8,6 +8,4 @@
   {"id":"07","nome":"Coca-Cola 350ml Zero","categoria":"bebidas","preco":6.00,"descricao":"Lata de refrigerante gelada, zero açúcar, sabor original","tempo":"20-30min","imagem":"https://picsum.photos/id/433/150/150","destaque":true},
   {"id":"08","nome":"Guaraná Antarctica 350ml","categoria":"bebidas","preco":6.00,"descricao":"Lata bem gelada, sabor tradicional do Brasil","tempo":"20-30min","imagem":"https://picsum.photos/id/429/150/150","destaque":true},
   {"id":"09","nome":"Suco de Laranja Natural 500ml","categoria":"bebidas","preco":9.00,"descricao":"Suco 100% fruta, espremido na hora, sem conservantes","tempo":"20-30min","imagem":"https://picsum.photos/id/416/150/150","destaque":true},
-  {"id":"10","nome":"Coca-Cola 2L Normal","categoria":"bebidas","preco":12.00,"descricao":"Garrafa grande, sabor original, bem gelada para toda a família","tempo":"20-30min","imagem":"https://picsum.photos/id/434/150/150","destaque":true},
-  {"id":"11","nome":"Coca-Cola 2L Zero Açúcar","categoria":"bebidas","preco":12.00,"descricao":"Garrafa grande, zero açúcar, sabor inconfundível, bem gelada","tempo":"20-30min","imagem":"https://picsum.photos/id/435/150/150","destaque":true}
-]
+  {"id":"10","nome":"Coca-Cola 2L Normal","categoria":"bebidas","preco":12.00,"descricao":"Garrafa grande, sabor original, bem gelada para toda a família","tempo":"20-30min","imagem":"https://picsum.photos/id/434
