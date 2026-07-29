@@ -26,12 +26,13 @@
             #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
         }
 
-        /* CABEÇALHO COM STATUS VISÍVEL E FUNCIONANDO */
+        /* CABEÇALHO ALINHADO TUDO NA MESMA LINHA */
         .status-topo {
             display: flex !important;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 18px;
+            align-items: center; /* centraliza verticalmente TODOS os elementos */
+            flex-wrap: nowrap; /* impede que quebrem linha */
+            gap: 10px; /* espaçamento compacto entre eles */
+            padding: 14px 18px;
             background: #ffffff;
             border-bottom: 1px solid #eee;
         }
@@ -40,18 +41,21 @@
             font-weight: 800;
             color: #111;
             margin: 0;
+            white-space: nowrap; /* não quebra o nome */
         }
         .ponto-status {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            flex-shrink: 0;
+            flex-shrink: 0; /* mantém tamanho fixo */
+            margin-top: 1px; /* ajuste fino para ficar exato no meio */
         }
         .ponto-status.aberto { background-color: #22c55e; }
         .ponto-status.fechado { background-color: #dc2626; }
         .texto-status {
             font-size: 1rem;
             color: #333;
+            white-space: nowrap;
         }
 
         .cabecalho-banner { display: none !important; }
@@ -213,14 +217,14 @@
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
         .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-fechar:hover { background: #e5e7eb; }
-        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-finalizar:hover { background: #16a34a; }
 
         #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
         .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
         .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
         .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
-        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-entendi:hover { background: #b91c1c; }
 
         html, body { overflow-x: hidden; touch-action: manipulation; }
@@ -229,7 +233,7 @@
 </head>
 <body>
 
-<!-- CABEÇALHO COM STATUS FUNCIONANDO -->
+<!-- CABEÇALHO: TUDO ALINHADO NA MESMA LINHA -->
 <div class="status-topo">
     <h1 class="nome-loja-cabecalho">ALISON BURGER</h1>
     <span class="ponto-status" id="ponto-status"></span>
@@ -395,7 +399,7 @@
     </div>
 </div>
 
-<!-- SCRIPT DE STATUS INTEGRADO E FUNCIONANDO -->
+<!-- SCRIPT DE STATUS E FUNCIONALIDADES -->
 <script>
 const CONFIG_STATUS = {
   horaAbertura: 7,
@@ -434,11 +438,10 @@ function verificarStatusLoja() {
   return estaAberto;
 }
 
-// Executa na hora e atualiza automaticamente a cada minuto
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 
-// Filtro de categorias mantido
+// Filtro categorias
 document.querySelectorAll('.categoria-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
