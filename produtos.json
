@@ -1,10 +1,5 @@
-
 [
-  {"id":"01","nome":"Hambúrguer Simples","categoria":"hamburgueres","preco":10.00,"descricao":"Pão, carne, queijo, alface e tomate...","tempo":"20-30 min","imagem":"https://...","destaque":true},
-  {"id":"02","nome":"Hambúrguer Duplo","categoria":"hamburgueres","preco":12.00,"descricao":"Duas carnes suculentas...","tempo":"20-30 min","imagem":"https://..."},
-  {"id":"03","nome":"Hambúrguer Picante","categoria":"hamburgueres","preco":15.00,...},
-  {"id":"04","nome":"Batata Frita Tradicional","categoria":"acompanhamentos",...},
-  {"id":"07","nome":"Coca-Cola 350ml Zero","categoria":"bebidas",...},
-  {"id":"10","nome":"Coca-Cola 2L Normal","categoria":"bebidas",...},
-  {"id":"11","nome":"Coca-Cola 2L Zero Açúcar","categoria":"bebidas",...}
+  {"id":"01","nome":"Hambúrguer Simples","categoria":"hamburgueres","preco":10.00,"descricao":"Pão, carne, queijo, alface e tomate, tudo fresquinho.","tempo":"20-30 min","imagem":"https://via.placeholder.com/150","destaque":true},
+  {"id":"02","nome":"Hambúrguer Duplo","categoria":"hamburgueres","preco":12.00,"descricao":"Duas carnes suculentas e queijo especial.","tempo":"20-30 min","imagem":"https://via.placeholder.com/150"},
+  {"id":"07","nome":"Coca-Cola 350ml Zero","categoria":"bebidas","preco":6.00,"descricao":"Lata gelada, zero açúcar.","tempo":"20-30 min","imagem":"https://via.placeholder.com/150"}
 ]
