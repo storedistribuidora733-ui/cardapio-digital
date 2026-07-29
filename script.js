@@ -240,15 +240,18 @@ document.addEventListener('DOMContentLoaded', () => {
   verificarStatus();
   setInterval(verificarStatus, 60000);
 
+  // Botões detalhe
   document.getElementById('btn-voltar')?.addEventListener('click', () => document.getElementById('modal-produto').classList.add('oculto'));
   document.getElementById('diminuir-qtd')?.addEventListener('click', () => { if(qtdAtual>1) qtdAtual--; document.getElementById('qtd-atual').textContent=qtdAtual; });
   document.getElementById('aumentar-qtd')?.addEventListener('click', () => { qtdAtual++; document.getElementById('qtd-atual').textContent=qtdAtual; });
   document.getElementById('btn-adicionar-detalhe')?.addEventListener('click', adicionarAoCarrinho);
 
+  // Carrinho
   document.getElementById('abrir-carrinho')?.addEventListener('click', abrirModalCarrinho);
   document.getElementById('fechar-modal')?.addEventListener('click', () => document.getElementById('modal-carrinho').classList.add('oculto'));
   document.getElementById('btn-limpar')?.addEventListener('click', limparCarrinho);
 
+  // Filtro categorias
   document.querySelectorAll('.categoria-btn').forEach(btn => btn.addEventListener('click', e => {
     document.querySelectorAll('.categoria-btn').forEach(b=>b.classList.remove('ativo'));
     e.target.classList.add('ativo');
@@ -256,11 +259,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.produto').forEach(p => p.classList.toggle('oculto', cat !== 'todos' && p.dataset.categoria !== cat));
   }));
 
+  // Busca
   document.getElementById('campoBusca')?.addEventListener('input', e => {
     const termo = e.target.value.trim().toLowerCase();
     document.querySelectorAll('.produto').forEach(p => p.classList.toggle('oculto', !p.textContent.toLowerCase().includes(termo)));
   });
 
+  // Entrega/Retirada
   document.getElementById('tipo-atendimento')?.addEventListener('change', e => {
     const entregaEl = document.getElementById('bloco-endereco');
     const taxaEl = document.getElementById('campo-taxa-entrega');
