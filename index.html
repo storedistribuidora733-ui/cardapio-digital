@@ -13,7 +13,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
-        body { background-color: #f8f9fa; padding-top: 50px; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
+        body { background-color: #f8f9fa; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
 
         @media (min-width: 768px) {
             html { font-size: 15px; }
@@ -26,46 +26,43 @@
             #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
         }
 
-        /* CABEÇALHO SUPERIOR — COMO NA IMAGEM */
-        .cabecalho-topo {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
+        /* CABEÇALHO ALINHADO TUDO NA MESMA LINHA */
+        .status-topo {
+            display: flex !important;
+            align-items: center; /* centraliza verticalmente TODOS os elementos */
+            flex-wrap: nowrap; /* impede que quebrem linha */
+            gap: 10px; /* espaçamento compacto entre eles */
+            padding: 14px 18px;
             background: #ffffff;
             border-bottom: 1px solid #eee;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
         }
-        @media (min-width: 620px) {
-            .cabecalho-topo { max-width: 620px; left: 50%; transform: translateX(-50%); }
-        }
-        .nome-loja {
-            font-size: 1.35rem;
+        .nome-loja-cabecalho {
+            font-size: 1.5rem;
             font-weight: 800;
-            color: #111827;
-            letter-spacing: 0.3px;
-        }
-        .status-loja {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
+            color: #111;
+            margin: 0;
+            white-space: nowrap; /* não quebra o nome */
         }
         .ponto-status {
-            width: 10px; height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            display: inline-block;
+            flex-shrink: 0; /* mantém tamanho fixo */
+            margin-top: 1px; /* ajuste fino para ficar exato no meio */
         }
-        .ponto-status.aberto { background: #22c55e; }
-        .ponto-status.fechado { background: #dc2626; }
-        .texto-status { color: #333; }
+        .ponto-status.aberto { background-color: #22c55e; }
+        .ponto-status.fechado { background-color: #dc2626; }
+        .texto-status {
+            font-size: 1rem;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .cabecalho-banner { display: none !important; }
 
         .categorias { 
             width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
-            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 50px; z-index: 99;
+            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 99;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 0 rgba(0,0,0,0);
         }
         .categorias.sticky-visivel { box-shadow: 0 3px 12px rgba(0,0,0,0.08); padding-top: 9px; padding-bottom: 9px; }
@@ -77,7 +74,7 @@
         }
         .categoria-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-color: #dc2626; }
         .categoria-btn:active { transform: translateY(-1px) scale(0.98); }
-        .categoria-btn.ativo { background: #dc2626; border-color: #dc2626; color: #ffffff; box-shadow: 0 2px 6px rgba(220,38,38,0.3); }
+        .categoria-btn.ativo { background-color: #dc2626; border-color: #dc2626; color: #ffffff; box-shadow: 0 2px 6px rgba(220,38,38,0.3); }
 
         .busca { margin: 8px 10px; position: relative; }
         .busca input { 
@@ -105,7 +102,7 @@
         
         .produto-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
         .produto-codigo { font-size: 0.75rem; font-weight: 700; color: #dc2626; }
-        .produto-nome { font-size: 1.1rem; font-weight: 800; color: #111827; line-height: 1.2; }
+        .produto-nome { font-size: 1.1rem; font-weight: 700; color: #111827; line-height: 1.2; }
         .produto-descricao { font-size: 0.8rem; color: #6b7280; line-height: 1.3; }
         .produto-detalhes { font-size: 0.7rem; color: #78716c; display: flex; gap: 8px; margin-top: 3px; }
         
@@ -227,7 +224,7 @@
         .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
         .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
         .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
-        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-entendi:hover { background: #b91c1c; }
 
         html, body { overflow-x: hidden; touch-action: manipulation; }
@@ -236,13 +233,11 @@
 </head>
 <body>
 
-<!-- CABEÇALHO ATIVO COMO NA FOTO -->
-<div class="cabecalho-topo">
-    <div class="nome-loja">ALISON BURGER</div>
-    <div class="status-loja">
-        <span class="ponto-status" id="ponto-status"></span>
-        <span id="texto-status" class="texto-status"></span>
-    </div>
+<!-- CABEÇALHO: TUDO ALINHADO NA MESMA LINHA -->
+<div class="status-topo">
+    <h1 class="nome-loja-cabecalho">ALISON BURGER</h1>
+    <span class="ponto-status" id="ponto-status"></span>
+    <span id="texto-status" class="texto-status"></span>
 </div>
 
 <div class="categorias">
@@ -404,49 +399,70 @@
     </div>
 </div>
 
-<script src="script.js"></script>
-
-<!-- SCRIPT PARA ATUALIZAR O STATUS NO CABEÇALHO -->
+<!-- SCRIPT DE STATUS E FUNCIONALIDADES -->
 <script>
-function atualizarStatusCabecalho(lojaAberta, textoAberto, textoFechado) {
+const CONFIG_STATUS = {
+  horaAbertura: 7,
+  horaFechamento: 23,
+  textoAberto: "Aberto até às 23:00",
+  textoFechado: "Fechado • Abre às 07:00"
+};
+
+function atualizarStatus(aberto) {
   const ponto = document.getElementById('ponto-status');
   const texto = document.getElementById('texto-status');
   const pontoModal = document.getElementById('ponto-status-modal');
   const textoModal = document.getElementById('texto-status-modal');
 
-  if (lojaAberta) {
-    ponto.classList.remove('fechado'); ponto.classList.add('aberto');
-    texto.textContent = textoAberto;
-    if (pontoModal) { pontoModal.classList.remove('fechado'); pontoModal.classList.add('aberto'); textoModal.textContent = textoAberto; }
+  if (aberto) {
+    ponto.className = 'ponto-status aberto';
+    texto.textContent = CONFIG_STATUS.textoAberto;
+    if (pontoModal) {
+      pontoModal.className = 'ponto-status aberto';
+      textoModal.textContent = CONFIG_STATUS.textoAberto;
+    }
   } else {
-    ponto.classList.remove('aberto'); ponto.classList.add('fechado');
-    texto.textContent = textoFechado;
-    if (pontoModal) { pontoModal.classList.remove('aberto'); pontoModal.classList.add('fechado'); textoModal.textContent = textoFechado; }
+    ponto.className = 'ponto-status fechado';
+    texto.textContent = CONFIG_STATUS.textoFechado;
+    if (pontoModal) {
+      pontoModal.className = 'ponto-status fechado';
+      textoModal.textContent = CONFIG_STATUS.textoFechado;
+    }
   }
 }
 
-// Integra com a função já existente no script.js
-const verificarStatusOriginal = typeof verificarStatusLoja === 'function' ? verificarStatusLoja : null;
-if (verificarStatusOriginal) {
-  const original = verificarStatusLoja;
-  window.verificarStatusLoja = function(mostrarAviso) {
-    const abriu = original(mostrarAviso);
-    atualizarStatusCabecalho(abriu, "Aberto até às 23:00", "Fechado • Abre às 07:00");
-    return abriu;
-  };
-} else {
-  // Fallback simples
-  const CONFIG = { horaAbertura:7, horaFechamento:23 };
-  function verificarStatusLoja() {
-    const h = new Date().getHours();
-    const abriu = h >= CONFIG.horaAbertura && h < CONFIG.horaFechamento;
-    atualizarStatusCabecalho(abriu, "Aberto até às 23:00", "Fechado • Abre às 07:00");
-    return abriu;
-  }
-  verificarStatusLoja();
-  setInterval(verificarStatusLoja, 60000);
+function verificarStatusLoja() {
+  const horaAtual = new Date().getHours();
+  const estaAberto = horaAtual >= CONFIG_STATUS.horaAbertura && horaAtual < CONFIG_STATUS.horaFechamento;
+  atualizarStatus(estaAberto);
+  return estaAberto;
 }
+
+verificarStatusLoja();
+setInterval(verificarStatusLoja, 60000);
+
+// Filtro categorias
+document.querySelectorAll('.categoria-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    btn.classList.add('ativo');
+    const cat = btn.dataset.categoria;
+    document.querySelectorAll('.produto').forEach(prod => {
+      prod.classList.toggle('oculto', cat !== 'todos' && prod.dataset.categoria !== cat);
+    });
+  });
+});
+
+// Busca
+document.getElementById('campoBusca').addEventListener('input', e => {
+  const termo = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.produto').forEach(prod => {
+    const texto = prod.textContent.toLowerCase();
+    prod.classList.toggle('oculto', !texto.includes(termo));
+  });
+});
 </script>
 
+<script src="script.js"></script>
 </body>
 </html>
