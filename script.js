@@ -1,17 +1,86 @@
- // ==============================================
+// ==============================================
 // ⚙️ CONFIGURAÇÕES — AJUSTE AQUI SE PRECISAR
 // ==============================================
 const CONFIG = {
-  horaAbertura: 19,
-  horaFechamento: 14,
+  horaAbertura: 7,
+  horaFechamento: 23,
   textoStatusAberto: "Aberto até às 23:00",
-  textoStatusFechado: "Fechado • Abre às 08:00",
+  textoStatusFechado: "Fechado • Abre às 07:00",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
   nomeLoja: "Alison Burger",
   taxaEntregaPadrao: 8.00
 };
+
+// ==============================================
+// 🛒 CARREGAR PRODUTOS DO PAINEL / PADRÃO
+// ==============================================
+function carregarProdutos() {
+  const salvos = localStorage.getItem('produtosAlisonBurger');
+  if (salvos) return JSON.parse(salvos);
+
+  // Lista padrão completa
+  return [
+    {id:1,nome:"Hambúrguer Simples",preco:10.00,categoria:"hamburgueres",descricao:"Pão, carne, queijo, alface e tomate, tudo fresquinho e preparado na hora.",imagem:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"01"},
+    {id:2,nome:"Hambúrguer Duplo",preco:12.00,categoria:"hamburgueres",descricao:"Duas carnes suculentas, queijo especial derretido e molho secreto da casa.",imagem:"https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"02"},
+    {id:3,nome:"Hambúrguer Picante",preco:15.00,categoria:"hamburgueres",descricao:"Carne especial, molho apimentado caseiro e pimenta calabresa fresca.",imagem:"https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"03"},
+    {id:4,nome:"Batata Frita Tradicional",preco:12.00,categoria:"acompanhamentos",descricao:"Porção grande de batatas selecionadas, crocantes e temperadas na hora.",imagem:"https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"04"},
+    {id:5,nome:"Anéis de Cebola",preco:14.00,categoria:"acompanhamentos",descricao:"Anéis de cebola branca empanados crocantes, servidos com molho especial.",imagem:"https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"05"},
+    {id:6,nome:"Batata com Cheddar e Bacon",preco:18.00,categoria:"acompanhamentos",descricao:"Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante.",imagem:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"06"},
+    {id:7,nome:"Coca-Cola 350ml Zero",preco:6.00,categoria:"bebidas",descricao:"Lata de refrigerante gelada, zero açúcar, sabor original.",imagem:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"07"},
+    {id:8,nome:"Guaraná Antarctica 350ml",preco:6.00,categoria:"bebidas",descricao:"Lata bem gelada, sabor tradicional do Brasil.",imagem:"https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"08"},
+    {id:9,nome:"Suco de Laranja Natural 500ml",preco:9.00,categoria:"bebidas",descricao:"Suco 100% fruta, espremido na hora, sem açúcar e sem conservantes.",imagem:"https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"09"},
+    {id:10,nome:"Coca‑Cola 2 L Normal",preco:12.00,categoria:"bebidas",descricao:"Garrafa grande, sabor original, bem gelada para toda a família.",imagem:"https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"10"},
+    {id:11,nome:"Coca‑Cola 2 L Zero Açúcar",preco:12.00,categoria:"bebidas",descricao:"Garrafa grande, zero açúcar, sabor inconfundível, bem gelada.",imagem:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"11"}
+  ];
+}
+
+window.salvarProdutos = function(lista) {
+  localStorage.setItem('produtosAlisonBurger', JSON.stringify(lista));
+  listaProdutos = lista;
+  renderizarProdutos();
+};
+
+let listaProdutos = carregarProdutos();
+
+// ==============================================
+// 📄 RENDERIZAR PRODUTOS NA TELA
+// ==============================================
+function renderizarProdutos() {
+  const container = document.getElementById('lista-produtos');
+  container.innerHTML = '';
+
+  listaProdutos.filter(p => p.ativo).forEach(prod => {
+    const div = document.createElement('div');
+    div.className = 'produto';
+    div.dataset.categoria = prod.categoria;
+    div.dataset.nome = prod.nome;
+    div.dataset.preco = prod.preco;
+    div.dataset.descricao = prod.descricao;
+    div.dataset.imagem = prod.imagem;
+
+    div.innerHTML = `
+      <div class="produto-imagem">
+        <img src="${prod.imagem}" alt="${prod.nome}" loading="lazy">
+        ${prod.codigo === "01" ? '<span class="tag-mais-pedido">★ MAIS</span>' : ''}
+      </div>
+      <div class="produto-info">
+        <p class="produto-codigo">${prod.codigo}</p>
+        <h2 class="produto-nome">${prod.nome}</h2>
+        <p class="produto-descricao">${prod.descricao}</p>
+        <div class="produto-detalhes">
+          <span><i class="fa fa-fire"></i> Muito pedido</span>
+          <span><i class="fa fa-clock"></i> 20-30 min</span>
+        </div>
+      </div>
+      <p class="produto-preco">R$ ${prod.preco.toFixed(2).replace('.', ',')}</p>
+    `;
+    container.appendChild(div);
+  });
+
+  configurarCliqueProdutos();
+}
 
 // ==============================================
 // 🛒 VARIÁVEIS GERAIS
@@ -21,7 +90,6 @@ let produtoAtual = null;
 let quantidadeAtual = 1;
 let adicionaisSelecionados = [];
 
-// Elementos originais
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
 const fecharModalBtns = [document.getElementById('fechar-modal')];
@@ -53,7 +121,6 @@ const cidadeUfEl = document.getElementById('cidade-uf');
 const avisoCepEl = document.getElementById('aviso-cep');
 const pagamentoEl = document.getElementById('forma-pagamento');
 
-// Elementos da tela de detalhes
 const modalProduto = document.getElementById('modal-produto');
 const btnVoltarLista = document.getElementById('btn-voltar');
 const imgDetalhe = document.getElementById('img-detalhe');
@@ -151,18 +218,16 @@ function limparCamposEndereco() {
 }
 
 // ==============================================
-// 🕒 STATUS DA LOJA (ATUALIZA AMBAS AS TELAS)
+// 🕒 STATUS DA LOJA
 // ==============================================
 function verificarStatusLoja(mostrarAviso = false) {
   const agora = new Date();
   const horaAtual = agora.getHours();
-  const lojaAberta = horaAtual >= CONFIG.horaAbertura || horaAtual < CONFIG.horaFechamento;
+  const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
 
-  // Tela principal
   pontoStatusEl.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
   textoStatusEl.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
 
-  // Tela de detalhes
   pontoStatusModal.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
   textoStatusModal.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
 
@@ -174,68 +239,64 @@ setInterval(verificarStatusLoja, 60000);
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ==============================================
-// 📂 ABRIR TELA DE DETALHES AO CLICAR NO PRODUTO
+// 📂 CLIQUE NOS PRODUTOS / TELA DE DETALHES
 // ==============================================
-document.querySelectorAll('.produto').forEach(produto => {
-  produto.addEventListener('click', () => {
-    if (!verificarStatusLoja(true)) return;
+function configurarCliqueProdutos() {
+  document.querySelectorAll('.produto').forEach(produto => {
+    produto.addEventListener('click', () => {
+      if (!verificarStatusLoja(true)) return;
 
-    // Carrega dados do produto
-    produtoAtual = {
-      nome: produto.dataset.nome,
-      preco: parseFloat(produto.dataset.preco),
-      descricao: produto.dataset.descricao || 'Sem descrição.',
-      imagem: produto.dataset.imagem || '',
-      adicionais: [
-        { nome: 'Bacon Suculento', preco: 2.90 },
-        { nome: 'Queijo Extra', preco: 2.50 },
-        { nome: 'Catupiry', preco: 2.00 },
-        { nome: 'Ovo', preco: 1.50 }
-      ]
-    };
+      produtoAtual = {
+        nome: produto.dataset.nome,
+        preco: parseFloat(produto.dataset.preco),
+        descricao: produto.dataset.descricao || 'Sem descrição.',
+        imagem: produto.dataset.imagem || '',
+        adicionais: [
+          { nome: 'Bacon Suculento', preco: 2.90 },
+          { nome: 'Queijo Extra', preco: 2.50 },
+          { nome: 'Catupiry', preco: 2.00 },
+          { nome: 'Ovo', preco: 1.50 }
+        ]
+      };
 
-    // Reseta valores
-    quantidadeAtual = 1;
-    adicionaisSelecionados = [];
-    qtdAtualEl.textContent = quantidadeAtual;
+      quantidadeAtual = 1;
+      adicionaisSelecionados = [];
+      qtdAtualEl.textContent = quantidadeAtual;
 
-    // Preenche tela
-    imgDetalhe.src = produtoAtual.imagem;
-    nomeDetalhe.textContent = produtoAtual.nome;
-    descricaoDetalhe.textContent = produtoAtual.descricao;
-    precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
-    precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
-    atualizarTotalDetalhe();
+      imgDetalhe.src = produtoAtual.imagem;
+      nomeDetalhe.textContent = produtoAtual.nome;
+      descricaoDetalhe.textContent = produtoAtual.descricao;
+      precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
+      precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
+      atualizarTotalDetalhe();
 
-    // Carrega adicionais
-    listaAdicionaisEl.innerHTML = '';
-    produtoAtual.adicionais.forEach((add, idx) => {
-      const addEl = document.createElement('div');
-      addEl.className = 'adicional-item';
-      addEl.innerHTML = `
-        <div>
-          <div class="adicional-nome">${add.nome}</div>
-          <div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div>
-        </div>
-        <button class="btn-add-adicional" data-idx="${idx}">+</button>
-      `;
-      listaAdicionaisEl.appendChild(addEl);
+      listaAdicionaisEl.innerHTML = '';
+      produtoAtual.adicionais.forEach((add, idx) => {
+        const addEl = document.createElement('div');
+        addEl.className = 'adicional-item';
+        addEl.innerHTML = `
+          <div>
+            <div class="adicional-nome">${add.nome}</div>
+            <div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div>
+          </div>
+          <button class="btn-add-adicional" data-idx="${idx}">+</button>
+        `;
+        listaAdicionaisEl.appendChild(addEl);
+      });
+
+      modalProduto.classList.remove('oculto');
+      document.body.style.overflow = 'hidden';
     });
-
-    // Abre tela
-    modalProduto.classList.remove('oculto');
-    document.body.style.overflow = 'hidden';
   });
-});
+}
 
-// Voltar para lista
 btnVoltarLista.addEventListener('click', () => {
   modalProduto.classList.add('oculto');
   document.body.style.overflow = 'auto';
 });
 
 // ==============================================
-// ➕ / ➖ QUANTIDADE E ADICIONAIS NA TELA DETALHES
+// ➕ / ➖ QUANTIDADE E ADICIONAIS
 // ==============================================
 diminuirQtdBtn.addEventListener('click', () => {
   if (quantidadeAtual > 1) {
@@ -276,7 +337,7 @@ function atualizarTotalDetalhe() {
 }
 
 // ==============================================
-// ✅ ADICIONAR DO DETALHES PARA O CARRINHO
+// ✅ ADICIONAR AO CARRINHO
 // ==============================================
 btnAdicionarDetalhe.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
@@ -382,7 +443,7 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO (SEM OBSERVAÇÕES)
+// ✅ FINALIZAR PEDIDO
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
@@ -396,11 +457,9 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
   const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-  // 📝 Observação (funciona se tiver o campo no HTML com id="observacao")
   const observacaoEl = document.getElementById('observacao');
   const observacao = observacaoEl ? observacaoEl.value.trim() : '';
 
-  // Validações mantidas
   if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
   if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
   if (tipoAtendimento === 'entrega') {
@@ -410,7 +469,6 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
   }
 
-  // Endereço só aparece quando for Entrega
   let enderecoCompleto = '';
   if (tipoAtendimento === 'entrega') {
     enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
@@ -421,45 +479,29 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
     if (referenciaEl.value.trim()) enderecoCompleto += `\n  Referência: ${referenciaEl.value.trim()}`;
   }
 
-  // 📄 COMANDO PADRÃO
   let mensagem = `=====================================\n`;
   mensagem += `          PEDIDO — ${CONFIG.nomeLoja}\n`;
   mensagem += `=====================================\n`;
   mensagem += `Nº ${numeroPedido}  |  ${dataPedido}\n\n`;
-
   mensagem += `Tipo de atendimento: ${tipoAtendimento === 'entrega' ? 'Entrega' : 'Retirada'}\n`;
   mensagem += `Cliente:            ${nome}\n`;
-
-  if (tipoAtendimento === 'entrega') {
-    mensagem += `Endereço:\n  ${enderecoCompleto}\n`;
-  }
-
+  if (tipoAtendimento === 'entrega') mensagem += `Endereço:\n  ${enderecoCompleto}\n`;
   mensagem += `Pagamento:          ${pagamento}\n\n`;
-
   mensagem += `-------------------------------------\n`;
   mensagem += `PRODUTO                QTD   VALOR\n`;
   mensagem += `-------------------------------------\n`;
-
   carrinho.forEach(i => {
     const totalItem = (i.preco * i.quantidade).toFixed(2).replace('.', ',');
     mensagem += `${i.nome.padEnd(20)} ${String(i.quantidade).padStart(3)}  R$ ${totalItem}\n`;
   });
-
   mensagem += `-------------------------------------\n`;
   mensagem += `Subtotal............ R$ ${totalItens.toFixed(2).replace('.', ',')}\n`;
-
-  if (tipoAtendimento === 'entrega') {
-    mensagem += `Entrega............. R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
-  }
-
+  if (tipoAtendimento === 'entrega') mensagem += `Entrega............. R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
   mensagem += `\nVALOR TOTAL......... R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
-
-  // 📝 OBSERVAÇÃO: aparece só se for preenchida
   if (observacao) {
     mensagem += `\n-------------------------------------\n`;
     mensagem += `Observação: ${observacao}\n`;
   }
-
   mensagem += `=====================================\n`;
   mensagem += `Confirmaremos o pedido em breve.\n`;
   mensagem += `Obrigado pela preferência!\n`;
@@ -467,3 +509,17 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
 
   window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`, '_blank');
 });
+
+// ==============================================
+// ▶️ INICIALIZAÇÃO GERAL
+// ==============================================
+renderizarProdutos();
+
+// Animação suave nas categorias ao rolar
+const cabecalhoCategorias = document.querySelector('.categorias');
+if (cabecalhoCategorias) {
+  const observador = new IntersectionObserver(([entrada]) => {
+    cabecalhoCategorias.classList.toggle('sticky-visivel', !entrada.isIntersecting);
+  }, { rootMargin: '0px', threshold: 0 });
+  observador.observe(document.querySelector('.busca') || document.body);
+}
