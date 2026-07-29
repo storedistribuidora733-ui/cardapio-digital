@@ -26,17 +26,19 @@
             #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
         }
 
-        /* === CABEÇALHO CORRIGIDO: FLEX, SEM OCULTAR, ALINHADO IGUAL SUA FOTO === */
+        /* ✅ CABEÇALHO ALTERADO APENAS: limpo, alinhado, sem elementos extras */
         .cabecalho-loja {
             width: 100%;
-            padding: 10px 15px;
+            padding: 12px 15px;
             background: #ffffff;
             display: flex !important;
             align-items: center;
             justify-content: flex-start;
             gap: 12px;
             border-bottom: 1px solid #eee;
-            flex-wrap: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .nome-loja {
             font-size: 1.25rem;
@@ -75,7 +77,7 @@
             font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; 
             transition: all 0.25s ease;
         }
-        .categoria-btn.ativo { background-color: #dc2626; border-color: #dc2626; color: #ffffff; }
+        .categoria-btn.ativo { background: #dc2626; border-color: #dc2626; color: #ffffff; }
 
         .busca { margin: 8px 10px; position: relative; }
         .busca input { 
@@ -96,7 +98,6 @@
 
         .produto-imagem { width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
         .produto-imagem img { width: 100%; height: 100%; object-fit: cover; }
-        .tag-mais-pedido { position: absolute; top: 0; left: 0; background: #dc2626; color: white; font-size: 0.65rem; font-weight: 600; padding: 2px 4px; border-radius: 0 0 5px 0; }
         
         .produto-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
         .produto-codigo { font-size: 0.75rem; font-weight: 700; color: #dc2626; }
@@ -174,7 +175,7 @@
         .total-texto { font-size: 1rem; font-weight: 700; text-align: right; margin: 8px 0; }
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
         .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
-        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-size: 600; font-size: 0.85rem; cursor: pointer; }
 
         #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
         .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
@@ -187,7 +188,7 @@
 </head>
 <body>
 
-<!-- ✅ CABEÇALHO IGUAL A FOTO: NOME + PONTO + TEXTO AO LADO -->
+<!-- CABEÇALHO SIMPLES E AJUSTADO -->
 <div class="cabecalho-loja">
     <h1 class="nome-loja">ALISON BURGER</h1>
     <div class="linha-status">
