@@ -1,9 +1,26 @@
 // ==============================================
-// ⚙️ CONFIGURAÇÕES — AJUSTE AQUI SE PRECISAR
+// ⚠️ COLOQUE SEUS DADOS DO FIREBASE AQUI EMBAIXO
+// ==============================================
+const firebaseConfig = {
+  apiKey: "COLOQUE_AQUI_SUA_apiKey",
+  authDomain: "COLOQUE_AQUI_SEU_authDomain",
+  databaseURL: "COLOQUE_AQUI_SUA_databaseURL",
+  projectId: "COLOQUE_AQUI_SEU_projectId",
+  storageBucket: "COLOQUE_AQUI_SEU_storageBucket",
+  messagingSenderId: "COLOQUE_AQUI_messagingSenderId",
+  appId: "COLOQUE_AQUI_appId"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const refProdutos = db.ref('produtos');
+
+// ==============================================
+// ⚙️ CONFIGURAÇÕES DA LOJA
 // ==============================================
 const CONFIG = {
-  horaAbertura: 23,
-  horaFechamento: 7,
+  horaAbertura: 7,
+  horaFechamento: 23,
   textoStatusAberto: "Aberto até às 23:00",
   textoStatusFechado: "Fechado • Abre às 07:00",
   corStatusAberto: "#22c55e",
@@ -14,25 +31,27 @@ const CONFIG = {
 };
 
 // ==============================================
-// 🛒 CARREGAR PRODUTOS DO PAINEL / PADRÃO
+// 📦 CARREGAR PRODUTOS DO BANCO CENTRAL
 // ==============================================
-function carregarProdutos() {
-  const salvos = localStorage.getItem('produtosAlisonBurger');
-  if (salvos) return JSON.parse(salvos);
+async function carregarProdutos() {
+  try {
+    const snap = await refProdutos.once('value');
+    const dados = snap.val();
+    if (dados && Array.isArray(dados) && dados.length > 0) {
+      localStorage.setItem('produtosAlisonBurger', JSON.stringify(dados));
+      return dados;
+    }
+  } catch (e) {
+    console.log('Usando cache ou lista padrão');
+  }
 
-  // Lista padrão completa
+  // Lista inicial se banco vazio
   return [
-    {id:1,nome:"Hambúrguer Simples",preco:10.00,categoria:"hamburgueres",descricao:"Pão, carne, queijo, alface e tomate, tudo fresquinho e preparado na hora.",imagem:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"01"},
-    {id:2,nome:"Hambúrguer Duplo",preco:12.00,categoria:"hamburgueres",descricao:"Duas carnes suculentas, queijo especial derretido e molho secreto da casa.",imagem:"https://images.unsplash.com/photo-1550547660-d9450d859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"02"},
-    {id:3,nome:"Hambúrguer Picante",preco:15.00,categoria:"hamburgueres",descricao:"Carne especial, molho apimentado caseiro e pimenta calabresa fresca.",imagem:"https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"03"},
-    {id:4,nome:"Batata Frita Tradicional",preco:12.00,categoria:"acompanhamentos",descricao:"Porção grande de batatas selecionadas, crocantes e temperadas na hora.",imagem:"https://images.unsplash.com/photo-1630384069788-507091318437?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"04"},
-    {id:5,nome:"Anéis de Cebola",preco:14.00,categoria:"acompanhamentos",descricao:"Anéis de cebola branca empanados crocantes, servidos com molho especial.",imagem:"https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"05"},
-    {id:6,nome:"Batata com Cheddar e Bacon",preco:18.00,categoria:"acompanhamentos",descricao:"Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante.",imagem:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"06"},
-    {id:7,nome:"Coca-Cola 350ml Zero",preco:6.00,categoria:"bebidas",descricao:"Lata de refrigerante gelada, zero açúcar, sabor original.",imagem:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"07"},
-    {id:8,nome:"Guaraná Antarctica 350ml",preco:6.00,categoria:"bebidas",descricao:"Lata bem gelada, sabor tradicional do Brasil.",imagem:"https://images.unsplash.com/photo-1613485950590-d09f19d0647a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"08"},
-    {id:9,nome:"Suco de Laranja Natural 500ml",preco:9.00,categoria:"bebidas",descricao:"Suco 100% fruta, espremido na hora, sem açúcar e sem conservantes.",imagem:"https://images.unsplash.com/photo-1613478223713-59039128562e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"09"},
-    {id:10,nome:"Coca‑Cola 2 L Normal",preco:12.00,categoria:"bebidas",descricao:"Garrafa grande, sabor original, bem gelada para toda a família.",imagem:"https://images.unsplash.com/photo-1554866531-0e5684a20d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"10"},
-    {id:11,nome:"Coca‑Cola 2 L Zero Açúcar",preco:12.00,categoria:"bebidas",descricao:"Garrafa grande, zero açúcar, sabor inconfundível, bem gelada.",imagem:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",ativo:true,codigo:"11"}
+    {id:1,codigo:"01",nome:"Hambúrguer Simples",preco:10.00,categoria:"hamburgueres",descricao:"Pão, carne, queijo, alface e tomate fresquinhos.",imagem:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80",ativo:true},
+    {id:2,codigo:"02",nome:"Hambúrguer Duplo",preco:12.00,categoria:"hamburgueres",descricao:"Duas carnes suculentas e molho secreto da casa.",imagem:"https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80",ativo:true},
+    {id:3,codigo:"10",nome:"Coca-Cola 2L Normal",preco:12.00,categoria:"bebidas",descricao:"Garrafa grande gelada, sabor original.",imagem:"https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80",ativo:true},
+    {id:4,codigo:"11",nome:"Coca-Cola 2L Zero",preco:12.00,categoria:"bebidas",descricao:"Garrafa grande gelada, zero açúcar.",imagem:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80",ativo:true},
+    {id:5,codigo:"04",nome:"Batata Frita",preco:12.00,categoria:"acompanhamentos",descricao:"Porção crocante e temperada na hora.",imagem:"https://images.unsplash.com/photo-1630384069788-507091318437?w=400&q=80",ativo:true}
   ];
 }
 
@@ -42,13 +61,14 @@ window.salvarProdutos = function(lista) {
   renderizarProdutos();
 };
 
-let listaProdutos = carregarProdutos();
+let listaProdutos = [];
 
 // ==============================================
-// 📄 RENDERIZAR PRODUTOS NA TELA
+// 🖼️ RENDERIZAR PRODUTOS NA TELA
 // ==============================================
 function renderizarProdutos() {
   const container = document.getElementById('lista-produtos');
+  if (!container) return;
   container.innerHTML = '';
 
   listaProdutos.filter(p => p.ativo).forEach(prod => {
@@ -57,28 +77,22 @@ function renderizarProdutos() {
     div.dataset.categoria = prod.categoria;
     div.dataset.nome = prod.nome;
     div.dataset.preco = prod.preco;
-    div.dataset.descricao = prod.descricao;
-    div.dataset.imagem = prod.imagem;
+    div.dataset.descricao = prod.descricao || 'Sem descrição.';
+    div.dataset.imagem = prod.imagem || 'https://picsum.photos/id/292/400/300';
 
     div.innerHTML = `
       <div class="produto-imagem">
         <img src="${prod.imagem}" alt="${prod.nome}" loading="lazy">
-        ${prod.codigo === "01" ? '<span class="tag-mais-pedido">★ MAIS</span>' : ''}
       </div>
       <div class="produto-info">
         <p class="produto-codigo">${prod.codigo}</p>
         <h2 class="produto-nome">${prod.nome}</h2>
         <p class="produto-descricao">${prod.descricao}</p>
-        <div class="produto-detalhes">
-          <span><i class="fa fa-fire"></i> Muito pedido</span>
-          <span><i class="fa fa-clock"></i> 20-30 min</span>
-        </div>
       </div>
       <p class="produto-preco">R$ ${prod.preco.toFixed(2).replace('.', ',')}</p>
     `;
     container.appendChild(div);
   });
-
   configurarCliqueProdutos();
 }
 
@@ -97,13 +111,13 @@ const btnLimparCarrinho = document.getElementById('btn-limpar');
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
 const valorTotalEl = document.getElementById('valor-total');
 const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
+const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 const textoStatusEl = document.getElementById('texto-status');
 const pontoStatusEl = document.getElementById('ponto-status');
 const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
-const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
 const nomeEl = document.getElementById('nome-cliente');
 const avisoGeral = document.getElementById('aviso-geral');
@@ -137,14 +151,14 @@ const pontoStatusModal = document.getElementById('ponto-status-modal');
 const textoStatusModal = document.getElementById('texto-status-modal');
 
 // ==============================================
-// 🗑️ LIMPAR CARRINHO
+// 🧹 LIMPAR CARRINHO
 // ==============================================
 function limparTudoCarrinho() {
   carrinho.length = 0;
   listaItensCarrinho.innerHTML = '';
   valorTotalEl.textContent = '0,00';
   qtdCarrinhoEl.textContent = '0';
-  resumoCarrinhoEl.innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
+  resumoCarrinhoEl.textContent = '0 itens • R$ 0,00';
   carrinhoContainer.style.display = 'none';
   nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada';
@@ -160,7 +174,7 @@ function limparTudoCarrinho() {
 btnLimparCarrinho.addEventListener('click', limparTudoCarrinho);
 
 // ==============================================
-// 🚀 CONTROLE ENTREGA / RETIRADA
+// 🚧 CONTROLE ENTREGA / RETIRADA
 // ==============================================
 tipoAtendimentoEl.addEventListener('change', () => {
   if (tipoAtendimentoEl.value === 'entrega') {
@@ -176,7 +190,7 @@ tipoAtendimentoEl.addEventListener('change', () => {
 });
 
 // ==============================================
-// 🔍 BUSCA DE CEP
+// 🔍 BUSCA DE CEP (VIA CEP)
 // ==============================================
 cepEl.addEventListener('input', () => {
   let cep = cepEl.value.replace(/\D/g, '');
@@ -187,9 +201,8 @@ cepEl.addEventListener('input', () => {
 cepEl.addEventListener('blur', async () => {
   const cepNumeros = cepEl.value.replace(/\D/g, '');
   if (cepNumeros.length !== 8) {
-    avisoCepEl.textContent = 'CEP inválido! Digite 8 dígitos.';
+    avisoCepEl.textContent = 'CEP inválido! Você pode preencher manualmente.';
     avisoCepEl.style.color = '#dc2626';
-    limparCamposEndereco();
     return;
   }
   avisoCepEl.textContent = 'Buscando endereço...';
@@ -201,24 +214,23 @@ cepEl.addEventListener('blur', async () => {
     ruaEl.value = dados.logradouro || '';
     bairroEl.value = dados.bairro || '';
     cidadeUfEl.value = `${dados.localidade} / ${dados.uf}`;
-    avisoCepEl.textContent = 'Endereço preenchido!';
+    avisoCepEl.textContent = 'Preenchido! Você pode alterar se precisar.';
     avisoCepEl.style.color = '#22c55e';
   } catch {
-    avisoCepEl.textContent = 'CEP não encontrado!';
-    avisoCepEl.style.color = '#dc2626';
-    limparCamposEndereco();
+    avisoCepEl.textContent = 'Não encontrado! Preencha os dados manualmente.';
+    avisoCepEl.style.color = '#f59e0b';
   }
 });
 
 function limparCamposEndereco() {
   cepEl.value = ''; numeroEl.value = ''; complementoEl.value = ''; referenciaEl.value = '';
   ruaEl.value = ''; bairroEl.value = ''; cidadeUfEl.value = '';
-  avisoCepEl.textContent = 'Digite o CEP para preencher automaticamente';
+  avisoCepEl.textContent = 'Digite o CEP ou preencha tudo manualmente';
   avisoCepEl.style.color = '#2563eb';
 }
 
 // ==============================================
-// 🕒 STATUS DA LOJA
+// 🕒 STATUS DA LOJA ABERTA / FECHADA
 // ==============================================
 function verificarStatusLoja(mostrarAviso = false) {
   const agora = new Date();
@@ -239,7 +251,7 @@ setInterval(verificarStatusLoja, 60000);
 btnEntendi.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
 // ==============================================
-// 📂 CLIQUE NOS PRODUTOS / TELA DE DETALHES
+// 👆 CLIQUE NOS PRODUTOS / TELA DE DETALHES
 // ==============================================
 function configurarCliqueProdutos() {
   document.querySelectorAll('.produto').forEach(produto => {
@@ -252,7 +264,7 @@ function configurarCliqueProdutos() {
         descricao: produto.dataset.descricao || 'Sem descrição.',
         imagem: produto.dataset.imagem || '',
         adicionais: [
-          { nome: 'Bacon Suculento', preco: 2.90 },
+          { nome: 'Bacon Extra', preco: 2.90 },
           { nome: 'Queijo Extra', preco: 2.50 },
           { nome: 'Catupiry', preco: 2.00 },
           { nome: 'Ovo', preco: 1.50 }
@@ -274,12 +286,17 @@ function configurarCliqueProdutos() {
       produtoAtual.adicionais.forEach((add, idx) => {
         const addEl = document.createElement('div');
         addEl.className = 'adicional-item';
+        addEl.style.display = 'flex';
+        addEl.style.justifyContent = 'space-between';
+        addEl.style.alignItems = 'center';
+        addEl.style.padding = '6px 0';
+        addEl.style.borderBottom = '1px solid #f3f3f3';
         addEl.innerHTML = `
           <div>
             <div class="adicional-nome">${add.nome}</div>
-            <div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div>
+            <div class="adicional-preco" style="font-size:13px;color:#666;">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div>
           </div>
-          <button class="btn-add-adicional" data-idx="${idx}">+</button>
+          <button class="btn-add-adicional" data-idx="${idx}" style="border:none;background:#eee;width:30px;height:30px;border-radius:50%;cursor:pointer;">+</button>
         `;
         listaAdicionaisEl.appendChild(addEl);
       });
@@ -321,11 +338,13 @@ listaAdicionaisEl.addEventListener('click', (e) => {
   if (posicao === -1) {
     adicionaisSelecionados.push(adicional);
     btn.textContent = '✓';
-    btn.classList.add('selecionado');
+    btn.style.background = '#22c55e';
+    btn.style.color = 'white';
   } else {
     adicionaisSelecionados.splice(posicao, 1);
     btn.textContent = '+';
-    btn.classList.remove('selecionado');
+    btn.style.background = '#eee';
+    btn.style.color = 'black';
   }
   atualizarTotalDetalhe();
 });
@@ -369,28 +388,34 @@ function atualizarCarrinho() {
   if (carrinho.length === 0) {
     valorTotalEl.textContent = '0,00';
     carrinhoContainer.style.display = 'none';
+    abrirCarrinhoBtn.classList.add('oculto');
     return;
   }
-  carrinhoContainer.style.display = 'flex';
+  carrinhoContainer.style.display = 'block';
+  abrirCarrinhoBtn.classList.remove('oculto');
+
   carrinho.forEach((item, index) => {
     const totalItem = item.preco * item.quantidade;
     total += totalItem; qtdTotal += item.quantidade;
     const itemEl = document.createElement('div');
-    itemEl.className = 'item-carrinho';
+    itemEl.style.padding = '10px 0';
+    itemEl.style.borderBottom = '1px solid #eee';
     itemEl.innerHTML = `
-      <div><h4 style="font-size:14px;margin-bottom:3px;">${item.nome}</h4><p style="font-size:11px;color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p></div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-        <span style="font-weight:600;font-size:14px;">${item.quantidade}</span>
-        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-        <span style="font-weight:700;min-width:75px;text-align:right;font-size:14px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
+      <div><h4 style="font-size:14px;margin:0 0 4px 0;">${item.nome}</h4><p style="font-size:11px;color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+        <div style="display:flex;gap:8px;">
+          <button class="qtd-btn diminuir-item" data-index="${index}" style="width:30px;height:30px;border-radius:50%;border:none;background:#eee;cursor:pointer;">-</button>
+          <span style="font-weight:600;">${item.quantidade}</span>
+          <button class="qtd-btn aumentar-item" data-index="${index}" style="width:30px;height:30px;border-radius:50%;border:none;background:#eee;cursor:pointer;">+</button>
+        </div>
+        <span style="font-weight:700;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
       </div>
     `;
     listaItensCarrinho.appendChild(itemEl);
   });
   valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
   qtdCarrinhoEl.textContent = qtdTotal;
-  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+  resumoCarrinhoEl.textContent = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')}`;
   adicionarEventosCarrinho();
 }
 
@@ -422,7 +447,7 @@ fecharModalBtns.forEach(b => b.addEventListener('click', () => {
 }));
 
 // ==============================================
-// 🗂️ FILTRAR E BUSCAR
+// 🗂️ FILTRAR / BUSCAR / CATEGORIAS
 // ==============================================
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -443,7 +468,7 @@ campoBusca.addEventListener('input', () => {
 });
 
 // ==============================================
-// ✅ FINALIZAR PEDIDO
+// ✅ FINALIZAR PEDIDO / ENVIO WHATSAPP
 // ==============================================
 document.getElementById('btn-finalizar').addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
@@ -464,8 +489,8 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
   if (tipoAtendimento === 'entrega') {
     const cepValido = cepEl.value.trim().replace(/\D/g, '').length === 8;
-    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido!'; avisoGeral.classList.remove('oculto'); return; }
-    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Aguarde o preenchimento do endereço!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido ou preencha o endereço!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Preencha o endereço da rua!'; avisoGeral.classList.remove('oculto'); return; }
     if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
   }
 
@@ -483,10 +508,10 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   mensagem += `          PEDIDO — ${CONFIG.nomeLoja}\n`;
   mensagem += `=====================================\n`;
   mensagem += `Nº ${numeroPedido}  |  ${dataPedido}\n\n`;
-  mensagem += `Tipo de atendimento: ${tipoAtendimento === 'entrega' ? 'Entrega' : 'Retirada'}\n`;
-  mensagem += `Cliente:            ${nome}\n`;
-  if (tipoAtendimento === 'entrega') mensagem += `Endereço:\n  ${enderecoCompleto}\n`;
-  mensagem += `Pagamento:          ${pagamento}\n\n`;
+  mensagem += `Tipo: ${tipoAtendimento === 'entrega' ? 'ENTREGA' : 'RETIRADA NA LOJA'}\n`;
+  mensagem += `Cliente: ${nome}\n`;
+  if (tipoAtendimento === 'entrega') mensagem += `Endereço:\n${enderecoCompleto}\n`;
+  mensagem += `Pagamento: ${pagamento}\n\n`;
   mensagem += `-------------------------------------\n`;
   mensagem += `PRODUTO                QTD   VALOR\n`;
   mensagem += `-------------------------------------\n`;
@@ -497,29 +522,34 @@ document.getElementById('btn-finalizar').addEventListener('click', () => {
   mensagem += `-------------------------------------\n`;
   mensagem += `Subtotal............ R$ ${totalItens.toFixed(2).replace('.', ',')}\n`;
   if (tipoAtendimento === 'entrega') mensagem += `Entrega............. R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
-  mensagem += `\nVALOR TOTAL......... R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
+  mensagem += `TOTAL............... R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
   if (observacao) {
-    mensagem += `\n-------------------------------------\n`;
+    mensagem += `-------------------------------------\n`;
     mensagem += `Observação: ${observacao}\n`;
   }
   mensagem += `=====================================\n`;
-  mensagem += `Confirmaremos o pedido em breve.\n`;
-  mensagem += `Obrigado pela preferência!\n`;
-  mensagem += `=====================================`;
+  mensagem += `Agradecemos a preferência!\n`;
 
   window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`, '_blank');
 });
 
 // ==============================================
-// ▶️ INICIALIZAÇÃO GERAL
+// 🚀 INICIALIZAÇÃO GERAL + ATUALIZAÇÃO EM TEMPO REAL
 // ==============================================
-renderizarProdutos();
+async function inicializar() {
+  listaProdutos = await carregarProdutos();
+  renderizarProdutos();
+  verificarStatusLoja();
 
-// Animação suave nas categorias ao rolar
-const cabecalhoCategorias = document.querySelector('.categorias');
-if (cabecalhoCategorias) {
-  const observador = new IntersectionObserver(([entrada]) => {
-    cabecalhoCategorias.classList.toggle('sticky-visivel', !entrada.isIntersecting);
-  }, { rootMargin: '0px', threshold: 0 });
-  observador.observe(document.querySelector('.busca') || document.body);
+  // Atualiza automaticamente quando editar no painel
+  refProdutos.on('value', snap => {
+    const dados = snap.val();
+    if (dados && Array.isArray(dados)) {
+      listaProdutos = dados;
+      localStorage.setItem('produtosAlisonBurger', JSON.stringify(dados));
+      renderizarProdutos();
+    }
+  });
 }
+
+inicializar();
