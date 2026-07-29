@@ -1,0 +1,5 @@
+[
+  {"id":"01","nome":"Hambúrguer Simples","categoria":"hamburgueres","preco":10.00,"descricao":"Pão, carne, queijo...","tempo":"20-30 min","imagem":"https://...","destaque":true},
+  {"id":"02","nome":"Hambúrguer Duplo","categoria":"hamburgueres","preco":12.00,"descricao":"Duas carnes suculentas...","tempo":"20-30 min","imagem":"https://..."},
+  ... todos os seus produtos ...
+]
