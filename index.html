@@ -26,7 +26,35 @@
             #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
         }
 
-        .status-topo, .cabecalho-banner { display: none !important; }
+        /* CABEÇALHO COM STATUS VISÍVEL E FUNCIONANDO */
+        .status-topo {
+            display: flex !important;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+            background: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+        .nome-loja-cabecalho {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #111;
+            margin: 0;
+        }
+        .ponto-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .ponto-status.aberto { background-color: #22c55e; }
+        .ponto-status.fechado { background-color: #dc2626; }
+        .texto-status {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .cabecalho-banner { display: none !important; }
 
         .categorias { 
             width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
@@ -201,21 +229,11 @@
 </head>
 <body>
 
+<!-- CABEÇALHO COM STATUS FUNCIONANDO -->
 <div class="status-topo">
+    <h1 class="nome-loja-cabecalho">ALISON BURGER</h1>
     <span class="ponto-status" id="ponto-status"></span>
     <span id="texto-status" class="texto-status"></span>
-</div>
-
-<div class="cabecalho-banner">
-    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Logo Alison Burger" class="logo-canto">
-    <div class="marca">
-        <h1>ALISON</h1>
-        <p>★ BURGER ★</p>
-    </div>
-    <div class="info-loja">
-        <div><i class="fa fa-map-marker-alt"></i> NOME DA RUA, 123 - SUA CIDADE</div>
-        <div><i class="fa fa-motorcycle"></i> Entrega: 20-30 min &nbsp;&nbsp; | &nbsp;&nbsp; <i class="fa fa-credit-card"></i> Pagamento na entrega</div>
-    </div>
 </div>
 
 <div class="categorias">
@@ -377,6 +395,71 @@
     </div>
 </div>
 
+<!-- SCRIPT DE STATUS INTEGRADO E FUNCIONANDO -->
+<script>
+const CONFIG_STATUS = {
+  horaAbertura: 7,
+  horaFechamento: 23,
+  textoAberto: "Aberto até às 23:00",
+  textoFechado: "Fechado • Abre às 07:00"
+};
+
+function atualizarStatus(aberto) {
+  const ponto = document.getElementById('ponto-status');
+  const texto = document.getElementById('texto-status');
+  const pontoModal = document.getElementById('ponto-status-modal');
+  const textoModal = document.getElementById('texto-status-modal');
+
+  if (aberto) {
+    ponto.className = 'ponto-status aberto';
+    texto.textContent = CONFIG_STATUS.textoAberto;
+    if (pontoModal) {
+      pontoModal.className = 'ponto-status aberto';
+      textoModal.textContent = CONFIG_STATUS.textoAberto;
+    }
+  } else {
+    ponto.className = 'ponto-status fechado';
+    texto.textContent = CONFIG_STATUS.textoFechado;
+    if (pontoModal) {
+      pontoModal.className = 'ponto-status fechado';
+      textoModal.textContent = CONFIG_STATUS.textoFechado;
+    }
+  }
+}
+
+function verificarStatusLoja() {
+  const horaAtual = new Date().getHours();
+  const estaAberto = horaAtual >= CONFIG_STATUS.horaAbertura && horaAtual < CONFIG_STATUS.horaFechamento;
+  atualizarStatus(estaAberto);
+  return estaAberto;
+}
+
+// Executa na hora e atualiza automaticamente a cada minuto
+verificarStatusLoja();
+setInterval(verificarStatusLoja, 60000);
+
+// Filtro de categorias mantido
+document.querySelectorAll('.categoria-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    btn.classList.add('ativo');
+    const cat = btn.dataset.categoria;
+    document.querySelectorAll('.produto').forEach(prod => {
+      prod.classList.toggle('oculto', cat !== 'todos' && prod.dataset.categoria !== cat);
+    });
+  });
+});
+
+// Busca
+document.getElementById('campoBusca').addEventListener('input', e => {
+  const termo = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.produto').forEach(prod => {
+    const texto = prod.textContent.toLowerCase();
+    prod.classList.toggle('oculto', !texto.includes(termo));
+  });
+});
+</script>
+
 <script src="script.js"></script>
 </body>
-</html> 
+</html>
