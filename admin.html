@@ -3,27 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin - Alison Burger</title>
+    <title>Painel Admin — Alison Burger</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { background: #f3f4f6; font-family: 'Poppins', sans-serif; }
+        .senha-correta { display: none; }
+        .alerta { padding: 8px 12px; border-radius: 6px; margin: 8px 0; font-size: 0.9rem; }
+        .sucesso { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .erro { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        input, select, textarea { font-size: 16px; }
+    </style>
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-3xl mx-auto">
-        <h1 class="text-2xl font-bold mb-4">🔧 Painel de Produtos</h1>
+<body class="p-4">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6 text-center text-gray-700">🔧 Painel de Produtos</h1>
 
-        <div id="tela-login" class="bg-white p-4 rounded shadow mb-6">
-            <h3 class="font-semibold mb-2">Acesso Restrito</h3>
-            <input type="password" id="senha" placeholder="Digite sua senha" class="w-full p-2 border rounded mb-2">
-            <button onclick="entrar()" class="bg-yellow-500 px-4 py-2 rounded font-bold">Entrar</button>
+        <!-- Tela de Login -->
+        <div id="tela-login" class="bg-white p-5 rounded-lg shadow mb-6">
+            <h3 class="font-semibold mb-3 text-lg">Acesso Restrito</h3>
+            <p class="text-sm text-gray-500 mb-3">Senha padrão: <strong>123456</strong> (você pode alterar depois no código do admin.js)</p>
+            <input type="password" id="senha" placeholder="Digite a senha..." 
+                   class="w-full p-2 border border-gray-300 rounded mb-3 focus:outline-none focus:ring-2 focus:ring-red-500">
+            <button onclick="verificarSenha()" class="w-full bg-red-600 hover:bg-red-700 text-white p-2 rounded transition">Entrar</button>
         </div>
 
-        <div id="tela-admin" class="hidden">
-            <div class="flex gap-3 mb-4">
-                <button onclick="salvar()" class="bg-green-600 text-white px-4 py-2 rounded">💾 Salvar Alterações</button>
-                <button onclick="novo()" class="bg-blue-600 text-white px-4 py-2 rounded">➕ Novo Produto</button>
+        <!-- Tela do Painel (aparece só após login) -->
+        <div id="painel-principal" class="senha-correta">
+            <div id="mensagem" class="alerta oculto"></div>
+
+            <!-- Formulário Adicionar/Editar -->
+            <div class="bg-white p-4 rounded-lg shadow mb-6">
+                <h3 class="font-semibold mb-4 text-lg">Adicionar / Editar Produto</h3>
+                <input type="hidden" id="indice-edicao">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Código</label>
+                        <input type="text" id="prod-codigo" placeholder="Ex: 01" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Nome</label>
+                        <input type="text" id="prod-nome" placeholder="Ex: Hambúrguer Duplo" class="w-full p-2 border rounded">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Preço (R$)</label>
+                        <input type="number" step="0.01" min="0" id="prod-preco" placeholder="10.00" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Categoria</label>
+                        <select id="prod-categoria" class="w-full p-2 border rounded">
+                            <option value="hamburgueres">Hambúrgueres</option>
+                            <option value="acompanhamentos">Acompanhamentos</option>
+                            <option value="bebidas">Bebidas</option>
+                            <option value="combos">Combos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Link da Imagem</label>
+                    <input type="url" id="prod-imagem" placeholder="https://..." class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Descrição</label>
+                    <textarea id="prod-descricao" rows="2" placeholder="Breve descrição..." class="w-full p-2 border rounded"></textarea>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="salvarProduto()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition">💾 Salvar</button>
+                    <button onclick="limparForm()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition">Limpar</button>
+                </div>
             </div>
-            <div id="lista-admin" class="space-y-4"></div>
+
+            <!-- Lista de Produtos -->
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="font-semibold mb-4 text-lg">Lista de Produtos</h3>
+                <div id="lista-produtos-admin"></div>
+                <button onclick="exportarDados()" class="mt-4 text-sm text-blue-600 hover:underline">📤 Ver dados brutos</button>
+                <button onclick="location.reload()" class="mt-4 ml-3 text-sm text-red-600 hover:underline">🔄 Recarregar tudo</button>
+            </div>
         </div>
     </div>
+
     <script src="admin.js"></script>
 </body>
 </html>
