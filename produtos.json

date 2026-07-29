@@ -1,5 +1,5 @@
 [
-  {"id":"01","nome":"Hambúrguer Simples","categoria":"hamburgueres","preco":10.00,"descricao":"Pão, carne, queijo, alface e tomate, tudo fresquinho.","tempo":"20-30 min","imagem":"https://via.placeholder.com/150","destaque":true},
-  {"id":"02","nome":"Hambúrguer Duplo","categoria":"hamburgueres","preco":12.00,"descricao":"Duas carnes suculentas e queijo especial.","tempo":"20-30 min","imagem":"https://via.placeholder.com/150"},
-  {"id":"07","nome":"Coca-Cola 350ml Zero","categoria":"bebidas","preco":6.00,"descricao":"Lata gelada, zero açúcar.","tempo":"20-30 min","imagem":"https://via.placeholder.com/150"}
+  {"id":"01","nome":"Hambúrguer Simples","categoria":"hamburgueres","preco":10.00,"descricao":"Pão, carne, queijo, alface e tomate frescos","tempo":"~20min","imagem":"https://via.placeholder.com/150/ff4444/ffffff?text=Hamburguer","destaque":true},
+  {"id":"02","nome":"Batata Frita Grande","categoria":"acompanhamentos","preco":8.00,"descricao":"Crocante e quentinha","tempo":"~15min","imagem":"https://via.placeholder.com/150/ee6600/ffffff?text=Batata"},
+  {"id":"03","nome":"Coca-Cola 2L Normal","categoria":"bebidas","preco":12.00,"descricao":"Gelada, 2 litros","tempo":"Imediato","imagem":"https://via.placeholder.com/150/2266cc/ffffff?text=Coca2L"}
 ]
