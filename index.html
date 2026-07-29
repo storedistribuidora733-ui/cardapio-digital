@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alison Burger</title>
 
-    <!-- Firebase (OBRIGATÓRIO PARA SALVAR NO SERVIDOR) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
-    <!-- Fontes e Ícones -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,225 +12,444 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        :root { --vermelho: #dc2626; --verde: #22c55e; --cinza: #6b7280; --claro: #f9fafb; --escuro: #1f2937; }
-        body { background: #f3f4f6; padding-bottom: 80px; }
+        html { font-size: 14px; }
+        body { background-color: #f8f9fa; padding-top: 50px; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
 
-        .cabecalho { background: #fff; padding: 12px 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top:0; z-index: 100; }
-        .cabecalho-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .nome-loja { font-weight: 700; font-size: 18px; color: var(--escuro); }
-        .status-loja { display: flex; align-items: center; gap: 6px; font-size: 13px; }
-        .ponto-status { width: 10px; height: 10px; border-radius: 50%; }
-
-        .busca { padding: 12px 16px; background: #fff; margin: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        #campoBusca { width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 8px 10px; font-size: 15px; outline: none; transition: border .2s; }
-        #campoBusca:focus { border-color: var(--vermelho); }
-
-        .categorias { display: flex; gap: 8px; padding: 10px 16px; overflow-x: auto; scrollbar-width: none; position: sticky; top: 62px; background: #f3f4f6; z-index: 90; border-bottom: 1px solid #e5e7eb; }
-        .categorias::-webkit-scrollbar { display: none; }
-        .categoria-btn { border: none; background: #fff; padding: 7px 14px; border-radius: 20px; font-size: 14px; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; transition: all .2s; }
-        .categoria-btn.ativo { background: var(--vermelho); color: white; }
-
-        .container { max-width: 1100px; margin: 0 auto; padding: 10px 16px; }
-        #lista-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-        .produto { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.08); display: flex; flex-direction: column; cursor: pointer; transition: transform .2s, box-shadow .2s; border: 1px solid #eee; }
-        .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
-        .produto-imagem { width: 100%; height: 180px; object-fit: cover; background: #f8f8f8; }
-        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; }
-        .produto-info { padding: 12px; flex: 1; }
-        .produto-codigo { font-size: 11px; color: var(--cinza); margin-bottom: 4px; }
-        .produto-nome { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--escuro); }
-        .produto-descricao { font-size: 13px; color: var(--cinza); line-height: 1.4; margin-bottom: 8px; }
-        .produto-preco { padding: 12px; font-weight: 700; font-size: 17px; color: var(--vermelho); text-align: right; border-top: 1px solid #eee; background: #fef2f2; }
-
-        .botao-carrinho-fixo { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--vermelho); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 15px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; z-index: 150; display: flex; gap: 8px; align-items: center; }
-        .oculto { display: none !important; }
-
-        .modal-fundo { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 15px; overflow-y: auto; }
-        .modal-conteudo { background: white; border-radius: 12px; max-width: 480px; width: 100%; margin: auto; overflow: hidden; animation: aparece .25s ease; }
-        @keyframes aparece { from { opacity: 0; transform: scale(.95); } to { opacity:1; transform: scale(1); } }
-        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #eee; }
-        .btn-fechar { border: none; background: none; font-size: 22px; cursor: pointer; color: #777; }
-        .modal-img { width: 100%; height: 220px; object-fit: cover; }
-        .modal-corpo { padding: 16px; }
-        .preco-original { color: #999; text-decoration: line-through; font-size: 14px; margin-right: 8px; }
-        .preco-promocional { font-size: 20px; font-weight: 700; color: var(--vermelho); }
-        .qtd-controle { display: flex; align-items: center; gap: 16px; margin: 15px 0; }
-        .qtd-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: #eee; font-size: 18px; cursor: pointer; }
-        .btn-adicionar { width: 100%; border: none; background: var(--vermelho); color: white; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px; }
-
-        .campo-grupo { margin-bottom: 12px; }
-        label { font-size: 13px; color: #444; margin-bottom: 4px; display: block; }
-        input, select, textarea { width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 9px; font-size: 15px; outline-color: var(--vermelho); }
-        .alerta { padding: 10px; border-radius: 6px; margin: 8px 0; font-size: 14px; }
-        .erro { background: #fee; color: #900; border: 1px solid #fcc; }
-        .sucesso { background: #efd; color: #060; border: 1px solid #cfc; }
-
-        @media (max-width: 500px) {
-            #lista-produtos { grid-template-columns: 1fr; }
-            .modal-conteudo { margin: 10px; }
+        @media (min-width: 768px) {
+            html { font-size: 15px; }
+            body { max-width: 620px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+            .carrinho-fixo { max-width: 620px; left: 50%; transform: translateX(-50%); padding: 7px 15px; border-radius: 12px 12px 0 0; }
+            .badge-qtd { width: 28px; height: 28px; font-size: 0.85rem; }
+            .texto-carrinho h3 { font-size: 1rem; }
+            .texto-carrinho p { font-size: 0.8rem; }
+            .btn-ver-carrinho { padding: 8px 15px; font-size: 0.85rem; border-radius: 8px; }
+            #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
         }
+
+        /* CABEÇALHO AJUSTADO — MESMA LINHA, ALINHADOS */
+        .cabecalho-topo {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid #eee;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center; /* tudo centralizado na altura */
+            justify-content: flex-start; /* lado a lado na mesma linha */
+            gap: 12px; /* espaço entre nome e status */
+            z-index: 1000;
+        }
+        @media (min-width: 620px) {
+            .cabecalho-topo { max-width: 620px; left: 50%; transform: translateX(-50%); }
+        }
+        .nome-loja {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: 0.3px;
+            line-height: 1;
+        }
+        .status-loja {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1;
+        }
+        .ponto-status {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .ponto-status.aberto { background: #22c55e; }
+        .ponto-status.fechado { background: #dc2626; }
+        .texto-status { color: #333; line-height: 1; }
+
+        .categorias { 
+            width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
+            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 50px; z-index: 99;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 0 rgba(0,0,0,0);
+        }
+        .categorias.sticky-visivel { box-shadow: 0 3px 12px rgba(0,0,0,0.08); padding-top: 9px; padding-bottom: 9px; }
+        .categorias::-webkit-scrollbar { display: none; }
+        .categoria-btn { 
+            padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; background: #ffffff; font-weight: 600; 
+            font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; 
+            transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        .categoria-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-color: #dc2626; }
+        .categoria-btn:active { transform: translateY(-1px) scale(0.98); }
+        .categoria-btn.ativo { background: #dc2626; border-color: #dc2626; color: #ffffff; box-shadow: 0 2px 6px rgba(220,38,38,0.3); }
+
+        .busca { margin: 8px 10px; position: relative; }
+        .busca input { 
+            width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; 
+            background: #ffffff; transition: all 0.25s ease; 
+        }
+        .busca input:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.15); transform: translateY(-1px); }
+        .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem; }
+
+        .container { width: 100%; padding: 0 10px; }
+        .lista-produtos { display: flex; flex-direction: column; gap: 7px; margin: 8px 0; }
+        
+        .produto { 
+            background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 9px; display: flex; 
+            align-items: center; gap: 10px; cursor: pointer; transform: translateZ(0); transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        .produto:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .produto:active { transform: translateY(-1px) scale(0.99); }
+        .produto.oculto { display: none !important; }
+
+        .produto-imagem { position: relative; width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
+        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .produto:hover .produto-imagem img { transform: scale(1.05); }
+        .tag-mais-pedido { position: absolute; top: 0; left: 0; background: #dc2626; color: white; font-size: 0.65rem; font-weight: 600; padding: 2px 4px; border-radius: 0 0 5px 0; }
+        
+        .produto-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        .produto-codigo { font-size: 0.75rem; font-weight: 700; color: #dc2626; }
+        .produto-nome { font-size: 1.1rem; font-weight: 800; color: #111827; line-height: 1.2; }
+        .produto-descricao { font-size: 0.8rem; color: #6b7280; line-height: 1.3; }
+        .produto-detalhes { font-size: 0.7rem; color: #78716c; display: flex; gap: 8px; margin-top: 3px; }
+        
+        .produto-preco { font-size: 1.2rem; font-weight: 800; color: #dc2626; white-space: nowrap; margin-left: auto; }
+        .produto-acoes, .controle-qtd, .add-carrinho { display: none !important; }
+
+        .carrinho-fixo { 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; color: white; padding: 6px 10px; 
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15); z-index: 999; border-top-left-radius: 10px; border-top-right-radius: 10px; display: none; 
+        }
+        .carrinho-conteudo { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .carrinho-esq { display: flex; align-items: center; gap: 7px; flex: 1; }
+        .badge-qtd { width: 26px; height: 26px; background: #dc2626; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+        .texto-carrinho h3 { font-size: 0.95rem; margin: 0; font-weight: 600; white-space: nowrap; }
+        .texto-carrinho p { font-size: 0.75rem; color: #b0b3b8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .btn-ver-carrinho { 
+            background: #dc2626; color: #ffffff; border: none; border-radius: 6px; padding: 7px 12px; font-size: 0.8rem; 
+            font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0; transition: all 0.2s ease; 
+        }
+        .btn-ver-carrinho:hover { transform: translateY(-1px); }
+
+        .oculto { display: none !important; }
+        #modal-produto { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; overflow-y: auto; }
+        .cabecalho-detalhe { position: relative; width: 100%; height: 180px; background: #f3f4f6; }
+
+        #btn-voltar { 
+            position: absolute; top: 10px; left: 10px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.9);
+            color: #222;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+        }
+        #btn-voltar:hover { background: #fff; transform: scale(1.08); }
+
+        #img-detalhe { width: 100%; height: 100%; object-fit: cover; background: #f3f4f6; }
+
+        .faixa-status { 
+            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background: #ffffff; 
+            padding: 6px 18px; border-radius: 50px; border: 2px solid #dc2626; font-size: clamp(15px, 3vw, 17px); 
+            font-weight: 600; color: #dc2626; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; 
+        }
+
+        .conteudo-detalhe { padding: 25px 15px 110px; }
+        #nome-detalhe { font-size: clamp(24px, 5vw, 32px); font-weight: 800; margin-bottom: 8px; color: #111; }
+        #descricao-detalhe { font-size: clamp(15px, 3vw, 18px); color: #666; line-height: 1.5; margin-bottom: 15px; }
+
+        .precos { display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; }
+        .preco-original { font-size: clamp(20px, 4.2vw, 26px); color: #999; text-decoration: line-through; }
+        .preco-promocional { font-size: clamp(28px, 5.8vw, 38px); font-weight: 800; color: #dc2626; }
+        .quero-btn { margin-left: auto; font-size: clamp(18px, 3.8vw, 22px); color: #dc2626; font-weight: 600; cursor: pointer; }
+
+        .secao-adicionais { margin-bottom: 30px; }
+        .secao-adicionais h3 { font-size: clamp(24px, 5vw, 30px); font-weight: 700; color: #111; margin-bottom: 6px; }
+        .secao-adicionais p { font-size: clamp(16px, 3.2vw, 19px); color: #888; margin-bottom: 20px; }
+
+        .adicional-item { padding: 12px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; }
+        .adicional-nome { font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
+        .adicional-preco { font-size: 0.95rem; color: #4b5563; }
+
+        .btn-add-adicional { 
+            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #dc2626; background: #fff; color: #dc2626; 
+            font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        .btn-add-adicional:hover { transform: scale(1.05); }
+        .btn-add-adicional.selecionado { background: #dc2626; color: #fff; }
+
+        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 12px 15px; border-top: 1px solid #e5e7eb; display: flex; align-items: center; gap: 15px; }
+        .qtd-detalhe { display: flex; align-items: center; gap: 20px; }
+        .qtd-detalhe button { 
+            font-size: clamp(24px, 5.5vw, 32px); border: none; background: none; cursor: pointer; color: #dc2626; 
+            font-weight: 700; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+        }
+        .qtd-detalhe button:hover { background: #fef2f2; }
+        #qtd-atual { font-size: clamp(22px, 5vw, 30px); font-weight: 700; min-width: 24px; text-align: center; }
+        #btn-adicionar-detalhe { 
+            flex: 1; padding: 10px 15px; border: none; border-radius: 10px; background: #dc2626; 
+            color: white; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease;
+        }
+        #btn-adicionar-detalhe:hover { background: #b91c1c; }
+
+        #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 10px; }
+        .modal-conteudo { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 10px; padding: 12px; overflow-y: auto; }
+        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .fechar-modal { 
+            background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666; transition: all 0.2s ease; 
+            border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+        }
+        .fechar-modal:hover { background: #f3f4f6; color: #111; transform: rotate(90deg); }
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .form-grupo { margin: 8px 0; }
+        .form-grupo label { display: block; margin-bottom: 3px; font-weight: 500; font-size: 0.85rem; }
+        .form-grupo input, .form-grupo select, .form-grupo textarea { 
+            width: 100%; padding: 7px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; transition: all 0.2s ease;
+        }
+        .form-grupo textarea { resize: vertical; min-height: 60px; }
+        .form-grupo input:focus, .form-grupo select:focus, .form-grupo textarea:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.15); }
+        .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .aviso-erro, .aviso-info { font-size: 0.8rem; margin-top: 2px; }
+        .aviso-erro { color: #dc2626; }
+        .aviso-info { color: #2563eb; }
+        .total-texto { font-size: 1rem; font-weight: 700; text-align: right; margin: 8px 0; }
+        .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
+        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-fechar:hover { background: #e5e7eb; }
+        .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-finalizar:hover { background: #16a34a; }
+
+        #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1001; padding: 10px; }
+        .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
+        .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
+        .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
+        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-entendi:hover { background: #b91c1c; }
+
+        html, body { overflow-x: hidden; touch-action: manipulation; }
+        .produto, .categoria-btn, .btn-ver-carrinho, button { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
 
-<!-- Cabeçalho -->
-<header class="cabecalho">
-    <div class="cabecalho-topo">
-        <h1 class="nome-loja">ALISON BURGER</h1>
-        <div class="status-loja">
-            <span id="ponto-status" class="ponto-status"></span>
-            <span id="texto-status"></span>
+<!-- CABEÇALHO: NOME E STATUS ALINHADOS NA MESMA LINHA -->
+<div class="cabecalho-topo">
+    <div class="nome-loja">ALISON BURGER</div>
+    <div class="status-loja">
+        <span class="ponto-status" id="ponto-status"></span>
+        <span id="texto-status" class="texto-status"></span>
+    </div>
+</div>
+
+<div class="categorias">
+    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
+    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
+    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
+    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
+    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
+</div>
+
+<div class="busca">
+    <i class="fa fa-search"></i>
+    <input type="text" id="campoBusca" placeholder="Buscar produtos...">
+</div>
+
+<div class="container">
+    <div class="lista-produtos" id="lista-produtos">
+        <!-- Produtos carregados DINAMICAMENTE do painel -->
+    </div>
+</div>
+
+<div id="modal-produto" class="oculto">
+    <div class="cabecalho-detalhe">
+        <button id="btn-voltar">&larr;</button>
+        <img id="img-detalhe" alt="">
+        <div class="faixa-status">
+            <span class="ponto-status" id="ponto-status-modal"></span>
+            <span id="texto-status-modal"></span>
         </div>
     </div>
-</header>
+    <div class="conteudo-detalhe">
+        <h2 id="nome-detalhe"></h2>
+        <p id="descricao-detalhe"></p>
+        <div class="precos">
+            <span class="preco-original" id="preco-original"></span>
+            <span class="preco-promocional" id="preco-promocional"></span>
+            <span class="quero-btn">Quero &gt;</span>
+        </div>
+        <div class="secao-adicionais">
+            <h3>Turbine Seu Lanche</h3>
+            <p>Escolha até 10 opções</p>
+            <div id="lista-adicionais"></div>
+        </div>
+    </div>
+    <div class="rodape-detalhe">
+        <div class="qtd-detalhe">
+            <button id="diminuir-qtd">&minus;</button>
+            <span id="qtd-atual">1</span>
+            <button id="aumentar-qtd">+</button>
+        </div>
+        <button id="btn-adicionar-detalhe">Adicionar</button>
+    </div>
+</div>
 
-<!-- Busca -->
-<section class="busca">
-    <input type="text" id="campoBusca" placeholder="🔍 Buscar produto...">
-</section>
-
-<!-- Categorias -->
-<section class="categorias">
-    <button class="categoria-btn ativo" data-categoria="todos">Todos</button>
-    <button class="categoria-btn" data-categoria="hamburgueres">Hambúrgueres</button>
-    <button class="categoria-btn" data-categoria="acompanhamentos">Acompanhamentos</button>
-    <button class="categoria-btn" data-categoria="bebidas">Bebidas</button>
-</section>
-
-<!-- Lista Produtos -->
-<main class="container">
-    <div id="lista-produtos"></div>
-</main>
-
-<!-- Botão Carrinho Fixo -->
-<button id="abrir-carrinho" class="botao-carrinho-fixo oculto">
-    🛒 <span id="qtd-carrinho">0</span> item(ns) • <span id="resumo-carrinho">R$ 0,00</span>
-</button>
-
-<!-- Modal Detalhe Produto -->
-<div id="modal-produto" class="modal-fundo oculto">
+<div id="modal-carrinho" class="oculto">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
-            <button id="btn-voltar" class="btn-fechar">&times;</button>
-            <div style="display:flex;align-items:center;gap:6px;font-size:13px;">
-                <span id="ponto-status-modal" class="ponto-status"></span>
-                <span id="texto-status-modal"></span>
+            <h3>Meu Carrinho</h3>
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
+        </div>
+        <div id="lista-itens-carrinho"></div>
+        <p class="total-texto">Total: R$ <span id="valor-total">0,00</span></p>
+
+        <div class="form-grupo">
+            <label>Forma de recebimento</label>
+            <select id="tipo-atendimento">
+                <option value="retirada">Retirada</option>
+                <option value="entrega">Entrega</option>
+            </select>
+        </div>
+
+        <div id="campo-taxa-entrega" class="form-grupo oculto">
+            <label>Taxa de entrega</label>
+            <input type="text" id="taxa-entrega" value="8,00" readonly style="background: #f8f8f8;">
+        </div>
+
+        <div class="form-grupo">
+            <label>Nome completo</label>
+            <input type="text" id="nome-cliente" placeholder="Digite seu nome">
+        </div>
+
+        <div id="bloco-endereco" class="oculto">
+            <div class="form-grupo">
+                <label>CEP</label>
+                <input type="text" id="cep" placeholder="Ex: 00000-000" maxlength="9">
+                <p id="aviso-cep" class="aviso-info">Digite o CEP para preencher automaticamente</p>
+            </div>
+            <div class="form-duplo">
+                <div class="form-grupo">
+                    <label>Número</label>
+                    <input type="text" id="numero" placeholder="Ex: 123">
+                </div>
+                <div class="form-grupo">
+                    <label>Complemento</label>
+                    <input type="text" id="complemento" placeholder="Ex: Apto 1">
+                </div>
+            </div>
+            <div class="form-grupo">
+                <label>Referência</label>
+                <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
+            </div>
+            <div class="form-grupo">
+                <label>Rua / Logradouro</label>
+                <input type="text" id="rua" placeholder="Preenchido automaticamente">
+            </div>
+            <div class="form-duplo">
+                <div class="form-grupo">
+                    <label>Bairro</label>
+                    <input type="text" id="bairro" placeholder="Preenchido automaticamente">
+                </div>
+                <div class="form-grupo">
+                    <label>Cidade / UF</label>
+                    <input type="text" id="cidade-uf" placeholder="Preenchido automaticamente">
+                </div>
             </div>
         </div>
-        <img id="img-detalhe" class="modal-img" alt="">
-        <div class="modal-corpo">
-            <h2 id="nome-detalhe" style="font-size:20px;margin-bottom:8px;"></h2>
-            <p id="descricao-detalhe" style="color:#666;margin-bottom:10px;"></p>
-            <div style="margin:10px 0;">
-                <span id="preco-original" class="preco-original"></span>
-                <span id="preco-promocional" class="preco-promocional"></span>
-            </div>
 
-            <div id="lista-adicionais" style="margin:12px 0;"></div>
+        <div class="form-grupo">
+            <label>Forma de pagamento</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+            </select>
+        </div>
 
-            <div class="qtd-controle">
-                <button id="diminuir-qtd" class="qtd-btn">-</button>
-                <span id="qtd-atual">1</span>
-                <button id="aumentar-qtd" class="qtd-btn">+</button>
-            </div>
-            <button id="btn-adicionar-detalhe" class="btn-adicionar">Adicionar ao Carrinho</button>
+        <div class="form-grupo">
+            <label>Observações</label>
+            <textarea id="observacao" placeholder="Alguma observação ou pedido especial? Ex: sem pimenta, ponto da carne, etc."></textarea>
+        </div>
+
+        <p id="aviso-geral" class="aviso-erro oculto"></p>
+
+        <div class="botoes-modal">
+            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
+            <button id="btn-finalizar" class="btn-finalizar">Finalizar Pedido</button>
         </div>
     </div>
 </div>
 
-<!-- Modal Carrinho / Pedido -->
-<div id="modal-carrinho" class="modal-fundo oculto">
-    <div class="modal-conteudo" style="max-height: 90vh; overflow-y:auto;">
-        <div class="modal-cabecalho">
-            <h3 style="font-size:17px;">🛒 Seu Pedido</h3>
-            <button id="fechar-modal" class="btn-fechar">&times;</button>
-        </div>
-        <div class="modal-corpo">
-            <div id="alerta-fechado" class="alerta erro oculto">
-                <strong>Atenção!</strong> A loja está fechada no momento.<br>
-                <button id="btn-entendi" style="margin-top:6px;background:#900;color:white;border:none;padding:4px 10px;border-radius:4px;">Entendi</button>
-            </div>
+<div id="alerta-fechado" class="oculto">
+    <div class="alerta-caixa">
+        <h2>Loja Fechada</h2>
+        <p>Atendimento das 07:00 às 23:00. Volte mais tarde!</p>
+        <button id="btn-entendi" class="btn-entendi">Entendi</button>
+    </div>
+</div>
 
-            <div id="carrinho-container" class="oculto">
-                <div id="lista-itens-carrinho" style="margin:12px 0;"></div>
-                <div style="border-top:1px solid #eee;padding:10px 0;font-weight:600;font-size:16px;">
-                    Total: <span id="valor-total">0,00</span> R$
-                </div>
-                <button id="btn-limpar" style="width:100%;background:#888;color:white;border:none;padding:9px;border-radius:6px;margin:8px 0;cursor:pointer;">Limpar Carrinho</button>
-            </div>
-
-            <div style="margin-top:15px;">
-                <div class="campo-grupo">
-                    <label>Nome completo *</label>
-                    <input id="nome-cliente" type="text" placeholder="Digite seu nome">
-                </div>
-                <div class="campo-grupo">
-                    <label>Tipo de atendimento</label>
-                    <select id="tipo-atendimento">
-                        <option value="retirada">Retirada na loja</option>
-                        <option value="entrega">Entrega a domicílio</option>
-                    </select>
-                </div>
-
-                <div id="campo-taxa-entrega" class="oculto campo-grupo">
-                    <label>Taxa de entrega (R$)</label>
-                    <input id="taxa-entrega" type="text" value="8,00" readonly>
-                </div>
-
-                <div id="bloco-endereco" class="oculto">
-                    <div class="campo-grupo">
-                        <label>CEP *</label>
-                        <input id="cep" maxlength="10" placeholder="00000-000">
-                        <p id="aviso-cep" style="font-size:12px;color:#2563eb;margin-top:4px;">Digite o CEP ou preencha manualmente abaixo</p>
-                    </div>
-                    <div class="campo-grupo">
-                        <label>Rua / Avenida</label>
-                        <input id="rua" type="text" placeholder="Nome da rua">
-                    </div>
-                    <div class="campo-grupo">
-                        <label>Bairro</label>
-                        <input id="bairro" type="text" placeholder="Bairro">
-                    </div>
-                    <div class="campo-grupo">
-                        <label>Cidade / UF</label>
-                        <input id="cidade-uf" type="text" placeholder="Cidade / Estado">
-                    </div>
-                    <div class="campo-grupo">
-                        <label>Número da casa *</label>
-                        <input id="numero" type="text" placeholder="Nº">
-                    </div>
-                    <div class="campo-grupo">
-                        <label>Complemento</label>
-                        <input id="complemento" type="text" placeholder="Apto, Bloco...">
-                    </div>
-                    <div class="campo-grupo">
-                        <label>Ponto de referência</label>
-                        <input id="referencia" type="text" placeholder="Próximo a...">
-                    </div>
-                </div>
-
-                <div class="campo-grupo">
-                    <label>Forma de pagamento</label>
-                    <select id="forma-pagamento">
-                        <option value="Dinheiro">Dinheiro</option>
-                        <option value="Cartão Crédito">Cartão de Crédito</option>
-                        <option value="Cartão Débito">Cartão de Débito</option>
-                        <option value="Pix">Pix</option>
-                    </select>
-                </div>
-
-                <div class="campo-grupo">
-                    <label>Observação / Pedido especial</label>
-                    <textarea id="observacao" rows="2" placeholder="Ex: sem tomate, ponto da carne..."></textarea>
-                </div>
-
-                <div id="aviso-geral" class="alerta erro oculto"></div>
-                <button id="btn-finalizar" style="width:100%;background:var(--verde);color:white;border:none;padding:12px;border-radius:8px;margin-top:10px;font-size:16px;font-weight:600;cursor:pointer;">Finalizar Pedido 📲</button>
+<div class="carrinho-fixo" id="carrinho-container">
+    <div class="carrinho-conteudo">
+        <div class="carrinho-esq">
+            <span class="badge-qtd" id="qtd-carrinho">0</span>
+            <div class="texto-carrinho">
+                <h3>Meu carrinho</h3>
+                <p id="resumo-carrinho">0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro</p>
             </div>
         </div>
+        <button class="btn-ver-carrinho" id="abrir-carrinho"> Ver </button>
     </div>
 </div>
 
 <script src="script.js"></script>
+
+<!-- SCRIPT PARA ATUALIZAR O STATUS NO CABEÇALHO -->
+<script>
+function atualizarStatusCabecalho(lojaAberta, textoAberto, textoFechado) {
+  const ponto = document.getElementById('ponto-status');
+  const texto = document.getElementById('texto-status');
+  const pontoModal = document.getElementById('ponto-status-modal');
+  const textoModal = document.getElementById('texto-status-modal');
+
+  if (lojaAberta) {
+    ponto.classList.remove('fechado'); ponto.classList.add('aberto');
+    texto.textContent = textoAberto;
+    if (pontoModal) { pontoModal.classList.remove('fechado'); pontoModal.classList.add('aberto'); textoModal.textContent = textoAberto; }
+  } else {
+    ponto.classList.remove('aberto'); ponto.classList.add('fechado');
+    texto.textContent = textoFechado;
+    if (pontoModal) { pontoModal.classList.remove('aberto'); pontoModal.classList.add('fechado'); textoModal.textContent = textoFechado; }
+  }
+}
+
+// Integra com a função já existente no script.js
+const verificarStatusOriginal = typeof verificarStatusLoja === 'function' ? verificarStatusLoja : null;
+if (verificarStatusOriginal) {
+  const original = verificarStatusLoja;
+  window.verificarStatusLoja = function(mostrarAviso) {
+    const abriu = original(mostrarAviso);
+    atualizarStatusCabecalho(abriu, "Aberto até às 23:00", "Fechado • Abre às 07:00");
+    return abriu;
+  };
+} else {
+  // Fallback simples
+  const CONFIG = { horaAbertura:7, horaFechamento:23 };
+  function verificarStatusLoja() {
+    const h = new Date().getHours();
+    const abriu = h >= CONFIG.horaAbertura && h < CONFIG.horaFechamento;
+    atualizarStatusCabecalho(abriu, "Aberto até às 23:00", "Fechado • Abre às 07:00");
+    return abriu;
+  }
+  verificarStatusLoja();
+  setInterval(verificarStatusLoja, 60000);
+}
+</script>
+
 </body>
 </html>
