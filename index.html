@@ -26,7 +26,7 @@
             #modal-produto, #modal-carrinho { max-width: 580px; left: 50%; transform: translateX(-50%); }
         }
 
-        /* CABEÇALHO AJUSTADO — MESMA LINHA, ALINHADOS */
+        /* CABEÇALHO SUPERIOR — COMO NA IMAGEM */
         .cabecalho-topo {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -34,9 +34,8 @@
             border-bottom: 1px solid #eee;
             padding: 10px 15px;
             display: flex;
-            align-items: center; /* tudo centralizado na altura */
-            justify-content: flex-start; /* lado a lado na mesma linha */
-            gap: 12px; /* espaço entre nome e status */
+            align-items: center;
+            justify-content: space-between;
             z-index: 1000;
         }
         @media (min-width: 620px) {
@@ -47,7 +46,6 @@
             font-weight: 800;
             color: #111827;
             letter-spacing: 0.3px;
-            line-height: 1;
         }
         .status-loja {
             display: flex;
@@ -55,7 +53,6 @@
             gap: 8px;
             font-size: 0.95rem;
             font-weight: 500;
-            line-height: 1;
         }
         .ponto-status {
             width: 10px; height: 10px;
@@ -64,7 +61,7 @@
         }
         .ponto-status.aberto { background: #22c55e; }
         .ponto-status.fechado { background: #dc2626; }
-        .texto-status { color: #333; line-height: 1; }
+        .texto-status { color: #333; }
 
         .categorias { 
             width: 100%; padding: 7px 10px; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; 
@@ -221,7 +218,7 @@
         .aviso-info { color: #2563eb; }
         .total-texto { font-size: 1rem; font-weight: 700; text-align: right; margin: 8px 0; }
         .botoes-modal { display: flex; gap: 7px; margin-top: 10px; }
-        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-fechar { flex: 1; padding: 8px; border: none; border-radius: 5px; background: #eee; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-fechar:hover { background: #e5e7eb; }
         .btn-finalizar { flex: 2; padding: 8px; border: none; border-radius: 5px; background: #22c55e; color: white; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-finalizar:hover { background: #16a34a; }
@@ -230,7 +227,7 @@
         .alerta-caixa { background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 280px; }
         .alerta-caixa h2 { color: #dc2626; margin-bottom: 7px; font-size: 1.2rem; }
         .alerta-caixa p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 10px; }
-        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-entendi { margin-top: 10px; padding: 7px 14px; border: none; border-radius: 5px; background: #dc2626; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
         .btn-entendi:hover { background: #b91c1c; }
 
         html, body { overflow-x: hidden; touch-action: manipulation; }
@@ -239,7 +236,7 @@
 </head>
 <body>
 
-<!-- CABEÇALHO: NOME E STATUS ALINHADOS NA MESMA LINHA -->
+<!-- CABEÇALHO ATIVO COMO NA FOTO -->
 <div class="cabecalho-topo">
     <div class="nome-loja">ALISON BURGER</div>
     <div class="status-loja">
