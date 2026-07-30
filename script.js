@@ -2,7 +2,7 @@
 // ⚙️ CONFIGURAÇÕES — AJUSTE AQUI SEMPRE QUE PRECISAR
 // ==============================================
 const CONFIG = {
-  horaAbertura: 7,
+  horaAbertura: 5,
   horaFechamento: 23,
   textoStatusAberto: "Aberto até às 23:00",
   textoStatusFechado: "Fechado • Abre às 07:00",
