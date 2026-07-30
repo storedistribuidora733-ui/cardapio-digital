@@ -11,7 +11,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
-        body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overflow-x: hidden; }
+        body { background-color: #f8f9fa; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
         .oculto { display: none !important; }
 
         @media (min-width: 768px) {
@@ -37,7 +37,7 @@
         .categorias::-webkit-scrollbar { display:none; }
         .categoria-btn {
             padding:6px 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer;
-            font-weight:600; white-space:nowrap; transition: .2s;
+            font-weight:600; white-space:nowrap;
         }
         .categoria-btn.ativo { background:#dc2626; border-color:#dc2626; color:#fff; }
 
@@ -50,9 +50,7 @@
         .produto {
             background:#fff; border-radius:8px; padding:9px; display:flex; align-items:center; gap:10px; cursor:pointer;
             box-shadow:0 1px 3px rgba(0,0,0,0.08);
-            transition: transform .2s, box-shadow .2s;
         }
-        .produto:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,.12); }
         .produto-imagem { width:70px; height:70px; border-radius:6px; overflow:hidden; flex-shrink:0; }
         .produto-imagem img { width:100%; height:100%; object-fit:cover; }
         .produto-info { flex:1; }
@@ -63,8 +61,8 @@
         /* Botão WhatsApp */
         .botao-whatsapp {
             position: fixed;
-            bottom: 72px;
-            right: 18px;
+            bottom: 20px;
+            right: 20px;
             width: 50px;
             height: 50px;
             background: #25d366;
@@ -75,64 +73,24 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            z-index: 95;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+            z-index: 9999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
         }
         @media (min-width: 768px) {
             .botao-whatsapp {
                 right: calc((100vw - 620px)/2 + 15px);
-                bottom: 78px;
+                bottom: 25px;
             }
         }
 
-        /* ============================================== */
-        /* 🛒 RODAPÉ CARRINHO — VISUAL PROFISSIONAL */
-        /* ============================================== */
+        /* Carrinho fixo */
         .carrinho-fixo {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #1e293b; /* Fundo azul-escuro elegante */
-            color: #f8fafc;
-            padding: 10px 16px; /* Tamanho equilibrado */
-            display: none; z-index: 100;
-            border-top: 1px solid #334155; /* Linha sutil superior */
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.12); /* Sombra suave de destaque */
+            position:fixed; bottom:0; left:0; width:100%; background:#111827; color:#fff; padding:7px 12px;
+            display:none; z-index:998;
         }
-        .carrinho-conteudo {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 12px; max-width: 100%;
-        }
-
-        /* 🟢 BADGE DE QUANTIDADE — SEM BORDA VERMELHA */
-        .badge-qtd {
-            width: 28px; height: 28px;
-            background: #f1f5f9; /* Fundo claro limpo */
-            border-radius: 50%; /* Círculo perfeito */
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: .9rem;
-            color: #1e293b !important; /* Número escuro legível */
-            flex-shrink: 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,.1);
-        }
-
-        /* TEXTO INFORMATIVO */
-        .grupo-texto-carrinho { display:flex; align-items:center; gap:9px; }
-        .texto-carrinho h3 { font-size: .92rem; margin: 0; font-weight:600; color:#fff; }
-        .texto-carrinho p { font-size: .8rem; color:#cbd5e1; margin: 2px 0 0; line-height:1.2; }
-
-        /* 🟥 BOTÃO VER CARRINHO — TAMANHO IDEAL, BORDA SUAVE */
-        .btn-ver-carrinho {
-            background: #dc2626;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 18px; /* Tamanho confortável */
-            font-weight: 600; font-size: .92rem;
-            cursor: pointer;
-            transition: all .22s ease;
-            white-space: nowrap;
-            box-shadow: 0 2px 6px rgba(220,38,38,.25);
-        }
-        .btn-ver-carrinho:hover { background: #b91c1c; transform: translateY(-1px); }
+        .carrinho-conteudo { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+        .badge-qtd { width:26px; height:26px; background:#dc2626; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; }
+        .btn-ver-carrinho { background:#dc2626; color:#fff; border:none; border-radius:6px; padding:7px 12px; font-weight:bold; cursor:pointer; }
 
         /* Modais */
         #modal-produto { position:fixed; inset:0; background:#fff; z-index:10000; overflow-y:auto; }
@@ -157,7 +115,7 @@
         .fechar-modal { background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .2s; }
         .fechar-modal:hover { background:#f2f2f2; }
 
-        /* Itens do carrinho */
+        /* ✅ ITENS DO CARRINHO — MAIS PROFISSIONAIS */
         .item-carrinho {
             display:flex; align-items:center; justify-content:space-between;
             padding:12px 10px; margin:8px 0; background:#fafafa; border-radius:8px; border:1px solid #f0f0f0;
@@ -167,6 +125,7 @@
         .item-preco-unit { font-size:.85rem; color:#777; }
         .item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; }
 
+        /* ✅ BOTÕES + / - REDESIGN */
         .qtd-controle { display:flex; align-items:center; gap:10px; }
         .qtd-btn {
             width:34px; height:34px; border-radius:8px; border:none; background:#fff; color:#333; font-size:1.1rem; font-weight:600;
@@ -181,6 +140,7 @@
         .form-grupo input, .form-grupo select, .form-grupo textarea {
             width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-size:.9rem;
         }
+        /* Taxa de entrega — DESATIVADA, NÃO EDITÁVEL */
         .input-desativado { background:#f8f8f8; color:#666; cursor:not-allowed; }
 
         .form-duplo { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -301,6 +261,7 @@
         <div id="aviso-geral" class="oculto"></div>
         <div id="lista-itens-carrinho"></div>
 
+        <!-- ✅ RESUMO DE VALORES CLARO E ORGANIZADO -->
         <div class="resumo-valores">
             <div class="linha-valor">
                 <span>Subtotal dos itens</span>
@@ -329,6 +290,7 @@
             </select>
         </div>
 
+        <!-- ✅ TAXA DE ENTREGA FIXA E BLOQUEADA -->
         <div id="campo-taxa-entrega" class="oculto form-grupo">
             <label>Taxa de entrega (R$)</label>
             <input type="text" id="taxa-entrega" value="8,00" class="input-desativado" readonly>
@@ -396,14 +358,14 @@
     </div>
 </div>
 
-<!-- Rodapé Carrinho -->
+<!-- Carrinho Fixo -->
 <div class="carrinho-fixo" id="carrinho-container">
     <div class="carrinho-conteudo">
-        <div class="grupo-texto-carrinho">
+        <div style="display:flex; align-items:center; gap:8px;">
             <span class="badge-qtd" id="badge-qtd">0</span>
             <div class="texto-carrinho">
-                <h3>Meu Carrinho</h3>
-                <p id="resumo-carrinho">Vazio • 🔒 Ambiente 100% seguro</p>
+                <h3 style="font-size:0.9rem;">Meu Carrinho</h3>
+                <p id="resumo-carrinho" style="font-size:0.75rem;">Vazio</p>
             </div>
         </div>
         <button class="btn-ver-carrinho" id="abrir-carrinho">Ver Carrinho</button>
