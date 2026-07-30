@@ -1,138 +1,95 @@
-// ⚙️ CONFIGURAÇÃO DA SENHA — ALTERE AQUI SE QUISER
-const SENHA_ADMIN = "123456";
+// ===== CONFIGURAÇÃO — COLOQUE SEUS DADOS AQUI =====
+const SENHA_ADMIN = "123456"; // TROQUE POR UMA SENHA SEGURA SUA!
+const BIN_ID = "COLOQUE_AQUI_SEU_ID_BIN";
+const API_KEY = "COLOQUE_AQUI_SUA_CHAVE_API";
+// ===================================================
+
+let dadosLoja = { config: {}, produtos: [] };
+
+function mostrarAviso(elId, texto, tipo="sucesso") {
+  const av = document.getElementById(elId);
+  av.textContent = texto; av.className = `aviso ${tipo}`; av.style.display="block";
+  setTimeout(()=>av.style.display="none", 3200);
+}
 
 function verificarSenha() {
-    const senha = document.getElementById('senha').value.trim();
-    if (senha === SENHA_ADMIN) {
-        document.getElementById('tela-login').style.display = 'none';
-        document.getElementById('painel-principal').style.display = 'block';
-        carregarListaAdmin();
-    } else {
-        mostrarAcesso('Senha incorreta!', 'erro');
-    }
+  if(document.getElementById("senha-admin").value.trim() === SENHA_ADMIN) {
+    document.getElementById("tela-login").style.display="none";
+    document.getElementById("conteudo-admin").style.display="block";
+    carregarDadosPainel();
+  } else mostrarAviso("msg-login", "Senha incorreta!", "erro");
 }
 
-function pegarLista() {
-    const dados = localStorage.getItem('produtosAlisonBurger');
-    return dados ? JSON.parse(dados) : [];
-}
-
-function salvarLista(lista) {
-    localStorage.setItem('produtosAlisonBurger', JSON.stringify(lista));
-    if (window.salvarProdutos) window.salvarProdutos(lista);
-    carregarListaAdmin();
-}
-
-function mostrarAcesso(texto, tipo='sucesso') {
-    const aviso = document.getElementById('mensagem');
-    aviso.textContent = texto;
-    aviso.className = `alerta ${tipo}`;
-    aviso.classList.remove('oculto');
-    setTimeout(() => aviso.classList.add('oculto'), 3000);
-}
-
-function limparForm() {
-    document.getElementById('prod-codigo').value = '';
-    document.getElementById('prod-nome').value = '';
-    document.getElementById('prod-preco').value = '';
-    document.getElementById('prod-categoria').value = 'hamburgueres';
-    document.getElementById('prod-imagem').value = '';
-    document.getElementById('prod-descricao').value = '';
-    document.getElementById('indice-edicao').value = '';
-}
-
-function salvarProduto() {
-    const codigo = document.getElementById('prod-codigo').value.trim();
-    const nome = document.getElementById('prod-nome').value.trim();
-    const preco = parseFloat(document.getElementById('prod-preco').value);
-    const categoria = document.getElementById('prod-categoria').value;
-    const imagem = document.getElementById('prod-imagem').value.trim() || 'https://via.placeholder.com/400x300?text=Sem+Imagem';
-    const descricao = document.getElementById('prod-descricao').value.trim() || 'Sem descrição.';
-    const indice = document.getElementById('indice-edicao').value;
-
-    if (!codigo || !nome || isNaN(preco) || preco <= 0) {
-        mostrarAcesso('Preencha código, nome e preço válido!', 'erro');
-        return;
-    }
-
-    let lista = pegarLista();
-    const novoProd = {
-        id: Date.now(),
-        codigo, nome, preco, categoria, imagem, descricao, ativo: true
-    };
-
-    if (indice !== '') {
-        lista[indice] = novoProd;
-        mostrarAcesso('Produto atualizado com sucesso!');
-    } else {
-        lista.push(novoProd);
-        mostrarAcesso('Produto adicionado com sucesso!');
-    }
-
-    salvarLista(lista);
-    limparForm();
-}
-
-function editar(indice) {
-    const lista = pegarLista();
-    const p = lista[indice];
-    if (!p) return;
-    document.getElementById('indice-edicao').value = indice;
-    document.getElementById('prod-codigo').value = p.codigo;
-    document.getElementById('prod-nome').value = p.nome;
-    document.getElementById('prod-preco').value = p.preco;
-    document.getElementById('prod-categoria').value = p.categoria;
-    document.getElementById('prod-imagem').value = p.imagem;
-    document.getElementById('prod-descricao').value = p.descricao;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function alternarAtivo(indice) {
-    const lista = pegarLista();
-    lista[indice].ativo = !lista[indice].ativo;
-    salvarLista(lista);
-    mostrarAcesso(lista[indice].ativo ? 'Produto ativado!' : 'Produto desativado!');
-}
-
-function remover(indice) {
-    if (!confirm('Deseja excluir este produto definitivamente?')) return;
-    const lista = pegarLista();
-    lista.splice(indice, 1);
-    salvarLista(lista);
-    mostrarAcesso('Produto removido!');
-}
-
-function carregarListaAdmin() {
-    const lista = pegarLista();
-    const container = document.getElementById('lista-produtos-admin');
-
-    if (lista.length === 0) {
-        container.innerHTML = '<p class="text-gray-500">Nenhum produto cadastrado ainda.</p>';
-        return;
-    }
-
-    container.innerHTML = '';
-    lista.forEach((prod, idx) => {
-        const linha = document.createElement('div');
-        linha.className = `border-b py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 ${prod.ativo ? '' : 'opacity-50'}`;
-        linha.innerHTML = `
-            <div>
-                <span class="font-mono text-xs bg-gray-100 px-1 rounded">${prod.codigo}</span>
-                <span class="font-semibold ml-1">${prod.nome}</span>
-                <span class="text-sm text-gray-500 ml-2">R$ ${prod.preco.toFixed(2).replace('.', ',')}</span>
-                <span class="text-xs text-gray-400 block sm:inline">${prod.categoria}</span>
-                ${!prod.ativo ? '<span class="text-xs text-red-500 ml-2">INATIVO</span>' : ''}
-            </div>
-            <div class="flex gap-1 text-sm">
-                <button onclick="editar(${idx})" class="text-blue-600 hover:underline">✏️ Editar</button>
-                <button onclick="alternarAtivo(${idx})" class="text-green-600 hover:underline">${prod.ativo ? '📴 Desativar' : '📲 Ativar'}</button>
-                <button onclick="remover(${idx})" class="text-red-600 hover:underline">🗑️ Apagar</button>
-            </div>
-        `;
-        container.appendChild(linha);
+async function carregarDadosPainel() {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      headers: { "X-Master-Key": API_KEY }
     });
+    const ret = await res.json();
+    dadosLoja = ret.record;
+    preencherCampos(); listarProdutosPainel();
+  } catch(e) { alert("Erro ao carregar dados! Verifique ID/Chave."); console.error(e); }
 }
 
-function exportarDados() {
-    alert(JSON.stringify(pegarLista(), null, 2));
+function preencherCampos() {
+  document.getElementById("cfg-nome").value = dadosLoja.config.nomeLoja || "";
+  document.getElementById("cfg-taxa").value = dadosLoja.config.taxaEntregaPadrao || "";
+  document.getElementById("cfg-whats").value = dadosLoja.config.numeroWhatsApp || "";
+  document.getElementById("cfg-hora-abre").value = dadosLoja.config.horaAbertura || 7;
+  document.getElementById("cfg-hora-fecha").value = dadosLoja.config.horaFechamento || 23;
+}
+
+async function salvarTudo() {
+  // Atualiza configurações com os valores do painel
+  dadosLoja.config.nomeLoja = document.getElementById("cfg-nome").value.trim();
+  dadosLoja.config.taxaEntregaPadrao = parseFloat(document.getElementById("cfg-taxa").value) || 0;
+  dadosLoja.config.numeroWhatsApp = document.getElementById("cfg-whats").value.trim();
+  dadosLoja.config.horaAbertura = parseInt(document.getElementById("cfg-hora-abre")) || 7;
+  dadosLoja.config.horaFechamento = parseInt(document.getElementById("cfg-hora-fecha")) || 23;
+
+  try {
+    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: "PUT",
+      headers: { "X-Master-Key": API_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify(dadosLoja)
+    });
+    mostrarAviso("aviso-salvar", "✅ SALVO COM SUCESSO! Atualizado para TODOS instantaneamente!");
+    listarProdutosPainel();
+  } catch(e) { mostrarAviso("aviso-salvar", "❌ Erro ao salvar! Verifique conexão/dados.", "erro"); console.error(e); }
+}
+
+function adicionarProduto() {
+  const nome = document.getElementById("prod-nome").value.trim();
+  const preco = parseFloat(document.getElementById("prod-preco").value) || 0;
+  if(!nome || preco <= 0) return alert("Preencha nome e preço corretamente!");
+
+  dadosLoja.produtos.push({
+    id: Date.now(), categoria: document.getElementById("prod-cat").value,
+    nome, preco, descricao: document.getElementById("prod-desc").value.trim(),
+    imagem: document.getElementById("prod-img").value.trim() || "https://via.placeholder.com/300",
+    ativo: true
+  });
+  listarProdutosPainel();
+  // Limpa campos
+  ["prod-nome","prod-preco","prod-desc","prod-img"].forEach(id=>document.getElementById(id).value="");
+}
+
+function listarProdutosPainel() {
+  const container = document.getElementById("lista-produtos-admin");
+  container.innerHTML = "";
+  dadosLoja.produtos.forEach((p, i)=>{
+    const el = document.createElement("div"); el.className="item-produto";
+    el.innerHTML = `
+      <strong>${p.nome}</strong> — R$ ${p.preco.toFixed(2).replace(".",",")}
+      <p style="margin:4px 0; font-size:.9rem; color:#555;">${p.descricao || "Sem descrição"}</p>
+      <span>${p.ativo ? "✅ Ativo" : "❌ Inativo"} | Categoria: ${p.categoria}</span>
+      <br><button class="btn-remover" onclick="desativar(${i})">Desativar/Esconder</button>
+    `;
+    container.appendChild(el);
+  });
+}
+
+function desativar(indice) {
+  dadosLoja.produtos[indice].ativo = !dadosLoja.produtos[indice].ativo;
+  listarProdutosPainel();
 }
