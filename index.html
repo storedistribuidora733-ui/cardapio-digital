@@ -11,7 +11,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
-        body { background-color: #f8f9fa; padding-bottom: 65px; line-height: 1.4; overflow-x: hidden; }
+        body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overflow-x: hidden; }
         .oculto { display: none !important; }
 
         @media (min-width: 768px) {
@@ -60,10 +60,10 @@
         .produto-descricao { font-size:0.8rem; color:#666; margin:3px 0; }
         .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
-        /* Botão WhatsApp — CORRIGIDO */
+        /* Botão WhatsApp */
         .botao-whatsapp {
             position: fixed;
-            bottom: 70px;
+            bottom: 72px;
             right: 18px;
             width: 50px;
             height: 50px;
@@ -81,55 +81,58 @@
         @media (min-width: 768px) {
             .botao-whatsapp {
                 right: calc((100vw - 620px)/2 + 15px);
-                bottom: 75px;
+                bottom: 78px;
             }
         }
 
         /* ============================================== */
-        /* 🛒 CARRINHO — ÁREA FÁCIL DE ALTERAR */
+        /* 🛒 RODAPÉ CARRINHO — VISUAL PROFISSIONAL */
         /* ============================================== */
         .carrinho-fixo {
-            position:fixed; bottom:0; left:0; width:100%;
-            background:#111827; /* COR DE FUNDO DO RODAPÉ */
-            color:#fff;
-            padding: 8px 15px; /* ESPAÇAMENTO GERAL */
-            display:none; z-index: 100;
-            border-top: 1px solid #272e3b; /* LINHA DE BORDA SUPERIOR */
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #1e293b; /* Fundo azul-escuro elegante */
+            color: #f8fafc;
+            padding: 10px 16px; /* Tamanho equilibrado */
+            display: none; z-index: 100;
+            border-top: 1px solid #334155; /* Linha sutil superior */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.12); /* Sombra suave de destaque */
         }
         .carrinho-conteudo {
-            display:flex; align-items:center; justify-content:space-between; gap:10px;
-            max-width: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; max-width: 100%;
         }
 
-        /* 🟢 BADGE DE QUANTIDADE — ALTERE AQUI */
+        /* 🟢 BADGE DE QUANTIDADE — SEM BORDA VERMELHA */
         .badge-qtd {
-            width:28px; height:28px;
-            background: transparent; /* FUNDO TRANSPARENTE AGORA */
-            border: 2px solid #dc2626; /* BORDA VERMELHA */
-            border-radius:50%;
-            display:flex; align-items:center; justify-content:center;
-            font-weight:bold; font-size: .95rem;
-            color: #ffffff !important; /* NÚMERO BRANCO */
+            width: 28px; height: 28px;
+            background: #f1f5f9; /* Fundo claro limpo */
+            border-radius: 50%; /* Círculo perfeito */
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: .9rem;
+            color: #1e293b !important; /* Número escuro legível */
             flex-shrink: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,.1);
         }
 
-        /* 🟥 BOTÃO VER CARRINHO — TAMANHO E BORDA */
+        /* TEXTO INFORMATIVO */
+        .grupo-texto-carrinho { display:flex; align-items:center; gap:9px; }
+        .texto-carrinho h3 { font-size: .92rem; margin: 0; font-weight:600; color:#fff; }
+        .texto-carrinho p { font-size: .8rem; color:#cbd5e1; margin: 2px 0 0; line-height:1.2; }
+
+        /* 🟥 BOTÃO VER CARRINHO — TAMANHO IDEAL, BORDA SUAVE */
         .btn-ver-carrinho {
-            background:#dc2626; /* COR DE FUNDO DO BOTÃO */
-            color:#fff;
+            background: #dc2626;
+            color: #fff;
             border: none;
-            border-radius: 6px;
-            padding: 6px 14px; /* MENOR COMPRIMENTO */
-            font-weight:600; font-size: .9rem; /* FONTE MENOR */
-            cursor:pointer;
-            border: 1px solid #b91c1c; /* BORDA MAIS ESCURA */
-            transition: background .2s;
+            border-radius: 8px;
+            padding: 8px 18px; /* Tamanho confortável */
+            font-weight: 600; font-size: .92rem;
+            cursor: pointer;
+            transition: all .22s ease;
             white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(220,38,38,.25);
         }
-        .btn-ver-carrinho:hover { background: #b91c1c; }
-
-        .texto-carrinho h3 { font-size: .9rem; margin: 0; }
-        .texto-carrinho p { font-size: .78rem; color:#d1d5db; margin: 1px 0 0; }
+        .btn-ver-carrinho:hover { background: #b91c1c; transform: translateY(-1px); }
 
         /* Modais */
         #modal-produto { position:fixed; inset:0; background:#fff; z-index:10000; overflow-y:auto; }
@@ -393,14 +396,14 @@
     </div>
 </div>
 
-<!-- Carrinho Fixo -->
+<!-- Rodapé Carrinho -->
 <div class="carrinho-fixo" id="carrinho-container">
     <div class="carrinho-conteudo">
-        <div style="display:flex; align-items:center; gap:8px;">
+        <div class="grupo-texto-carrinho">
             <span class="badge-qtd" id="badge-qtd">0</span>
             <div class="texto-carrinho">
                 <h3>Meu Carrinho</h3>
-                <p id="resumo-carrinho">Vazio</p>
+                <p id="resumo-carrinho">Vazio • 🔒 Ambiente 100% seguro</p>
             </div>
         </div>
         <button class="btn-ver-carrinho" id="abrir-carrinho">Ver Carrinho</button>
