@@ -58,10 +58,10 @@
         .produto-descricao { font-size:0.8rem; color:#666; margin:3px 0; }
         .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
-        /* Botão WhatsApp */
+        /* ✅ BOTÃO WHATSAPP CORRIGIDO — não sobrepõe o carrinho */
         .botao-whatsapp {
             position: fixed;
-            bottom: 20px;
+            bottom: 75px; /* Espaço seguro acima do carrinho */
             right: 20px;
             width: 50px;
             height: 50px;
@@ -73,20 +73,20 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            z-index: 9999;
+            z-index: 95; /* Menor que o carrinho/modais → fica atrás */
             box-shadow: 0 2px 8px rgba(0,0,0,0.25);
         }
         @media (min-width: 768px) {
             .botao-whatsapp {
                 right: calc((100vw - 620px)/2 + 15px);
-                bottom: 25px;
+                bottom: 80px;
             }
         }
 
-        /* Carrinho fixo */
+        /* Carrinho fixo — tem prioridade de camada */
         .carrinho-fixo {
             position:fixed; bottom:0; left:0; width:100%; background:#111827; color:#fff; padding:7px 12px;
-            display:none; z-index:998;
+            display:none; z-index: 100; /* Acima do WhatsApp */
         }
         .carrinho-conteudo { display:flex; align-items:center; justify-content:space-between; gap:8px; }
         .badge-qtd { width:26px; height:26px; background:#dc2626; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; }
@@ -115,7 +115,7 @@
         .fechar-modal { background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .2s; }
         .fechar-modal:hover { background:#f2f2f2; }
 
-        /* ✅ ITENS DO CARRINHO — MAIS PROFISSIONAIS */
+        /* Itens do carrinho e botões + / - */
         .item-carrinho {
             display:flex; align-items:center; justify-content:space-between;
             padding:12px 10px; margin:8px 0; background:#fafafa; border-radius:8px; border:1px solid #f0f0f0;
@@ -125,7 +125,6 @@
         .item-preco-unit { font-size:.85rem; color:#777; }
         .item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; }
 
-        /* ✅ BOTÕES + / - REDESIGN */
         .qtd-controle { display:flex; align-items:center; gap:10px; }
         .qtd-btn {
             width:34px; height:34px; border-radius:8px; border:none; background:#fff; color:#333; font-size:1.1rem; font-weight:600;
@@ -140,7 +139,6 @@
         .form-grupo input, .form-grupo select, .form-grupo textarea {
             width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-size:.9rem;
         }
-        /* Taxa de entrega — DESATIVADA, NÃO EDITÁVEL */
         .input-desativado { background:#f8f8f8; color:#666; cursor:not-allowed; }
 
         .form-duplo { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -261,7 +259,6 @@
         <div id="aviso-geral" class="oculto"></div>
         <div id="lista-itens-carrinho"></div>
 
-        <!-- ✅ RESUMO DE VALORES CLARO E ORGANIZADO -->
         <div class="resumo-valores">
             <div class="linha-valor">
                 <span>Subtotal dos itens</span>
@@ -290,7 +287,6 @@
             </select>
         </div>
 
-        <!-- ✅ TAXA DE ENTREGA FIXA E BLOQUEADA -->
         <div id="campo-taxa-entrega" class="oculto form-grupo">
             <label>Taxa de entrega (R$)</label>
             <input type="text" id="taxa-entrega" value="8,00" class="input-desativado" readonly>
