@@ -1,5 +1,5 @@
 const CONFIG = {
-  horaAbertura: 6,
+  horaAbertura: 7,
   horaFechamento: 23,
   textoStatusAberto: "Aberto até às 23:00",
   textoStatusFechado: "Fechado • Abre às 07:00",
@@ -7,7 +7,7 @@ const CONFIG = {
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
   nomeLoja: "Alison Burger",
-  taxaEntregaPadrao: 8.00
+  taxaEntregaFixa: 8.00 // ✅ Taxa fixa definida aqui
 };
 
 const carrinho = [];
@@ -15,13 +15,12 @@ let produtoAtual = null;
 let quantidadeAtual = 1;
 let adicionaisSelecionados = [];
 
+// Elementos gerais
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
 const fecharModalBtns = [document.getElementById('fechar-modal')];
 const btnLimparCarrinho = document.getElementById('btn-limpar');
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
-const valorTotalEl = document.getElementById('valor-total');
-const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 const textoStatusEl = document.getElementById('texto-status');
@@ -30,6 +29,12 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
 
+// Resumo valores
+const subtotaisEl = document.getElementById('subtotal-itens');
+const valorTotalEl = document.getElementById('valor-total');
+const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
+
+// Formulário
 const nomeEl = document.getElementById('nome-cliente');
 const avisoGeral = document.getElementById('aviso-geral');
 const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
@@ -46,6 +51,7 @@ const cidadeUfEl = document.getElementById('cidade-uf');
 const avisoCepEl = document.getElementById('aviso-cep');
 const pagamentoEl = document.getElementById('forma-pagamento');
 
+// Modal Produto
 const modalProduto = document.getElementById('modal-produto');
 const btnVoltarLista = document.getElementById('btn-voltar');
 const imgDetalhe = document.getElementById('img-detalhe');
@@ -64,6 +70,9 @@ const textoStatusModal = document.getElementById('texto-status-modal');
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
+// ======================
+// Status da loja
+// ======================
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
   const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
@@ -89,16 +98,19 @@ verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 btnEntendi?.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
+// ======================
+// Limpar carrinho
+// ======================
 function limparTudoCarrinho() {
   carrinho.length = 0;
   listaItensCarrinho.innerHTML = '';
+  subtotaisEl.textContent = '0,00';
   valorTotalEl.textContent = '0,00';
   if(qtdCarrinhoEl) qtdCarrinhoEl.textContent = '0';
   resumoCarrinhoEl.innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
   carrinhoContainer.style.display = 'none';
   nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada';
-  taxaEntregaEl.value = '8,00';
   pagamentoEl.value = 'Dinheiro';
   avisoGeral.classList.add('oculto');
   limparCamposEndereco();
@@ -109,17 +121,20 @@ function limparTudoCarrinho() {
 }
 btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
 
+// ======================
+// Atendimento e endereço
+// ======================
 tipoAtendimentoEl?.addEventListener('change', () => {
   if (tipoAtendimentoEl.value === 'entrega') {
     campoTaxaEntregaEl.classList.remove('oculto');
     blocoEnderecoEl.classList.remove('oculto');
-    taxaEntregaEl.value = CONFIG.taxaEntregaPadrao.toFixed(2).replace('.', ',');
+    taxaEntregaEl.value = CONFIG.taxaEntregaFixa.toFixed(2).replace('.', ',');
   } else {
     campoTaxaEntregaEl.classList.add('oculto');
     blocoEnderecoEl.classList.add('oculto');
-    taxaEntregaEl.value = '0,00';
     limparCamposEndereco();
   }
+  atualizarCarrinho();
 });
 
 cepEl?.addEventListener('input', () => {
@@ -162,6 +177,9 @@ function limparCamposEndereco() {
   avisoCepEl.style.color = '#2563eb';
 }
 
+// ======================
+// Produtos e Modal
+// ======================
 document.querySelectorAll('.produto').forEach(produto => {
   produto.addEventListener('click', () => {
     if (!verificarStatusLoja(true)) return;
@@ -274,34 +292,50 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   document.body.style.overflow = 'auto';
 });
 
+// ======================
+// ✅ ATUALIZAÇÃO DO CARRINHO — LAYOUT E CÁLCULOS CORRETOS
+// ======================
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
-  let total = 0; let qtdTotal = 0;
+  let totalItens = 0; let qtdTotal = 0;
+  const usaTaxaEntrega = tipoAtendimentoEl.value === 'entrega';
+  const taxa = usaTaxaEntrega ? CONFIG.taxaEntregaFixa : 0;
+
   if (carrinho.length === 0) {
+    subtotaisEl.textContent = '0,00';
     valorTotalEl.textContent = '0,00';
     carrinhoContainer.style.display = 'none';
     return;
   }
+
   carrinhoContainer.style.display = 'flex';
   carrinho.forEach((item, index) => {
     const totalItem = item.preco * item.quantidade;
-    total += totalItem; qtdTotal += item.quantidade;
+    totalItens += totalItem; qtdTotal += item.quantidade;
+
     const itemEl = document.createElement('div');
     itemEl.className = 'item-carrinho';
     itemEl.innerHTML = `
-      <div><h4 style="font-size:14px;margin-bottom:3px;">${item.nome}</h4><p style="font-size:11px;color:#666;">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p></div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button class="qtd-btn diminuir-item" data-index="${index}">-</button>
-        <span style="font-weight:600;font-size:14px;">${item.quantidade}</span>
-        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-        <span style="font-weight:700;min-width:75px;text-align:right;font-size:14px;">R$ ${totalItem.toFixed(2).replace('.', ',')}</span>
+      <div class="item-info">
+        <h4 class="item-nome">${item.nome}</h4>
+        <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
       </div>
+      <div class="qtd-controle">
+        <button class="qtd-btn diminuir-item" data-index="${index}">&minus;</button>
+        <span class="qtd-valor">${item.quantidade}</span>
+        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
+      </div>
+      <div class="item-total">R$ ${totalItem.toFixed(2).replace('.', ',')}</div>
     `;
     listaItensCarrinho.appendChild(itemEl);
   });
-  valorTotalEl.textContent = total.toFixed(2).replace('.', ',');
+
+  const totalFinal = totalItens + taxa;
+  subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
+  valorTotalEl.textContent = totalFinal.toFixed(2).replace('.', ',');
   if(qtdCarrinhoEl) qtdCarrinhoEl.textContent = qtdTotal;
-  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${total.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${totalFinal.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+
   adicionarEventosCarrinho();
 }
 
@@ -317,9 +351,13 @@ function adicionarEventosCarrinho() {
   }));
 }
 
+// ======================
+// Abrir / Fechar modal
+// ======================
 abrirCarrinhoBtn?.addEventListener('click', () => {
   if (carrinho.length === 0) return;
   if (!verificarStatusLoja(true)) return;
+  atualizarCarrinho();
   modalCarrinho.classList.remove('oculto');
   document.body.style.overflow = 'hidden';
   avisoGeral.classList.add('oculto');
@@ -329,6 +367,9 @@ fecharModalBtns.forEach(b => b.addEventListener('click', () => {
   document.body.style.overflow = 'auto';
 }));
 
+// ======================
+// Categorias e Busca
+// ======================
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
     document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
@@ -347,14 +388,17 @@ campoBusca?.addEventListener('input', () => {
   });
 });
 
+// ======================
+// Enviar pedido WhatsApp
+// ======================
 document.getElementById('btn-finalizar')?.addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
   const nome = nomeEl.value.trim();
   const pagamento = pagamentoEl.value;
   const tipoAtendimento = tipoAtendimentoEl.value;
-  const taxaEntrega = parseFloat(taxaEntregaEl.value.replace(',', '.')) || 0;
+  const taxa = tipoAtendimento === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
   const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
-  const totalGeral = totalItens + taxaEntrega;
+  const totalGeral = totalItens + taxa;
 
   const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
   const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
@@ -375,34 +419,4 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
     enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
     if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
     enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
-    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
-    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
-    if (referenciaEl.value.trim()) enderecoCompleto += `\n  Referência: ${referenciaEl.value.trim()}`;
-  }
-
-  let mensagem = `=====================================\n`;
-  mensagem += `          PEDIDO — ${CONFIG.nomeLoja}\n`;
-  mensagem += `=====================================\n`;
-  mensagem += `Nº ${numeroPedido}  |  ${dataPedido}\n\n`;
-  mensagem += `Tipo de atendimento: ${tipoAtendimento === 'entrega' ? 'Entrega' : 'Retirada'}\n`;
-  mensagem += `Cliente:            ${nome}\n`;
-  if (tipoAtendimento === 'entrega') mensagem += `Endereço:\n  ${enderecoCompleto}\n`;
-  mensagem += `Pagamento:          ${pagamento}\n\n`;
-  mensagem += `-------------------------------------\n`;
-  mensagem += `PRODUTO                QTD   VALOR\n`;
-  mensagem += `-------------------------------------\n`;
-  carrinho.forEach(i => {
-    const totalItem = (i.preco * i.quantidade).toFixed(2).replace('.', ',');
-    mensagem += `${i.nome.padEnd(20)} ${String(i.quantidade).padStart(3)}  R$ ${totalItem}\n`;
-  });
-  mensagem += `-------------------------------------\n`;
-  mensagem += `Subtotal............ R$ ${totalItens.toFixed(2).replace('.', ',')}\n`;
-  if (tipoAtendimento === 'entrega') mensagem += `Entrega............. R$ ${taxaEntrega.toFixed(2).replace('.', ',')}\n`;
-  mensagem += `\nVALOR TOTAL......... R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
-  if (observacao) {
-    mensagem += `\n-------------------------------------\nObservação: ${observacao}\n`;
-  }
-  mensagem += `=====================================\nConfirmaremos em breve. Obrigado!\n`;
-
-  window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`, '_blank');
-});
+    enderecoCompleto += `\n  Cidade/UF: ${cidade
