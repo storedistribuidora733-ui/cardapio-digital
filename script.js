@@ -7,7 +7,7 @@ const CONFIG = {
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
   nomeLoja: "Alison Burger",
-  taxaEntregaFixa: 8.00 // ✅ Taxa fixa definida aqui
+  taxaEntregaFixa: 8.00 // Taxa fixa, não editável
 };
 
 const carrinho = [];
@@ -23,8 +23,6 @@ const btnLimparCarrinho = document.getElementById('btn-limpar');
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
-const textoStatusEl = document.getElementById('texto-status');
-const pontoStatusEl = document.getElementById('ponto-status');
 const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
@@ -77,18 +75,14 @@ function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
   const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
 
-  if(pontoStatusEl && textoStatusEl){
-    pontoStatusEl.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
-    textoStatusEl.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
-  }
-  if(pontoStatusModal && textoStatusModal){
-    pontoStatusModal.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
-    textoStatusModal.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
-  }
   if(pontoCab && textoCab){
     pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
     textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
     pontoCab.className = "ponto-status " + (lojaAberta ? "aberto" : "fechado");
+  }
+  if(pontoStatusModal && textoStatusModal){
+    pontoStatusModal.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
+    textoStatusModal.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
   }
 
   if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
@@ -293,7 +287,7 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
 });
 
 // ======================
-// ✅ ATUALIZAÇÃO DO CARRINHO — LAYOUT E CÁLCULOS CORRETOS
+// Atualização do carrinho
 // ======================
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
@@ -419,4 +413,34 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
     enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
     if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
     enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
-    enderecoCompleto += `\n  Cidade/UF: ${cidade
+    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
+    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
+    if (referenciaEl.value.trim()) enderecoCompleto += `\n  Ponto de referência: ${referenciaEl.value.trim()}`;
+  }
+
+  let mensagem = `🍔 *PEDIDO #${numeroPedido} — ${CONFIG.nomeLoja}*
+📅 ${dataPedido}
+👤 Cliente: ${nome}
+📦 Tipo: ${tipoAtendimento === 'retirada' ? 'Retirada na loja' : 'Entrega'}`;
+
+  if (tipoAtendimento === 'entrega') mensagem += `\n📍 Endereço:\n${enderecoCompleto}`;
+
+  mensagem += `\n\n📋 *ITENS DO PEDIDO*:\n`;
+  carrinho.forEach(item => {
+    mensagem += `• ${item.quantidade}x ${item.nome} — R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+  });
+
+  mensagem += `\n💵 *RESUMO DE VALORES*
+Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
+${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}` : 'Sem taxa de retirada'}
+*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
+
+💳 Forma de pagamento: ${pagamento}`;
+
+  if (observacao) mensagem += `\n📝 Observação: ${observacao}`;
+
+  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(urlWhatsApp, '_blank');
+
+  limparTudoCarrinho();
+});
