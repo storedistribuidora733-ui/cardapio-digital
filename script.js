@@ -1,5 +1,5 @@
 // ===== CONFIGURAÇÃO JSONBIN — COLOQUE SEUS DADOS AQUI DEPOIS DE CRIAR A CONTA =====
-const BIN_ID = "COLOQUE_AQUI_SEU_ID_BIN"; // ex: 60abc123...
+const BIN_ID = "6a6b2922f5f4af5e29d5199b"; // ex: 60abc123...
 const API_KEY = "$2a$10$dbRX.ZHWQYh0ta6G.dvbEOLp4PVLCqwjSeXJvKK5z7Q3aFDuqAG5C";
 // ====================================================================================
 
