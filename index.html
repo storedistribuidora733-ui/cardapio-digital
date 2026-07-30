@@ -11,7 +11,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
-        body { background-color: #f8f9fa; padding-bottom: 60px; line-height: 1.4; overflow-x: hidden; }
+        body { background-color: #f8f9fa; padding-bottom: 65px; line-height: 1.4; overflow-x: hidden; }
         .oculto { display: none !important; }
 
         @media (min-width: 768px) {
@@ -37,7 +37,7 @@
         .categorias::-webkit-scrollbar { display:none; }
         .categoria-btn {
             padding:6px 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer;
-            font-weight:600; white-space:nowrap;
+            font-weight:600; white-space:nowrap; transition: .2s;
         }
         .categoria-btn.ativo { background:#dc2626; border-color:#dc2626; color:#fff; }
 
@@ -50,7 +50,9 @@
         .produto {
             background:#fff; border-radius:8px; padding:9px; display:flex; align-items:center; gap:10px; cursor:pointer;
             box-shadow:0 1px 3px rgba(0,0,0,0.08);
+            transition: transform .2s, box-shadow .2s;
         }
+        .produto:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,.12); }
         .produto-imagem { width:70px; height:70px; border-radius:6px; overflow:hidden; flex-shrink:0; }
         .produto-imagem img { width:100%; height:100%; object-fit:cover; }
         .produto-info { flex:1; }
@@ -58,11 +60,11 @@
         .produto-descricao { font-size:0.8rem; color:#666; margin:3px 0; }
         .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
-        /* ✅ BOTÃO WHATSAPP CORRIGIDO — não sobrepõe o carrinho */
+        /* Botão WhatsApp — CORRIGIDO */
         .botao-whatsapp {
             position: fixed;
-            bottom: 75px; /* Espaço seguro acima do carrinho */
-            right: 20px;
+            bottom: 70px;
+            right: 18px;
             width: 50px;
             height: 50px;
             background: #25d366;
@@ -73,24 +75,61 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            z-index: 95; /* Menor que o carrinho/modais → fica atrás */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            z-index: 95;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.22);
         }
         @media (min-width: 768px) {
             .botao-whatsapp {
                 right: calc((100vw - 620px)/2 + 15px);
-                bottom: 80px;
+                bottom: 75px;
             }
         }
 
-        /* Carrinho fixo — tem prioridade de camada */
+        /* ============================================== */
+        /* 🛒 CARRINHO — ÁREA FÁCIL DE ALTERAR */
+        /* ============================================== */
         .carrinho-fixo {
-            position:fixed; bottom:0; left:0; width:100%; background:#111827; color:#fff; padding:7px 12px;
-            display:none; z-index: 100; /* Acima do WhatsApp */
+            position:fixed; bottom:0; left:0; width:100%;
+            background:#111827; /* COR DE FUNDO DO RODAPÉ */
+            color:#fff;
+            padding: 8px 15px; /* ESPAÇAMENTO GERAL */
+            display:none; z-index: 100;
+            border-top: 1px solid #272e3b; /* LINHA DE BORDA SUPERIOR */
         }
-        .carrinho-conteudo { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-        .badge-qtd { width:26px; height:26px; background:#dc2626; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; }
-        .btn-ver-carrinho { background:#dc2626; color:#fff; border:none; border-radius:6px; padding:7px 12px; font-weight:bold; cursor:pointer; }
+        .carrinho-conteudo {
+            display:flex; align-items:center; justify-content:space-between; gap:10px;
+            max-width: 100%;
+        }
+
+        /* 🟢 BADGE DE QUANTIDADE — ALTERE AQUI */
+        .badge-qtd {
+            width:28px; height:28px;
+            background: transparent; /* FUNDO TRANSPARENTE AGORA */
+            border: 2px solid #dc2626; /* BORDA VERMELHA */
+            border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:bold; font-size: .95rem;
+            color: #ffffff !important; /* NÚMERO BRANCO */
+            flex-shrink: 0;
+        }
+
+        /* 🟥 BOTÃO VER CARRINHO — TAMANHO E BORDA */
+        .btn-ver-carrinho {
+            background:#dc2626; /* COR DE FUNDO DO BOTÃO */
+            color:#fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px; /* MENOR COMPRIMENTO */
+            font-weight:600; font-size: .9rem; /* FONTE MENOR */
+            cursor:pointer;
+            border: 1px solid #b91c1c; /* BORDA MAIS ESCURA */
+            transition: background .2s;
+            white-space: nowrap;
+        }
+        .btn-ver-carrinho:hover { background: #b91c1c; }
+
+        .texto-carrinho h3 { font-size: .9rem; margin: 0; }
+        .texto-carrinho p { font-size: .78rem; color:#d1d5db; margin: 1px 0 0; }
 
         /* Modais */
         #modal-produto { position:fixed; inset:0; background:#fff; z-index:10000; overflow-y:auto; }
@@ -115,7 +154,7 @@
         .fechar-modal { background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .2s; }
         .fechar-modal:hover { background:#f2f2f2; }
 
-        /* Itens do carrinho e botões + / - */
+        /* Itens do carrinho */
         .item-carrinho {
             display:flex; align-items:center; justify-content:space-between;
             padding:12px 10px; margin:8px 0; background:#fafafa; border-radius:8px; border:1px solid #f0f0f0;
@@ -360,8 +399,8 @@
         <div style="display:flex; align-items:center; gap:8px;">
             <span class="badge-qtd" id="badge-qtd">0</span>
             <div class="texto-carrinho">
-                <h3 style="font-size:0.9rem;">Meu Carrinho</h3>
-                <p id="resumo-carrinho" style="font-size:0.75rem;">Vazio</p>
+                <h3>Meu Carrinho</h3>
+                <p id="resumo-carrinho">Vazio</p>
             </div>
         </div>
         <button class="btn-ver-carrinho" id="abrir-carrinho">Ver Carrinho</button>
