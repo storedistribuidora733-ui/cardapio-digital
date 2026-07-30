@@ -1,11 +1,33 @@
-[
-  {"id":"01","nome":"Hambúrguer Simples","categoria":"hamburgueres","preco":10.00,"descricao":"Pão, carne, queijo, alface e tomate, tudo fresquinho e preparado na hora","tempo":"20-30min","imagem":"https://picsum.photos/id/1060/150/150","destaque":true},
-  {"id":"02","nome":"Hambúrguer Duplo","categoria":"hamburgueres","preco":12.00,"descricao":"Duas carnes suculentas, queijo especial derretido e molho secreto da casa","tempo":"20-30min","imagem":"https://picsum.photos/id/1074/150/150","destaque":true},
-  {"id":"03","nome":"Hambúrguer Picante","categoria":"hamburgueres","preco":15.00,"descricao":"Carne especial, molho apimentado caseiro e pimenta calabresa fresca","tempo":"20-30min","imagem":"https://picsum.photos/id/1076/150/150","destaque":true},
-  {"id":"04","nome":"Batata Frita Tradicional","categoria":"acompanhamentos","preco":12.00,"descricao":"Porção grande de batatas selecionadas, crocantes e temperadas na hora","tempo":"20-30min","imagem":"https://picsum.photos/id/180/150/150","destaque":true},
-  {"id":"05","nome":"Anéis de Cebola","categoria":"acompanhamentos","preco":14.00,"descricao":"Anéis de cebola branca empanados crocantes, servidos com molho especial","tempo":"20-30min","imagem":"https://picsum.photos/id/292/150/150","destaque":true},
-  {"id":"06","nome":"Batata com Cheddar e Bacon","categoria":"acompanhamentos","preco":18.00,"descricao":"Batata frita coberta com molho de queijo cheddar cremoso e bacon picado crocante","tempo":"20-30min","imagem":"https://picsum.photos/id/431/150/150","destaque":true},
-  {"id":"07","nome":"Coca-Cola 350ml Zero","categoria":"bebidas","preco":6.00,"descricao":"Lata de refrigerante gelada, zero açúcar, sabor original","tempo":"20-30min","imagem":"https://picsum.photos/id/433/150/150","destaque":true},
-  {"id":"08","nome":"Guaraná Antarctica 350ml","categoria":"bebidas","preco":6.00,"descricao":"Lata bem gelada, sabor tradicional do Brasil","tempo":"20-30min","imagem":"https://picsum.photos/id/429/150/150","destaque":true},
-  {"id":"09","nome":"Suco de Laranja Natural 500ml","categoria":"bebidas","preco":9.00,"descricao":"Suco 100% fruta, espremido na hora, sem conservantes","tempo":"20-30min","imagem":"https://picsum.photos/id/416/150/150","destaque":true},
-  {"id":"10","nome":"Coca-Cola 2L Normal","categoria":"bebidas","preco":12.00,"descricao":"Garrafa grande, sabor original, bem gelada para toda a família","tempo":"20-30min","imagem":"https://picsum.photos/id/434
+{
+  "config": {
+    "horaAbertura": 7,
+    "horaFechamento": 23,
+    "textoStatusAberto": "Aberto até às 23:00",
+    "textoStatusFechado": "Fechado • Abre às 07:00",
+    "corStatusAberto": "#22c55e",
+    "corStatusFechado": "#dc2626",
+    "numeroWhatsApp": "5519989021323",
+    "nomeLoja": "Alison Burger",
+    "taxaEntregaPadrao": 8.00
+  },
+  "produtos": [
+    {
+      "id": 1,
+      "categoria": "hamburgueres",
+      "nome": "Hambúrguer Simples",
+      "preco": 10.00,
+      "descricao": "Pão, carne, queijo, alface e tomate fresquinhos.",
+      "imagem": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "categoria": "bebidas",
+      "nome": "Coca-Cola 2L Normal",
+      "preco": 12.00,
+      "descricao": "Garrafa de 2 litros, bem gelada.",
+      "imagem": "https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80",
+      "ativo": true
+    }
+  ]
+}
