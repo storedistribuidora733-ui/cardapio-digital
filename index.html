@@ -58,7 +58,7 @@
         .produto-descricao { font-size:0.8rem; color:#666; margin:3px 0; }
         .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
-        /* ✅ BOTÃO WHATSAPP AJUSTADO — FUNCIONA CELULAR E PC */
+        /* Botão WhatsApp */
         .botao-whatsapp {
             position: fixed;
             bottom: 20px;
@@ -76,7 +76,6 @@
             z-index: 9999;
             box-shadow: 0 2px 8px rgba(0,0,0,0.25);
         }
-        /* Alinha com o conteúdo centralizado no computador */
         @media (min-width: 768px) {
             .botao-whatsapp {
                 right: calc((100vw - 620px)/2 + 15px);
@@ -110,23 +109,59 @@
         #btn-adicionar-detalhe { flex:1; padding:10px; border:none; border-radius:8px; background:#dc2626; color:#fff; font-size:1rem; cursor:pointer; }
 
         #modal-carrinho { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:10002; padding:10px; }
-        .modal-conteudo { background:#fff; width:100%; max-width:500px; max-height:90vh; border-radius:10px; padding:15px; overflow-y:auto; }
-        .modal-cabecalho { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #eee; }
-        .fechar-modal { background:none; border:none; font-size:1.3rem; cursor:pointer; color:#666; width:32px; height:32px; border-radius:50%; }
-        .form-grupo { margin:8px 0; }
-        .form-grupo label { display:block; margin-bottom:3px; font-weight:500; font-size:0.85rem; }
-        .form-grupo input, .form-grupo select, .form-grupo textarea { width:100%; padding:7px; border:1px solid #ddd; border-radius:5px; font-size:0.85rem; }
-        .form-duplo { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-        .botoes-modal { display:flex; gap:8px; margin-top:12px; }
-        .btn-fechar { flex:1; padding:8px; border:none; border-radius:6px; background:#eee; font-weight:600; cursor:pointer; }
-        .btn-finalizar { flex:2; padding:8px; border:none; border-radius:6px; background:#22c55e; color:#fff; font-weight:600; cursor:pointer; }
+        .modal-conteudo { background:#fff; width:100%; max-width:500px; max-height:90vh; border-radius:12px; padding:20px; overflow-y:auto; }
+        .modal-cabecalho { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid #eee; }
+        .modal-cabecalho h3 { font-size:1.25rem; font-weight:700; color:#222; }
+        .fechar-modal { background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .2s; }
+        .fechar-modal:hover { background:#f2f2f2; }
+
+        /* ✅ ITENS DO CARRINHO — MAIS PROFISSIONAIS */
+        .item-carrinho {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 10px; margin:8px 0; background:#fafafa; border-radius:8px; border:1px solid #f0f0f0;
+        }
+        .item-info { flex:1; padding-right:10px; }
+        .item-nome { font-weight:600; font-size:.95rem; color:#111; margin-bottom:4px; line-height:1.3; }
+        .item-preco-unit { font-size:.85rem; color:#777; }
+        .item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; }
+
+        /* ✅ BOTÕES + / - REDESIGN */
+        .qtd-controle { display:flex; align-items:center; gap:10px; }
+        .qtd-btn {
+            width:34px; height:34px; border-radius:8px; border:none; background:#fff; color:#333; font-size:1.1rem; font-weight:600;
+            cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.12); transition:all .2s;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .qtd-btn:active { background:#f5f5f5; transform:scale(.95); }
+        .qtd-valor { min-width:22px; text-align:center; font-weight:600; font-size:1rem; }
+
+        .form-grupo { margin:12px 0; }
+        .form-grupo label { display:block; margin-bottom:5px; font-weight:500; font-size:.9rem; color:#333; }
+        .form-grupo input, .form-grupo select, .form-grupo textarea {
+            width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-size:.9rem;
+        }
+        /* Taxa de entrega — DESATIVADA, NÃO EDITÁVEL */
+        .input-desativado { background:#f8f8f8; color:#666; cursor:not-allowed; }
+
+        .form-duplo { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .botoes-modal { display:flex; gap:10px; margin-top:18px; }
+        .btn-fechar { flex:1; padding:11px; border:none; border-radius:8px; background:#eee; font-weight:600; cursor:pointer; font-size:.95rem; transition:background .2s; }
+        .btn-fechar:hover { background:#e4e4e4; }
+        .btn-finalizar { flex:2; padding:11px; border:none; border-radius:8px; background:#22c55e; color:#fff; font-weight:600; cursor:pointer; font-size:.95rem; transition:background .2s; }
+        .btn-finalizar:hover { background:#20b850; }
+
+        .resumo-valores { margin-top:15px; padding:12px; background:#f8f9fa; border-radius:8px; }
+        .linha-valor { display:flex; justify-content:space-between; padding:4px 0; font-size:.95rem; }
+        .linha-valor.total { font-weight:700; font-size:1.05rem; margin-top:6px; padding-top:6px; border-top:1px solid #e5e5; }
+
+        #aviso-geral { background:#fef2f2; color:#b91c1c; padding:10px 12px; border-radius:8px; margin-bottom:12px; font-size:.9rem; }
 
         #alerta-fechado { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index:10003; padding:10px; }
-        .alerta-caixa { background:#fff; padding:20px; border-radius:8px; text-align:center; max-width:280px; }
-        .btn-entendi { margin-top:10px; padding:8px 16px; border:none; border-radius:6px; background:#dc2626; color:#fff; font-weight:600; cursor:pointer; }
+        .alerta-caixa { background:#fff; padding:24px; border-radius:10px; text-align:center; max-width:280px; }
+        .btn-entendi { margin-top:12px; padding:10px 18px; border:none; border-radius:8px; background:#dc2626; color:#fff; font-weight:600; cursor:pointer; font-size:.95rem; }
 
-        .adicional-item { display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid #eee; }
-        .btn-add-adicional { width:28px; height:28px; border-radius:50%; border:none; background:#eee; cursor:pointer; font-weight:bold; }
+        .adicional-item { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee; }
+        .btn-add-adicional { width:30px; height:30px; border-radius:8px; border:none; background:#f0f0f0; cursor:pointer; font-weight:bold; transition:.2s; }
         .btn-add-adicional.selecionado { background:#22c55e; color:#fff; }
     </style>
 </head>
@@ -223,9 +258,25 @@
             <h3>Meu Carrinho</h3>
             <button id="fechar-modal" class="fechar-modal">&times;</button>
         </div>
-        <div id="aviso-geral" class="oculto" style="background:#fee; color:#c00; padding:8px; border-radius:6px; margin-bottom:8px;"></div>
+        <div id="aviso-geral" class="oculto"></div>
         <div id="lista-itens-carrinho"></div>
-        <p style="margin-top:8px;"><strong>Total:</strong> R$ <span id="valor-total">0,00</span> | Qtd: <span id="qtd-carrinho">0</span></p>
+
+        <!-- ✅ RESUMO DE VALORES CLARO E ORGANIZADO -->
+        <div class="resumo-valores">
+            <div class="linha-valor">
+                <span>Subtotal dos itens</span>
+                <span>R$ <span id="subtotal-itens">0,00</span></span>
+            </div>
+            <div class="linha-valor">
+                <span>Taxa de entrega</span>
+                <span>R$ <span id="valor-taxa-fixa">8,00</span></span>
+            </div>
+            <div class="linha-valor total">
+                <strong>Total do pedido</strong>
+                <strong>R$ <span id="valor-total">0,00</span></strong>
+            </div>
+            <p style="margin-top:6px; font-size:.85rem; color:#666;">Quantidade total: <span id="qtd-carrinho">0</span> itens</p>
+        </div>
 
         <div class="form-grupo">
             <label>Nome completo *</label>
@@ -238,10 +289,13 @@
                 <option value="entrega">Entrega</option>
             </select>
         </div>
+
+        <!-- ✅ TAXA DE ENTREGA FIXA E BLOQUEADA -->
         <div id="campo-taxa-entrega" class="oculto form-grupo">
             <label>Taxa de entrega (R$)</label>
-            <input type="text" id="taxa-entrega" value="8,00">
+            <input type="text" id="taxa-entrega" value="8,00" class="input-desativado" readonly>
         </div>
+
         <div id="bloco-endereco" class="oculto">
             <div class="form-grupo">
                 <label>CEP</label>
@@ -290,7 +344,7 @@
             <input type="text" id="observacao" placeholder="Ex: sem cebola, maionese à parte...">
         </div>
         <div class="botoes-modal">
-            <button id="btn-limpar" class="btn-fechar">Limpar</button>
+            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
             <button id="btn-finalizar" class="btn-finalizar">Enviar Pedido</button>
         </div>
     </div>
