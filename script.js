@@ -440,3 +440,4 @@ ${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace
 
   limparTudoCarrinho();
 });
+ 
