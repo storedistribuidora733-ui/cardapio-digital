@@ -25,12 +25,12 @@ const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
-const resumoCarrinhoEl = document.getElementById('resumo-carrinho');
+const resumoValorEl = document.getElementById('resumo-valor');
+const badgeQtdEl = document.getElementById('badge-qtd');
 
 // Resumo valores
 const subtotaisEl = document.getElementById('subtotal-itens');
 const valorTotalEl = document.getElementById('valor-total');
-const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
 
 // Formulário
 const nomeEl = document.getElementById('nome-cliente');
@@ -63,12 +63,11 @@ const diminuirQtdBtn = document.getElementById('diminuir-qtd');
 const aumentarQtdBtn = document.getElementById('aumentar-qtd');
 const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
 
-// APENAS STATUS DO CABEÇALHO MANTIDO
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ======================
-// Status da loja (SÓ NO CABEÇALHO)
+// Status da loja
 // ======================
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
@@ -95,8 +94,8 @@ function limparTudoCarrinho() {
   listaItensCarrinho.innerHTML = '';
   subtotaisEl.textContent = '0,00';
   valorTotalEl.textContent = '0,00';
-  if(qtdCarrinhoEl) qtdCarrinhoEl.textContent = '0';
-  resumoCarrinhoEl.innerHTML = '0 itens • R$ 0,00 &nbsp; | &nbsp; 🔒 Ambiente 100% seguro';
+  badgeQtdEl.textContent = '0';
+  resumoValorEl.textContent = 'R$ 0,00';
   carrinhoContainer.style.display = 'none';
   nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada';
@@ -282,7 +281,7 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
 });
 
 // ======================
-// Atualização do carrinho
+// Atualização do carrinho — CONTADOR CORRIGIDO
 // ======================
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
@@ -293,6 +292,8 @@ function atualizarCarrinho() {
   if (carrinho.length === 0) {
     subtotaisEl.textContent = '0,00';
     valorTotalEl.textContent = '0,00';
+    badgeQtdEl.textContent = '0';
+    resumoValorEl.textContent = 'R$ 0,00';
     carrinhoContainer.style.display = 'none';
     return;
   }
@@ -322,8 +323,8 @@ function atualizarCarrinho() {
   const totalFinal = totalItens + taxa;
   subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
   valorTotalEl.textContent = totalFinal.toFixed(2).replace('.', ',');
-  if(qtdCarrinhoEl) qtdCarrinhoEl.textContent = qtdTotal;
-  resumoCarrinhoEl.innerHTML = `${qtdTotal} itens • R$ ${totalFinal.toFixed(2).replace('.', ',')} &nbsp; | &nbsp; 🔒 Ambiente 100% seguro`;
+  badgeQtdEl.textContent = qtdTotal;
+  resumoValorEl.textContent = `R$ ${totalItens.toFixed(2).replace('.', ',')}`;
 
   adicionarEventosCarrinho();
 }
@@ -427,15 +428,4 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
 
   mensagem += `\n💵 *RESUMO DE VALORES*
 Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
-${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}` : 'Sem taxa de retirada'}
-*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
-
-💳 Forma de pagamento: ${pagamento}`;
-
-  if (observacao) mensagem += `\n📝 Observação: ${observacao}`;
-
-  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-  window.open(urlWhatsApp, '_blank');
-
-  limparTudoCarrinho();
-});
+${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace
