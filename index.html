@@ -85,33 +85,36 @@
             }
         }
 
-        /* 🛒 RODAPÉ CARRINHO */
+        /* 🛒 RODAPÉ CARRINHO — NOVO VISUAL SIMPLIFICADO */
         .carrinho-fixo {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #1e293b; color: #f8fafc;
+            background: #ffffff; color: #222;
             padding: 10px 16px; display: none; z-index: 100;
-            border-top: 1px solid #334155;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.12);
+            border-top: 1px solid #e5e5e5;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
         }
         .carrinho-conteudo {
-            display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 100%;
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            max-width: 100%; margin: 0 auto;
+        }
+        .grupo-qtd-valor {
+            display: flex; align-items: center; gap: 12px;
         }
         .badge-qtd {
-            width: 28px; height: 28px; background: #f1f5f9; border-radius: 50%;
+            width: 32px; height: 32px; background: #dc2626; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: .9rem; color: #1e293b !important; flex-shrink: 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,.1);
+            font-weight: 700; font-size: 1rem; color: #ffffff;
+            flex-shrink: 0;
         }
-        .grupo-texto-carrinho { display:flex; align-items:center; gap:9px; }
-        .texto-carrinho h3 { font-size: .92rem; margin: 0; font-weight:600; color:#fff; }
-        .texto-carrinho p { font-size: .8rem; color:#cbd5e1; margin: 2px 0 0; line-height:1.2; }
+        .texto-valor {
+            font-size: 1rem; font-weight: 600; color: #1f2937;
+        }
         .btn-ver-carrinho {
             background: #dc2626; color: #fff; border: none; border-radius: 8px;
-            padding: 8px 18px; font-weight: 600; font-size: .92rem; cursor:pointer;
-            transition: all .22s ease; white-space: nowrap;
-            box-shadow: 0 2px 6px rgba(220,38,38,.25);
+            padding: 10px 20px; font-weight: 600; font-size: .95rem; cursor: pointer;
+            transition: background .2s ease; white-space: nowrap;
         }
-        .btn-ver-carrinho:hover { background: #b91c1c; transform: translateY(-1px); }
+        .btn-ver-carrinho:hover { background: #b91c1c; }
 
         /* Modais */
         #modal-produto { position:fixed; inset:0; background:#fff; z-index:10000; overflow-y:auto; }
@@ -182,7 +185,7 @@
 </head>
 <body>
 
-<!-- Cabeçalho (Status PERMANECE AQUI) -->
+<!-- Cabeçalho -->
 <div class="cabecalho-loja">
   <h1 class="nome-loja">ALISON BURGER</h1>
   <div class="linha-status">
@@ -234,12 +237,11 @@
     </div>
 </div>
 
-<!-- Modal Produto (STATUS REMOVIDO DAQUI) -->
+<!-- Modal Produto -->
 <div id="modal-produto" class="oculto">
     <div class="cabecalho-detalhe">
         <button id="btn-voltar">&larr;</button>
         <img id="img-detalhe" alt="">
-        <!-- REMOVIDO: bloco faixa-status que ficava aqui -->
     </div>
     <div class="conteudo-detalhe">
         <h2 id="nome-detalhe"></h2>
@@ -286,7 +288,6 @@
                 <strong>Total do pedido</strong>
                 <strong>R$ <span id="valor-total">0,00</span></strong>
             </div>
-            <p style="margin-top:6px; font-size:.85rem; color:#666;">Quantidade total: <span id="qtd-carrinho">0</span> itens</p>
         </div>
 
         <div class="form-grupo">
@@ -368,15 +369,12 @@
     </div>
 </div>
 
-<!-- Rodapé Carrinho -->
+<!-- Rodapé Carrinho SIMPLIFICADO -->
 <div class="carrinho-fixo" id="carrinho-container">
     <div class="carrinho-conteudo">
-        <div class="grupo-texto-carrinho">
+        <div class="grupo-qtd-valor">
             <span class="badge-qtd" id="badge-qtd">0</span>
-            <div class="texto-carrinho">
-                <h3>Meu Carrinho</h3>
-                <p id="resumo-carrinho">Vazio • 🔒 Ambiente 100% seguro</p>
-            </div>
+            <span class="texto-valor" id="resumo-valor">R$ 0,00</span>
         </div>
         <button class="btn-ver-carrinho" id="abrir-carrinho">Ver Carrinho</button>
     </div>
