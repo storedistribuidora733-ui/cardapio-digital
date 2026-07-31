@@ -42,8 +42,8 @@
         .categoria-btn.ativo { background:#dc2626; border-color:#dc2626; color:#fff; }
 
         .busca { margin:8px 10px; position:relative; }
-        .busca input { width:100%; padding:8px 8px 8px 30px; border:1px solid #ddd; border-radius:8px; }
         .busca i { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#999; }
+        .busca input { width:100%; padding:8px 8px 8px 30px; border:1px solid #ddd; border-radius:8px; }
 
         /* Produtos */
         .lista-produtos { display:flex; flex-direction:column; gap:8px; margin:8px 10px; }
@@ -85,51 +85,30 @@
             }
         }
 
-        /* ============================================== */
-        /* 🛒 RODAPÉ CARRINHO — VISUAL PROFISSIONAL */
-        /* ============================================== */
+        /* 🛒 RODAPÉ CARRINHO */
         .carrinho-fixo {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #1e293b; /* Fundo azul-escuro elegante */
-            color: #f8fafc;
-            padding: 10px 16px; /* Tamanho equilibrado */
-            display: none; z-index: 100;
-            border-top: 1px solid #334155; /* Linha sutil superior */
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.12); /* Sombra suave de destaque */
+            background: #1e293b; color: #f8fafc;
+            padding: 10px 16px; display: none; z-index: 100;
+            border-top: 1px solid #334155;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.12);
         }
         .carrinho-conteudo {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 12px; max-width: 100%;
+            display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 100%;
         }
-
-        /* 🟢 BADGE DE QUANTIDADE — SEM BORDA VERMELHA */
         .badge-qtd {
-            width: 28px; height: 28px;
-            background: #f1f5f9; /* Fundo claro limpo */
-            border-radius: 50%; /* Círculo perfeito */
+            width: 28px; height: 28px; background: #f1f5f9; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: .9rem;
-            color: #1e293b !important; /* Número escuro legível */
-            flex-shrink: 0;
+            font-weight: 700; font-size: .9rem; color: #1e293b !important; flex-shrink: 0;
             box-shadow: 0 1px 3px rgba(0,0,0,.1);
         }
-
-        /* TEXTO INFORMATIVO */
         .grupo-texto-carrinho { display:flex; align-items:center; gap:9px; }
         .texto-carrinho h3 { font-size: .92rem; margin: 0; font-weight:600; color:#fff; }
         .texto-carrinho p { font-size: .8rem; color:#cbd5e1; margin: 2px 0 0; line-height:1.2; }
-
-        /* 🟥 BOTÃO VER CARRINHO — TAMANHO IDEAL, BORDA SUAVE */
         .btn-ver-carrinho {
-            background: #dc2626;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 18px; /* Tamanho confortável */
-            font-weight: 600; font-size: .92rem;
-            cursor: pointer;
-            transition: all .22s ease;
-            white-space: nowrap;
+            background: #dc2626; color: #fff; border: none; border-radius: 8px;
+            padding: 8px 18px; font-weight: 600; font-size: .92rem; cursor:pointer;
+            transition: all .22s ease; white-space: nowrap;
             box-shadow: 0 2px 6px rgba(220,38,38,.25);
         }
         .btn-ver-carrinho:hover { background: #b91c1c; transform: translateY(-1px); }
@@ -139,10 +118,6 @@
         .cabecalho-detalhe { position:relative; width:100%; height:180px; background:#f3f4f6; }
         #btn-voltar { position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; border:none; background:#fff; font-size:1rem; cursor:pointer; z-index:10; }
         #img-detalhe { width:100%; height:100%; object-fit:cover; }
-        .faixa-status {
-            position:absolute; bottom:-15px; left:50%; transform:translateX(-50%); background:#fff;
-            padding:6px 18px; border-radius:50%; border:2px solid #dc2626; font-weight:600; display:flex; gap:6px;
-        }
         .conteudo-detalhe { padding:30px 15px 110px; }
         .preco-promocional { font-size:1.4rem; font-weight:800; color:#dc2626; }
         .rodape-detalhe { position:fixed; bottom:0; left:0; width:100%; background:#fff; padding:12px 15px; border-top:1px solid #ddd; display:flex; align-items:center; gap:15px; z-index:10001; }
@@ -187,7 +162,7 @@
         .botoes-modal { display:flex; gap:10px; margin-top:18px; }
         .btn-fechar { flex:1; padding:11px; border:none; border-radius:8px; background:#eee; font-weight:600; cursor:pointer; font-size:.95rem; transition:background .2s; }
         .btn-fechar:hover { background:#e4e4e4; }
-        .btn-finalizar { flex:2; padding:11px; border:none; border-radius:8px; background:#22c55e; color:#fff; font-weight:600; cursor:pointer; font-size:.95rem; transition:background .2s; }
+        .btn-finalizar { flex:2; padding:11px; border:none; border-radius:8px; background:#22c55e; color:#fff; cursor:pointer; font-size:.95rem; transition:background .2s; }
         .btn-finalizar:hover { background:#20b850; }
 
         .resumo-valores { margin-top:15px; padding:12px; background:#f8f9fa; border-radius:8px; }
@@ -207,7 +182,7 @@
 </head>
 <body>
 
-<!-- Cabeçalho -->
+<!-- Cabeçalho (Status PERMANECE AQUI) -->
 <div class="cabecalho-loja">
   <h1 class="nome-loja">ALISON BURGER</h1>
   <div class="linha-status">
@@ -231,7 +206,7 @@
     <input type="text" id="campoBusca" placeholder="Buscar produtos...">
 </div>
 
-<!-- Produtos -->
+<!-- Lista Produtos -->
 <div class="lista-produtos">
     <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-descricao="Pão, carne, queijo, alface e tomate fresquinhos." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" alt="Hambúrguer Simples"></div>
@@ -259,15 +234,12 @@
     </div>
 </div>
 
-<!-- Modal Produto -->
+<!-- Modal Produto (STATUS REMOVIDO DAQUI) -->
 <div id="modal-produto" class="oculto">
     <div class="cabecalho-detalhe">
         <button id="btn-voltar">&larr;</button>
         <img id="img-detalhe" alt="">
-        <div class="faixa-status">
-            <span class="ponto-status" id="ponto-status-modal"></span>
-            <span id="texto-status-modal"></span>
-        </div>
+        <!-- REMOVIDO: bloco faixa-status que ficava aqui -->
     </div>
     <div class="conteudo-detalhe">
         <h2 id="nome-detalhe"></h2>
