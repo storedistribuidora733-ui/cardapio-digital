@@ -428,4 +428,15 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
 
   mensagem += `\n💵 *RESUMO DE VALORES*
 Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
-${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace
+${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}` : 'Sem taxa de retirada'}
+*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
+
+💳 Forma de pagamento: ${pagamento}`;
+
+  if (observacao) mensagem += `\n📝 Observação: ${observacao}`;
+
+  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(urlWhatsApp, '_blank');
+
+  limparTudoCarrinho();
+});
