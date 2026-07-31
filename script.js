@@ -1,7 +1,7 @@
 const CONFIG = {
   horaAbertura: 24,
   horaFechamento: 7,
-  textoStatusAberto: "Aberto até às 23:00",
+  textoStatusAberto: "Aberto até às 24:00",
   textoStatusFechado: "Fechado • Abre às 07:00",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
