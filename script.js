@@ -7,7 +7,7 @@ const CONFIG = {
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
   nomeLoja: "Alison Burger",
-  taxaEntregaFixa: 8.00 // Taxa fixa, não editável
+  taxaEntregaFixa: 8.00
 };
 
 const carrinho = [];
@@ -62,14 +62,13 @@ const qtdAtualEl = document.getElementById('qtd-atual');
 const diminuirQtdBtn = document.getElementById('diminuir-qtd');
 const aumentarQtdBtn = document.getElementById('aumentar-qtd');
 const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
-const pontoStatusModal = document.getElementById('ponto-status-modal');
-const textoStatusModal = document.getElementById('texto-status-modal');
 
+// APENAS STATUS DO CABEÇALHO MANTIDO
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ======================
-// Status da loja
+// Status da loja (SÓ NO CABEÇALHO)
 // ======================
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
@@ -79,10 +78,6 @@ function verificarStatusLoja(mostrarAviso = false) {
     pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
     textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
     pontoCab.className = "ponto-status " + (lojaAberta ? "aberto" : "fechado");
-  }
-  if(pontoStatusModal && textoStatusModal){
-    pontoStatusModal.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
-    textoStatusModal.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
   }
 
   if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
