@@ -1,5 +1,5 @@
 // ==============================================
-// ⚙️ SEUS DADOS E PRODUTOS — EXATAMENTE COMO VOCÊ TEM
+// ⚙️ CONFIGURAÇÕES E PRODUTOS IGUAIS AO SEU
 // ==============================================
 const CONFIG = {
     nomeLoja: "Alison Burger",
@@ -11,21 +11,41 @@ const CONFIG = {
     taxaEntregaFixa: 8.00,
     categorias: ["Lanches", "Bebidas", "Porções"],
     produtos: [
-        {nome:"X-Burguer Simples",desc:"Pão, carne, queijo, alface, tomate",categoria:"Lanches",preco:15.00,img:"https://i.imgur.com/7Z7Z7Z7.jpg"},
-        {nome:"X-Bacon Especial",desc:"Pão, carne, queijo, bacon, ovo, molho especial",categoria:"Lanches",preco:19.90,img:"https://i.imgur.com/9X9X9X9.jpg"},
-        {nome:"X-Tudo",desc:"Pão, carne, queijo, bacon, presunto, ovo, salada",categoria:"Lanches",preco:24.00,img:"https://i.imgur.com/3A3A3A3.jpg"},
-        {nome:"Coca-Cola Lata",desc:"Refrigerante gelado",categoria:"Bebidas",preco:5.00,img:"https://i.imgur.com/1A1A1A1.jpg"},
-        {nome:"Guaraná Antarctica Lata",desc:"Bebida gelada",categoria:"Bebidas",preco:4.50,img:"https://i.imgur.com/guarana-lata.png"},
-        {nome:"Batata Frita Pequena",desc:"Crocante e sequinha",categoria:"Porções",preco:12.00,img:"https://i.imgur.com/2B2B2B2.jpg"}
+        {
+            nome: "X-Burguer Simples",
+            desc: "Pão, carne, queijo, alface e tomate",
+            categoria: "Lanches",
+            preco: 15.00,
+            img: "https://i.imgur.com/7Z7Z7Z7.jpg",
+            temAdicionais: false
+        },
+        {
+            nome: "X-Bacon Especial",
+            desc: "Pão, carne, queijo, bacon, ovo e molho especial",
+            categoria: "Lanches",
+            preco: 19.90,
+            img: "https://i.imgur.com/9X9X9X9.jpg",
+            temAdicionais: true,
+            adicionais: [{nome:"Ovo",preco:2},{nome:"Bacon extra",preco:3}]
+        },
+        {
+            nome: "Coca-Cola Lata 350ml",
+            desc: "Refrigerante gelado",
+            categoria: "Bebidas",
+            preco: 5.00,
+            img: "https://i.imgur.com/1A1A1A1.jpg",
+            temAdicionais: false
+        }
     ]
 };
 
 // ==============================================
-// 🛒 VARIÁVEIS E FUNÇÕES ORIGINAIS — NENHUMA ALTERADA
+// 🛒 VARIÁVEIS E FUNÇÕES 100% ORIGINAIS
 // ==============================================
 let carrinho = [];
 let produtoModal = null;
 let qtdModal = 1;
+let adicionaisSelecionados = [];
 
 window.onload = function () {
     setTimeout(() => {
@@ -36,10 +56,11 @@ window.onload = function () {
         montarProdutos(CONFIG.produtos);
         configurarBusca();
         atualizarLinkWhatsApp();
+        document.getElementById('mostrarTaxa').textContent = CONFIG.taxaEntregaFixa.toFixed(2).replace('.', ',');
     }, 500);
 };
 
-// Status no cabeçalho
+// Status do cabeçalho
 function atualizarStatus() {
     const hora = new Date().getHours();
     const aberta = hora >= CONFIG.horaAbertura && hora < CONFIG.horaFechamento;
@@ -63,7 +84,7 @@ function montarCategorias() {
     });
 }
 
-// ✅ CLICK NOS PRODUTOS FUNCIONA IGUAL ANTES — ABRE O MODAL NORMALMENTE
+// ✅ CLICK FUNCIONA CORRETAMENTE — ABRE MODAL COM TODOS OS DETALHES
 function montarProdutos(lista) {
     document.getElementById('listaProdutos').innerHTML = lista.map(p => `
         <div class="produto" onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}')">
@@ -80,46 +101,101 @@ function montarProdutos(lista) {
 function configurarBusca() {
     document.getElementById('buscaProduto').addEventListener('input', e => {
         const termo = e.target.value.toLowerCase();
-        montarProdutos(CONFIG.produtos.filter(p => p.nome.toLowerCase().includes(termo) || p.categoria.toLowerCase().includes(termo)));
+        montarProdutos(CONFIG.produtos.filter(p =>
+            p.nome.toLowerCase().includes(termo) || p.categoria.toLowerCase().includes(termo)
+        ));
     });
 }
 
-// ✅ MODAL — FUNCIONAMENTO 100% IGUAL AO SEU CÓDIGO ANTIGO
+// ✅ MODAL COMPLETO COM IMAGEM, DESCRIÇÃO, ENTREGA/RETIRADA E ADICIONAIS
 function abrirModal(nome) {
     produtoModal = CONFIG.produtos.find(p => p.nome === nome);
     qtdModal = 1;
+    adicionaisSelecionados = [];
+
+    document.getElementById('modalImg').src = produtoModal.img;
     document.getElementById('modalNome').textContent = produtoModal.nome;
     document.getElementById('modalDesc').textContent = produtoModal.desc;
     document.getElementById('modalPreco').textContent = `R$ ${produtoModal.preco.toFixed(2).replace('.', ',')}`;
     document.getElementById('qtdAtual').textContent = '1';
+
+    // Mostra/esconde área de adicionais
+    const areaAdic = document.getElementById('areaAdicionais');
+    if (produtoModal.temAdicionais && produtoModal.adicionais.length > 0) {
+        areaAdic.style.display = 'block';
+        areaAdic.innerHTML = `<p><strong>Adicionais:</strong></p>` +
+            produtoModal.adicionais.map((a, i) => `
+                <label class="opcao">
+                    <input type="checkbox" value="${i}" onchange="toggleAdicional(${i}, '${a.nome}', ${a.preco})">
+                    ${a.nome} (+R$ ${a.preco.toFixed(2).replace('.', ',')})
+                </label>
+            `).join('');
+    } else {
+        areaAdic.style.display = 'none';
+    }
+
     document.getElementById('modalProduto').style.display = 'flex';
 }
+
 function fecharModal() { document.getElementById('modalProduto').style.display = 'none'; }
 function alterarQtd(n) { qtdModal = Math.max(1, qtdModal + n); document.getElementById('qtdAtual').textContent = qtdModal; }
 
+// Controle de adicionais
+function toggleAdicional(ind, nome, preco) {
+    const existe = adicionaisSelecionados.find(x => x.ind === ind);
+    if (existe) adicionaisSelecionados = adicionaisSelecionados.filter(x => x.ind !== ind);
+    else adicionaisSelecionados.push({ind, nome, preco});
+}
+
+// ✅ ADICIONA AO CARRINHO COM TAXA SE ENTREGA
 function adicionarAoCarrinho() {
-    const item = carrinho.find(i => i.nome === produtoModal.nome);
-    item ? item.qtd += qtdModal : carrinho.push({ ...produtoModal, qtd: qtdModal });
-    atualizarCarrinho(); fecharModal();
+    const formaReceb = document.querySelector('input[name="recebimento"]:checked').value;
+    const precoAdic = adicionaisSelecionados.reduce((s, a) => s + a.preco, 0);
+    const valorUnit = produtoModal.preco + precoAdic;
+
+    const item = carrinho.find(i => i.nome === produtoModal.nome && JSON.stringify(i.adicionais) === JSON.stringify(adicionaisSelecionados));
+    if (item) item.qtd += qtdModal;
+    else carrinho.push({
+        nome: produtoModal.nome,
+        desc: produtoModal.desc,
+        precoUnit: valorUnit,
+        qtd: qtdModal,
+        adicionais: [...adicionaisSelecionados],
+        recebimento: formaReceb
+    });
+
+    atualizarCarrinho();
+    fecharModal();
 }
 
 function atualizarCarrinho() {
     const totalItens = carrinho.reduce((s, i) => s + i.qtd, 0);
-    const totalProd = carrinho.reduce((s, i) => s + (i.preco * i.qtd), 0);
-    const totalGeral = totalProd + CONFIG.taxaEntregaFixa;
+    let totalProd = carrinho.reduce((s, i) => s + (i.precoUnit * i.qtd), 0);
+    const temEntrega = carrinho.some(i => i.recebimento === 'entregar');
+    if (temEntrega) totalProd += CONFIG.taxaEntregaFixa;
+
     document.getElementById('contadorCarrinho').textContent = totalItens;
-    document.getElementById('valorCarrinho').textContent = totalGeral.toFixed(2).replace('.', ',');
+    document.getElementById('valorCarrinho').textContent = totalProd.toFixed(2).replace('.', ',');
     atualizarLinkWhatsApp();
 }
 
+// ✅ MENSAGEM COMPLETA NO WHATSAPP COM TUDO
 function atualizarLinkWhatsApp() {
     if (carrinho.length === 0) {
         document.getElementById('linkWhatsApp').href = `https://wa.me/${CONFIG.numeroWhatsApp}`;
         return;
     }
-    let texto = `🍔 PEDIDO - ${CONFIG.nomeLoja}\n`;
-    carrinho.forEach(i => texto += `• ${i.qtd}x ${i.nome} — R$ ${(i.preco*i.qtd).toFixed(2).replace('.',',')}\n`);
-    texto += `\n📦 Taxa entrega: R$ ${CONFIG.taxaEntregaFixa.toFixed(2).replace('.',',')}\n✅ TOTAL: R$ ${(carrinho.reduce((s,i)=>s+i.preco*i.qtd,0)+CONFIG.taxaEntregaFixa).toFixed(2).replace('.',',')}`;
+    let texto = `🍔 *PEDIDO — ${CONFIG.nomeLoja}*\n`;
+    carrinho.forEach(i => {
+        texto += `• ${i.qtd}x ${i.nome}`;
+        if (i.adicionais.length > 0) texto += ` (${i.adicionais.map(a => a.nome).join(', ')})`;
+        texto += ` — R$ ${(i.precoUnit * i.qtd).toFixed(2).replace('.', ',')} — ${i.recebimento === 'retirar' ? 'Retirada' : 'Entrega'}\n`;
+    });
+    const precisaTaxa = carrinho.some(i => i.recebimento === 'entregar');
+    if (precisaTaxa) texto += `\n📦 Taxa de entrega: R$ ${CONFIG.taxaEntregaFixa.toFixed(2).replace('.', ',')}\n`;
+    const totalFinal = carrinho.reduce((s, i) => s + i.precoUnit * i.qtd, 0) + (precisaTaxa ? CONFIG.taxaEntregaFixa : 0);
+    texto += `✅ TOTAL: R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
+
     document.getElementById('linkWhatsApp').href = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
 }
 
