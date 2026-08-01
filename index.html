@@ -12,14 +12,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f8f8f8; padding-bottom: 85px; }
 
-        /* Tela de carregamento leve */
+        /* Carregamento leve */
         .carregando {
             position: fixed; inset: 0; background: #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; color: #444; z-index: 999;
+            font-size: 1rem; color: #555; z-index: 999;
         }
 
-        /* ✅ CABEÇALHO NOVO — ALINHADO, COMPACTO, NÃO QUEBRA EM TELA PEQUENA */
+        /* ✅ CABEÇALHO NOVO — ACIMA DAS CATEGORIAS, ALINHADO, NÃO QUEBRA */
         .cabecalho {
             background: #222; color: #fff; padding: 12px 15px;
             display: flex; align-items: center; justify-content: space-between;
@@ -28,13 +28,12 @@
         .nome-loja { font-size: 1.1rem; font-weight: 600; }
         .status-loja { font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
         .ponto-status {
-            width: 10px; height: 10px; border-radius: 50%;
-            display: inline-block;
+            width: 10px; height: 10px; border-radius: 50%; display: inline-block;
         }
         .aberto .ponto-status { background: #22c55e; }
         .fechado .ponto-status { background: #dc2626; }
 
-        /* Busca e categorias — IGUAIS AO SEU ORIGINAL */
+        /* Busca e Categorias — FUNCIONAMENTO IGUAL AO SEU */
         .busca { padding: 12px; max-width: 500px; margin: 0 auto; }
         .busca input {
             width: 100%; padding: 10px 15px; border-radius: 25px;
@@ -48,12 +47,12 @@
         }
         .categoria.ativa { background: #e63946; color: #fff; border-color: #e63946; }
 
-        /* ✅ PRODUTOS — EXATAMENTE COMO VOCÊ TEM, BORDA E FUNDO BRANCO DESTAQUE */
+        /* ✅ PRODUTOS — VISUAL MAIS BONITO, MAS CLIQUE FUNCIONA IGUAL ANTES */
         .container { padding: 15px; max-width: 1000px; margin: 0 auto; }
         .produto {
             background: #fff; border: 1px solid #ddd; border-radius: 10px;
             padding: 12px; margin-bottom: 12px; display: flex; gap: 12px; align-items: center;
-            cursor: pointer;
+            cursor: pointer; /* CLICK FUNCIONA NORMAL PARA ABRIR MODAL */
             transition: .2s;
         }
         .produto:hover { border-color: #bbb; }
@@ -63,9 +62,9 @@
         .info p.desc { font-size: 0.85rem; color: #666; margin-bottom: 6px; }
         .preco { font-weight: bold; color: #e63946; font-size: 1rem; }
 
-        /* Modal, Carrinho e WhatsApp — TODOS SEUS ELEMENTOS ORIGINAIS FUNCIONANDO */
+        /* ✅ MODAL, BOTÕES E CARRINHO — ESTILOS IGUAIS AO SEU ORIGINAL, FUNCIONAMENTO 100% */
         .modal {
-            display: none; position: fixed; inset: 0; background: #00000070;
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
             align-items: center; justify-content: center; z-index: 200; padding: 15px;
         }
         .modal-content {
@@ -89,25 +88,25 @@
             position: fixed; bottom: 20px; right: 20px; background: #25d366;
             color: #fff; width: 55px; height: 55px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 28px; text-decoration: none; box-shadow: 0 2px 10px #0003; z-index: 100;
+            font-size: 28px; text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.03); z-index: 100;
         }
         .carrinho-fixo {
             position: fixed; bottom: 20px; left: 20px; background: #e63946;
             color: #fff; padding: 10px 14px; border-radius: 8px; font-weight: bold; z-index: 100;
-            font-size: 0.95rem; box-shadow: 0 2px 8px #0002;
+            font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
     </style>
 </head>
 <body>
-    <div class="carregando" id="telaCarregando">Carregando cardápio...</div>
+    <div class="carregando" id="telaCarregando">Carregando...</div>
 
     <div id="conteudoPrincipal" style="display:none;">
-        <!-- ✅ CABEÇALHO NOVO — COMO VOCÊ QUER, ACIMA DAS CATEGORIAS -->
+        <!-- CABEÇALHO NOVO — SÓ ISSO DE DIFERENTE NA ESTRUTURA -->
         <div class="cabecalho">
             <div class="nome-loja">Alison Burger</div>
             <div class="status-loja" id="blocoStatus">
                 <span class="ponto-status"></span>
-                <span id="textoStatus">Aberto até às 23:00</span>
+                <span id="textoStatus"></span>
             </div>
         </div>
 
@@ -118,15 +117,15 @@
         <div class="categorias" id="listaCategorias"></div>
         <div class="container" id="listaProdutos"></div>
 
-        <a href="" target="_blank" class="whatsapp" id="linkWhatsApp" title="Abrir WhatsApp">
+        <a href="#" target="_blank" class="whatsapp" id="linkWhatsApp">
             <i class="fab fa-whatsapp"></i>
         </a>
         <div class="carrinho-fixo">
-            🛒 <span id="contadorCarrinho">0</span> itens | R$ <span id="valorCarrinho">0,00</span>
+            🛒 <span id="contadorCarrinho">0</span> | R$ <span id="valorCarrinho">0,00</span>
         </div>
     </div>
 
-    <!-- Modal Produto — ORIGINAL FUNCIONAL -->
+    <!-- MODAL DE PRODUTO — IGUAL O SEU ANTIGO, ABRE AO CLICAR NORMALMENTE -->
     <div class="modal" id="modalProduto">
         <div class="modal-content">
             <span class="fechar" onclick="fecharModal()">&times;</span>
@@ -135,7 +134,7 @@
             <p class="preco" id="modalPreco"></p>
             <div class="qtd-box">
                 <button class="qtd-btn" onclick="alterarQtd(-1)">−</button>
-                <span id="qtdAtual" style="font-size:1.1rem; font-weight:bold;">1</span>
+                <span id="qtdAtual">1</span>
                 <button class="qtd-btn" onclick="alterarQtd(+1)">+</button>
             </div>
             <button class="btn-adicionar" onclick="adicionarAoCarrinho()">Adicionar ao Pedido</button>
