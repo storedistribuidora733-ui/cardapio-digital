@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cardápio Digital</title>
+    <title>Alison Burger</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,35 +12,34 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f8f8f8; padding-bottom: 85px; }
 
-        /* Tela de carregamento */
+        /* Tela de carregamento leve */
         .carregando {
             position: fixed; inset: 0; background: #fff;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.1rem; color: #444; z-index: 999;
         }
 
-        /* Aviso loja inativa */
-        .inativa {
-            max-width: 400px; margin: 40px auto; padding: 30px;
-            background: #fff; border: 2px solid #dc2626; border-radius: 10px;
-            text-align: center; color: #333;
+        /* ✅ CABEÇALHO NOVO — ALINHADO, COMPACTO, NÃO QUEBRA EM TELA PEQUENA */
+        .cabecalho {
+            background: #222; color: #fff; padding: 12px 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 8px;
         }
+        .nome-loja { font-size: 1.1rem; font-weight: 600; }
+        .status-loja { font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+        .ponto-status {
+            width: 10px; height: 10px; border-radius: 50%;
+            display: inline-block;
+        }
+        .aberto .ponto-status { background: #22c55e; }
+        .fechado .ponto-status { background: #dc2626; }
 
-        /* Cabeçalho */
-        .cabecalho { background: #222; color: #fff; padding: 15px; text-align: center; }
-        .cabecalho h1 { font-size: 1.2rem; margin-bottom: 4px; }
-        .status { font-size: 0.9rem; }
-        .aberto { color: #22c55e; }
-        .fechado { color: #dc2626; }
-
-        /* Barra de busca */
+        /* Busca e categorias — IGUAIS AO SEU ORIGINAL */
         .busca { padding: 12px; max-width: 500px; margin: 0 auto; }
         .busca input {
             width: 100%; padding: 10px 15px; border-radius: 25px;
             border: 1px solid #ddd; outline: none; font-size: 0.95rem;
         }
-
-        /* Categorias */
         .categorias { display: flex; overflow-x: auto; gap: 10px; padding: 10px 15px; scrollbar-width: thin; }
         .categoria {
             background: #fff; border: 1px solid #ddd; padding: 7px 16px;
@@ -49,19 +48,22 @@
         }
         .categoria.ativa { background: #e63946; color: #fff; border-color: #e63946; }
 
-        /* Produtos */
+        /* ✅ PRODUTOS — EXATAMENTE COMO VOCÊ TEM, BORDA E FUNDO BRANCO DESTAQUE */
         .container { padding: 15px; max-width: 1000px; margin: 0 auto; }
         .produto {
             background: #fff; border: 1px solid #ddd; border-radius: 10px;
             padding: 12px; margin-bottom: 12px; display: flex; gap: 12px; align-items: center;
+            cursor: pointer;
+            transition: .2s;
         }
+        .produto:hover { border-color: #bbb; }
         .produto img { width: 85px; height: 85px; object-fit: cover; border-radius: 8px; }
         .info { flex: 1; }
         .info h3 { font-size: 1rem; color: #222; margin-bottom: 3px; }
         .info p.desc { font-size: 0.85rem; color: #666; margin-bottom: 6px; }
         .preco { font-weight: bold; color: #e63946; font-size: 1rem; }
 
-        /* Modal do produto */
+        /* Modal, Carrinho e WhatsApp — TODOS SEUS ELEMENTOS ORIGINAIS FUNCIONANDO */
         .modal {
             display: none; position: fixed; inset: 0; background: #00000070;
             align-items: center; justify-content: center; z-index: 200; padding: 15px;
@@ -83,16 +85,12 @@
         .fechar {
             float: right; font-size: 1.4rem; color: #888; cursor: pointer; margin-top: -5px;
         }
-
-        /* Botão WhatsApp */
         .whatsapp {
             position: fixed; bottom: 20px; right: 20px; background: #25d366;
             color: #fff; width: 55px; height: 55px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 28px; text-decoration: none; box-shadow: 0 2px 10px #0003; z-index: 100;
         }
-
-        /* Carrinho fixo */
         .carrinho-fixo {
             position: fixed; bottom: 20px; left: 20px; background: #e63946;
             color: #fff; padding: 10px 14px; border-radius: 8px; font-weight: bold; z-index: 100;
@@ -104,9 +102,13 @@
     <div class="carregando" id="telaCarregando">Carregando cardápio...</div>
 
     <div id="conteudoPrincipal" style="display:none;">
+        <!-- ✅ CABEÇALHO NOVO — COMO VOCÊ QUER, ACIMA DAS CATEGORIAS -->
         <div class="cabecalho">
-            <h1 id="nomeLoja"></h1>
-            <p id="statusLoja" class="status"></p>
+            <div class="nome-loja">Alison Burger</div>
+            <div class="status-loja" id="blocoStatus">
+                <span class="ponto-status"></span>
+                <span id="textoStatus">Aberto até às 23:00</span>
+            </div>
         </div>
 
         <div class="busca">
@@ -124,7 +126,7 @@
         </div>
     </div>
 
-    <!-- Modal Produto -->
+    <!-- Modal Produto — ORIGINAL FUNCIONAL -->
     <div class="modal" id="modalProduto">
         <div class="modal-content">
             <span class="fechar" onclick="fecharModal()">&times;</span>
