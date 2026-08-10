@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alison Burger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<!-- Cabeçalho -->
+<div class="cabecalho-loja">
+  <h1 class="nome-loja">ALISON BURGER</h1>
+  <div class="linha-status">
+    <span class="ponto-status" id="cab-ponto-status"></span>
+    <span id="cab-texto-status" class="texto-status"></span>
+  </div>
+</div>
+
+<!-- Categorias -->
+<div class="categorias">
+    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
+    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
+    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
+    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
+    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
+</div>
+
+<!-- Busca -->
+<div class="busca">
+    <i class="fa fa-search"></i>
+    <input type="text" id="campoBusca" placeholder="Buscar produtos...">
+</div>
+
+<!-- Lista Produtos -->
+<div class="lista-produtos">
+    <!-- 🟠 HAMBÚRGUERES -->
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-descricao="Pão, carne, queijo, alface e tomate fresquinhos." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" alt="Hambúrguer Simples"></div>
+        <div class="produto-info">
+            <h2 class="produto-nome">Hambúrguer Simples</h2>
+            <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
+        </div>
+        <p class="produto-preco">R$ 10,00</p>
+    </div>
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="12.00" data-descricao="Duas carnes suculentas e molho especial da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80" alt="Hambúrguer Duplo"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Hambúrguer Duplo</h3>
+            <p class="produto-descricao">Duas carnes, queijo e molho da casa.</p>
+        </div>
+        <p class="produto-preco">R$ 12,00</p>
+    </div>
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer com Bacon" data-preco="14.90" data-descricao="Carne suculenta, queijo derretido e fatias de bacon crocante." data-imagem="https://images.unsplash.com/photo-1594217055841-891c8b81f82a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594217055841-891c8b81f82a?w=400&q=80" alt="Hambúrguer com Bacon"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Hambúrguer com Bacon</h3>
+            <p class="produto-descricao">Queijo derretido e bacon crocante.</p>
+        </div>
+        <p class="produto-preco">R$ 14,90</p>
+    </div>
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer com Queijo" data-preco="13.50" data-descricao="Pão macio, carne suculenta e muito queijo mussarela derretido." data-imagem="https://images.unsplash.com/photo-1571091388259-0b4b10b823b7?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1571091388259-0b4b10b823b7?w=400&q=80" alt="Hambúrguer com Queijo"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Hambúrguer com Queijo</h3>
+            <p class="produto-descricao">Muito queijo derretido e carne saborosa.</p>
+        </div>
+        <p class="produto-preco">R$ 13,50</p>
+    </div>
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Vegetariano" data-preco="12.90" data-descricao="Hambúrguer de grão-de-bico, salada fresca e molho de iogurte." data-imagem="https://images.unsplash.com/photo-1520072959219-cb45f0d9e50a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1520072959219-cb45f0d9e50a?w=400&q=80" alt="Hambúrguer Vegetariano"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Hambúrguer Vegetariano</h3>
+            <p class="produto-descricao">Saudável, leve e muito saboroso.</p>
+        </div>
+        <p class="produto-preco">R$ 12,90</p>
+    </div>
+    <div class="produto" data-categoria="hamburgueres" data-nome="Super Triplo Burger" data-preco="18.90" data-descricao="Três carnes, três queijos, bacon e molho especial da casa." data-imagem="https://images.unsplash.com/photo-1537915104300-4f02b8b3e1f8?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1537915104300-4f02b8b3e1f8?w=400&q=80" alt="Super Triplo Burger"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Super Triplo Burger</h3>
+            <p class="produto-descricao">O maior e mais saboroso da loja!</p>
+        </div>
+        <p class="produto-preco">R$ 18,90</p>
+    </div>
+
+    <!-- 🟡 COMBOS -->
+    <div class="produto" data-categoria="combos" data-nome="Combo Simples" data-preco="19.90" data-descricao="1 Hambúrguer Simples + Batata Frita Pequena + Refrigerante 300ml." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" alt="Combo Simples"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Simples</h3>
+            <p class="produto-descricao">Hambúrguer + batata + refri pequeno.</p>
+        </div>
+        <p class="produto-preco">R$ 19,90</p>
+    </div>
+    <div class="produto" data-categoria="combos" data-nome="Combo Duplo" data-preco="24.90" data-descricao="1 Hambúrguer Duplo + Batata Média + Suco Natural de Laranja." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80" alt="Combo Duplo"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Duplo</h3>
+            <p class="produto-descricao">Duplo burger + batata média + suco.</p>
+        </div>
+        <p class="produto-preco">R$ 24,90</p>
+    </div>
+    <div class="produto" data-categoria="combos" data-nome="Combo Família" data-preco="49.90" data-descricao="2 Hambúrgueres + 2 Batatas Grandes + 2 Bebidas Geladas." data-imagem="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80" alt="Combo Família"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Família</h3>
+            <p class="produto-descricao">Perfeito para compartilhar com a família!</p>
+        </div>
+        <p class="produto-preco">R$ 49,90</p>
+    </div>
+    <div class="produto" data-categoria="combos" data-nome="Combo Bacon Especial" data-preco="27.90" data-descricao="Hambúrguer de bacon + batata frita crocante + refrigerante 500ml." data-imagem="https://images.unsplash.com/photo-1594217055841-891c8b81f82a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594217055841-891c8b81f82a?w=400&q=80" alt="Combo Bacon Especial"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Bacon Especial</h3>
+            <p class="produto-descricao">Saboroso e completo para matar a fome!</p>
+        </div>
+        <p class="produto-preco">R$ 27,90</p>
+    </div>
+    <div class="produto" data-categoria="combos" data-nome="Combo Infantil" data-preco="16.90" data-descricao="Mini hambúrguer + batata palha + suco de uva pequeno." data-imagem="https://images.unsplash.com/photo-1588496532489-0a8b96c50a0e?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1588496532489-0a8b96c50a0e?w=400&q=80" alt="Combo Infantil"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Infantil</h3>
+            <p class="produto-descricao">Tamanho pequeno e gostoso para as crianças!</p>
+        </div>
+        <p class="produto-preco">R$ 16,90</p>
+    </div>
+
+    <!-- 🟢 BEBIDAS -->
+    <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 2L Normal" data-preco="12.00" data-descricao="Garrafa 2 litros, bem gelada." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" alt="Coca 2L Normal"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Coca-Cola 2L Normal</h3>
+            <p class="produto-descricao">Garrafa de 2 litros gelada.</p>
+        </div>
+        <p class="produto-preco">R$ 12,00</p>
+    </div>
+    <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica 2L" data-preco="10.00" data-descricao="Refresque-se com o tradicional guaraná bem gelado de 2 litros." data-imagem="https://images.unsplash.com/photo-1622483767028-3f66f3a8b36a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1622483767028-3f66f3a8b36a?w=400&q=80" alt="Guaraná Antarctica 2L"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Guaraná Antarctica 2L</h3>
+            <p class="produto-descricao">Doce, refrescante e muito gelado!</p>
+        </div>
+        <p class="produto-preco">R$ 10,00</p>
+    </div>
+    <div class="produto" data-categoria="bebidas" data-nome="Suco Natural de Laranja 500ml" data-preco="8.50" data-descricao="Suco fresco espremido na hora, sem açúcar e natural." data-imagem="https://images.unsplash.com/photo-1621506289937-a59d362a893a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1621506289937-a59d362a893a?w=400&q=80" alt="Suco Natural de Laranja"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Suco Natural de Laranja 500ml</h3>
+            <p class="produto-descricao">Natural, saudável e refrescante!</p>
+        </div>
+        <p class="produto-preco">R$ 8,50</p>
+    </div>
+    <div class="produto" data-categoria="bebidas" data-nome="Água Mineral com Gás 500ml" data-preco="5.00" data-descricao="Água gaseificada, pura e refrescante para acompanhar sua refeição." data-imagem="https://images.unsplash.com/photo-1604079273549-8b32489a3a7c?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1604079273549-8b32489a3a7c?w=400&q=80" alt="Água Mineral com Gás"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Água Mineral com Gás 500ml</h3>
+            <p class="produto-descricao">Leve e ideal para quem prefere sem açúcar!</p>
+        </div>
+        <p class="produto-preco">R$ 5,00</p>
+    </div>
+    <div class="produto" data-categoria="bebidas" data-nome="Refrigerante Lata Coca-Cola 350ml" data-preco="6.00" data-descricao="Lata individual, gelada e perfeita para consumo rápido." data-imagem="https://images.unsplash.com/photo-1581636625439-241a780b1c3a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1581636625439-241a780b1c3a?w=400&q=80" alt="Lata Coca-Cola"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Lata Coca-Cola 350ml</h3>
+            <p class="produto-descricao">Gelada e prática para levar!</p>
+        </div>
+        <p class="produto-preco">R$ 6,00</p>
+    </div>
+
+    <!-- 🔵 ACOMPANHAMENTOS -->
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Pequena" data-preco="7.00" data-descricao="Batatas cortadas finas, fritas até ficarem douradas e crocantes." data-imagem="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80" alt="Batata Frita Pequena"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Batata Frita Pequena</h3>
+            <p class="produto-descricao">Crocante, quentinha e salgada na medida!</p>
+        </div>
+        <p class="produto-preco">R$ 7,00</p>
+    </div>
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita com Queijo e Bacon" data-preco="12.90" data-descricao="Batata frita coberta com queijo derretido e pedacinhos de bacon crocante." data-imagem="https://images.unsplash.com/photo-1626642738132-a67f3571a29d?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1626642738132-a67f3571a29d?w=400&q=80" alt="Batata com Queijo e Bacon"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Batata com Queijo e Bacon</h3>
+            <p class="produto-descricao">Acompanhamento cheio de sabor e cremosidade!</p>
+        </div>
+        <p class="produto-preco">R$ 12,90</p>
+    </div>
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola Fritos" data-preco="9.90" data-descricao="Anéis de cebola empanados e fritos, crocantes por fora e macios por dentro." data-imagem="https://images.unsplash.com/photo-1639024473969-9c885b4a7a9a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1639024473969-9c885b4a7a9a?w=400&q=80" alt="Anéis de Cebola"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Anéis de Cebola Fritos</h3>
+            <p class="produto-descricao">Saboroso e crocante para acompanhar o hambúrguer!</p>
+        </div>
+        <p class="produto-preco">R$ 9,90</p>
+    </div>
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Nuggets de Frango (8 unidades)" data-preco="11.50" data-descricao="Nuggets suculentos e crocantes, ideal para crianças e adultos." data-imagem="https://images.unsplash.com/photo-1606755820679-6955391f8351?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1606755820679-6955391f8351?w=400&q=80" alt="Nuggets de Frango"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Nuggets de Frango (8un)</h3>
+            <p class="produto-descricao">Suculento, crocante e super gostoso!</p>
+        </div>
+        <p class="produto-preco">R$ 11,50</p>
+    </div>
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Salada Fresca" data-preco="8.00" data-descricao="Alface, tomate, pepino e cenoura ralada, fresquinha e leve." data-imagem="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&q=80" alt="Salada Fresca"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Salada Fresca</h3>
+            <p class="produto-descricao">Leve, saudável e combina com tudo!</p>
+        </div>
+        <p class="produto-preco">R$ 8,00</p>
+    </div>
+</div>
+
+<!-- Modal Produto COM CAMPO OBSERVAÇÃO -->
+<div id="modal-produto" class="oculto">
+    <div class="cabecalho-detalhe">
+        <button id="btn-voltar">&larr;</button>
+        <img id="img-detalhe" alt="">
+    </div>
+    <div class="conteudo-detalhe">
+        <h2 id="nome-detalhe"></h2>
+        <p id="descricao-detalhe"></p>
+        <div class="precos">
+            <span id="preco-original" style="color:#999; text-decoration:line-through; margin-right:8px;"></span>
+            <span class="preco-promocional" id="preco-promocional"></span>
+        </div>
+        <div class="bloco-adicionais" style="margin-top:15px;">
+            <h3 style="font-size:1rem; margin-bottom:8px;">Adicionais</h3>
+            <div id="lista-adicionais"></div>
+        </div>
+        <!-- ✅ CAMPO OBSERVAÇÃO LOGO ABAIXO -->
+        <div class="bloco-observacao" style="margin-top:15px;">
+            <label style="font-size:0.9rem; font-weight:500; margin-bottom:5px; display:block;">Observação</label>
+            <textarea id="obs-produto" placeholder="Ex: sem cebola, bem gelado, sem gelo..." rows="3" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; resize:none;"></textarea>
+        </div>
+    </div>
+    <div class="rodape-detalhe">
+        <div class="qtd-detalhe">
+            <button id="diminuir-qtd">&minus;</button>
+            <span id="qtd-atual">1</span>
+            <button id="aumentar-qtd">+</button>
+        </div>
+        <button id="btn-adicionar-detalhe">Adicionar R$ 0,00</button>
+    </div>
+</div>
+
+<!-- Modal Carrinho -->
+<div id="modal-carrinho" class="oculto">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h3>Meu Carrinho</h3>
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
+        </div>
+        <div id="aviso-geral" class="oculto"></div>
+        <div id="lista-itens-carrinho"></div>
+        <div class="resumo-valores">
+            <div class="linha-valor"><span>Subtotal dos itens</span><span>R$ <span id="subtotal-itens">0,00</span></span></div>
+            <div class="linha-valor"><span>Taxa de entrega</span><span>R$ <span id="valor-taxa-fixa">8,00</span></span></div>
+            <div class="linha-valor total"><strong>Total do pedido</strong><strong>R$ <span id="valor-total">0,00</span></strong></div>
+        </div>
+        <div class="form-grupo">
+            <label>Nome completo *</label>
+            <input type="text" id="nome-cliente" placeholder="Seu nome">
+        </div>
+        <div class="form-grupo">
+            <label>Tipo de atendimento</label>
+            <select id="tipo-atendimento">
+                <option value="retirada">Retirada na loja</option>
+                <option value="entrega">Entrega</option>
+            </select>
+        </div>
+        <div id="campo-taxa-entrega" class="oculto form-grupo">
+            <label>Taxa de entrega (R$)</label>
+            <input type="text" id="taxa-entrega" value="8,00" class="input-desativado" readonly>
+        </div>
+        <div id="bloco-endereco" class="oculto">
+            <div class="form-grupo">
+                <label>CEP</label>
+                <input type="text" id="cep" placeholder="00000-000">
+                <div id="aviso-cep" style="font-size:0.8rem; color:#2563eb; margin-top:3px;">Digite o CEP para preencher automaticamente</div>
+            </div>
+            <div class="form-duplo form-grupo">
+                <div><label>Número *</label><input type="text" id="numero" placeholder="Nº"></div>
+                <div><label>Complemento</label><input type="text" id="complemento" placeholder="Apto/Casa"></div>
+            </div>
+            <div class="form-grupo">
+                <label>Rua</label>
+                <input type="text" id="rua" readonly>
+            </div>
+            <div class="form-duplo form-grupo">
+                <div><label>Bairro</label><input type="text" id="bairro" readonly></div>
+                <div><label>Cidade/UF</label><input type="text" id="cidade-uf" readonly></div>
+            </div>
+            <div class="form-grupo">
+                <label>Ponto de referência</label>
+                <input type="text" id="referencia" placeholder="Próximo a...">
+            </div>
+        </div>
+        <div class="form-grupo">
+            <label>Forma de pagamento</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+            </select>
+        </div>
+        <div class="form-grupo">
+            <label>Observação geral do pedido</label>
+            <input type="text" id="observacao" placeholder="Ex: sem cebola, maionese à parte...">
+        </div>
+        <div class="botoes-modal">
+            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
+            <button id="btn-finalizar" class="btn-finalizar">Enviar Pedido</button>
+        </div>
+    </div>
+</div>
+
+<div id="alerta-fechado" class="oculto">
+    <div class="alerta-caixa">
+        <h2>Loja Fechada</h2>
+        <p>Aberto das 07:00 às 23:00</p>
+        <button id="btn-entendi" class="btn-entendi">Entendi</button>
+    </div>
+</div>
+
+<div class="carrinho-fixo" id="carrinho-container">
+    <div class="carrinho-conteudo">
+        <div class="grupo-qtd-valor">
+            <span class="badge-qtd" id="badge-qtd">0</span>
+            <span class="texto-valor" id="resumo-valor">R$ 0,00</span>
+        </div>
+        <button class="btn-ver-carrinho" id="abrir-carrinho">Ver Carrinho</button>
+    </div>
+</div>
+
+<a href="https://wa.me/5519989021323" target="_blank" rel="noopener" class="botao-whatsapp" title="Fale conosco">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
