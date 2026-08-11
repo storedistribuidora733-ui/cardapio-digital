@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel — Barbearia Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --preto: #050505; --cinza-escuro: #1f1f1f; --cinza: #2d2d2d;
+            --ouro: #d4af37; --ouro-escuro: #b8962e; --ouro-claro: #f5e7a3;
+            --texto: #e5e5e5; --texto-claro: #a0a0a0;
+            --sucesso: #22c55e; --alerta: #f59e0b; --erro: #ef4444;
+            --borda-ouro: 1px solid rgba(212,175,55,0.18);
+        }
+        body {
+            background: linear-gradient(180deg, #080808 0%, #141414 40%, #1a1a1a 100%);
+            color: var(--texto); font-family: 'Poppins', sans-serif; min-height: 100vh; padding: 20px 16px;
+        }
+        h1, h2 { font-family: 'Playfair Display', serif; }
+        header { text-align: center; padding: 20px; margin-bottom: 24px; border-bottom: var(--borda-ouro); }
+        header h1 { font-size: 22px; color: var(--ouro); letter-spacing: 2px; }
+        .container { max-width: 650px; margin: 0 auto; }
+        .cartao {
+            background: linear-gradient(145deg, rgba(31,31,31,0.9), rgba(20,20,20,0.95));
+            border-radius: 18px; padding: 24px; border: var(--borda-ouro);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); margin-bottom: 18px;
+        }
+        .resumo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+        .resumo-card {
+            background: rgba(255,255,255,0.03); border-radius: 12px; padding: 16px 10px;
+            text-align: center; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .resumo-card .numero { font-size: 26px; font-weight: 700; color: var(--ouro); }
+        .resumo-card .rotulo { font-size: 12px; color: var(--texto-claro); margin-top: 4px; }
+        .grupo { margin-bottom: 16px; }
+        .grupo label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #ccc; }
+        .grupo input {
+            width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(212,175,55,0.15); border-radius: 12px;
+            font-size: 15px; color: #fff; outline: none;
+        }
+        .btn {
+            padding: 12px 16px; border: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s;
+        }
+        .btn-ouro { background: linear-gradient(135deg, var(--ouro), var(--ouro-escuro)); color: #000; width: 100%; }
+        .btn-ouro:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212,175,55,0.3); }
+        .btn-linha { background: transparent; border: 1px solid var(--ouro); color: var(--ouro); }
+        .btn-linha:hover { background: var(--ouro); color: #000; }
+        .btn-vermelho { background: var(--erro); color: white; }
+        .botoes { display: flex; gap: 10px; flex-wrap: wrap; }
+        .agendamento {
+            background: rgba(255,255,255,0.02); border-radius: 12px; padding: 14px;
+            margin-bottom: 10px; border-left: 4px solid var(--sucesso);
+        }
+        .agendamento.pendente { border-left-color: var(--alerta); }
+        .agendamento.concluido { border-left-color: var(--cinza); opacity: 0.6; }
+        .agendamento.cancelado { border-left-color: var(--erro); opacity: 0.5; }
+        .agendamento .linha { margin: 4px 0; font-size: 13px; }
+        .agendamento .nome { font-weight: 600; font-size: 14px; }
+        .agendamento .dados { color: var(--texto-claro); }
+        .agendamento .acoes { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+        .agendamento .btn-acao {
+            padding: 5px 10px; font-size: 11px; border-radius: 6px; border: none;
+            cursor: pointer; font-weight: 500;
+        }
+        .titulo { font-size: 16px; color: var(--ouro); margin: 24px 0 14px; }
+        .vazio { text-align: center; padding: 40px; color: var(--texto-claro); }
+        .oculto { display: none !important; }
+        .busca { margin-bottom: 18px; }
+        .status-tag {
+            display: inline-block; padding: 2px 8px; border-radius: 12px;
+            font-size: 11px; font-weight: 600; margin-left: 8px;
+        }
+        .pendente-tag { background: rgba(245,158,11,0.2); color: #fcd34d; }
+        .confirmado-tag { background: rgba(34,197,94,0.2); color: #86efac; }
+        .concluido-tag { background: rgba(100,100,100,0.2); color: #ccc; }
+        .cancelado-tag { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🔐 PAINEL DE CONTROLE</h1>
+    <p>Barbearia Premium — Gerenciamento de Agendamentos</p>
+</header>
+
+<div class="container">
+
+    <!-- TELA DE LOGIN -->
+    <div id="tela-login">
+        <div class="cartao">
+            <h2 style="color:var(--ouro);text-align:center;margin-bottom:20px;">Acesso Restrito</h2>
+            <div class="grupo">
+                <label>Senha do Administrador</label>
+                <input type="password" id="senha-admin" placeholder="Digite sua senha...">
+            </div>
+            <button class="btn btn-ouro" onclick="verificarSenha()">Entrar no Painel</button>
+            <p style="font-size:12px;color:var(--texto-claro);text-align:center;margin-top:12px;">
+                Senha padrão: 123456 — altere no código depois!
+            </p>
+        </div>
+    </div>
+
+    <!-- TELA PRINCIPAL -->
+    <div id="tela-painel" class="oculto">
+        <div class="cartao">
+            <div class="resumo">
+                <div class="resumo-card">
+                    <div class="numero" id="total">0</div>
+                    <div class="rotulo">Total</div>
+                </div>
+                <div class="resumo-card">
+                    <div class="numero" id="pendentes">0</div>
+                    <div class="rotulo">Pendentes</div>
+                </div>
+                <div class="resumo-card">
+                    <div class="numero" id="faturamento">R$0</div>
+                    <div class="rotulo">Faturamento</div>
+                </div>
+            </div>
+            <div class="botoes">
+                <button class="btn btn-linha" onclick="exportar()">📤 Exportar</button>
+                <button class="btn btn-linha" onclick="limparConcluidos()">🧹 Limpar Concluídos</button>
+                <button class="btn btn-vermelho btn-linha" onclick="sair()">🚪 Sair</button>
+            </div>
+        </div>
+
+        <h3 class="titulo">📝 Agendamentos</h3>
+        <div class="cartao busca">
+            <div class="grupo" style="margin:0;">
+                <label>🔍 Buscar por nome, data ou barbeiro</label>
+                <input type="text" id="busca" placeholder="Digite para buscar..." oninput="filtrarLista()">
+            </div>
+        </div>
+
+        <div class="cartao" id="lista">
+            <div class="vazio">Carregando...</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ⚙️ CONFIGURAÇÕES
+const CONFIG = {
+    senhaAdmin: "123456", // 🔴 TROQUE ESTA SENHA!
+    chave: "agendamentosBarbearia"
+};
+
+// 🔐 LOGIN
+function verificarSenha() {
+    const senha = document.getElementById('senha-admin').value.trim();
+    if (senha === CONFIG.senhaAdmin) {
+        document.getElementById('tela-login').classList.add('oculto');
+        document.getElementById('tela-painel').classList.remove('oculto');
+        carregarEAtualizar();
+    } else {
+        alert('❌ Senha incorreta!');
+    }
+}
+
+// 📊 CARREGAR DADOS
+function carregar() {
+    const dados = localStorage.getItem(CONFIG.chave);
+    return dados ? JSON.parse(dados) : [];
+}
+function salvar(lista) {
+    localStorage.setItem(CONFIG.chave, JSON.stringify(lista));
+}
+
+// 🔄 ATUALIZAR TUDO
+function carregarEAtualizar() {
+    let lista = carregar();
+    
+    // Atualizar números
+    document.getElementById('total').textContent = lista.length;
+    document.getElementById('pendentes').textContent = lista.filter(a => a.status === 'pendente').length;
+    const total = lista.filter(a => a.status !== 'cancelado').reduce((s, a) => s + (a.valor||0), 0);
+    document.getElementById('faturamento').textContent = 'R$' + total.toFixed(2).replace('.', ',');
+
+    // Ordenar: mais recente primeiro
+    lista.sort((a, b) => b.id - a.id);
+
+    // Renderizar lista
+    const container = document.getElementById('lista');
+    const termoBusca = document.getElementById('busca')?.value.toLowerCase() || '';
+    
+    const filtrada = termoBusca 
+        ? lista.filter(a => 
+            (a.nome+'').toLowerCase().includes(termoBusca) ||
+            (a.data+'').includes(termoBusca) ||
+            (a.barbeiro+'').toLowerCase().includes(termoBusca))
+        : lista;
+
+    if (!filtrada.length) {
+        container.innerHTML = `<div class="vazio">${termoBusca ? 'Nenhum resultado encontrado.' : 'Nenhum agendamento ainda.'}</div>`;
+        return;
+    }
+
+    container.innerHTML = filtrada.map(a => {
+        let classe = a.status === 'pendente' ? 'pendente' : a.status === 'concluido' ? 'concluido' : a.status === 'cancelado' ? 'cancelado' : '';
+        let statusTexto = a.status === 'pendente' ? '⏳ Pendente' : a.status === 'confirmado' ? '✅ Confirmado' : a.status === 'concluido' ? '✔️ Concluído' : '❌ Cancelado';
+        let tagClasse = a.status === 'pendente' ? 'pendente-tag' : a.status === 'confirmado' ? 'confirmado-tag' : a.status === 'concluido' ? 'concluido-tag' : 'cancelado-tag';
+
+        return `
+        <div class="agendamento ${classe}">
+            <div class="linha nome">📅 ${a.data} às ${a.horario} — 💈 ${a.barbeiro}
+                <span class="status-tag ${tagClasse}">${statusTexto}</span>
+            </div>
+            <div class="linha">👤 ${a.nome} | ✂️ ${a.servico} | 💰 R$${(a.valor||0).toFixed(2).replace('.', ',')}</div>
+            <div class="linha dados">📱 ${a.fone} ${a.email ? '| 📧 ' + a.email : ''}</div>
+            ${a.obs ? `<div class="linha dados">📝 ${a.obs}</div>` : ''}
+            <div class="linha dados">${a.dataCadastro || 'Sem data'}</div>
+            <div class="acoes">
+                <button class="btn-acao" style="background:#22c55e;color:white" onclick="mudarStatus(${a.id},'confirmado')">✓ Confirmar</button>
+                <button class="btn-acao" style="background:#4f46e5;color:white" onclick="mudarStatus(${a.id},'concluido')">✔ Concluir</button>
+                <button class="btn-acao" style="background:#f59e0b;color:white" onclick="mudarStatus(${a.id},'cancelado')">⚠ Cancelar</button>
+                <button class="btn-acao" style="background:#ef4444;color:white" onclick="excluir(${a.id})">🗑 Excluir</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ✏️ MUDAR STATUS
+function mudarStatus(id, novoStatus) {
+    const lista = carregar();
+    const item = lista.find(a => a.id === id);
+    if (item) {
+        item.status = novoStatus;
+        salvar(lista);
+        carregarEAtualizar();
+    }
+}
+
+// 🗑 EXCLUIR
+function excluir(id) {
+    if (!confirm('⚠️ Excluir este agendamento?')) return;
+    let lista = carregar();
+    lista = lista.filter(a => a.id !== id);
+    salvar(lista);
+    carregarEAtualizar();
+}
+
+// 🧹 LIMPAR CONCLUÍDOS
+function limparConcluidos() {
+    if (!confirm('⚠️ Apagar TODOS os concluídos?')) return;
+    let lista = carregar();
+    lista = lista.filter(a => a.status !== 'concluido');
+    salvar(lista);
+    carregarEAtualizar();
+}
+
+// 🔍 FILTRAR
+function filtrarLista() {
+    carregarEAtualizar();
+}
+
+// 📤 EXPORTAR
+function exportar() {
+    const lista = carregar();
+    let csv = 'Data,Horário,Barbeiro,Cliente,Serviço,Valor,WhatsApp,Email,Status,Observações\n';
+    lista.forEach(a => {
+        csv += `${a.data||''},${a.horario||''},"${a.barbeiro||''}","${a.nome||''}","${a.servico||''}",${(a.valor||0).toFixed(2).replace('.', ',')},"${a.fone||''}","${a.email||''}",${a.status||'pendente'},"${(a.obs||'').replace(/"/g,"'")}"\n`;
+    });
+    const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'agendamentos_' + new Date().toLocaleDateString('pt-BR').replace(/\//g,'-') + '.csv';
+    a.click();
+}
+
+// 🚪 SAIR
+function sair() {
+    document.getElementById('tela-painel').classList.add('oculto');
+    document.getElementById('tela-login').classList.remove('oculto');
+    document.getElementById('senha-admin').value = '';
+}
+</script>
+</body>
+</html>
