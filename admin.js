@@ -1,95 +1,167 @@
-// ===== CONFIGURAÇÃO — COLOQUE SEUS DADOS AQUI =====
-const SENHA_ADMIN = "123456"; // TROQUE POR UMA SENHA SEGURA SUA!
-const BIN_ID = "COLOQUE_AQUI_SEU_ID_BIN";
-const API_KEY = "COLOQUE_AQUI_SUA_CHAVE_API";
-// ===================================================
+// ⚙️ CONFIGURAÇÕES — ALTERE AQUI!
+const CONFIG = {
+    senhaAdmin: "123456", // 🔴 TROQUE ESTA SENHA PELA SUA!
+    chaveArmazenamento: "agendamentosBarbearia" // NÃO ALTERE — deve ser igual ao do site principal
+};
 
-let dadosLoja = { config: {}, produtos: [] };
-
-function mostrarAviso(elId, texto, tipo="sucesso") {
-  const av = document.getElementById(elId);
-  av.textContent = texto; av.className = `aviso ${tipo}`; av.style.display="block";
-  setTimeout(()=>av.style.display="none", 3200);
-}
-
+// 🔐 VERIFICAR SENHA DE ACESSO
 function verificarSenha() {
-  if(document.getElementById("senha-admin").value.trim() === SENHA_ADMIN) {
-    document.getElementById("tela-login").style.display="none";
-    document.getElementById("conteudo-admin").style.display="block";
-    carregarDadosPainel();
-  } else mostrarAviso("msg-login", "Senha incorreta!", "erro");
+    const senha = document.getElementById('senha-admin').value.trim();
+    if (senha === CONFIG.senhaAdmin) {
+        document.getElementById('tela-login').classList.add('oculto');
+        document.getElementById('tela-painel').classList.remove('oculto');
+        carregarEAtualizar();
+    } else {
+        alert('❌ Senha incorreta! Tente novamente.');
+    }
 }
 
-async function carregarDadosPainel() {
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-      headers: { "X-Master-Key": API_KEY }
+// 📊 CARREGAR LISTA DE AGENDAMENTOS SALVOS
+function carregarAgendamentos() {
+    const dados = localStorage.getItem(CONFIG.chaveArmazenamento);
+    return dados ? JSON.parse(dados) : [];
+}
+
+// 💾 SALVAR LISTA
+function salvarAgendamentos(lista) {
+    localStorage.setItem(CONFIG.chaveArmazenamento, JSON.stringify(lista));
+}
+
+// 🔄 ATUALIZAR TUDO NA TELA
+function carregarEAtualizar() {
+    let lista = carregarAgendamentos();
+    
+    // Atualizar números do resumo
+    document.getElementById('total').textContent = lista.length;
+    document.getElementById('pendentes').textContent = lista.filter(a => a.status === 'pendente').length;
+    const total = lista.filter(a => a.status !== 'cancelado').reduce((s, a) => s + (a.valor || 0), 0);
+    document.getElementById('faturamento').textContent = 'R$' + total.toFixed(2).replace('.', ',');
+
+    // Ordenar: mais recente primeiro
+    lista.sort((a, b) => b.id - a.id);
+
+    // Campo de busca
+    const termoBusca = document.getElementById('busca')?.value.toLowerCase() || '';
+    
+    // Filtrar se estiver buscando
+    const filtrada = termoBusca 
+        ? lista.filter(a => 
+            (a.nome + '').toLowerCase().includes(termoBusca) ||
+            (a.data + '').includes(termoBusca) ||
+            (a.barbeiro + '').toLowerCase().includes(termoBusca))
+        : lista;
+
+    const container = document.getElementById('lista');
+
+    // Lista vazia
+    if (!filtrada.length) {
+        container.innerHTML = `<div class="vazio">${termoBusca ? 'Nenhum resultado encontrado.' : 'Nenhum agendamento ainda.'}</div>`;
+        return;
+    }
+
+    // Mostrar lista completa
+    container.innerHTML = filtrada.map(a => {
+        // Classes e textos de status
+        let classeLinha = '';
+        let statusTexto = '';
+        let classeTag = '';
+
+        if (a.status === 'pendente') {
+            classeLinha = 'pendente';
+            statusTexto = '⏳ Pendente';
+            classeTag = 'pendente-tag';
+        } else if (a.status === 'confirmado') {
+            statusTexto = '✅ Confirmado';
+            classeTag = 'confirmado-tag';
+        } else if (a.status === 'concluido') {
+            classeLinha = 'concluido';
+            statusTexto = '✔️ Concluído';
+            classeTag = 'concluido-tag';
+        } else if (a.status === 'cancelado') {
+            classeLinha = 'cancelado';
+            statusTexto = '❌ Cancelado';
+            classeTag = 'cancelado-tag';
+        }
+
+        return `
+        <div class="agendamento ${classeLinha}">
+            <div class="linha nome">
+                📅 ${a.data} às ${a.horario} — 💈 ${a.barbeiro}
+                <span class="status-tag ${classeTag}">${statusTexto}</span>
+            </div>
+            <div class="linha">
+                👤 ${a.nome} | ✂️ ${a.servico} | 💰 R$${(a.valor || 0).toFixed(2).replace('.', ',')}
+            </div>
+            <div class="linha dados">
+                📱 ${a.fone} ${a.email ? '| 📧 ' + a.email : ''}
+            </div>
+            ${a.obs ? `<div class="linha dados">📝 ${a.obs}</div>` : ''}
+            <div class="linha dados">${a.dataCadastro || 'Sem data de cadastro'}</div>
+            <div class="acoes">
+                <button class="btn-acao" style="background:#22c55e; color:white" onclick="mudarStatus(${a.id}, 'confirmado')">✓ Confirmar</button>
+                <button class="btn-acao" style="background:#4f46e5; color:white" onclick="mudarStatus(${a.id}, 'concluido')">✔ Concluir</button>
+                <button class="btn-acao" style="background:#f59e0b; color:white" onclick="mudarStatus(${a.id}, 'cancelado')">⚠ Cancelar</button>
+                <button class="btn-acao" style="background:#ef4444; color:white" onclick="excluirAgendamento(${a.id})">🗑 Excluir</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ✏️ ALTERAR STATUS DO AGENDAMENTO
+function mudarStatus(id, novoStatus) {
+    const lista = carregarAgendamentos();
+    const item = lista.find(a => a.id === id);
+    if (item) {
+        item.status = novoStatus;
+        salvarAgendamentos(lista);
+        carregarEAtualizar();
+    }
+}
+
+// 🗑️ EXCLUIR AGENDAMENTO
+function excluirAgendamento(id) {
+    if (!confirm('⚠️ Tem certeza? Essa ação não pode ser desfeita!')) return;
+    let lista = carregarAgendamentos();
+    lista = lista.filter(a => a.id !== id);
+    salvarAgendamentos(lista);
+    carregarEAtualizar();
+}
+
+// 🧹 LIMPAR TODOS OS CONCLUÍDOS
+function limparConcluidos() {
+    if (!confirm('⚠️ Apagar TODOS os agendamentos já concluídos?')) return;
+    let lista = carregarAgendamentos();
+    lista = lista.filter(a => a.status !== 'concluido');
+    salvarAgendamentos(lista);
+    carregarEAtualizar();
+}
+
+// 🔍 BUSCAR NA LISTA
+function filtrarLista() {
+    carregarEAtualizar();
+}
+
+// 📤 EXPORTAR PARA PLANILHA EXCEL
+function exportarPlanilha() {
+    const lista = carregarAgendamentos();
+    let csv = 'Data,Horário,Barbeiro,Cliente,Serviço,Valor,WhatsApp,Email,Status,Observações\n';
+    
+    lista.forEach(a => {
+        csv += `${a.data || ''},${a.horario || ''},"${a.barbeiro || ''}","${a.nome || ''}","${a.servico || ''}",${(a.valor || 0).toFixed(2).replace('.', ',')},"${a.fone || ''}","${a.email || ''}",${a.status || 'pendente'},"${(a.obs || '').replace(/"/g, "'")}"\n`;
     });
-    const ret = await res.json();
-    dadosLoja = ret.record;
-    preencherCampos(); listarProdutosPainel();
-  } catch(e) { alert("Erro ao carregar dados! Verifique ID/Chave."); console.error(e); }
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'agendamentos_' + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + '.csv';
+    link.click();
+    URL.revokeObjectURL(url);
 }
 
-function preencherCampos() {
-  document.getElementById("cfg-nome").value = dadosLoja.config.nomeLoja || "";
-  document.getElementById("cfg-taxa").value = dadosLoja.config.taxaEntregaPadrao || "";
-  document.getElementById("cfg-whats").value = dadosLoja.config.numeroWhatsApp || "";
-  document.getElementById("cfg-hora-abre").value = dadosLoja.config.horaAbertura || 7;
-  document.getElementById("cfg-hora-fecha").value = dadosLoja.config.horaFechamento || 23;
-}
-
-async function salvarTudo() {
-  // Atualiza configurações com os valores do painel
-  dadosLoja.config.nomeLoja = document.getElementById("cfg-nome").value.trim();
-  dadosLoja.config.taxaEntregaPadrao = parseFloat(document.getElementById("cfg-taxa").value) || 0;
-  dadosLoja.config.numeroWhatsApp = document.getElementById("cfg-whats").value.trim();
-  dadosLoja.config.horaAbertura = parseInt(document.getElementById("cfg-hora-abre")) || 7;
-  dadosLoja.config.horaFechamento = parseInt(document.getElementById("cfg-hora-fecha")) || 23;
-
-  try {
-    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-      method: "PUT",
-      headers: { "X-Master-Key": API_KEY, "Content-Type": "application/json" },
-      body: JSON.stringify(dadosLoja)
-    });
-    mostrarAviso("aviso-salvar", "✅ SALVO COM SUCESSO! Atualizado para TODOS instantaneamente!");
-    listarProdutosPainel();
-  } catch(e) { mostrarAviso("aviso-salvar", "❌ Erro ao salvar! Verifique conexão/dados.", "erro"); console.error(e); }
-}
-
-function adicionarProduto() {
-  const nome = document.getElementById("prod-nome").value.trim();
-  const preco = parseFloat(document.getElementById("prod-preco").value) || 0;
-  if(!nome || preco <= 0) return alert("Preencha nome e preço corretamente!");
-
-  dadosLoja.produtos.push({
-    id: Date.now(), categoria: document.getElementById("prod-cat").value,
-    nome, preco, descricao: document.getElementById("prod-desc").value.trim(),
-    imagem: document.getElementById("prod-img").value.trim() || "https://via.placeholder.com/300",
-    ativo: true
-  });
-  listarProdutosPainel();
-  // Limpa campos
-  ["prod-nome","prod-preco","prod-desc","prod-img"].forEach(id=>document.getElementById(id).value="");
-}
-
-function listarProdutosPainel() {
-  const container = document.getElementById("lista-produtos-admin");
-  container.innerHTML = "";
-  dadosLoja.produtos.forEach((p, i)=>{
-    const el = document.createElement("div"); el.className="item-produto";
-    el.innerHTML = `
-      <strong>${p.nome}</strong> — R$ ${p.preco.toFixed(2).replace(".",",")}
-      <p style="margin:4px 0; font-size:.9rem; color:#555;">${p.descricao || "Sem descrição"}</p>
-      <span>${p.ativo ? "✅ Ativo" : "❌ Inativo"} | Categoria: ${p.categoria}</span>
-      <br><button class="btn-remover" onclick="desativar(${i})">Desativar/Esconder</button>
-    `;
-    container.appendChild(el);
-  });
-}
-
-function desativar(indice) {
-  dadosLoja.produtos[indice].ativo = !dadosLoja.produtos[indice].ativo;
-  listarProdutosPainel();
+// 🚪 SAIR DO PAINEL
+function sairPainel() {
+    document.getElementById('tela-painel').classList.add('oculto');
+    document.getElementById('tela-login').classList.remove('oculto');
+    document.getElementById('senha-admin').value = '';
 }
