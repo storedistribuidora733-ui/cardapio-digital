@@ -125,9 +125,9 @@
                 </div>
             </div>
             <div class="botoes">
-                <button class="btn btn-linha" onclick="exportar()">📤 Exportar</button>
+                <button class="btn btn-linha" onclick="exportarPlanilha()">📤 Exportar</button>
                 <button class="btn btn-linha" onclick="limparConcluidos()">🧹 Limpar Concluídos</button>
-                <button class="btn btn-vermelho btn-linha" onclick="sair()">🚪 Sair</button>
+                <button class="btn btn-vermelho btn-linha" onclick="sairPainel()">🚪 Sair</button>
             </div>
         </div>
 
@@ -147,10 +147,10 @@
 </div>
 
 <script>
-// ⚙️ CONFIGURAÇÕES
+// ⚙️ CONFIGURAÇÕES — ALTERE AQUI!
 const CONFIG = {
     senhaAdmin: "123456", // 🔴 TROQUE ESTA SENHA!
-    chave: "agendamentosBarbearia"
+    chaveArmazenamento: "agendamentosBarbearia"
 };
 
 // 🔐 LOGIN
@@ -165,32 +165,27 @@ function verificarSenha() {
     }
 }
 
-// 📊 CARREGAR DADOS
-function carregar() {
-    const dados = localStorage.getItem(CONFIG.chave);
+// 📊 CARREGAR
+function carregarAgendamentos() {
+    const dados = localStorage.getItem(CONFIG.chaveArmazenamento);
     return dados ? JSON.parse(dados) : [];
 }
-function salvar(lista) {
-    localStorage.setItem(CONFIG.chave, JSON.stringify(lista));
+function salvarAgendamentos(lista) {
+    localStorage.setItem(CONFIG.chaveArmazenamento, JSON.stringify(lista));
 }
 
 // 🔄 ATUALIZAR TUDO
 function carregarEAtualizar() {
-    let lista = carregar();
+    let lista = carregarAgendamentos();
     
-    // Atualizar números
     document.getElementById('total').textContent = lista.length;
     document.getElementById('pendentes').textContent = lista.filter(a => a.status === 'pendente').length;
     const total = lista.filter(a => a.status !== 'cancelado').reduce((s, a) => s + (a.valor||0), 0);
     document.getElementById('faturamento').textContent = 'R$' + total.toFixed(2).replace('.', ',');
 
-    // Ordenar: mais recente primeiro
     lista.sort((a, b) => b.id - a.id);
 
-    // Renderizar lista
-    const container = document.getElementById('lista');
     const termoBusca = document.getElementById('busca')?.value.toLowerCase() || '';
-    
     const filtrada = termoBusca 
         ? lista.filter(a => 
             (a.nome+'').toLowerCase().includes(termoBusca) ||
@@ -198,30 +193,39 @@ function carregarEAtualizar() {
             (a.barbeiro+'').toLowerCase().includes(termoBusca))
         : lista;
 
+    const container = document.getElementById('lista');
     if (!filtrada.length) {
         container.innerHTML = `<div class="vazio">${termoBusca ? 'Nenhum resultado encontrado.' : 'Nenhum agendamento ainda.'}</div>`;
         return;
     }
 
     container.innerHTML = filtrada.map(a => {
-        let classe = a.status === 'pendente' ? 'pendente' : a.status === 'concluido' ? 'concluido' : a.status === 'cancelado' ? 'cancelado' : '';
-        let statusTexto = a.status === 'pendente' ? '⏳ Pendente' : a.status === 'confirmado' ? '✅ Confirmado' : a.status === 'concluido' ? '✔️ Concluído' : '❌ Cancelado';
-        let tagClasse = a.status === 'pendente' ? 'pendente-tag' : a.status === 'confirmado' ? 'confirmado-tag' : a.status === 'concluido' ? 'concluido-tag' : 'cancelado-tag';
+        let classeLinha = '', statusTexto = '', classeTag = '';
+        if (a.status === 'pendente') {
+            classeLinha = 'pendente'; statusTexto = '⏳ Pendente'; classeTag = 'pendente-tag';
+        } else if (a.status === 'confirmado') {
+            statusTexto = '✅ Confirmado'; classeTag = 'confirmado-tag';
+        } else if (a.status === 'concluido') {
+            classeLinha = 'concluido'; statusTexto = '✔️ Concluído'; classeTag = 'concluido-tag';
+        } else if (a.status === 'cancelado') {
+            classeLinha = 'cancelado'; statusTexto = '❌ Cancelado'; classeTag = 'cancelado-tag';
+        }
 
         return `
-        <div class="agendamento ${classe}">
-            <div class="linha nome">📅 ${a.data} às ${a.horario} — 💈 ${a.barbeiro}
-                <span class="status-tag ${tagClasse}">${statusTexto}</span>
+        <div class="agendamento ${classeLinha}">
+            <div class="linha nome">
+                📅 ${a.data} às ${a.horario} — 💈 ${a.barbeiro}
+                <span class="status-tag ${classeTag}">${statusTexto}</span>
             </div>
             <div class="linha">👤 ${a.nome} | ✂️ ${a.servico} | 💰 R$${(a.valor||0).toFixed(2).replace('.', ',')}</div>
             <div class="linha dados">📱 ${a.fone} ${a.email ? '| 📧 ' + a.email : ''}</div>
             ${a.obs ? `<div class="linha dados">📝 ${a.obs}</div>` : ''}
             <div class="linha dados">${a.dataCadastro || 'Sem data'}</div>
             <div class="acoes">
-                <button class="btn-acao" style="background:#22c55e;color:white" onclick="mudarStatus(${a.id},'confirmado')">✓ Confirmar</button>
-                <button class="btn-acao" style="background:#4f46e5;color:white" onclick="mudarStatus(${a.id},'concluido')">✔ Concluir</button>
-                <button class="btn-acao" style="background:#f59e0b;color:white" onclick="mudarStatus(${a.id},'cancelado')">⚠ Cancelar</button>
-                <button class="btn-acao" style="background:#ef4444;color:white" onclick="excluir(${a.id})">🗑 Excluir</button>
+                <button class="btn-acao" style="background:#22c55e; color:white" onclick="mudarStatus(${a.id}, 'confirmado')">✓ Confirmar</button>
+                <button class="btn-acao" style="background:#4f46e5; color:white" onclick="mudarStatus(${a.id}, 'concluido')">✔ Concluir</button>
+                <button class="btn-acao" style="background:#f59e0b; color:white" onclick="mudarStatus(${a.id}, 'cancelado')">⚠ Cancelar</button>
+                <button class="btn-acao" style="background:#ef4444; color:white" onclick="excluirAgendamento(${a.id})">🗑 Excluir</button>
             </div>
         </div>`;
     }).join('');
@@ -229,61 +233,59 @@ function carregarEAtualizar() {
 
 // ✏️ MUDAR STATUS
 function mudarStatus(id, novoStatus) {
-    const lista = carregar();
+    const lista = carregarAgendamentos();
     const item = lista.find(a => a.id === id);
     if (item) {
         item.status = novoStatus;
-        salvar(lista);
+        salvarAgendamentos(lista);
         carregarEAtualizar();
     }
 }
 
-// 🗑 EXCLUIR
-function excluir(id) {
-    if (!confirm('⚠️ Excluir este agendamento?')) return;
-    let lista = carregar();
+// 🗑️ EXCLUIR
+function excluirAgendamento(id) {
+    if (!confirm('⚠️ Tem certeza?')) return;
+    let lista = carregarAgendamentos();
     lista = lista.filter(a => a.id !== id);
-    salvar(lista);
+    salvarAgendamentos(lista);
     carregarEAtualizar();
 }
 
 // 🧹 LIMPAR CONCLUÍDOS
 function limparConcluidos() {
     if (!confirm('⚠️ Apagar TODOS os concluídos?')) return;
-    let lista = carregar();
+    let lista = carregarAgendamentos();
     lista = lista.filter(a => a.status !== 'concluido');
-    salvar(lista);
+    salvarAgendamentos(lista);
     carregarEAtualizar();
 }
 
-// 🔍 FILTRAR
+// 🔍 BUSCAR
 function filtrarLista() {
     carregarEAtualizar();
 }
 
 // 📤 EXPORTAR
-function exportar() {
-    const lista = carregar();
+function exportarPlanilha() {
+    const lista = carregarAgendamentos();
     let csv = 'Data,Horário,Barbeiro,Cliente,Serviço,Valor,WhatsApp,Email,Status,Observações\n';
     lista.forEach(a => {
         csv += `${a.data||''},${a.horario||''},"${a.barbeiro||''}","${a.nome||''}","${a.servico||''}",${(a.valor||0).toFixed(2).replace('.', ',')},"${a.fone||''}","${a.email||''}",${a.status||'pendente'},"${(a.obs||'').replace(/"/g,"'")}"\n`;
     });
     const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'agendamentos_' + new Date().toLocaleDateString('pt-BR').replace(/\//g,'-') + '.csv';
-    a.click();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'agendamentos_' + new Date().toLocaleDateString('pt-BR').replace(/\//g,'-') + '.csv';
+    link.click();
 }
 
 // 🚪 SAIR
-function sair() {
+function sairPainel() {
     document.getElementById('tela-painel').classList.add('oculto');
     document.getElementById('tela-login').classList.remove('oculto');
     document.getElementById('senha-admin').value = '';
 }
-<script src="painel.js"></script>
-
-
+</script>
 </body>
 </html>
