@@ -392,4 +392,114 @@ function atualizarCarrinho() {
   adicionarEventosCarrinho();
 }
 
-function adicionarEventosCarr
+function adicionarEventosCarrinho() {
+  document.querySelectorAll('.diminuir-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index);
+      if (carrinho[idx].quantidade > 1) {
+        carrinho[idx].quantidade--;
+      } else {
+        carrinho.splice(idx, 1);
+      }
+      atualizarCarrinho();
+    });
+  });
+
+  document.querySelectorAll('.aumentar-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index);
+      carrinho[idx].quantidade++;
+      atualizarCarrinho();
+    });
+  });
+}
+
+// Abrir e fechar carrinho
+abrirCarrinhoBtn?.addEventListener('click', () => {
+  if (carrinho.length === 0) {
+    avisoGeral.textContent = 'Adicione produtos ao carrinho primeiro!';
+    avisoGeral.classList.remove('oculto');
+    setTimeout(() => avisoGeral.classList.add('oculto'), 3000);
+    return;
+  }
+  atualizarCarrinho();
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+});
+
+fecharModalBtns.forEach(btn => {
+  btn?.addEventListener('click', () => {
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+  });
+});
+
+// Busca de produtos
+campoBusca?.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(produto => {
+    const nome = produto.dataset.nome.toLowerCase();
+    const desc = (produto.dataset.descricao || '').toLowerCase();
+    produto.style.display = nome.includes(termo) || desc.includes(termo) ? 'flex' : 'none';
+  });
+});
+
+// Filtro por categorias
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    
+    const categoriaEscolhida = botao.dataset.categoria;
+    document.querySelectorAll('.produto').forEach(produto => {
+      const catProduto = produto.dataset.categoria;
+      produto.style.display = (categoriaEscolhida === 'todos' || catProduto === categoriaEscolhida) ? 'flex' : 'none';
+    });
+  });
+});
+
+// Enviar pedido pelo WhatsApp
+document.getElementById('btn-finalizar')?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  
+  if (!nomeEl.value.trim()) {
+    avisoGeral.textContent = 'Preencha seu nome completo!';
+    avisoGeral.classList.remove('oculto');
+    return;
+  }
+
+  const tipo = tipoAtendimentoEl.value;
+  const taxa = tipo === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
+  const totalFinal = totalItens + taxa;
+
+  let mensagem = `📦 *NOVO PEDIDO - ${CONFIG.nomeLoja}*\n`;
+  mensagem += `👤 Cliente: ${nomeEl.value.trim()}\n`;
+  mensagem += `🛍️ Tipo: ${tipo === 'retirada' ? 'RETIRADA NA LOJA' : 'ENTREGA'}\n\n`;
+  mensagem += `📝 *ITENS:*\n`;
+
+  carrinho.forEach(item => {
+    mensagem += `• ${item.quantidade}x ${item.nome} - R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+  });
+
+  mensagem += `\n💰 *RESUMO:*\n`;
+  mensagem += `Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}\n`;
+  if (tipo === 'entrega') mensagem += `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}\n`;
+  mensagem += `*TOTAL: R$ ${totalFinal.toFixed(2).replace('.', ',')}*\n\n`;
+
+  if (tipo === 'entrega') {
+    mensagem += `📍 *ENDEREÇO:*\n`;
+    mensagem += `Rua: ${ruaEl.value || 'Não informado'}, Nº ${numeroEl.value || 'Não informado'}\n`;
+    if (complementoEl.value.trim()) mensagem += `Complemento: ${complementoEl.value.trim()}\n`;
+    mensagem += `Bairro: ${bairroEl.value || 'Não informado'} | ${cidadeUfEl.value || 'Não informado'} | CEP: ${cepEl.value || 'Não informado'}\n`;
+    if (referenciaEl.value.trim()) mensagem += `Ponto de referência: ${referenciaEl.value.trim()}\n\n`;
+  }
+
+  mensagem += `💳 *Pagamento:* ${pagamentoEl.value}\n`;
+  if (observacaoEl.value.trim()) mensagem += `📌 *Observação:* ${observacaoEl.value.trim()}`;
+
+  const linkWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(linkWhatsApp, '_blank');
+  
+  limparTudoCarrinho();
+});
