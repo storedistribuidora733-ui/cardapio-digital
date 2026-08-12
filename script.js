@@ -467,3 +467,4 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
       prod.style.display = (cat === 'todos' || prod.dataset.categoria === cat) ? 'flex' : 'none';
     });
   });
+});
