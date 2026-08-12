@@ -166,3 +166,4 @@ hr { border: none; border-top: 1px dashed #ccc; margin: 10px 0; }
 .adicional-item { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee; }
 .btn-add-adicional { width:30px; height:30px; border-radius:8px; border:none; background:#f0f0f0; cursor:pointer; font-weight:bold; transition:.2s; }
 .btn-add-adicional.selecionado { background:#22c55e; color:#fff; }
+ 
