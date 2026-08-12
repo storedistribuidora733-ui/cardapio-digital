@@ -14,6 +14,15 @@
         body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overflow-x: hidden; }
         .oculto { display: none !important; }
 
+        /* 🔒 REGRA PRINCIPAL: ÁREA DE IMPRESSÃO SÓ APARECE NA IMPRESSÃO */
+        #area-impressao { display: none !important; }
+        @media print {
+            body * { visibility: hidden; }
+            #area-impressao, #area-impressao * { visibility: visible; }
+            #area-impressao { position: absolute; left: 0; top: 0; width: 100%; }
+            .carrinho-fixo, .botao-whatsapp, .cabecalho-loja, .categorias, .busca, .lista-produtos, #modal-carrinho, #modal-produto, #alerta-fechado { display: none !important; }
+        }
+
         @media (min-width: 768px) {
             body { max-width: 620px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
         }
@@ -85,7 +94,7 @@
             }
         }
 
-        /* 🛒 RODAPÉ CARRINHO — NOVO VISUAL SIMPLIFICADO */
+        /* Rodapé Carrinho */
         .carrinho-fixo {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: #ffffff; color: #222;
@@ -356,6 +365,7 @@
         </div>
         <div class="botoes-modal">
             <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
+            <button id="btn-imprimir" class="btn-fechar">Imprimir</button>
             <button id="btn-finalizar" class="btn-finalizar">Enviar Pedido</button>
         </div>
     </div>
@@ -369,7 +379,23 @@
     </div>
 </div>
 
-<!-- Rodapé Carrinho SIMPLIFICADO -->
+<!-- ÁREA DE IMPRESSÃO - FICA ESCONDIDA NA TELA, SÓ APARECE NA IMPRESSÃO -->
+<div id="area-impressao" class="oculto">
+    <h2 style="text-align:center; margin-bottom:15px;">🍔 PEDIDO - ALISON BURGER</h2>
+    <p id="data-impressao" style="text-align:center; margin-bottom:20px;"></p>
+    <p><strong>Cliente:</strong> <span id="cliente-impressao"></span></p>
+    <p><strong>Tipo:</strong> <span id="tipo-impressao"></span></p>
+    <p id="endereco-impressao"></p>
+    <hr style="margin:15px 0;">
+    <h4>ITENS DO PEDIDO:</h4>
+    <div id="itens-impressao" style="margin:10px 0;"></div>
+    <hr style="margin:15px 0;">
+    <div id="valores-impressao"></div>
+    <p><strong>Pagamento:</strong> <span id="pagamento-impressao"></span></p>
+    <p id="obs-impressao"></p>
+</div>
+
+<!-- Rodapé Carrinho -->
 <div class="carrinho-fixo" id="carrinho-container">
     <div class="carrinho-conteudo">
         <div class="grupo-qtd-valor">
