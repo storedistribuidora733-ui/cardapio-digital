@@ -26,13 +26,9 @@ const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 const campoBusca = document.getElementById('campoBusca');
-const carrinhoContainer = document.getElementById('carrinho-container');
-const resumoValorEl = document.getElementById('resumo-valor');
-const badgeQtdEl = document.getElementById('badge-qtd');
-
-// Resumo valores
 const subtotaisEl = document.getElementById('subtotal-itens');
 const valorTotalEl = document.getElementById('valor-total');
+const badgeQtdEl = document.getElementById('badge-qtd');
 
 // Formulário
 const nomeEl = document.getElementById('nome-cliente');
@@ -69,7 +65,7 @@ const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
-// Função de Impressão
+// FUNÇÃO DE IMPRESSÃO — AJUSTADA PARA TM-T20 80MM
 function imprimirPedido() {
   const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
   const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
@@ -81,6 +77,7 @@ function imprimirPedido() {
   const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
   const totalGeral = totalItens + taxa;
 
+  // Preenche cupom de impressão
   document.getElementById('data-impressao').textContent = `Pedido #${numeroPedido} • ${dataPedido}`;
   document.getElementById('cliente-impressao').textContent = nome;
   document.getElementById('tipo-impressao').textContent = tipoAtendimento === 'retirada' ? 'Retirada na Loja' : 'Entrega';
@@ -95,19 +92,25 @@ function imprimirPedido() {
 
   let itensHtml = '';
   carrinho.forEach(item => {
-    itensHtml += `<p>${item.quantidade}x ${item.nome} ....... R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</p>`;
+    const nomeAjustado = item.nome.substring(0, 20).padEnd(20, ' ');
+    const valorItem = `R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}`;
+    itensHtml += `${item.quantidade}x ${nomeAjustado} ${valorItem}\n`;
+    if (item.adicionais?.length > 0) {
+      itensHtml += `  + ${item.adicionais.map(a => a.nome).join(', ')}\n`;
+    }
   });
-  document.getElementById('itens-impressao').innerHTML = itensHtml;
+  document.getElementById('itens-impressao').textContent = itensHtml;
 
-  document.getElementById('valores-impressao').innerHTML = `
-    <p>Subtotal ....... R$ ${totalItens.toFixed(2).replace('.', ',')}</p>
-    <p>Taxa Entrega .. R$ ${taxa.toFixed(2).replace('.', ',')}</p>
-    <p><strong>TOTAL ......... R$ ${totalGeral.toFixed(2).replace('.', ',')}</strong></p>
+  document.getElementById('valores-impressao').textContent = `
+Subtotal ....... R$ ${totalItens.toFixed(2).replace('.', ',')}
+Taxa Entrega .. R$ ${taxa.toFixed(2).replace('.', ',')}
+TOTAL ......... R$ ${totalGeral.toFixed(2).replace('.', ',')}
   `;
 
   document.getElementById('pagamento-impressao').textContent = pagamento;
   document.getElementById('obs-impressao').textContent = observacao ? `Obs: ${observacao}` : '';
 
+  // CHAMA A IMPRESSÃO DIRETO
   window.print();
 }
 
@@ -136,8 +139,6 @@ function limparTudoCarrinho() {
   subtotaisEl.textContent = '0,00';
   valorTotalEl.textContent = '0,00';
   badgeQtdEl.textContent = '0';
-  resumoValorEl.textContent = 'R$ 0,00';
-  carrinhoContainer.style.display = 'none';
   nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada';
   pagamentoEl.value = 'Dinheiro';
@@ -435,9 +436,6 @@ function atualizarCarrinho() {
   subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
   valorTotalEl.textContent = totalGeral.toFixed(2).replace('.', ',');
   badgeQtdEl.textContent = totalQuantidade;
-  resumoValorEl.textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-
-  carrinhoContainer.style.display = totalQuantidade > 0 ? 'block' : 'none';
 }
 
 function alterarQuantidade(indice, delta) {
@@ -469,4 +467,3 @@ document.querySelectorAll('.categoria-btn').forEach(botao => {
       prod.style.display = (cat === 'todos' || prod.dataset.categoria === cat) ? 'flex' : 'none';
     });
   });
-});
