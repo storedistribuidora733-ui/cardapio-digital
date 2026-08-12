@@ -1,4 +1,3 @@
-
 const CONFIG = {
   horaAbertura: 0,
   horaFechamento: 24,
@@ -19,8 +18,10 @@ let adicionaisSelecionados = [];
 // Elementos gerais
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
-const fecharModalBtns = [document.getElementById('fechar-modal')];
+const fecharModalBtn = document.getElementById('fechar-modal');
 const btnLimparCarrinho = document.getElementById('btn-limpar');
+const btnImprimir = document.getElementById('btn-imprimir');
+const btnFinalizar = document.getElementById('btn-finalizar');
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
@@ -49,6 +50,7 @@ const bairroEl = document.getElementById('bairro');
 const cidadeUfEl = document.getElementById('cidade-uf');
 const avisoCepEl = document.getElementById('aviso-cep');
 const pagamentoEl = document.getElementById('forma-pagamento');
+const observacaoEl = document.getElementById('observacao');
 
 // Modal Produto
 const modalProduto = document.getElementById('modal-produto');
@@ -66,6 +68,56 @@ const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
 
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
+
+// ======================
+// Função de Impressão
+// ======================
+function imprimirPedido() {
+  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
+  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const nome = nomeEl.value.trim();
+  const tipoAtendimento = tipoAtendimentoEl.value;
+  const pagamento = pagamentoEl.value;
+  const observacao = observacaoEl?.value.trim() || '';
+  const taxa = tipoAtendimento === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
+  const totalGeral = totalItens + taxa;
+
+  // Preenche dados da impressão
+  document.getElementById('data-impressao').textContent = `Pedido #${numeroPedido} • ${dataPedido}`;
+  document.getElementById('cliente-impressao').textContent = nome;
+  document.getElementById('tipo-impressao').textContent = tipoAtendimento === 'retirada' ? 'Retirada na Loja' : 'Entrega';
+  
+  let enderecoTexto = '';
+  if (tipoAtendimento === 'entrega') {
+    enderecoTexto = `Endereço: ${ruaEl.value}, Nº ${numeroEl.value}`;
+    if (complementoEl.value.trim()) enderecoTexto += ` / ${complementoEl.value.trim()}`;
+    enderecoTexto += ` • ${bairroEl.value} • ${cidadeUfEl.value}`;
+  }
+  document.getElementById('endereco-impressao').textContent = enderecoTexto;
+
+  // Itens
+  let itensHtml = '';
+  carrinho.forEach(item => {
+    itensHtml += `<p>${item.quantidade}x ${item.nome} ....... R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</p>`;
+  });
+  document.getElementById('itens-impressao').innerHTML = itensHtml;
+
+  // Valores
+  document.getElementById('valores-impressao').innerHTML = `
+    <p>Subtotal ....... R$ ${totalItens.toFixed(2).replace('.', ',')}</p>
+    <p>Taxa Entrega .. R$ ${taxa.toFixed(2).replace('.', ',')}</p>
+    <p><strong>TOTAL ......... R$ ${totalGeral.toFixed(2).replace('.', ',')}</strong></p>
+  `;
+
+  document.getElementById('pagamento-impressao').textContent = pagamento;
+  document.getElementById('obs-impressao').textContent = observacao ? `Obs: ${observacao}` : '';
+
+  // Imprime
+  document.getElementById('area-impressao').style.display = 'block';
+  window.print();
+  document.getElementById('area-impressao').style.display = 'none';
+}
 
 // ======================
 // Status da loja
@@ -101,6 +153,7 @@ function limparTudoCarrinho() {
   nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada';
   pagamentoEl.value = 'Dinheiro';
+  observacaoEl.value = '';
   avisoGeral.classList.add('oculto');
   limparCamposEndereco();
   campoTaxaEntregaEl.classList.add('oculto');
@@ -109,6 +162,77 @@ function limparTudoCarrinho() {
   document.body.style.overflow = 'auto';
 }
 btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
+
+// ======================
+// Validação dos dados
+// ======================
+function validarPedido() {
+  avisoGeral.classList.add('oculto');
+  if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return false; }
+  if (!nomeEl.value.trim()) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return false; }
+  if (tipoAtendimentoEl.value === 'entrega') {
+    const cepValido = cepEl.value.trim().replace(/\D/g, '').length === 8;
+    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido!'; avisoGeral.classList.remove('oculto'); return false; }
+    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Aguarde o preenchimento do endereço!'; avisoGeral.classList.remove('oculto'); return false; }
+    if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return false; }
+  }
+  return true;
+}
+
+// ======================
+// Botões de Ação
+// ======================
+btnImprimir?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  if (!validarPedido()) return;
+  imprimirPedido();
+});
+
+btnFinalizar?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  if (!validarPedido()) return;
+
+  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
+  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const taxa = tipoAtendimentoEl.value === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
+  const totalGeral = totalItens + taxa;
+
+  let enderecoCompleto = '';
+  if (tipoAtendimentoEl.value === 'entrega') {
+    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
+    if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
+    enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
+    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
+    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
+    if (referenciaEl.value.trim()) enderecoCompleto += `\n  Ponto de referência: ${referenciaEl.value.trim()}`;
+  }
+
+  let mensagem = `🍔 *PEDIDO #${numeroPedido} — ${CONFIG.nomeLoja}*
+📅 ${dataPedido}
+👤 Cliente: ${nomeEl.value.trim()}
+📦 Tipo: ${tipoAtendimentoEl.value === 'retirada' ? 'Retirada na loja' : 'Entrega'}`;
+
+  if (tipoAtendimentoEl.value === 'entrega') mensagem += `\n📍 Endereço:\n${enderecoCompleto}`;
+
+  mensagem += `\n\n📋 *ITENS DO PEDIDO*:\n`;
+  carrinho.forEach(item => {
+    mensagem += `• ${item.quantidade}x ${item.nome} — R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+  });
+
+  mensagem += `\n💵 *RESUMO DE VALORES*
+Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
+${tipoAtendimentoEl.value === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}` : 'Sem taxa de retirada'}
+*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
+
+💳 Forma de pagamento: ${pagamentoEl.value}`;
+
+  if (observacaoEl.value.trim()) mensagem += `\n📝 Observação: ${observacaoEl.value.trim()}`;
+
+  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(urlWhatsApp, '_blank');
+  limparTudoCarrinho();
+});
 
 // ======================
 // Atendimento e endereço
@@ -202,10 +326,7 @@ document.querySelectorAll('.produto').forEach(produto => {
       const addEl = document.createElement('div');
       addEl.className = 'adicional-item';
       addEl.innerHTML = `
-        <div>
-          <div class="adicional-nome">${add.nome}</div>
-          <div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div>
-        </div>
+        <span>${add.nome} (+ R$ ${add.preco.toFixed(2).replace('.', ',')})</span>
         <button class="btn-add-adicional" data-idx="${idx}">+</button>
       `;
       listaAdicionaisEl.appendChild(addEl);
@@ -255,189 +376,136 @@ listaAdicionaisEl?.addEventListener('click', (e) => {
 
 function atualizarTotalDetalhe() {
   if(!produtoAtual) return;
-  const totalAdicionais = adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
+  const totalAdicionais = adicionaisSelecionados.reduce((s, a) => s + a.preco, 0);
   const total = (produtoAtual.preco + totalAdicionais) * quantidadeAtual;
-  btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
+  btnAdicionarDetalhe.textContent = `Adicionar • R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
 btnAdicionarDetalhe?.addEventListener('click', () => {
-  if (!verificarStatusLoja(true)) return;
+  if(!produtoAtual) return;
+  const totalAdicionais = adicionaisSelecionados.reduce((s, a) => s + a.preco, 0);
+  const precoUnitario = produtoAtual.preco + totalAdicionais;
 
-  const nomeCompleto = adicionaisSelecionados.length 
-    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
-    : produtoAtual.nome;
-
-  const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
-
-  const itemExistente = carrinho.find(i => i.nome === nomeCompleto);
+  const itemExistente = carrinho.find(i => i.nome === produtoAtual.nome && JSON.stringify(i.adicionais) === JSON.stringify(adicionaisSelecionados));
+  
   if (itemExistente) {
     itemExistente.quantidade += quantidadeAtual;
   } else {
-    carrinho.push({ nome: nomeCompleto, preco: precoTotal, quantidade: quantidadeAtual });
+    carrinho.push({
+      id: Date.now(),
+      nome: produtoAtual.nome,
+      preco: precoUnitario,
+      quantidade: quantidadeAtual,
+      adicionais: [...adicionaisSelecionados]
+    });
   }
 
-  atualizarCarrinho();
   modalProduto.classList.add('oculto');
   document.body.style.overflow = 'auto';
+  atualizarCarrinho();
 });
 
 // ======================
-// Atualização do carrinho — CONTADOR CORRIGIDO
+// Carrinho
 // ======================
+abrirCarrinhoBtn?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  atualizarCarrinho();
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+});
+
+fecharModalBtn?.addEventListener('click', () => {
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
+
+modalCarrinho?.addEventListener('click', (e) => {
+  if (e.target === modalCarrinho) {
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+  }
+});
+
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
-  let totalItens = 0; let qtdTotal = 0;
-  const usaTaxaEntrega = tipoAtendimentoEl.value === 'entrega';
-  const taxa = usaTaxaEntrega ? CONFIG.taxaEntregaFixa : 0;
+  let totalItens = 0;
+  let totalValor = 0;
 
-  if (carrinho.length === 0) {
-    subtotaisEl.textContent = '0,00';
-    valorTotalEl.textContent = '0,00';
-    badgeQtdEl.textContent = '0';
-    resumoValorEl.textContent = 'R$ 0,00';
-    carrinhoContainer.style.display = 'none';
-    return;
-  }
-
-  carrinhoContainer.style.display = 'flex';
-  carrinho.forEach((item, index) => {
-    const totalItem = item.preco * item.quantidade;
-    totalItens += totalItem; qtdTotal += item.quantidade;
+  carrinho.forEach(item => {
+    totalItens += item.quantidade;
+    totalValor += item.preco * item.quantidade;
 
     const itemEl = document.createElement('div');
     itemEl.className = 'item-carrinho';
     itemEl.innerHTML = `
       <div class="item-info">
-        <h4 class="item-nome">${item.nome}</h4>
-        <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
+        <div class="item-nome">${item.nome}</div>
+        ${item.adicionais.length > 0 ? `<div class="item-preco-unit">+ ${item.adicionais.map(a => a.nome).join(', ')}</div>` : ''}
+        <div class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</div>
       </div>
       <div class="qtd-controle">
-        <button class="qtd-btn diminuir-item" data-index="${index}">&minus;</button>
+        <button class="qtd-btn diminuir" data-id="${item.id}">−</button>
         <span class="qtd-valor">${item.quantidade}</span>
-        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
+        <button class="qtd-btn aumentar" data-id="${item.id}">+</button>
       </div>
-      <div class="item-total">R$ ${totalItem.toFixed(2).replace('.', ',')}</div>
+      <div class="item-total">R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</div>
     `;
     listaItensCarrinho.appendChild(itemEl);
   });
 
-  const totalFinal = totalItens + taxa;
-  subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
-  valorTotalEl.textContent = totalFinal.toFixed(2).replace('.', ',');
-  badgeQtdEl.textContent = qtdTotal;
-  resumoValorEl.textContent = `R$ ${totalItens.toFixed(2).replace('.', ',')}`;
+  const taxa = tipoAtendimentoEl?.value === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalGeral = totalValor + taxa;
 
-  adicionarEventosCarrinho();
+  badgeQtdEl.textContent = totalItens;
+  resumoValorEl.textContent = `R$ ${totalValor.toFixed(2).replace('.', ',')}`;
+  subtotaisEl.textContent = totalValor.toFixed(2).replace('.', ',');
+  valorTotalEl.textContent = totalGeral.toFixed(2).replace('.', ',');
+
+  carrinhoContainer.style.display = carrinho.length > 0 ? 'block' : 'none';
 }
 
-function adicionarEventosCarrinho() {
-  document.querySelectorAll('.aumentar-item').forEach(b => b.addEventListener('click', () => {
-    const idx = parseInt(b.dataset.index); carrinho[idx].quantidade++; atualizarCarrinho();
-  }));
-  document.querySelectorAll('.diminuir-item').forEach(b => b.addEventListener('click', () => {
-    const idx = parseInt(b.dataset.index);
-    if (carrinho[idx].quantidade > 1) carrinho[idx].quantidade--;
-    else carrinho.splice(idx, 1);
-    atualizarCarrinho();
-  }));
-}
+listaItensCarrinho?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.qtd-btn');
+  if (!btn) return;
+  const id = parseInt(btn.dataset.id);
+  const item = carrinho.find(i => i.id === id);
+  if (!item) return;
 
-// ======================
-// Abrir / Fechar modal
-// ======================
-abrirCarrinhoBtn?.addEventListener('click', () => {
-  if (carrinho.length === 0) return;
-  if (!verificarStatusLoja(true)) return;
+  if (btn.classList.contains('diminuir')) {
+    item.quantidade--;
+    if (item.quantidade <= 0) {
+      const pos = carrinho.indexOf(item);
+      carrinho.splice(pos, 1);
+    }
+  } else {
+    item.quantidade++;
+  }
   atualizarCarrinho();
-  modalCarrinho.classList.remove('oculto');
-  document.body.style.overflow = 'hidden';
-  avisoGeral.classList.add('oculto');
 });
-fecharModalBtns.forEach(b => b.addEventListener('click', () => {
-  modalCarrinho.classList.add('oculto');
-  document.body.style.overflow = 'auto';
-}));
 
 // ======================
-// Categorias e Busca
+// Busca e Categorias
 // ======================
+campoBusca?.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(produto => {
+    const nome = produto.dataset.nome.toLowerCase();
+    const desc = (produto.dataset.descricao || '').toLowerCase();
+    const temTermo = nome.includes(termo) || desc.includes(termo);
+    produto.style.display = temTermo ? 'flex' : 'none';
+  });
+});
+
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
     document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
     botao.classList.add('ativo');
     const cat = botao.dataset.categoria;
-    document.querySelectorAll('.produto').forEach(p => {
-      p.style.display = (cat === 'todos' || p.dataset.categoria === cat) ? 'flex' : 'none';
+
+    document.querySelectorAll('.produto').forEach(produto => {
+      produto.style.display = (cat === 'todos' || produto.dataset.categoria === cat) ? 'flex' : 'none';
     });
     campoBusca.value = '';
   });
-});
-campoBusca?.addEventListener('input', () => {
-  const termo = campoBusca.value.toLowerCase().trim();
-  document.querySelectorAll('.produto').forEach(p => {
-    p.style.display = p.dataset.nome.toLowerCase().includes(termo) ? 'flex' : 'none';
-  });
-});
-
-// ======================
-// Enviar pedido WhatsApp
-// ======================
-document.getElementById('btn-finalizar')?.addEventListener('click', () => {
-  avisoGeral.classList.add('oculto');
-  const nome = nomeEl.value.trim();
-  const pagamento = pagamentoEl.value;
-  const tipoAtendimento = tipoAtendimentoEl.value;
-  const taxa = tipoAtendimento === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
-  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
-  const totalGeral = totalItens + taxa;
-
-  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
-  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-  const observacaoEl = document.getElementById('observacao');
-  const observacao = observacaoEl ? observacaoEl.value.trim() : '';
-
-  if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
-  if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
-  if (tipoAtendimento === 'entrega') {
-    const cepValido = cepEl.value.trim().replace(/\D/g, '').length === 8;
-    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido!'; avisoGeral.classList.remove('oculto'); return; }
-    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Aguarde o preenchimento do endereço!'; avisoGeral.classList.remove('oculto'); return; }
-    if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
-  }
-
-  let enderecoCompleto = '';
-  if (tipoAtendimento === 'entrega') {
-    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
-    if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
-    enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
-    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
-    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
-    if (referenciaEl.value.trim()) enderecoCompleto += `\n  Ponto de referência: ${referenciaEl.value.trim()}`;
-  }
-
-  let mensagem = `🍔 *PEDIDO #${numeroPedido} — ${CONFIG.nomeLoja}*
-📅 ${dataPedido}
-👤 Cliente: ${nome}
-📦 Tipo: ${tipoAtendimento === 'retirada' ? 'Retirada na loja' : 'Entrega'}`;
-
-  if (tipoAtendimento === 'entrega') mensagem += `\n📍 Endereço:\n${enderecoCompleto}`;
-
-  mensagem += `\n\n📋 *ITENS DO PEDIDO*:\n`;
-  carrinho.forEach(item => {
-    mensagem += `• ${item.quantidade}x ${item.nome} — R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
-  });
-
-  mensagem += `\n💵 *RESUMO DE VALORES*
-Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
-${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}` : 'Sem taxa de retirada'}
-*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
-
-💳 Forma de pagamento: ${pagamento}`;
-
-  if (observacao) mensagem += `\n📝 Observação: ${observacao}`;
-
-  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-  window.open(urlWhatsApp, '_blank');
-
-  limparTudoCarrinho();
 });
