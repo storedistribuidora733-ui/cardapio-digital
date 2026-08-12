@@ -1,7 +1,7 @@
 const CONFIG = {
   horaAbertura: 0,
   horaFechamento: 24,
-  textoStatusAberto: "Aberto até às 24:00",
+  textoStatusAberto: "Aberto 24h por dia",
   textoStatusFechado: "Fechado • Abre às 07:00",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
@@ -108,9 +108,7 @@ function imprimirPedido() {
   document.getElementById('pagamento-impressao').textContent = pagamento;
   document.getElementById('obs-impressao').textContent = observacao ? `Obs: ${observacao}` : '';
 
-  document.getElementById('area-impressao').style.display = 'block';
   window.print();
-  document.getElementById('area-impressao').style.display = 'none';
 }
 
 // Status da loja
@@ -358,4 +356,117 @@ listaAdicionaisEl?.addEventListener('click', (e) => {
 
 function atualizarTotalDetalhe() {
   if(!produtoAtual) return;
-  const totalAdicionais = adicionaisSelecionados.reduce((s, a) => s + a.preco
+  const totalAdicionais = adicionaisSelecionados.reduce((s, a) => s + a.preco, 0);
+  const totalFinal = (produtoAtual.preco + totalAdicionais) * quantidadeAtual;
+  btnAdicionarDetalhe.textContent = `Adicionar • R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
+}
+
+btnAdicionarDetalhe?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  if(!produtoAtual) return;
+
+  const totalAdicionais = adicionaisSelecionados.reduce((s, a) => s + a.preco, 0);
+  const precoUnitario = produtoAtual.preco + totalAdicionais;
+
+  const itemExistente = carrinho.find(i => i.nome === produtoAtual.nome && JSON.stringify(i.adicionais) === JSON.stringify(adicionaisSelecionados));
+  if (itemExistente) {
+    itemExistente.quantidade += quantidadeAtual;
+  } else {
+    carrinho.push({
+      nome: produtoAtual.nome,
+      preco: precoUnitario,
+      quantidade: quantidadeAtual,
+      adicionais: [...adicionaisSelecionados]
+    });
+  }
+
+  atualizarCarrinho();
+  modalProduto.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+  abrirCarrinhoBtn.click();
+});
+
+// Abrir e fechar Carrinho
+abrirCarrinhoBtn?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  atualizarCarrinho();
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+});
+
+fecharModalBtn?.addEventListener('click', () => {
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
+
+function atualizarCarrinho() {
+  listaItensCarrinho.innerHTML = '';
+  let totalItens = 0;
+  let totalQuantidade = 0;
+
+  carrinho.forEach((item, indice) => {
+    totalQuantidade += item.quantidade;
+    totalItens += item.preco * item.quantidade;
+
+    const addTexto = item.adicionais.length > 0 
+      ? `<div class="item-preco-unit">+ ${item.adicionais.map(a => a.nome).join(', ')}</div>` 
+      : '';
+
+    listaItensCarrinho.innerHTML += `
+      <div class="item-carrinho">
+        <div class="item-info">
+          <div class="item-nome">${item.nome}</div>
+          ${addTexto}
+          <div class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</div>
+        </div>
+        <div class="qtd-controle">
+          <button class="qtd-btn" onclick="alterarQuantidade(${indice}, -1)">−</button>
+          <span class="qtd-valor">${item.quantidade}</span>
+          <button class="qtd-btn" onclick="alterarQuantidade(${indice}, 1)">+</button>
+        </div>
+        <div class="item-total">R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</div>
+      </div>
+    `;
+  });
+
+  const taxa = tipoAtendimentoEl?.value === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalGeral = totalItens + taxa;
+
+  subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
+  valorTotalEl.textContent = totalGeral.toFixed(2).replace('.', ',');
+  badgeQtdEl.textContent = totalQuantidade;
+  resumoValorEl.textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+
+  carrinhoContainer.style.display = totalQuantidade > 0 ? 'block' : 'none';
+}
+
+function alterarQuantidade(indice, delta) {
+  carrinho[indice].quantidade += delta;
+  if (carrinho[indice].quantidade <= 0) {
+    carrinho.splice(indice, 1);
+  }
+  atualizarCarrinho();
+}
+
+// Busca de produtos
+campoBusca?.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(prod => {
+    const nome = prod.dataset.nome.toLowerCase();
+    const desc = prod.dataset.descricao?.toLowerCase() || '';
+    prod.style.display = (nome.includes(termo) || desc.includes(termo)) ? 'flex' : 'none';
+  });
+});
+
+// Filtro por categorias
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    const cat = botao.dataset.categoria;
+
+    document.querySelectorAll('.produto').forEach(prod => {
+      prod.style.display = (cat === 'todos' || prod.dataset.categoria === cat) ? 'flex' : 'none';
+    });
+  });
+});
