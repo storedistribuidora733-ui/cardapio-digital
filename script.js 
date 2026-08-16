@@ -439,4 +439,4 @@ ${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace
   window.open(urlWhatsApp, '_blank');
 
   limparTudoCarrinho();
-}); 
+});
