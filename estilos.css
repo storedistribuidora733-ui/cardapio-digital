@@ -203,4 +203,4 @@ input, select {width:100%; padding:8px; border:1px solid #ddd; border-radius:6px
 .btn-entendi {padding:8px 20px; background:#f97316; color:white; border:none; border-radius:8px; margin-top:15px; cursor:pointer;}
 .adicional-item {display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #eee;}
 .btn-add-adicional {width:30px; height:30px; border-radius:50%; border:none; background:#eee; cursor:pointer;}
-.btn-add-adicional.selecionado {background:#22c55e; color:white;}
+.btn-add-adicional.selecionado {background:#22c55e; color:white;} 
