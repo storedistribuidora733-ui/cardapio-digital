@@ -49,7 +49,7 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 .produto-descricao { font-size:0.8rem; color:#666; margin:3px 0; }
 .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
-/* ✅ ESTILO DA OBSERVAÇÃO DO PRODUTO */
+/* ESTILO DA OBSERVAÇÃO DO PRODUTO */
 .grupo-observacao {
     margin: 1.2rem 0 0.8rem;
     padding-top: 1rem;
@@ -78,7 +78,7 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
     box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
 }
 
-/* ✅ ESTILO DA OBSERVAÇÃO NO CARRINHO */
+/* ESTILO DA OBSERVAÇÃO NO CARRINHO */
 .observacao-item {
     font-size: 0.85rem;
     color: #666;
