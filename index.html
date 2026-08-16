@@ -24,7 +24,7 @@
 <!-- Categorias -->
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
-    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-hamburger"></i> Hambúrgueres</button>
+    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
     <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
     <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
     <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
@@ -182,7 +182,8 @@
             <input type="text" id="observacao" placeholder="Ex: sem cebola, maionese à parte...">
         </div>
         <div class="botoes-modal">
-            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
+            <button id="btn-limpar" class="btn-fechar">Limpar</button>
+            <button id="btn-imprimir-pedido" class="btn-imprimir">Imprimir Cupom</button>
             <button id="btn-finalizar" class="btn-finalizar">Enviar Pedido</button>
         </div>
     </div>
@@ -195,6 +196,9 @@
         <button id="btn-entendi" class="btn-entendi">Entendi</button>
     </div>
 </div>
+
+<!-- Área Oculta Apenas para Impressão -->
+<div id="area-cupom-impressao" class="area-impressao oculto"></div>
 
 <!-- Rodapé Carrinho -->
 <div class="carrinho-fixo" id="carrinho-container">
