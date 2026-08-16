@@ -102,15 +102,15 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 
 /* Itens do Carrinho */
 .item-carrinho {
-    display:flex; align-items:flex-start; justify-content:space-between;
+    display:flex; align-items:center; justify-content:space-between;
     padding:12px 10px; margin:8px 0; background:#fafafa; border-radius:8px; border:1px solid #f0f0f0;
 }
 .item-info { flex:1; padding-right:10px; }
 .item-nome { font-weight:600; font-size:.95rem; color:#111; margin-bottom:4px; line-height:1.3; }
-.item-preco-unit { font-size:.85rem; color:#777; margin-top:2px; }
-.item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; margin-left:8px; }
+.item-preco-unit { font-size:.85rem; color:#777; }
+.item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; }
 
-.qtd-controle { display:flex; align-items:center; gap:10px; margin-top:6px; }
+.qtd-controle { display:flex; align-items:center; gap:10px; }
 .qtd-btn {
     width:34px; height:34px; border-radius:8px; border:none; background:#fff; color:#333; font-size:1.1rem; font-weight:600;
     cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.12); transition:all .2s;
@@ -121,7 +121,7 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 
 .form-grupo { margin:12px 0; }
 .form-grupo label { display:block; margin-bottom:5px; font-weight:500; font-size:.9rem; color:#333; }
-.form-grupo input, .form-grupo select {
+.form-grupo input, .form-grupo select, .form-grupo textarea {
     width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-size:.9rem;
 }
 .input-desativado { background:#f8f8f8; color:#666; cursor:not-allowed; }
@@ -130,6 +130,8 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 .botoes-modal { display:flex; gap:10px; margin-top:18px; }
 .btn-fechar { flex:1; padding:11px; border:none; border-radius:8px; background:#eee; font-weight:600; cursor:pointer; font-size:.95rem; transition:background .2s; }
 .btn-fechar:hover { background:#e4e4e4; }
+.btn-imprimir { flex:1; padding:11px; border:none; border-radius:8px; background:#f97316; color:#fff; font-weight:600; cursor:pointer; font-size:.95rem; transition:background .2s; }
+.btn-imprimir:hover { background:#ea580c; }
 .btn-finalizar { flex:2; padding:11px; border:none; border-radius:8px; background:#22c55e; color:#fff; cursor:pointer; font-size:.95rem; transition:background .2s; }
 .btn-finalizar:hover { background:#20b850; }
 
@@ -146,3 +148,19 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 .adicional-item { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee; }
 .btn-add-adicional { width:30px; height:30px; border-radius:8px; border:none; background:#f0f0f0; cursor:pointer; font-weight:bold; transition:.2s; }
 .btn-add-adicional.selecionado { background:#22c55e; color:#fff; }
+
+/* Regras para Impressão */
+.area-impressao { display: block !important; visibility: visible !important; color: #000 !important; }
+.area-impressao h2 { font-size: 14px !important; text-align: center !important; margin: 0 0 8px 0 !important; border-bottom: 1px dashed #000 !important; padding-bottom: 5px !important; }
+.area-impressao .linha-total { font-weight: bold !important; font-size: 13px !important; border-top: 1px solid #000 !important; padding-top: 5px !important; margin-top: 5px !important; }
+.area-impressao hr { border: none; border-bottom: 1px dashed #000; margin: 5px 0; }
+
+@media print {
+    body * { visibility: hidden; }
+    .area-impressao, .area-impressao * { visibility: visible !important; }
+    .area-impressao { position: absolute; left: 0; top: 0; width: 76mm; }
+    @page { size: 80mm auto; margin: 0; }
+    html, body { margin: 0 !important; padding: 3mm !important; background: white !important; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .area-impressao { font-family: 'Courier New', monospace !important; font-size: 11px !important; line-height: 1.3 !important; }
+}
