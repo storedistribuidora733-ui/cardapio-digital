@@ -49,6 +49,45 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 .produto-descricao { font-size:0.8rem; color:#666; margin:3px 0; }
 .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
+/* ✅ ESTILO DA OBSERVAÇÃO DO PRODUTO */
+.grupo-observacao {
+    margin: 1.2rem 0 0.8rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+.grupo-observacao label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #333;
+}
+.grupo-observacao textarea {
+    width: 100%;
+    min-height: 70px;
+    padding: 0.7rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    resize: vertical;
+    font-family: inherit;
+}
+.grupo-observacao textarea:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+}
+
+/* ✅ ESTILO DA OBSERVAÇÃO NO CARRINHO */
+.observacao-item {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.3rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid #dc2626;
+    font-style: italic;
+}
+
 /* Botão WhatsApp */
 .botao-whatsapp {
     position: fixed; bottom: 72px; right: 18px; width: 50px; height: 50px;
@@ -102,15 +141,15 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 
 /* Itens do Carrinho */
 .item-carrinho {
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:flex-start; justify-content:space-between;
     padding:12px 10px; margin:8px 0; background:#fafafa; border-radius:8px; border:1px solid #f0f0f0;
 }
 .item-info { flex:1; padding-right:10px; }
 .item-nome { font-weight:600; font-size:.95rem; color:#111; margin-bottom:4px; line-height:1.3; }
-.item-preco-unit { font-size:.85rem; color:#777; }
-.item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; }
+.item-preco-unit { font-size:.85rem; color:#777; margin-top:2px; }
+.item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; margin-left:8px; }
 
-.qtd-controle { display:flex; align-items:center; gap:10px; }
+.qtd-controle { display:flex; align-items:center; gap:10px; margin-top:6px; }
 .qtd-btn {
     width:34px; height:34px; border-radius:8px; border:none; background:#fff; color:#333; font-size:1.1rem; font-weight:600;
     cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.12); transition:all .2s;
@@ -149,7 +188,7 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 .btn-add-adicional { width:30px; height:30px; border-radius:8px; border:none; background:#f0f0f0; cursor:pointer; font-weight:bold; transition:.2s; }
 .btn-add-adicional.selecionado { background:#22c55e; color:#fff; }
 
-/* ==================== REGRAS EXTRAS PARA IMPRESSÃO/PDF SEM PÁGINA BRANCA ==================== */
+/* Impressão Térmica Sem Página Branca */
 .area-impressao { display: block !important; visibility: visible !important; color: #000 !important; }
 .area-impressao h2 { font-size: 14px !important; text-align: center !important; margin: 0 0 8px 0 !important; border-bottom: 1px dashed #000 !important; padding-bottom: 5px !important; }
 .area-impressao .linha-total { font-weight: bold !important; font-size: 13px !important; border-top: 1px solid #000 !important; padding-top: 5px !important; margin-top: 5px !important; }
