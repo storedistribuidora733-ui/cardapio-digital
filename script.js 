@@ -1,7 +1,7 @@
 const CONFIG = {
   horaAbertura: 0,
   horaFechamento: 24,
-  textoStatusAberto: "Aberto até às 24:00",
+  textoStatusAberto: "Aberto 24h",
   textoStatusFechado: "Fechado • Abre às 07:00",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
@@ -27,12 +27,8 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoValorEl = document.getElementById('resumo-valor');
 const badgeQtdEl = document.getElementById('badge-qtd');
-
-// Resumo valores
 const subtotaisEl = document.getElementById('subtotal-itens');
 const valorTotalEl = document.getElementById('valor-total');
-
-// Formulário
 const nomeEl = document.getElementById('nome-cliente');
 const avisoGeral = document.getElementById('aviso-geral');
 const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
@@ -48,8 +44,7 @@ const bairroEl = document.getElementById('bairro');
 const cidadeUfEl = document.getElementById('cidade-uf');
 const avisoCepEl = document.getElementById('aviso-cep');
 const pagamentoEl = document.getElementById('forma-pagamento');
-
-// Modal Produto
+const observacaoEl = document.getElementById('observacao');
 const modalProduto = document.getElementById('modal-produto');
 const btnVoltarLista = document.getElementById('btn-voltar');
 const imgDetalhe = document.getElementById('img-detalhe');
@@ -62,13 +57,10 @@ const qtdAtualEl = document.getElementById('qtd-atual');
 const diminuirQtdBtn = document.getElementById('diminuir-qtd');
 const aumentarQtdBtn = document.getElementById('aumentar-qtd');
 const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
-
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
-// ======================
 // Status da loja
-// ======================
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
   const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
@@ -86,9 +78,7 @@ verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 btnEntendi?.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
-// ======================
 // Limpar carrinho
-// ======================
 function limparTudoCarrinho() {
   carrinho.length = 0;
   listaItensCarrinho.innerHTML = '';
@@ -100,6 +90,7 @@ function limparTudoCarrinho() {
   nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada';
   pagamentoEl.value = 'Dinheiro';
+  observacaoEl.value = '';
   avisoGeral.classList.add('oculto');
   limparCamposEndereco();
   campoTaxaEntregaEl.classList.add('oculto');
@@ -109,9 +100,7 @@ function limparTudoCarrinho() {
 }
 btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
 
-// ======================
 // Atendimento e endereço
-// ======================
 tipoAtendimentoEl?.addEventListener('change', () => {
   if (tipoAtendimentoEl.value === 'entrega') {
     campoTaxaEntregaEl.classList.remove('oculto');
@@ -165,9 +154,7 @@ function limparCamposEndereco() {
   avisoCepEl.style.color = '#2563eb';
 }
 
-// ======================
-// Produtos e Modal
-// ======================
+// Abrir produto
 document.querySelectorAll('.produto').forEach(produto => {
   produto.addEventListener('click', () => {
     if (!verificarStatusLoja(true)) return;
@@ -280,9 +267,7 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   document.body.style.overflow = 'auto';
 });
 
-// ======================
-// Atualização do carrinho — CONTADOR CORRIGIDO
-// ======================
+// Atualizar carrinho
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
   let totalItens = 0; let qtdTotal = 0;
@@ -341,9 +326,7 @@ function adicionarEventosCarrinho() {
   }));
 }
 
-// ======================
-// Abrir / Fechar modal
-// ======================
+// Abrir/fechar carrinho
 abrirCarrinhoBtn?.addEventListener('click', () => {
   if (carrinho.length === 0) return;
   if (!verificarStatusLoja(true)) return;
@@ -357,9 +340,7 @@ fecharModalBtns.forEach(b => b.addEventListener('click', () => {
   document.body.style.overflow = 'auto';
 }));
 
-// ======================
-// Categorias e Busca
-// ======================
+// Categorias e busca
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
     document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
@@ -378,9 +359,7 @@ campoBusca?.addEventListener('input', () => {
   });
 });
 
-// ======================
 // Enviar pedido WhatsApp
-// ======================
 document.getElementById('btn-finalizar')?.addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
   const nome = nomeEl.value.trim();
@@ -392,7 +371,6 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
 
   const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
   const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-  const observacaoEl = document.getElementById('observacao');
   const observacao = observacaoEl ? observacaoEl.value.trim() : '';
 
   if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
@@ -419,24 +397,4 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
 👤 Cliente: ${nome}
 📦 Tipo: ${tipoAtendimento === 'retirada' ? 'Retirada na loja' : 'Entrega'}`;
 
-  if (tipoAtendimento === 'entrega') mensagem += `\n📍 Endereço:\n${enderecoCompleto}`;
-
-  mensagem += `\n\n📋 *ITENS DO PEDIDO*:\n`;
-  carrinho.forEach(item => {
-    mensagem += `• ${item.quantidade}x ${item.nome} — R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
-  });
-
-  mensagem += `\n💵 *RESUMO DE VALORES*
-Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
-${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}` : 'Sem taxa de retirada'}
-*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
-
-💳 Forma de pagamento: ${pagamento}`;
-
-  if (observacao) mensagem += `\n📝 Observação: ${observacao}`;
-
-  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-  window.open(urlWhatsApp, '_blank');
-
-  limparTudoCarrinho();
-});
+  if (tipoAtendimento === 'entrega') mensagem += `\
