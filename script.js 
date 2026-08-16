@@ -405,4 +405,111 @@ function adicionarEventosCarrinho() {
     });
   });
 
-  document.querySelectorAll('.aumentar-item').forEach(
+  document.querySelectorAll('.aumentar-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index);
+      carrinho[idx].quantidade++;
+      atualizarCarrinho();
+    });
+  });
+}
+
+// Abrir/fechar carrinho
+abrirCarrinhoBtn?.addEventListener('click', () => {
+  if (carrinho.length === 0) return;
+  if (!verificarStatusLoja(true)) return;
+  atualizarCarrinho();
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+  avisoGeral.classList.add('oculto');
+});
+
+fecharModalBtns.forEach(b => b.addEventListener('click', () => {
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+}));
+
+// Categorias e busca
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    const cat = botao.dataset.categoria;
+    document.querySelectorAll('.produto').forEach(p => {
+      p.style.display = (cat === 'todos' || p.dataset.categoria === cat) ? 'flex' : 'none';
+    });
+    campoBusca.value = '';
+  });
+});
+
+campoBusca?.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(p => {
+    const nome = p.dataset.nome.toLowerCase();
+    const desc = (p.dataset.descricao || '').toLowerCase();
+    p.style.display = nome.includes(termo) || desc.includes(termo) ? 'flex' : 'none';
+  });
+});
+
+// Enviar pedido para WhatsApp
+document.getElementById('btn-finalizar')?.addEventListener('click', () => {
+  avisoGeral.classList.add('oculto');
+  const nome = nomeEl.value.trim();
+  const pagamento = pagamentoEl.value;
+  const tipoAtendimento = tipoAtendimentoEl.value;
+  const taxa = tipoAtendimento === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
+  const totalGeral = totalItens + taxa;
+
+  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
+  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const observacao = observacaoEl ? observacaoEl.value.trim() : '';
+
+  if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
+  if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
+  if (tipoAtendimento === 'entrega') {
+    const cepValido = cepEl.value.trim().replace(/\D/g, '').length === 8;
+    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Aguarde o preenchimento do endereço!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
+  }
+
+  let enderecoCompleto = '';
+  if (tipoAtendimento === 'entrega') {
+    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
+    if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
+    enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
+    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
+    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
+    if (referenciaEl.value.trim()) enderecoCompleto += `\n  Ponto de referência: ${referenciaEl.value.trim()}`;
+  }
+
+  let mensagem = `🍔 *PEDIDO #${numeroPedido} — ${CONFIG.nomeLoja}*
+📅 ${dataPedido}
+👤 Cliente: ${nome}
+📦 Tipo: ${tipoAtendimento === 'retirada' ? 'Retirada na loja' : 'Entrega'}
+${tipoAtendimento === 'entrega' ? `📍 Endereço:\n${enderecoCompleto}` : ''}
+
+🛒 *ITENS:*
+`;
+
+  carrinho.forEach(item => {
+    mensagem += `• ${item.quantidade}x ${item.nome} — R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+  });
+
+  mensagem += `
+💸 *RESUMO:*
+Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
+${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}\n` : ''}
+*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
+
+💳 Pagamento: ${pagamento}
+${observacao ? `📝 Observação: ${observacao}` : ''}
+
+✅ Enviado pelo cardápio online!`;
+
+  const linkWhats = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(linkWhats, '_blank');
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
