@@ -88,7 +88,7 @@
         .texto-valor { font-size: 1rem; font-weight: 600; color: #1f2937; }
         .btn-ver-carrinho {
             background: #dc2626; color: #fff; border: none; border-radius: 8px;
-            padding: 10px 20px; font-weight: 600; font-size: .95rem; cursor: pointer;
+            padding: 10px 20px; font-weight: 600; font-size: .95rem; cursor:pointer;
             transition: background .2s ease; white-space: nowrap;
         }
         .btn-ver-carrinho:hover { background: #b91c1c; }
@@ -102,7 +102,6 @@
         .bloco-adicionais { margin-top:15px; }
         .bloco-adicionais.oculto { display: none !important; }
         
-        /* ✅ NOVO BLOCO DE OBSERVAÇÃO DO PRODUTO */
         .bloco-observacao-item { margin-top:18px; }
         .bloco-observacao-item label { display:block; font-weight:600; font-size:0.95rem; margin-bottom:6px; color:#333; }
         #observacao-item {
@@ -254,7 +253,7 @@
         <p class="produto-preco">R$ 25,00</p>
     </div>
     
-    <!-- 🥤 BEBIDAS — SEM ADICIONAIS -->
+    <!-- 🥤 BEBIDAS -->
     <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola Lata 350ml" data-preco="5.00" data-tem-adicionais="nao" data-descricao="Lata gelada de Coca-Cola." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" alt="Coca Lata"></div>
         <div class="produto-info">
@@ -262,61 +261,6 @@
             <p class="produto-descricao">350ml bem gelada.</p>
         </div>
         <p class="produto-preco">R$ 5,00</p>
-    </div>
-    
-    <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 2 Litros" data-preco="12.00" data-tem-adicionais="nao" data-descricao="Garrafa grande para compartilhar." data-imagem="https://images.unsplash.com/photo-1625772245513-8a38480858b4?w=400&q=80">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1625772245513-8a38480858b4?w=400&q=80" alt="Coca 2L"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Coca-Cola 2L</h3>
-            <p class="produto-descricao">Garrafa de 2 litros.</p>
-        </div>
-        <p class="produto-preco">R$ 12,00</p>
-    </div>
-
-    <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica Lata" data-preco="5.00" data-tem-adicionais="nao" data-descricao="Lata gelada de Guaraná Antarctica." data-imagem="https://images.unsplash.com/photo-1581636625411-9d8a1c4a8a5b?w=400&q=80">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1581636625411-9d8a1c4a8a5b?w=400&q=80" alt="Guaraná Lata"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Guaraná Antarctica Lata</h3>
-            <p class="produto-descricao">350ml bem gelada.</p>
-        </div>
-        <p class="produto-preco">R$ 5,00</p>
-    </div>
-    
-    <div class="produto" data-categoria="bebidas" data-nome="Água Mineral sem Gás" data-preco="3.00" data-tem-adicionais="nao" data-descricao="Garrafa de 500ml de água pura." data-imagem="https://images.unsplash.com/photo-1548833510-5c30d588a83a?w=400&q=80">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1548833510-5c30d588a83a?w=400&q=80" alt="Água sem Gás"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Água Mineral sem Gás</h3>
-            <p class="produto-descricao">500ml.</p>
-        </div>
-        <p class="produto-preco">R$ 3,00</p>
-    </div>
-
-    <!-- 🍟 ACOMPANHAMENTOS -->
-    <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Pequena" data-preco="7.00" data-tem-adicionais="sim" data-descricao="Porção pequena de batatas crocantes." data-imagem="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80" alt="Batata Pequena"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Batata Frita Pequena</h3>
-            <p class="produto-descricao">Crocantes e sequinhas.</p>
-        </div>
-        <p class="produto-preco">R$ 7,00</p>
-    </div>
-    
-    <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Grande" data-preco="12.00" data-tem-adicionais="sim" data-descricao="Porção grande para compartilhar." data-imagem="https://images.unsplash.com/photo-1630384060228-573a69d76150?w=400&q=80">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1630384060228-573a69d76150?w=400&q=80" alt="Batata Grande"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Batata Frita Grande</h3>
-            <p class="produto-descricao">Porção generosa!</p>
-        </div>
-        <p class="produto-preco">R$ 12,00</p>
-    </div>
-    
-    <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola" data-preco="9.00" data-tem-adicionais="sim" data-descricao="Anéis de cebola empanados e crocantes." data-imagem="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&q=80">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&q=80" alt="Anéis de Cebola"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Anéis de Cebola</h3>
-            <p class="produto-descricao">Crocantes por fora, macios por dentro.</p>
-        </div>
-        <p class="produto-preco">R$ 9,00</p>
     </div>
 </div>
 
@@ -332,15 +276,13 @@
             <span id="preco-original" style="color:#999; text-decoration:line-through; margin-right:8px;"></span>
             <span class="preco-promocional" id="preco-promocional"></span>
         </div>
-        <!-- ✅ BLOCO ADICIONAIS — FICA OCULTO NAS BEBIDAS AUTOMATICAMENTE -->
         <div id="bloco-adicionais" class="bloco-adicionais">
             <h3 style="font-size:1rem; margin-bottom:8px;">Adicionais</h3>
             <div id="lista-adicionais"></div>
         </div>
-        <!-- ✅ CAMPO DE OBSERVAÇÃO DO PRODUTO -->
         <div class="bloco-observacao-item">
-            <label>Observação do produto:</label>
-            <textarea id="observacao-item" placeholder="Ex: Sem cebola, ponto da carne, sem gelo..." rows="2"></textarea>
+            <label>Observação deste produto:</label>
+            <textarea id="observacao-item" placeholder="Ex: Sem cebola, bem passado, sem gelo..." rows="2"></textarea>
         </div>
     </div>
     <div class="rodape-detalhe">
@@ -398,7 +340,6 @@
             <div class="form-grupo">
                 <label>CEP</label>
                 <input type="text" id="cep" placeholder="00000-000">
-                <div id="aviso-cep" style="font-size:0.8rem; color:#2563eb; margin-top:3px;">Digite o CEP para preencher automaticamente</div>
             </div>
             <div class="form-duplo form-grupo">
                 <div>
@@ -424,10 +365,6 @@
                     <input type="text" id="cidade-uf" readonly>
                 </div>
             </div>
-            <div class="form-grupo">
-                <label>Ponto de referência</label>
-                <input type="text" id="referencia" placeholder="Próximo a...">
-            </div>
         </div>
         <div class="form-grupo">
             <label>Forma de pagamento</label>
@@ -450,7 +387,7 @@
 
 <div id="alerta-fechado" class="oculto">
     <div class="alerta-caixa">
-        <h2> LOJA FECHADA</h2>
+        <h2>LOJA FECHADA</h2>
         <p>Aberto das 07:00 às 23:00</p>
         <button id="btn-entendi" class="btn-entendi">Entendi</button>
     </div>
