@@ -167,13 +167,12 @@ function limparCamposEndereco() {
 }
 
 // ======================
-// Produtos e Modal — CORRIGIDO 100%
+// Produtos e Modal — Sem adicionais em bebidas
 // ======================
 document.querySelectorAll('.produto').forEach(produto => {
   produto.addEventListener('click', () => {
     if (!verificarStatusLoja(true)) return;
 
-    // Lê direto do HTML se tem adicionais
     const temAdicionais = (produto.dataset.temAdicionais || 'sim').toLowerCase() === 'sim';
 
     produtoAtual = {
@@ -200,7 +199,6 @@ document.querySelectorAll('.produto').forEach(produto => {
     precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
     atualizarTotalDetalhe();
 
-    // Mostra ou esconde todo o bloco de adicionais
     if (blocoAdicionaisEl) {
       blocoAdicionaisEl.classList.toggle('oculto', !temAdicionais);
     }
@@ -388,7 +386,7 @@ campoBusca?.addEventListener('input', () => {
 });
 
 // ======================
-// Enviar pedido WhatsApp
+// Enviar pedido WhatsApp — NOVO MODELO DE CUPOM
 // ======================
 document.getElementById('btn-finalizar')?.addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
@@ -423,26 +421,41 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
     if (referenciaEl.value.trim()) enderecoCompleto += `\n  Ponto de referência: ${referenciaEl.value.trim()}`;
   }
 
-  let mensagem = `🍔 *PEDIDO #${numeroPedido} — ${CONFIG.nomeLoja}*
-📅 ${dataPedido}
-👤 Cliente: ${nome}
-📦 Tipo: ${tipoAtendimento === 'retirada' ? 'Retirada na loja' : 'Entrega'}`;
+  let mensagem = `=====================================
+           ALISON BURGER
+=====================================
+PEDIDO Nº: ${numeroPedido}
+EMITIDO EM: ${dataPedido}
+-------------------------------------
+CLIENTE: ${nome}
+TIPO DE ATENDIMENTO: ${tipoAtendimento === 'retirada' ? 'RETIRADA NA LOJA' : 'ENTREGA'}
+${tipoAtendimento === 'entrega' ? `
+-------------------------------------
+ENDEREÇO:
+${enderecoCompleto}` : ''}
+-------------------------------------
+ITEM                    QTD  VALOR
+-------------------------------------
+`;
 
-  if (tipoAtendimento === 'entrega') mensagem += `\n📍 Endereço:\n${enderecoCompleto}`;
-
-  mensagem += `\n\n📋 *ITENS DO PEDIDO*:\n`;
   carrinho.forEach(item => {
-    mensagem += `• ${item.quantidade}x ${item.nome} — R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+    mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(3)}  R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
   });
 
-  mensagem += `\n💵 *RESUMO DE VALORES*
-Subtotal: R$ ${totalItens.toFixed(2).replace('.', ',')}
-${tipoAtendimento === 'entrega' ? `Taxa de entrega: R$ ${taxa.toFixed(2).replace('.', ',')}` : 'Sem taxa de retirada'}
-*TOTAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
-
-💳 Forma de pagamento: ${pagamento}`;
-
-  if (observacao) mensagem += `\n📝 Observação: ${observacao}`;
+  mensagem += `-------------------------------------
+SUBTOTAL...............: R$ ${totalItens.toFixed(2).replace('.', ',')}
+TAXA DE ENTREGA........: R$ ${taxa.toFixed(2).replace('.', ',')}
+-------------------------------------
+*TOTAL A PAGAR.........: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
+-------------------------------------
+FORMA DE PAGAMENTO.....: ${pagamento}
+${observacao ? `
+OBSERVAÇÃO:
+${observacao}
+-------------------------------------` : ''}
+=====================================
+      OBRIGADO PELA PREFERÊNCIA!
+=====================================`;
 
   const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
