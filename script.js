@@ -386,7 +386,7 @@ campoBusca?.addEventListener('input', () => {
 });
 
 // ======================
-// Enviar pedido WhatsApp — NOVO MODELO DE CUPOM
+// Enviar pedido WhatsApp — AJUSTADO COM ESPAÇO E ALINHAMENTO
 // ======================
 document.getElementById('btn-finalizar')?.addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
@@ -422,7 +422,7 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
   }
 
   let mensagem = `=====================================
-           ALISON BURGER
+            ALISON BURGER
 =====================================
 PEDIDO Nº: ${numeroPedido}
 EMITIDO EM: ${dataPedido}
@@ -434,25 +434,27 @@ ${tipoAtendimento === 'entrega' ? `
 ENDEREÇO:
 ${enderecoCompleto}` : ''}
 -------------------------------------
-ITEM                    QTD  VALOR
+ITEM                   QTD   VALOR
 -------------------------------------
 `;
 
+  // Adiciona cada item com espaço e alinhamento fixo
   carrinho.forEach(item => {
-    mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(3)}  R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+    const valorItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
+    mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(2)}    R$ ${valorItem}\n\n`;
   });
 
   mensagem += `-------------------------------------
 SUBTOTAL...............: R$ ${totalItens.toFixed(2).replace('.', ',')}
 TAXA DE ENTREGA........: R$ ${taxa.toFixed(2).replace('.', ',')}
 -------------------------------------
-*TOTAL A PAGAR.........: R$ ${totalGeral.toFixed(2).replace('.', ',')}*
+TOTAL A PAGAR..........: R$ ${totalGeral.toFixed(2).replace('.', ',')}
 -------------------------------------
 FORMA DE PAGAMENTO.....: ${pagamento}
 ${observacao ? `
+-------------------------------------
 OBSERVAÇÃO:
-${observacao}
--------------------------------------` : ''}
+${observacao}` : ''}
 =====================================
       OBRIGADO PELA PREFERÊNCIA!
 =====================================`;
