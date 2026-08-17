@@ -1,8 +1,8 @@
 const CONFIG = {
-  horaAbertura: 5,
-  horaFechamento: 22,
-  textoStatusAberto: " ABERTO ",
-  textoStatusFechado: " FECHADO ",
+  horaAbertura: 7,
+  horaFechamento: 23,
+  textoStatusAberto: "Aberto até às 23:00",
+  textoStatusFechado: "Fechado • Abre às 07:00",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
@@ -14,6 +14,7 @@ const carrinho = [];
 let produtoAtual = null;
 let quantidadeAtual = 1;
 let adicionaisSelecionados = [];
+let observacaoProdutoAtual = "";
 
 // Elementos gerais
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
@@ -28,6 +29,7 @@ const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoValorEl = document.getElementById('resumo-valor');
 const badgeQtdEl = document.getElementById('badge-qtd');
 const blocoAdicionaisEl = document.getElementById('bloco-adicionais');
+const observacaoItemEl = document.getElementById('observacao-item');
 
 // Resumo valores
 const subtotaisEl = document.getElementById('subtotal-itens');
@@ -49,6 +51,7 @@ const bairroEl = document.getElementById('bairro');
 const cidadeUfEl = document.getElementById('cidade-uf');
 const avisoCepEl = document.getElementById('aviso-cep');
 const pagamentoEl = document.getElementById('forma-pagamento');
+const observacaoGeralEl = document.getElementById('observacao');
 
 // Modal Produto
 const modalProduto = document.getElementById('modal-produto');
@@ -101,6 +104,7 @@ function limparTudoCarrinho() {
   nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada';
   pagamentoEl.value = 'Dinheiro';
+  observacaoGeralEl.value = '';
   avisoGeral.classList.add('oculto');
   limparCamposEndereco();
   campoTaxaEntregaEl.classList.add('oculto');
@@ -167,7 +171,7 @@ function limparCamposEndereco() {
 }
 
 // ======================
-// Produtos e Modal — Sem adicionais em bebidas
+// Abrir produto e adicionar observação
 // ======================
 document.querySelectorAll('.produto').forEach(produto => {
   produto.addEventListener('click', () => {
@@ -190,7 +194,9 @@ document.querySelectorAll('.produto').forEach(produto => {
 
     quantidadeAtual = 1;
     adicionaisSelecionados = [];
+    observacaoProdutoAtual = "";
     qtdAtualEl.textContent = quantidadeAtual;
+    if(observacaoItemEl) observacaoItemEl.value = "";
 
     imgDetalhe.src = produtoAtual.imagem;
     nomeDetalhe.textContent = produtoAtual.nome;
@@ -269,18 +275,20 @@ function atualizarTotalDetalhe() {
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
 
+  observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
+
   const nomeCompleto = adicionaisSelecionados.length 
     ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
     : produtoAtual.nome;
 
   const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
 
-  const itemExistente = carrinho.find(i => i.nome === nomeCompleto);
-  if (itemExistente) {
-    itemExistente.quantidade += quantidadeAtual;
-  } else {
-    carrinho.push({ nome: nomeCompleto, preco: precoTotal, quantidade: quantidadeAtual });
-  }
+  carrinho.push({ 
+    nome: nomeCompleto, 
+    preco: precoTotal, 
+    quantidade: quantidadeAtual,
+    observacao: observacaoProdutoAtual
+  });
 
   atualizarCarrinho();
   modalProduto.classList.add('oculto');
@@ -288,7 +296,7 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
 });
 
 // ======================
-// Atualização do carrinho
+// Atualizar carrinho com observação
 // ======================
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
@@ -315,6 +323,7 @@ function atualizarCarrinho() {
     itemEl.innerHTML = `
       <div class="item-info">
         <h4 class="item-nome">${item.nome}</h4>
+        ${item.observacao ? `<p class="item-obs">Obs: ${item.observacao}</p>` : ''}
         <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
       </div>
       <div class="qtd-controle">
@@ -349,7 +358,7 @@ function adicionarEventosCarrinho() {
 }
 
 // ======================
-// Abrir / Fechar modal
+// Abrir / Fechar carrinho
 // ======================
 abrirCarrinhoBtn?.addEventListener('click', () => {
   if (carrinho.length === 0) return;
@@ -386,7 +395,7 @@ campoBusca?.addEventListener('input', () => {
 });
 
 // ======================
-// Enviar pedido WhatsApp — AJUSTADO COM ESPAÇO E ALINHAMENTO
+// Enviar pedido WhatsApp com observação
 // ======================
 document.getElementById('btn-finalizar')?.addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
@@ -399,8 +408,7 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
 
   const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
   const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-  const observacaoEl = document.getElementById('observacao');
-  const observacao = observacaoEl ? observacaoEl.value.trim() : '';
+  const observacaoGeral = observacaoGeralEl ? observacaoGeralEl.value.trim() : '';
 
   if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
   if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
@@ -438,10 +446,11 @@ ITEM                   QTD   VALOR
 -------------------------------------
 `;
 
-  // Adiciona cada item com espaço e alinhamento fixo
   carrinho.forEach(item => {
     const valorItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
-    mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(2)}    R$ ${valorItem}\n\n`;
+    mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(2)}    R$ ${valorItem}\n`;
+    if(item.observacao) mensagem += `  ⚠️ Obs: ${item.observacao}\n`;
+    mensagem += `\n`;
   });
 
   mensagem += `-------------------------------------
@@ -451,10 +460,10 @@ TAXA DE ENTREGA........: R$ ${taxa.toFixed(2).replace('.', ',')}
 TOTAL A PAGAR..........: R$ ${totalGeral.toFixed(2).replace('.', ',')}
 -------------------------------------
 FORMA DE PAGAMENTO.....: ${pagamento}
-${observacao ? `
+${observacaoGeral ? `
 -------------------------------------
-OBSERVAÇÃO:
-${observacao}` : ''}
+OBSERVAÇÃO GERAL:
+${observacaoGeral}` : ''}
 =====================================
       OBRIGADO PELA PREFERÊNCIA!
 =====================================`;
