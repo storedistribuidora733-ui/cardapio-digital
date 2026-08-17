@@ -27,7 +27,7 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoValorEl = document.getElementById('resumo-valor');
 const badgeQtdEl = document.getElementById('badge-qtd');
-const blocoAdicionaisEl = document.getElementById('bloco-adicionais'); // Adicionei essa linha
+const blocoAdicionaisEl = document.getElementById('bloco-adicionais');
 
 // Resumo valores
 const subtotaisEl = document.getElementById('subtotal-itens');
@@ -167,21 +167,20 @@ function limparCamposEndereco() {
 }
 
 // ======================
-// Produtos e Modal — COM OCULTAÇÃO DE ADICIONAIS PARA BEBIDAS
+// Produtos e Modal — CORRIGIDO 100%
 // ======================
 document.querySelectorAll('.produto').forEach(produto => {
   produto.addEventListener('click', () => {
     if (!verificarStatusLoja(true)) return;
 
-    // ✅ Verifica se o produto tem adicionais (vem do HTML)
-    const temAdicionais = produto.dataset.temAdicionais?.toLowerCase() === 'sim';
+    // Lê direto do HTML se tem adicionais
+    const temAdicionais = (produto.dataset.temAdicionais || 'sim').toLowerCase() === 'sim';
 
     produtoAtual = {
       nome: produto.dataset.nome,
       preco: parseFloat(produto.dataset.preco),
       descricao: produto.dataset.descricao || 'Sem descrição.',
       imagem: produto.dataset.imagem || '',
-      // ✅ Adicionais só aparecem se o produto permitir
       adicionais: temAdicionais ? [
         { nome: 'Bacon Suculento', preco: 2.90 },
         { nome: 'Queijo Extra', preco: 2.50 },
@@ -201,8 +200,8 @@ document.querySelectorAll('.produto').forEach(produto => {
     precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
     atualizarTotalDetalhe();
 
-    // ✅ Mostra ou esconde o bloco de adicionais automaticamente
-    if(blocoAdicionaisEl) {
+    // Mostra ou esconde todo o bloco de adicionais
+    if (blocoAdicionaisEl) {
       blocoAdicionaisEl.classList.toggle('oculto', !temAdicionais);
     }
 
