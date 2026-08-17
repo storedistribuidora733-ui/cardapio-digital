@@ -325,7 +325,7 @@ ITEM                   QTD   VALOR
   carrinho.forEach(item => {
     const valorItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
     mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(2)}    R$ ${valorItem}\n`;
-    if(item.observacao) mensagem += `  ⚠️ Obs do item: ${item.observacao}\n`;
+    if(item.observacao) mensagem += `⚠️ Obs do item: ${item.observacao}\n`;
     mensagem += `\n`;
   });
 
@@ -342,7 +342,7 @@ ${observacaoGeral ? `
 ${observacaoGeral}` : ''}
 =====================================
       OBRIGADO PELA PREFERÊNCIA!
-=====================================`;
+`;
 
   const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
