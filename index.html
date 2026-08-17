@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
@@ -18,97 +19,49 @@
             body { max-width: 620px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
         }
 
-        /* ✅ CABEÇALHO COMPLETO COM LOGO PERSONALIZADA */
         .cabecalho-loja {
-            width: 100%;
-            padding: 12px 15px;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 101;
+            width: 100%; padding: 12px 15px; background: #fff; display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid #eee; position: sticky; top:0; z-index:101;
         }
-
-        /* 🍔 LOGO REDONDA PERSONALIZADA "ALISON BURGER" */
         .logo-redonda {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 900;
-            flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
-            border: 2px solid #fff;
+            width: 36px; height: 36px; background: #dc2626; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 16px; flex-shrink: 0;
         }
+        .nome-loja { font-size: 1.1rem; font-weight: 800; color:#111; text-align: center; flex:1; margin: 0; }
+        .linha-status { display:flex; align-items:center; gap:6px; font-size:0.9rem; flex-shrink: 0; }
+        .ponto-status { width:10px; height:10px; border-radius:50%; }
+        .ponto-status.aberto { background:#22c55e; }
+        .ponto-status.fechado { background:#dc2626; }
 
-        /* Nome da Loja PERFEITAMENTE CENTRALIZADO */
-        .nome-loja {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #111;
-            margin: 0;
-            text-align: center;
-            flex: 1;
-            letter-spacing: 0.5px;
-        }
-
-        /* 📌 STATUS BEM NO CANTO DIREITO */
-        .linha-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-            font-weight: 500;
-        }
-        .ponto-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        .ponto-status.aberto { background: #22c55e; }
-        .ponto-status.fechado { background: #dc2626; }
-        .texto-status { color: #333; }
-
-        /* Categorias */
         .categorias {
-            width: 100%; padding: 8px 10px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
-            background: #F5F7FA; border-bottom: 1px solid #eee; position: sticky; top: 52px; z-index: 99;
+            width:100%; padding:8px 10px; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+            background:#F5F7FA; border-bottom:1px solid #eee; position:sticky; top:52px; z-index:99;
         }
-        .categorias::-webkit-scrollbar { display: none; }
+        .categorias::-webkit-scrollbar { display:none; }
         .categoria-btn {
-            padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer;
-            font-weight: 600; white-space: nowrap; transition: .2s;
+            padding:6px 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer;
+            font-weight:600; white-space:nowrap; transition: .2s;
         }
-        .categoria-btn.ativo { background: #dc2626; border-color: #dc2626; color: #fff; }
+        .categoria-btn.ativo { background:#dc2626; border-color:#dc2626; color:#fff; }
 
-        .busca { margin: 8px 10px; position: relative; }
-        .busca i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #999; }
-        .busca input { width: 100%; padding: 8px 8px 8px 30px; border: 1px solid #ddd; border-radius: 8px; }
+        .busca { margin:8px 10px; position:relative; }
+        .busca i { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#999; }
+        .busca input { width:100%; padding:8px 8px 8px 30px; border:1px solid #ddd; border-radius:8px; }
 
-        /* Produtos */
-        .lista-produtos { display: flex; flex-direction: column; gap: 8px; margin: 8px 10px; }
+        .lista-produtos { display:flex; flex-direction:column; gap:8px; margin:8px 10px; }
         .produto {
-            background: #fff; border-radius: 8px; padding: 9px; display: flex; align-items: center; gap: 10px; cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform .2s, box-shadow .2s;
+            background:#fff; border-radius:8px; padding:9px; display:flex; align-items:center; gap:10px; cursor:pointer;
+            box-shadow:0 1px 3px rgba(0,0,0,0.08); transition: transform .2s, box-shadow .2s;
         }
         .produto:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,.12); }
-        .produto-imagem { width: 70px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
-        .produto-imagem img { width: 100%; height: 100%; object-fit: cover; }
-        .produto-info { flex: 1; }
-        .produto-nome { font-size: 1rem; font-weight: 600; color: #111; }
-        .produto-descricao { font-size: 0.8rem; color: #666; margin: 3px 0; }
-        .produto-preco { font-size: 1.1rem; font-weight: 800; color: #dc2626; white-space: nowrap; }
+        .produto-imagem { width:70px; height:70px; border-radius:6px; overflow:hidden; flex-shrink:0; }
+        .produto-imagem img { width:100%; height:100%; object-fit:cover; }
+        .produto-info { flex:1; }
+        .produto-nome { font-size:1rem; font-weight:600; color:#111; }
+        .produto-descricao { font-size:0.8rem; color:#666; margin:3px 0; }
+        .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
-        /* Botão WhatsApp */
         .botao-whatsapp {
             position: fixed; bottom: 72px; right: 18px; width: 50px; height: 50px;
             background: #25d366; color: #fff !important; border-radius: 50%;
@@ -119,7 +72,6 @@
             .botao-whatsapp { right: calc((100vw - 620px)/2 + 15px); bottom: 78px; }
         }
 
-        /* Carrinho Fixo */
         .carrinho-fixo {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: #ffffff; color: #222; padding: 10px 16px; display: none; z-index: 100;
@@ -141,92 +93,86 @@
         }
         .btn-ver-carrinho:hover { background: #b91c1c; }
 
-        /* Modais */
-        #modal-produto { position: fixed; inset: 0; background: #fff; z-index: 10000; overflow-y: auto; }
-        .cabecalho-detalhe { position: relative; width: 100%; height: 180px; background: #f3f4f6; }
-        #btn-voltar { position: absolute; top: 12px; left: 12px; width: 32px; height: 32px; border-radius: 50%; border: none; background: #fff; font-size: 1rem; cursor: pointer; z-index: 10; }
-        #img-detalhe { width: 100%; height: 100%; object-fit: cover; }
-        .conteudo-detalhe { padding: 30px 15px 110px; }
-        .preco-promocional { font-size: 1.4rem; font-weight: 800; color: #dc2626; }
-        .rodape-detalhe { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 12px 15px; border-top: 1px solid #ddd; display: flex; align-items: center; gap: 15px; z-index: 10001; }
-        .qtd-detalhe { display: flex; align-items: center; gap: 18px; }
-        .qtd-detalhe button { font-size: 1.5rem; border: none; background: none; color: #dc2626; cursor: pointer; }
-        #btn-adicionar-detalhe { flex: 1; padding: 10px; border: none; border-radius: 8px; background: #dc2626; color: #fff; font-size: 1rem; cursor: pointer; }
+        #modal-produto { position:fixed; inset:0; background:#fff; z-index:10000; overflow-y:auto; }
+        .cabecalho-detalhe { position:relative; width:100%; height:180px; background:#f3f4f6; }
+        #btn-voltar { position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; border:none; background:#fff; font-size:1rem; cursor:pointer; z-index:10; }
+        #img-detalhe { width:100%; height:100%; object-fit:cover; }
+        .conteudo-detalhe { padding:30px 15px 110px; }
+        .preco-promocional { font-size:1.4rem; font-weight:800; color:#dc2626; }
+        .bloco-adicionais { margin-top:15px; }
+        .bloco-adicionais.oculto { display: none !important; }
+        .rodape-detalhe { position:fixed; bottom:0; left:0; width:100%; background:#fff; padding:12px 15px; border-top:1px solid #ddd; display:flex; align-items:center; gap:15px; z-index:10001; }
+        .qtd-detalhe { display:flex; align-items:center; gap:18px; }
+        .qtd-detalhe button { font-size:1.5rem; border:none; background:none; color:#dc2626; cursor:pointer; }
+        #btn-adicionar-detalhe { flex:1; padding:10px; border:none; border-radius:8px; background:#dc2626; color:#fff; font-size:1rem; cursor:pointer; }
 
-        #modal-carrinho { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 10002; padding: 10px; }
-        .modal-conteudo { background: #fff; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 12px; padding: 20px; overflow-y: auto; }
-        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #eee; }
-        .modal-cabecalho h3 { font-size: 1.25rem; font-weight: 700; color: #222; }
-        .fechar-modal { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #888; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background .2s; }
-        .fechar-modal:hover { background: #f2f2f2; }
+        #modal-carrinho { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:10002; padding:10px; }
+        .modal-conteudo { background:#fff; width:100%; max-width:500px; max-height:90vh; border-radius:12px; padding:20px; overflow-y:auto; }
+        .modal-cabecalho { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid #eee; }
+        .modal-cabecalho h3 { font-size:1.25rem; font-weight:700; color:#222; }
+        .fechar-modal { background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .2s; }
+        .fechar-modal:hover { background:#f2f2f2; }
 
         .item-carrinho {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 10px; margin: 8px 0; background: #fafafa; border-radius: 8px; border: 1px solid #f0f0f0;
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 10px; margin:8px 0; background:#fafafa; border-radius:8px; border:1px solid #f0f0f0;
         }
-        .item-info { flex: 1; padding-right: 10px; }
-        .item-nome { font-weight: 600; font-size: .95rem; color: #111; margin-bottom: 4px; line-height: 1.3; }
-        .item-preco-unit { font-size: .85rem; color: #777; }
-        .item-total { font-weight: 700; font-size: 1rem; color: #dc2626; white-space: nowrap; }
+        .item-info { flex:1; padding-right:10px; }
+        .item-nome { font-weight:600; font-size:.95rem; color:#111; margin-bottom:4px; line-height:1.3; }
+        .item-preco-unit { font-size:.85rem; color:#777; }
+        .item-total { font-weight:700; font-size:1rem; color:#dc2626; white-space:nowrap; }
 
-        .qtd-controle { display: flex; align-items: center; gap: 10px; }
+        .qtd-controle { display:flex; align-items:center; gap:10px; }
         .qtd-btn {
-            width: 34px; height: 34px; border-radius: 8px; border: none; background: #fff; color: #333; font-size: 1.1rem; font-weight: 600;
-            cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,.12); transition: all .2s;
-            display: flex; align-items: center; justify-content: center;
+            width:34px; height:34px; border-radius:8px; border:none; background:#fff; color:#333; font-size:1.1rem; font-weight:600;
+            cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.12); transition:all .2s;
+            display:flex; align-items:center; justify-content:center;
         }
-        .qtd-btn:active { background: #f5f5f5; transform: scale(.95); }
-        .qtd-valor { min-width: 22px; text-align: center; font-weight: 600; font-size: 1rem; }
+        .qtd-btn:active { background:#f5f5f5; transform:scale(.95); }
+        .qtd-valor { min-width:22px; text-align:center; font-weight:600; font-size:1rem; }
 
-        .form-grupo { margin: 12px 0; }
-        .form-grupo label { display: block; margin-bottom: 5px; font-weight: 500; font-size: .9rem; color: #333; }
+        .form-grupo { margin:12px 0; }
+        .form-grupo label { display:block; margin-bottom:5px; font-weight:500; font-size:.9rem; color:#333; }
         .form-grupo input, .form-grupo select, .form-grupo textarea {
-            width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: .9rem;
+            width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-size:.9rem;
         }
-        .input-desativado { background: #f8f8f8; color: #666; cursor: not-allowed; }
+        .input-desativado { background:#f8f8f8; color:#666; cursor:not-allowed; }
 
-        .form-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .botoes-modal { display: flex; gap: 10px; margin-top: 18px; }
-        .btn-fechar { flex: 1; padding: 11px; border: none; border-radius: 8px; background: #eee; font-weight: 600; cursor: pointer; font-size: .95rem; transition: background .2s; }
-        .btn-fechar:hover { background: #e4e4e4; }
-        .btn-finalizar { flex: 2; padding: 11px; border: none; border-radius: 8px; background: #22c55e; color: #fff; cursor: pointer; font-size: .95rem; transition: background .2s; }
-        .btn-finalizar:hover { background: #20b850; }
+        .form-duplo { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .botoes-modal { display:flex; gap:10px; margin-top:18px; }
+        .btn-fechar { flex:1; padding:11px; border:none; border-radius:8px; background:#eee; font-weight:600; cursor:pointer; font-size:.95rem; transition:background .2s; }
+        .btn-fechar:hover { background:#e4e4e4; }
+        .btn-finalizar { flex:2; padding:11px; border:none; border-radius:8px; background:#22c55e; color:#fff; cursor:pointer; font-size:.95rem; transition:background .2s; }
+        .btn-finalizar:hover { background:#20b850; }
 
-        .resumo-valores { margin-top: 15px; padding: 12px; background: #f8f9fa; border-radius: 8px; }
-        .linha-valor { display: flex; justify-content: space-between; padding: 4px 0; font-size: .95rem; }
-        .linha-valor.total { font-weight: 700; font-size: 1.05rem; margin-top: 6px; padding-top: 6px; border-top: 1px solid #e5e5e5; }
+        .resumo-valores { margin-top:15px; padding:12px; background:#f8f9fa; border-radius:8px; }
+        .linha-valor { display:flex; justify-content:space-between; padding:4px 0; font-size:.95rem; }
+        .linha-valor.total { font-weight:700; font-size:1.05rem; margin-top:6px; padding-top:6px; border-top:1px solid #e5e5e5; }
 
-        #aviso-geral { background: #fef2f2; color: #b91c1c; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-size: .9rem; }
+        #aviso-geral { background:#fef2f2; color:#b91c1c; padding:10px 12px; border-radius:8px; margin-bottom:12px; font-size:.9rem; }
 
-        #alerta-fechado { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 10003; padding: 10px; }
-        .alerta-caixa { background: #fff; padding: 24px; border-radius: 10px; text-align: center; max-width: 280px; }
-        .btn-entendi { margin-top: 12px; padding: 10px 18px; border: none; border-radius: 8px; background: #dc2626; color: #fff; font-weight: 600; cursor: pointer; font-size: .95rem; }
+        #alerta-fechado { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index:10003; padding:10px; }
+        .alerta-caixa { background:#fff; padding:24px; border-radius:10px; text-align:center; max-width:280px; }
+        .btn-entendi { margin-top:12px; padding:10px 18px; border:none; border-radius:8px; background:#dc2626; color:#fff; font-weight:600; cursor:pointer; font-size:.95rem; }
 
-        .adicional-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        .btn-add-adicional { width: 30px; height: 30px; border-radius: 8px; border: none; background: #f0f0f0; cursor: pointer; font-weight: bold; transition: .2s; }
-        .btn-add-adicional.selecionado { background: #22c55e; color: #fff; }
+        .adicional-item { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee; }
+        .btn-add-adicional { width:30px; height:30px; border-radius:8px; border:none; background:#f0f0f0; cursor:pointer; font-weight:bold; transition:.2s; }
+        .btn-add-adicional.selecionado { background:#22c55e; color:#fff; }
     </style>
 </head>
 <body>
 
-<!-- ✅ CABEÇALHO COM LOGO PERSONALIZADA -->
 <div class="cabecalho-loja">
-    <!-- Logo Redonda com Ícone Personalizado -->
     <div class="logo-redonda">
         <i class="fas fa-hamburger"></i>
     </div>
-
-    <!-- Nome da Loja Centralizado -->
     <h1 class="nome-loja">ALISON BURGER</h1>
-
-    <!-- Status Bem no Canto Direito -->
     <div class="linha-status">
         <span class="ponto-status" id="cab-ponto-status"></span>
         <span id="cab-texto-status" class="texto-status"></span>
     </div>
 </div>
 
-<!-- Categorias -->
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
     <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
@@ -235,15 +181,14 @@
     <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
 </div>
 
-<!-- Busca -->
 <div class="busca">
     <i class="fa fa-search"></i>
     <input type="text" id="campoBusca" placeholder="Buscar produtos...">
 </div>
 
-<!-- Lista Produtos -->
 <div class="lista-produtos">
-    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-descricao="Pão, carne, queijo, alface e tomate fresquinhos." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80">
+    <!-- 🍔 HAMBÚRGUERES -->
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-tem-adicionais="sim" data-descricao="Pão, carne, queijo, alface e tomate fresquinhos." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" alt="Hambúrguer Simples"></div>
         <div class="produto-info">
             <h2 class="produto-nome">Hambúrguer Simples</h2>
@@ -251,25 +196,118 @@
         </div>
         <p class="produto-preco">R$ 10,00</p>
     </div>
-    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="12.00" data-descricao="Duas carnes suculentas e molho especial da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80">
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="14.00" data-tem-adicionais="sim" data-descricao="Duas carnes suculentas, queijo e molho especial da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80" alt="Hambúrguer Duplo"></div>
         <div class="produto-info">
             <h3 class="produto-nome">Hambúrguer Duplo</h3>
             <p class="produto-descricao">Duas carnes, queijo e molho da casa.</p>
         </div>
-        <p class="produto-preco">R$ 12,00</p>
+        <p class="produto-preco">R$ 14,00</p>
     </div>
-    <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 2L Normal" data-preco="12.00" data-descricao="Garrafa 2 litros, bem gelada." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" alt="Coca 2L Normal"></div>
+    <div class="produto" data-categoria="hamburgueres" data-nome="Bacon Burger" data-preco="16.00" data-tem-adicionais="sim" data-descricao="Carne, queijo, bacon crocante e molho de alho." data-imagem="https://images.unsplash.com/photo-1594212357290-571c2da90d5d?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594212357290-571c2da90d5d?w=400&q=80" alt="Bacon Burger"></div>
         <div class="produto-info">
-            <h3 class="produto-nome">Coca-Cola 2L Normal</h3>
-            <p class="produto-descricao">Garrafa de 2 litros gelada.</p>
+            <h3 class="produto-nome">Bacon Burger</h3>
+            <p class="produto-descricao">Com bacon crocante e molho de alho.</p>
+        </div>
+        <p class="produto-preco">R$ 16,00</p>
+    </div>
+    <div class="produto" data-categoria="hamburgueres" data-nome="Alison Burger Especial" data-preco="22.00" data-tem-adicionais="sim" data-descricao="Três carnes, queijo prato e mussarela, bacon, ovo e molho secreto." data-imagem="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&q=80" alt="Alison Burger Especial"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Alison Burger Especial</h3>
+            <p class="produto-descricao">O mais pedido da casa!</p>
+        </div>
+        <p class="produto-preco">R$ 22,00</p>
+    </div>
+
+    <!-- ⭐ COMBOS -->
+    <div class="produto" data-categoria="combos" data-nome="Combo Simples" data-preco="18.00" data-tem-adicionais="sim" data-descricao="1 Hambúrguer Simples + Batata Frita Pequena + Refrigerante Lata." data-imagem="https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80" alt="Combo Simples"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Simples</h3>
+            <p class="produto-descricao">Lanches + Batata + Refrigerante.</p>
+        </div>
+        <p class="produto-preco">R$ 18,00</p>
+    </div>
+    <div class="produto" data-categoria="combos" data-nome="Combo Duplo" data-preco="25.00" data-tem-adicionais="sim" data-descricao="1 Hambúrguer Duplo + Batata Frita Grande + Refrigerante 1L." data-imagem="https://images.unsplash.com/photo-1606755888529-85a65a7d15e0?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1606755888529-85a65a7d15e0?w=400&q=80" alt="Combo Duplo"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Duplo</h3>
+            <p class="produto-descricao">Mais porções para você!</p>
+        </div>
+        <p class="produto-preco">R$ 25,00</p>
+    </div>
+    <div class="produto" data-categoria="combos" data-nome="Combo Família" data-preco="42.00" data-tem-adicionais="sim" data-descricao">2 Hambúrgueres Especiais + Batata Frita Grande + 2 Refrigerantes Lata.</p>
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1619881985729-9c14f5c1a5b3?w=400&q=80" alt="Combo Família"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Família</h3>
+            <p class="produto-descricao">Perfeito para a família toda!</p>
+        </div>
+        <p class="produto-preco">R$ 42,00</p>
+    </div>
+
+    <!-- 🥤 BEBIDAS — SEM ADICIONAIS -->
+    <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola Lata 350ml" data-preco="5,00" data-tem-adicionais="nao" data-descricao="Lata gelada de Coca-Cola." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" alt="Coca Lata"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Coca-Cola Lata</h3>
+            <p class="produto-descricao">350ml bem gelada.</p>
+        </div>
+        <p class="produto-preco">R$ 5,00</p>
+    </div>
+    <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola 2 Litros" data-preco="12,00" data-tem-adicionais="nao" data-descricao="Garrafa grande para compartilhar." data-imagem="https://images.unsplash.com/photo-1625772245513-8a38480858b4?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1625772245513-8a38480858b4?w=400&q=80" alt="Coca 2L"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Coca-Cola 2L</h3>
+            <p class="produto-descricao">Garrafa de 2 litros.</p>
         </div>
         <p class="produto-preco">R$ 12,00</p>
     </div>
+    <div class="produto" data-categoria="bebidas" data-nome="Guaraná Antarctica Lata" data-preco="5,00" data-tem-adicionais="nao" data-descricao="Lata gelada de Guaraná Antarctica." data-imagem="https://images.unsplash.com/photo-1581636625411-9d8a1c4a8a5b?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1581636625411-9d8a1c4a8a5b?w=400&q=80" alt="Guaraná Lata"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Guaraná Antarctica Lata</h3>
+            <p class="produto-descricao">350ml bem gelada.</p>
+        </div>
+        <p class="produto-preco">R$ 5,00</p>
+    </div>
+    <div class="produto" data-categoria="bebidas" data-nome="Água Mineral sem Gás" data-preco="3,00" data-tem-adicionais="nao" data-descricao="Garrafa de 500ml de água pura." data-imagem="https://images.unsplash.com/photo-1548833510-5c30d588a83a?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1548833510-5c30d588a83a?w=400&q=80" alt="Água sem Gás"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Água Mineral sem Gás</h3>
+            <p class="produto-descricao">500ml.</p>
+        </div>
+        <p class="produto-preco">R$ 3,00</p>
+    </div>
+
+    <!-- 🍟 ACOMPANHAMENTOS -->
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Pequena" data-preco="7,00" data-tem-adicionais="sim" data-descricao="Porção pequena de batatas crocantes." data-imagem="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80" alt="Batata Pequena"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Batata Frita Pequena</h3>
+            <p class="produto-descricao">Crocantes e sequinhas.</p>
+        </div>
+        <p class="produto-preco">R$ 7,00</p>
+    </div>
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Batata Frita Grande" data-preco="12,00" data-tem-adicionais="sim" data-descricao="Porção grande para compartilhar." data-imagem="https://images.unsplash.com/photo-1630384060228-573a69d76150?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1630384060228-573a69d76150?w=400&q=80" alt="Batata Grande"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Batata Frita Grande</h3>
+            <p class="produto-descricao">Porção generosa!</p>
+        </div>
+        <p class="produto-preco">R$ 12,00</p>
+    </div>
+    <div class="produto" data-categoria="acompanhamentos" data-nome="Anéis de Cebola" data-preco="9,00" data-tem-adicionais="sim" data-descricao="Anéis de cebola empanados e crocantes." data-imagem="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&q=80" alt="Anéis de Cebola"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Anéis de Cebola</h3>
+            <p class="produto-descricao">Crocantes por fora, macios por dentro.</p>
+        </div>
+        <p class="produto-preco">R$ 9,00</p>
+    </div>
 </div>
 
-<!-- Modal Produto -->
 <div id="modal-produto" class="oculto">
     <div class="cabecalho-detalhe">
         <button id="btn-voltar">&larr;</button>
@@ -282,7 +320,8 @@
             <span id="preco-original" style="color:#999; text-decoration:line-through; margin-right:8px;"></span>
             <span class="preco-promocional" id="preco-promocional"></span>
         </div>
-        <div style="margin-top:15px;">
+        <!-- ✅ BLOCO ADICIONAIS — FICA OCULTO NAS BEBIDAS AUTOMATICAMENTE -->
+        <div id="bloco-adicionais" class="bloco-adicionais">
             <h3 style="font-size:1rem; margin-bottom:8px;">Adicionais</h3>
             <div id="lista-adicionais"></div>
         </div>
@@ -297,7 +336,6 @@
     </div>
 </div>
 
-<!-- Modal Carrinho -->
 <div id="modal-carrinho" class="oculto">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
@@ -384,7 +422,7 @@
         </div>
         <div class="form-grupo">
             <label>Observação</label>
-            <input type="text" id="observacao" placeholder="Ex: sem cebola, maionese à parte...">
+            <input type="text" id="observacao" placeholder="Ex: sem gelo, bem gelado...">
         </div>
         <div class="botoes-modal">
             <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
@@ -401,7 +439,6 @@
     </div>
 </div>
 
-<!-- Rodapé Carrinho -->
 <div class="carrinho-fixo" id="carrinho-container">
     <div class="carrinho-conteudo">
         <div class="grupo-qtd-valor">
