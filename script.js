@@ -27,6 +27,7 @@ const campoBusca = document.getElementById('campoBusca');
 const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoValorEl = document.getElementById('resumo-valor');
 const badgeQtdEl = document.getElementById('badge-qtd');
+const blocoAdicionaisEl = document.getElementById('bloco-adicionais'); // Adicionei essa linha
 
 // Resumo valores
 const subtotaisEl = document.getElementById('subtotal-itens');
@@ -166,23 +167,27 @@ function limparCamposEndereco() {
 }
 
 // ======================
-// Produtos e Modal
+// Produtos e Modal — COM OCULTAÇÃO DE ADICIONAIS PARA BEBIDAS
 // ======================
 document.querySelectorAll('.produto').forEach(produto => {
   produto.addEventListener('click', () => {
     if (!verificarStatusLoja(true)) return;
+
+    // ✅ Verifica se o produto tem adicionais (vem do HTML)
+    const temAdicionais = produto.dataset.temAdicionais?.toLowerCase() === 'sim';
 
     produtoAtual = {
       nome: produto.dataset.nome,
       preco: parseFloat(produto.dataset.preco),
       descricao: produto.dataset.descricao || 'Sem descrição.',
       imagem: produto.dataset.imagem || '',
-      adicionais: [
+      // ✅ Adicionais só aparecem se o produto permitir
+      adicionais: temAdicionais ? [
         { nome: 'Bacon Suculento', preco: 2.90 },
         { nome: 'Queijo Extra', preco: 2.50 },
         { nome: 'Catupiry', preco: 2.00 },
         { nome: 'Ovo', preco: 1.50 }
-      ]
+      ] : []
     };
 
     quantidadeAtual = 1;
@@ -195,6 +200,11 @@ document.querySelectorAll('.produto').forEach(produto => {
     precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
     precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
     atualizarTotalDetalhe();
+
+    // ✅ Mostra ou esconde o bloco de adicionais automaticamente
+    if(blocoAdicionaisEl) {
+      blocoAdicionaisEl.classList.toggle('oculto', !temAdicionais);
+    }
 
     listaAdicionaisEl.innerHTML = '';
     produtoAtual.adicionais.forEach((add, idx) => {
@@ -281,7 +291,7 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
 });
 
 // ======================
-// Atualização do carrinho — CONTADOR CORRIGIDO
+// Atualização do carrinho
 // ======================
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
