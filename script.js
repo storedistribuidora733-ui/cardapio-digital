@@ -62,15 +62,13 @@ const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ==============================================
-// 🔒 TRAVA PARA NUNCA SAIR DO SITE
+// CORREÇÃO BOTÃO VOLTAR - NÃO SAI DO SITE
 // ==============================================
 window.addEventListener('load', () => {
-  // Adiciona entrada segura no histórico logo ao carregar
-  history.replaceState({ pagina: 'inicio' }, '');
-  history.pushState({ pagina: 'inicio' }, '');
+  history.replaceState({ ok: true }, '');
+  history.pushState({ ok: true }, '');
 });
 
-// Funções auxiliares
 function fecharModalProduto() {
   if(modalProduto) modalProduto.classList.add('oculto');
   document.body.style.overflow = 'auto';
@@ -80,31 +78,23 @@ function fecharCarrinho() {
   document.body.style.overflow = 'auto';
 }
 
-// CONTROLE TOTAL DO BOTÃO VOLTAR / ARRASTAR
 window.addEventListener('popstate', (e) => {
   e.preventDefault();
-  e.stopPropagation();
-
-  // 1. Se modal do produto estiver ABERTO → FECHA E PERMANECE NO SITE
   if (modalProduto && !modalProduto.classList.contains('oculto')) {
     fecharModalProduto();
-    history.pushState({ pagina: 'inicio' }, ''); // Garante que não sai
+    history.pushState({ ok: true }, '');
     return;
   }
-
-  // 2. Se carrinho estiver ABERTO → FECHA E PERMANECE NO SITE
   if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
     fecharCarrinho();
-    history.pushState({ pagina: 'inicio' }, ''); // Garante que não sai
+    history.pushState({ ok: true }, '');
     return;
   }
-
-  // 3. Se NADA estiver aberto → SOBE AO TOPO E FICA NO SITE
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  history.pushState({ pagina: 'inicio' }, ''); // Trava a permanência
+  history.pushState({ ok: true }, '');
 });
 // ==============================================
-// FIM DO CONTROLE DE SAÍDA
+// FIM DA CORREÇÃO
 // ==============================================
 
 // Status da loja
@@ -187,7 +177,7 @@ document.querySelectorAll('.produto').forEach(produto => {
     });
     modalProduto.classList.remove('oculto'); 
     document.body.style.overflow = 'hidden';
-    history.pushState({ pagina: 'produto' }, '');
+    history.pushState({ ok: true }, '');
   });
 });
 
@@ -221,7 +211,6 @@ function atualizarTotalDetalhe() {
   btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// Adicionar ao carrinho COM OBSERVAÇÃO DO PRODUTO
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
   observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
@@ -237,7 +226,6 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   fecharModalProduto();
 });
 
-// Atualizar carrinho e mostrar observação por item
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
   let totalItens = 0; let qtdTotal = 0;
@@ -289,7 +277,6 @@ function adicionarEventosCarrinho() {
   }));
 }
 
-// Abrir e fechar carrinho
 abrirCarrinhoBtn?.addEventListener('click', () => {
   if (carrinho.length === 0) return;
   if (!verificarStatusLoja(true)) return;
@@ -297,11 +284,10 @@ abrirCarrinhoBtn?.addEventListener('click', () => {
   modalCarrinho.classList.remove('oculto');
   document.body.style.overflow = 'hidden'; 
   avisoGeral.classList.add('oculto');
-  history.pushState({ pagina: 'carrinho' }, '');
+  history.pushState({ ok: true }, '');
 });
 fecharModalBtn?.addEventListener('click', fecharCarrinho);
 
-// Categorias e busca
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
     document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
@@ -320,7 +306,6 @@ campoBusca?.addEventListener('input', () => {
   });
 });
 
-// Enviar pedido WhatsApp COM AMBAS AS OBSERVAÇÕES
 document.getElementById('btn-finalizar')?.addEventListener('click', () => {
   avisoGeral.classList.add('oculto');
   const nome = nomeEl.value.trim();
