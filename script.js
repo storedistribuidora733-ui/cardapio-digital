@@ -62,7 +62,7 @@ const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ==============================================
-// TRAVA PARA NUNCA SAIR DO SITE
+// NAVEGAÇÃO BOTÃO VOLTAR - NÃO SAI DO SITE
 // ==============================================
 window.addEventListener('load', () => {
   history.pushState({fixo: true}, '');
@@ -208,7 +208,7 @@ function atualizarTotalDetalhe() {
   btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// ✅ AQUI É O PONTO PRINCIPAL: ADICIONA, MOSTRA AVISO, NÃO FECHA NADA
+// ✅ ADICIONA, MOSTRA AVISO, ZERA TUDO, NÃO FECHA TELA
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
   
@@ -228,14 +228,27 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   
   atualizarCarrinho();
   
-  // Mostra aviso simples que deu certo
+  // Mostra aviso de sucesso
   const aviso = document.createElement('div');
   aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
   aviso.textContent = '✅ Adicionado!';
   document.body.appendChild(aviso);
   setTimeout(() => aviso.remove(), 1500);
 
-  // 🚫 NENHUM CÓDIGO PARA FECHAR A TELA AQUI! ELA CONTINUA ABERTA!
+  // 🔄 REINICIA OS DADOS DO PRODUTO NA MESMA TELA
+  quantidadeAtual = 1;
+  adicionaisSelecionados = [];
+  observacaoProdutoAtual = "";
+  qtdAtualEl.textContent = quantidadeAtual;
+  observacaoItemEl.value = "";
+  // Volta os botões de adicionais para o estado normal
+  document.querySelectorAll('.btn-add-adicional').forEach(b => {
+    b.textContent = '+';
+    b.classList.remove('selecionado');
+  });
+  atualizarTotalDetalhe();
+
+  // 🚫 NÃO FECHA A TELA! CONTINUA ABERTA PRONTA PARA OUTRO
 });
 
 function atualizarCarrinho() {
