@@ -95,6 +95,20 @@ window.addEventListener('popstate', (e) => {
 });
 // ==============================================
 
+// Função de aviso de produto adicionado
+function mostrarAvisoAdicionado() {
+  const aviso = document.createElement('div');
+  aviso.style.cssText = `
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: #22c55e; color: white; padding: 12px 24px; border-radius: 8px;
+    font-family: 'Poppins', sans-serif; font-weight: 600; z-index: 99999;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  `;
+  aviso.textContent = '✅ Produto adicionado ao carrinho!';
+  document.body.appendChild(aviso);
+  setTimeout(() => aviso.remove(), 2000);
+}
+
 // Status da loja
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
@@ -209,7 +223,7 @@ function atualizarTotalDetalhe() {
   btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// ✅ ALTERAÇÃO PRINCIPAL: Adiciona ao carrinho mas NÃO FECHA a janela
+// ✅ AQUI É A PARTE PRINCIPAL: NÃO FECHA TELA + MOSTRA AVISO
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
   observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
@@ -217,14 +231,16 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
     ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
     : produtoAtual.nome;
   const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
+  
+  // Adiciona ao carrinho
   carrinho.push({ 
     nome: nomeCompleto, preco: precoTotal, quantidade: quantidadeAtual,
     observacao: observacaoProdutoAtual
   });
-  atualizarCarrinho();
   
-  // 👇 AQUI ESTÁ A MUDANÇA: Removi o fecharModalProduto() daqui
-  // Agora só fecha se você clicar no botão voltar ou no botão voltar do celular
+  atualizarCarrinho();
+  mostrarAvisoAdicionado(); // Mostra que deu certo
+  // ❌ REMOVIDO: fecharModalProduto() → NÃO VOLTA MAIS PARA TELA INICIAL
 });
 
 function atualizarCarrinho() {
