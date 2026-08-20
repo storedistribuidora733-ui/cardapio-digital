@@ -62,43 +62,49 @@ const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ==============================================
-// 📱 CORREÇÃO DO BOTÃO VOLTAR - NÃO SAI DO SITE
+// 🔒 TRAVA PARA NUNCA SAIR DO SITE
 // ==============================================
 window.addEventListener('load', () => {
+  // Adiciona entrada segura no histórico logo ao carregar
   history.replaceState({ pagina: 'inicio' }, '');
   history.pushState({ pagina: 'inicio' }, '');
 });
 
-window.addEventListener('popstate', (e) => {
-  e.preventDefault();
-  
-  if (modalProduto && !modalProduto.classList.contains('oculto')) {
-    fecharModalProduto();
-    history.pushState({ pagina: 'aberto' }, '');
-    return;
-  }
-  
-  if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
-    fecharCarrinho();
-    history.pushState({ pagina: 'aberto' }, '');
-    return;
-  }
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  history.pushState({ pagina: 'inicio' }, '');
-});
-
+// Funções auxiliares
 function fecharModalProduto() {
   if(modalProduto) modalProduto.classList.add('oculto');
   document.body.style.overflow = 'auto';
 }
-
 function fecharCarrinho() {
   if(modalCarrinho) modalCarrinho.classList.add('oculto');
   document.body.style.overflow = 'auto';
 }
+
+// CONTROLE TOTAL DO BOTÃO VOLTAR / ARRASTAR
+window.addEventListener('popstate', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  // 1. Se modal do produto estiver ABERTO → FECHA E PERMANECE NO SITE
+  if (modalProduto && !modalProduto.classList.contains('oculto')) {
+    fecharModalProduto();
+    history.pushState({ pagina: 'inicio' }, ''); // Garante que não sai
+    return;
+  }
+
+  // 2. Se carrinho estiver ABERTO → FECHA E PERMANECE NO SITE
+  if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
+    fecharCarrinho();
+    history.pushState({ pagina: 'inicio' }, ''); // Garante que não sai
+    return;
+  }
+
+  // 3. Se NADA estiver aberto → SOBE AO TOPO E FICA NO SITE
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  history.pushState({ pagina: 'inicio' }, ''); // Trava a permanência
+});
 // ==============================================
-// FIM DA CORREÇÃO
+// FIM DO CONTROLE DE SAÍDA
 // ==============================================
 
 // Status da loja
