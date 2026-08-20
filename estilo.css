@@ -1,8 +1,8 @@
-/* ✅ CARRINHO FIXO - ESPAÇO TOTAL ENTRE OS LADOS */
+/* ✅ CARRINHO FIXO - FORÇA TOTALMENTE NAS PONTAS */
 .carrinho-fixo {
     position: fixed; bottom: 0; left: 0; width: 100%;
     background: #ffffff; color: #222; 
-    padding: 14px 20px; /* Aumentei o espaço interno das laterais */
+    padding: 12px 16px; 
     display: none; z-index: 100;
     border-top: 1px solid #e5e5e5; 
     box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
@@ -12,40 +12,41 @@
 .carrinho-conteudo { 
     display: flex; 
     align-items: center; 
-    justify-content: space-between; /* ✅ Empurra cada lado para a ponta */
-    gap: 40px; /* ✅ ESPAÇO GRANDE ENTRE VALOR E BOTÃO */
+    justify-content: space-between; /* ✅ Empurra um para esquerda outro para direita */
+    width: 100%; /* ✅ OBRIGA OCUPAR TODA A LARGURA */
     max-width: 100%; 
-    margin: 0 auto; 
+    margin: 0; 
+    padding: 0;
 }
 
 /* LADO ESQUERDO */
 .grupo-qtd-valor { 
     display: flex; 
     align-items: center; 
-    gap: 14px; /* Espaço entre o círculo e o valor */
-    flex-shrink: 0; /* Não deixa encolher */
+    gap: 12px; 
+    margin-right: auto; /* ✅ MANDA TUDO O MAIS PARA ESQUERDA POSSÍVEL */
 }
 .badge-qtd {
-    width: 36px; height: 36px; 
+    width: 34px; height: 34px; 
     background: #dc2626; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 1.1rem; color: #ffffff; 
+    font-weight: 700; font-size: 1rem; color: #ffffff; 
     flex-shrink: 0;
 }
 .texto-valor { 
-    font-size: 1.2rem; font-weight: 700; 
+    font-size: 1.1rem; font-weight: 700; 
     color: #1f2937; 
-    white-space: nowrap; /* Não deixa o valor quebrar linha */
+    white-space: nowrap;
 }
 
 /* LADO DIREITO */
 .btn-ver-carrinho {
     background: #dc2626; color: #fff; border: none; 
-    border-radius: 10px; padding: 12px 24px; 
+    border-radius: 10px; padding: 12px 22px; 
     font-weight: 600; font-size: 1rem; 
     cursor: pointer; transition: background .2s ease; 
-    white-space: nowrap; flex-shrink: 0;
-    min-width: 160px; /* Tamanho fixo do botão */
+    white-space: nowrap; 
+    margin-left: auto; /* ✅ MANDA O BOTÃO O MAIS PARA DIREITA POSSÍVEL */
+    flex-shrink: 0;
 }
 .btn-ver-carrinho:hover { background: #b91c1c; }
-.btn-ver-carrinho:active { transform: scale(0.97); }
