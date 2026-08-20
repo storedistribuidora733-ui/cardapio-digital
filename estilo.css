@@ -1,6 +1,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 html { font-size: 14px; }
-body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overflow-x: hidden; }
+body { background-color: #f8f9fa; padding-bottom: 80px; line-height: 1.4; overflow-x: hidden; }
 .oculto { display: none !important; }
 
 @media (min-width: 768px) {
@@ -52,36 +52,47 @@ body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overfl
 
 /* Botão WhatsApp */
 .botao-whatsapp {
-    position: fixed; bottom: 72px; right: 18px; width: 50px; height: 50px;
+    position: fixed; bottom: 90px; right: 18px; width: 50px; height: 50px;
     background: #25d366; color: #fff !important; border-radius: 50%;
     font-size: 26px; display: flex !important; align-items: center; justify-content: center;
     text-decoration: none; z-index: 95; box-shadow: 0 2px 8px rgba(0,0,0,0.22);
 }
 @media (min-width: 768px) {
-    .botao-whatsapp { right: calc((100vw - 620px)/2 + 15px); bottom: 78px; }
+    .botao-whatsapp { right: calc((100vw - 620px)/2 + 15px); bottom: 95px; }
 }
 
-/* Carrinho Fixo */
+/* ✅ CARRINHO FIXO AJUSTADO: LADO ESQUERDO = VALOR / LADO DIREITO = BOTÃO */
 .carrinho-fixo {
     position: fixed; bottom: 0; left: 0; width: 100%;
-    background: #ffffff; color: #222; padding: 10px 16px; display: none; z-index: 100;
+    background: #ffffff; color: #222; padding: 12px 18px; display: none; z-index: 100;
     border-top: 1px solid #e5e5e5; box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
 }
 .carrinho-fixo.ativo { display: flex; }
-.carrinho-conteudo { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 100%; margin: 0 auto; }
-.grupo-qtd-valor { display: flex; align-items: center; gap: 12px; }
+.carrinho-conteudo { 
+    display: flex; align-items: center; justify-content: space-between; 
+    gap: 16px; max-width: 100%; margin: 0 auto; 
+}
+
+/* LADO ESQUERDO: QUANTIDADE + VALOR */
+.grupo-qtd-valor { 
+    display: flex; align-items: center; gap: 12px; 
+}
 .badge-qtd {
-    width: 32px; height: 32px; background: #dc2626; border-radius: 50%;
+    width: 34px; height: 34px; background: #dc2626; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-weight: 700; font-size: 1rem; color: #ffffff; flex-shrink: 0;
 }
-.texto-valor { font-size: 1rem; font-weight: 600; color: #1f2937; }
+.texto-valor { font-size: 1.15rem; font-weight: 700; color: #1f2937; }
+
+/* LADO DIREITO: BOTÃO VER CARRINHO */
 .btn-ver-carrinho {
-    background: #dc2626; color: #fff; border: none; border-radius: 8px;
-    padding: 10px 20px; font-weight: 600; font-size: .95rem; cursor: pointer;
+    background: #dc2626; color: #fff; border: none; border-radius: 10px;
+    padding: 12px 28px; font-weight: 600; font-size: 1rem; cursor: pointer;
     transition: background .2s ease; white-space: nowrap;
+    min-width: 150px; text-align: center;
 }
 .btn-ver-carrinho:hover { background: #b91c1c; }
+.btn-ver-carrinho:active { transform: scale(0.97); }
 
 /* Modais */
 #modal-produto { position:fixed; inset:0; background:#fff; z-index:10000; overflow-y:auto; }
