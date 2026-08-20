@@ -62,52 +62,35 @@ const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ==============================================
-// 📱 NAVEGAÇÃO BOTÃO VOLTAR
+// TRAVA PARA NUNCA SAIR DO SITE
 // ==============================================
 window.addEventListener('load', () => {
-  history.replaceState({}, '');
+  history.pushState({fixo: true}, '');
+  history.pushState({fixo: true}, '');
 });
-
-function fecharModalProduto() {
-  if(modalProduto) modalProduto.classList.add('oculto');
-  document.body.style.overflow = 'auto';
-}
-function fecharCarrinho() {
-  if(modalCarrinho) modalCarrinho.classList.add('oculto');
-  document.body.style.overflow = 'auto';
-}
 
 window.addEventListener('popstate', (e) => {
   e.preventDefault();
+  e.stopPropagation();
   
   if (modalProduto && !modalProduto.classList.contains('oculto')) {
-    fecharModalProduto();
+    modalProduto.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+    history.pushState({fixo: true}, '');
     return;
   }
   
   if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
-    fecharCarrinho();
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+    history.pushState({fixo: true}, '');
     return;
   }
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  history.pushState({}, '');
+  window.scrollTo({top:0});
+  history.pushState({fixo: true}, '');
 });
 // ==============================================
-
-// Função de aviso de produto adicionado
-function mostrarAvisoAdicionado() {
-  const aviso = document.createElement('div');
-  aviso.style.cssText = `
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-    background: #22c55e; color: white; padding: 12px 24px; border-radius: 8px;
-    font-family: 'Poppins', sans-serif; font-weight: 600; z-index: 99999;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  `;
-  aviso.textContent = '✅ Produto adicionado ao carrinho!';
-  document.body.appendChild(aviso);
-  setTimeout(() => aviso.remove(), 2000);
-}
 
 // Status da loja
 function verificarStatusLoja(mostrarAviso = false) {
@@ -116,7 +99,6 @@ function verificarStatusLoja(mostrarAviso = false) {
   if(pontoCab && textoCab){
     pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
     textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
-    pontoCab.className = "ponto-status " + (lojaAberta ? "aberto" : "fechado");
   }
   if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
   return lojaAberta;
@@ -189,11 +171,14 @@ document.querySelectorAll('.produto').forEach(produto => {
     });
     modalProduto.classList.remove('oculto'); 
     document.body.style.overflow = 'hidden';
-    history.pushState({}, '');
+    history.pushState({fixo: true}, '');
   });
 });
 
-btnVoltarLista?.addEventListener('click', fecharModalProduto);
+btnVoltarLista?.addEventListener('click', () => {
+  modalProduto.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
 
 diminuirQtdBtn?.addEventListener('click', () => {
   if (quantidadeAtual > 1) { quantidadeAtual--; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe(); }
@@ -223,9 +208,10 @@ function atualizarTotalDetalhe() {
   btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// ✅ AQUI É A PARTE PRINCIPAL: NÃO FECHA TELA + MOSTRA AVISO
+// ✅ AQUI É O PONTO PRINCIPAL: ADICIONA, MOSTRA AVISO, NÃO FECHA NADA
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
+  
   observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
   const nomeCompleto = adicionaisSelecionados.length 
     ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
@@ -234,13 +220,22 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   
   // Adiciona ao carrinho
   carrinho.push({ 
-    nome: nomeCompleto, preco: precoTotal, quantidade: quantidadeAtual,
+    nome: nomeCompleto, 
+    preco: precoTotal, 
+    quantidade: quantidadeAtual,
     observacao: observacaoProdutoAtual
   });
   
   atualizarCarrinho();
-  mostrarAvisoAdicionado(); // Mostra que deu certo
-  // ❌ REMOVIDO: fecharModalProduto() → NÃO VOLTA MAIS PARA TELA INICIAL
+  
+  // Mostra aviso simples que deu certo
+  const aviso = document.createElement('div');
+  aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
+  aviso.textContent = '✅ Adicionado!';
+  document.body.appendChild(aviso);
+  setTimeout(() => aviso.remove(), 1500);
+
+  // 🚫 NENHUM CÓDIGO PARA FECHAR A TELA AQUI! ELA CONTINUA ABERTA!
 });
 
 function atualizarCarrinho() {
@@ -301,9 +296,12 @@ abrirCarrinhoBtn?.addEventListener('click', () => {
   modalCarrinho.classList.remove('oculto');
   document.body.style.overflow = 'hidden'; 
   avisoGeral.classList.add('oculto');
-  history.pushState({}, '');
+  history.pushState({fixo: true}, '');
 });
-fecharModalBtn?.addEventListener('click', fecharCarrinho);
+fecharModalBtn?.addEventListener('click', () => {
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
 
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -396,4 +394,3 @@ ${observacaoGeral}` : ''}
   window.open(urlWhatsApp, '_blank');
   limparTudoCarrinho();
 });
- 
