@@ -396,3 +396,4 @@ ${observacaoGeral}` : ''}
   window.open(urlWhatsApp, '_blank');
   limparTudoCarrinho();
 });
+ 
