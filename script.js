@@ -100,7 +100,7 @@ function verificarStatusLoja(mostrarAviso = false) {
     pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
     textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
   }
-  if (!lojaAberta && mostrarAviso) alertaFechado.classList.add("oculto");
+  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
   return lojaAberta;
 }
 verificarStatusLoja();
@@ -112,7 +112,9 @@ function limparTudoCarrinho() {
   carrinho.length = 0; listaItensCarrinho.innerHTML = '';
   subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
   badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
-  carrinhoContainer.style.display = 'none'; nomeEl.value = '';
+  // ✅ CORRIGIDO: Usamos a classe para esconder, não só o estilo
+  carrinhoContainer.classList.remove('ativo'); 
+  nomeEl.value = '';
   tipoAtendimentoEl.value = 'retirada'; pagamentoEl.value = 'Dinheiro';
   observacaoGeralEl.value = ''; avisoGeral.classList.add('oculto');
   campoTaxaEntregaEl.classList.add('oculto'); blocoEnderecoEl.classList.add('oculto');
@@ -237,25 +239,16 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   setTimeout(() => aviso.remove(), 1500);
 
   // 🔄 RESETA ABSOLUTAMENTE TUDO — NADA FICA SALVO
-  // Zera as variáveis da memória
   quantidadeAtual = 1;
   adicionaisSelecionados = [];
   observacaoProdutoAtual = "";
-
-  // Zera tudo que aparece na tela
   qtdAtualEl.textContent = "1";
-  if(observacaoItemEl) observacaoItemEl.value = ""; // Apaga o texto da observação
-
-  // FORÇA TODOS os botões de adicionais voltarem para "+" sem marcação
+  if(observacaoItemEl) observacaoItemEl.value = "";
   document.querySelectorAll('.btn-add-adicional').forEach(botao => {
     botao.textContent = '+';
     botao.classList.remove('selecionado');
   });
-
-  // Atualiza o valor do botão para o preço original do produto
   atualizarTotalDetalhe();
-
-  // 🚫 NÃO FECHA A TELA — FICA ABERTA PRONTA PARA NOVO
 });
 
 function atualizarCarrinho() {
@@ -263,12 +256,18 @@ function atualizarCarrinho() {
   let totalItens = 0; let qtdTotal = 0;
   const usaTaxaEntrega = tipoAtendimentoEl.value === 'entrega';
   const taxa = usaTaxaEntrega ? CONFIG.taxaEntregaFixa : 0;
+  
   if (carrinho.length === 0) {
     subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
     badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
-    carrinhoContainer.style.display = 'none'; return;
+    // ✅ CORRIGIDO: Esconde usando a classe
+    carrinhoContainer.classList.remove('ativo');
+    return;
   }
-  carrinhoContainer.style.display = 'flex';
+
+  // ✅ CORRIGIDO: Mostra o carrinho quando tem produto
+  carrinhoContainer.classList.add('ativo');
+
   carrinho.forEach((item, index) => {
     const totalItem = item.preco * item.quantidade;
     totalItens += totalItem; qtdTotal += item.quantidade;
