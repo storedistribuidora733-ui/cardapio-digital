@@ -66,7 +66,7 @@ body {
     .botao-whatsapp { right: calc((100vw - 620px)/2 + 15px); bottom: 110px; }
 }
 
-/* ✅ CARRINHO - SÓ BOLINHA VERMELHA COM NÚMERO, SEM ÍCONE */
+/* ✅ CARRINHO COM ÍCONE DE CARRINHO NO LUGAR DA BOLA */
 .carrinho-fixo {
     position: fixed !important;
     bottom: 0 !important;
@@ -99,18 +99,35 @@ body {
     gap: 12px !important;
 }
 
-/* ✅ BOLINHA VERMELHA ORIGINAL, SEM ÍCONE */
-.badge-qtd {
-    width: 42px !important;
-    height: 42px !important;
-    background: #dc2626 !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 1.1rem !important;
+/* ✅ NOVO: ÍCONE DE CARRINHO COM NÚMERO EM DESTAQUE */
+.icone-carrinho-badge {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    background: #dc2626;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.icone-carrinho-badge .badge-qtd {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    background: #ffffff;
+    color: #dc2626;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #dc2626;
 }
 
 .texto-valor { 
