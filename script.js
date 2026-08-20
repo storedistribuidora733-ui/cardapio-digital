@@ -62,7 +62,7 @@ const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ==============================================
-// NAVEGAÇÃO BOTÃO VOLTAR
+// NAVEGAÇÃO - NÃO SAI DO SITE
 // ==============================================
 window.addEventListener('load', () => {
   history.pushState({fixo: true}, '');
@@ -100,7 +100,7 @@ function verificarStatusLoja(mostrarAviso = false) {
     pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
     textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
   }
-  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
+  if (!lojaAberta && mostrarAviso) alertaFechado.classList.add("oculto");
   return lojaAberta;
 }
 verificarStatusLoja();
@@ -208,10 +208,11 @@ function atualizarTotalDetalhe() {
   btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// ✅ AGORA LIMPA TUDO DE VERDADE NA TAMBÉM NA TELA
+// ✅ AQUI É A PARTE PRINCIPAL: ADICIONA E RESETA TUDO DE VERDADE
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
   
+  // Pega os dados antes de limpar
   observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
   const nomeCompleto = adicionaisSelecionados.length 
     ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
@@ -228,32 +229,33 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   
   atualizarCarrinho();
   
-  // Mostra aviso
+  // Mostra aviso rápido
   const aviso = document.createElement('div');
   aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
   aviso.textContent = '✅ Adicionado!';
   document.body.appendChild(aviso);
   setTimeout(() => aviso.remove(), 1500);
 
-  // 🔄 REINICIA TUDO, INCLUSIVE VISUALMENTE NA TELA
+  // 🔄 RESETA ABSOLUTAMENTE TUDO — NADA FICA SALVO
+  // Zera as variáveis da memória
   quantidadeAtual = 1;
   adicionaisSelecionados = [];
   observacaoProdutoAtual = "";
-  
-  // Zera os valores que aparecem na tela
+
+  // Zera tudo que aparece na tela
   qtdAtualEl.textContent = "1";
-  if(observacaoItemEl) observacaoItemEl.value = "";
-  
-  // VOLTA TODOS OS BOTÕES DE ADICIONAIS PARA O ESTADO ORIGINAL "+"
+  if(observacaoItemEl) observacaoItemEl.value = ""; // Apaga o texto da observação
+
+  // FORÇA TODOS os botões de adicionais voltarem para "+" sem marcação
   document.querySelectorAll('.btn-add-adicional').forEach(botao => {
     botao.textContent = '+';
     botao.classList.remove('selecionado');
   });
 
-  // Atualiza o valor do botão de adicionar
+  // Atualiza o valor do botão para o preço original do produto
   atualizarTotalDetalhe();
 
-  // 🚫 NÃO FECHA A TELA!
+  // 🚫 NÃO FECHA A TELA — FICA ABERTA PRONTA PARA NOVO
 });
 
 function atualizarCarrinho() {
