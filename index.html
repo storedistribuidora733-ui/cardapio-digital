@@ -12,7 +12,12 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { font-size: 14px; }
-        body { background-color: #f8f9fa; padding-bottom: 70px; line-height: 1.4; overflow-x: hidden; }
+        body { 
+            background-color: #f8f9fa; 
+            padding-bottom: 90px; 
+            line-height: 1.4; 
+            overflow-x: hidden; 
+        }
         .oculto { display: none !important; }
 
         @media (min-width: 768px) {
@@ -20,7 +25,8 @@
         }
 
         .cabecalho-loja {
-            width: 100%; padding: 12px 15px; background: #fff; display: flex; align-items: center; justify-content: space-between;
+            width: 100%; padding: 12px 15px; background: #fff; 
+            display: flex; align-items: center; justify-content: space-between;
             border-bottom: 1px solid #eee; position: sticky; top:0; z-index:101;
         }
         .logo-redonda {
@@ -63,35 +69,91 @@
         .produto-preco { font-size:1.1rem; font-weight:800; color:#dc2626; white-space:nowrap; }
 
         .botao-whatsapp {
-            position: fixed; bottom: 72px; right: 18px; width: 50px; height: 50px;
+            position: fixed; bottom: 100px; right: 18px; width: 50px; height: 50px;
             background: #25d366; color: #fff !important; border-radius: 50%;
             font-size: 26px; display: flex !important; align-items: center; justify-content: center;
             text-decoration: none; z-index: 95; box-shadow: 0 2px 8px rgba(0,0,0,0.22);
         }
         @media (min-width: 768px) {
-            .botao-whatsapp { right: calc((100vw - 620px)/2 + 15px); bottom: 78px; }
+            .botao-whatsapp { right: calc((100vw - 620px)/2 + 15px); bottom: 105px; }
         }
 
+        /* ✅ CARRINHO FIXO - AGORA SIM TOTALMENTE NAS PONTAS */
         .carrinho-fixo {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #ffffff; color: #222; padding: 10px 16px; display: none; z-index: 100;
-            border-top: 1px solid #e5e5e5; box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            background: #ffffff !important;
+            color: #222 !important;
+            padding: 14px 20px !important;
+            display: none !important;
+            z-index: 100 !important;
+            border-top: 1px solid #e5e5e5 !important;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.08) !important;
         }
-        .carrinho-fixo.ativo { display: flex; }
-        .carrinho-conteudo { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 100%; margin: 0 auto; }
-        .grupo-qtd-valor { display: flex; align-items: center; gap: 12px; }
+        .carrinho-fixo.ativo { display: flex !important; }
+
+        .carrinho-conteudo { 
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            max-width: 620px !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+        }
+
+        /* LADO ESQUERDO - BEM NA BORDA */
+        .grupo-qtd-valor { 
+            display: flex !important;
+            align-items: center !important;
+            gap: 14px !important;
+            margin: 0 !important;
+            margin-right: auto !important;
+            flex-shrink: 0 !important;
+        }
         .badge-qtd {
-            width: 32px; height: 32px; background: #dc2626; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1rem; color: #ffffff; flex-shrink: 0;
+            width: 36px !important;
+            height: 36px !important;
+            background: #dc2626 !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 700 !important;
+            font-size: 1.1rem !important;
+            color: #ffffff !important;
+            flex-shrink: 0 !important;
         }
-        .texto-valor { font-size: 1rem; font-weight: 600; color: #1f2937; }
+        .texto-valor { 
+            font-size: 1.2rem !important;
+            font-weight: 700 !important;
+            color: #1f2937 !important;
+            white-space: nowrap !important;
+            margin: 0 !important;
+        }
+
+        /* LADO DIREITO - BEM NA OUTRA BORDA */
         .btn-ver-carrinho {
-            background: #dc2626; color: #fff; border: none; border-radius: 8px;
-            padding: 10px 20px; font-weight: 600; font-size: .95rem; cursor:pointer;
-            transition: background .2s ease; white-space: nowrap;
+            background: #dc2626 !important;
+            color: #fff !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 12px 28px !important;
+            font-weight: 600 !important;
+            font-size: 1rem !important;
+            cursor: pointer !important;
+            transition: background .2s ease !important;
+            white-space: nowrap !important;
+            margin: 0 !important;
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
+            min-width: 160px !important;
         }
-        .btn-ver-carrinho:hover { background: #b91c1c; }
+        .btn-ver-carrinho:hover { background: #b91c1c !important; }
+        .btn-ver-carrinho:active { transform: scale(0.97) !important; }
 
         #modal-produto { position:fixed; inset:0; background:#fff; z-index:10000; overflow-y:auto; }
         .cabecalho-detalhe { position:relative; width:100%; height:180px; background:#f3f4f6; }
@@ -197,7 +259,6 @@
 </div>
 
 <div class="lista-produtos">
-    <!-- 🍔 HAMBÚRGUERES -->
     <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-tem-adicionais="sim" data-descricao="Pão, carne, queijo, alface e tomate fresquinhos." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" alt="Hambúrguer Simples"></div>
         <div class="produto-info">
@@ -234,7 +295,6 @@
         <p class="produto-preco">R$ 22,00</p>
     </div>
 
-    <!-- ⭐ COMBOS -->
     <div class="produto" data-categoria="combos" data-nome="Combo Simples" data-preco="18.00" data-tem-adicionais="sim" data-descricao="1 Hambúrguer Simples + Batata Frita Pequena + Refrigerante Lata." data-imagem="https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80" alt="Combo Simples"></div>
         <div class="produto-info">
@@ -253,7 +313,6 @@
         <p class="produto-preco">R$ 25,00</p>
     </div>
     
-    <!-- 🥤 BEBIDAS -->
     <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola Lata 350ml" data-preco="5.00" data-tem-adicionais="nao" data-descricao="Lata gelada de Coca-Cola." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" alt="Coca Lata"></div>
         <div class="produto-info">
