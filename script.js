@@ -61,6 +61,46 @@ const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
+// ==============================================
+// 📱 CORREÇÃO DO BOTÃO VOLTAR - NÃO SAI DO SITE
+// ==============================================
+window.addEventListener('load', () => {
+  history.replaceState({ pagina: 'inicio' }, '');
+  history.pushState({ pagina: 'inicio' }, '');
+});
+
+window.addEventListener('popstate', (e) => {
+  e.preventDefault();
+  
+  if (modalProduto && !modalProduto.classList.contains('oculto')) {
+    fecharModalProduto();
+    history.pushState({ pagina: 'aberto' }, '');
+    return;
+  }
+  
+  if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
+    fecharCarrinho();
+    history.pushState({ pagina: 'aberto' }, '');
+    return;
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  history.pushState({ pagina: 'inicio' }, '');
+});
+
+function fecharModalProduto() {
+  if(modalProduto) modalProduto.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+}
+
+function fecharCarrinho() {
+  if(modalCarrinho) modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+}
+// ==============================================
+// FIM DA CORREÇÃO
+// ==============================================
+
 // Status da loja
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
@@ -139,13 +179,13 @@ document.querySelectorAll('.produto').forEach(produto => {
       `;
       listaAdicionaisEl.appendChild(addEl);
     });
-    modalProduto.classList.remove('oculto'); document.body.style.overflow = 'hidden';
+    modalProduto.classList.remove('oculto'); 
+    document.body.style.overflow = 'hidden';
+    history.pushState({ pagina: 'produto' }, '');
   });
 });
 
-btnVoltarLista?.addEventListener('click', () => {
-  modalProduto.classList.add('oculto'); document.body.style.overflow = 'auto';
-});
+btnVoltarLista?.addEventListener('click', fecharModalProduto);
 
 diminuirQtdBtn?.addEventListener('click', () => {
   if (quantidadeAtual > 1) { quantidadeAtual--; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe(); }
@@ -188,7 +228,7 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
     observacao: observacaoProdutoAtual
   });
   atualizarCarrinho();
-  modalProduto.classList.add('oculto'); document.body.style.overflow = 'auto';
+  fecharModalProduto();
 });
 
 // Atualizar carrinho e mostrar observação por item
@@ -247,12 +287,13 @@ function adicionarEventosCarrinho() {
 abrirCarrinhoBtn?.addEventListener('click', () => {
   if (carrinho.length === 0) return;
   if (!verificarStatusLoja(true)) return;
-  atualizarCarrinho(); modalCarrinho.classList.remove('oculto');
-  document.body.style.overflow = 'hidden'; avisoGeral.classList.add('oculto');
+  atualizarCarrinho(); 
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden'; 
+  avisoGeral.classList.add('oculto');
+  history.pushState({ pagina: 'carrinho' }, '');
 });
-fecharModalBtn?.addEventListener('click', () => {
-  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
-});
+fecharModalBtn?.addEventListener('click', fecharCarrinho);
 
 // Categorias e busca
 document.querySelectorAll('.categoria-btn').forEach(botao => {
@@ -302,7 +343,6 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
     enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
     enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
     enderecoCompleto += `\n  CEP: ${cepEl.value}`;
-    if (referenciaEl && referenciaEl.value.trim()) enderecoCompleto += `\n  Ponto de referência: ${referenciaEl.value.trim()}`;
   }
 
   let mensagem = `=====================================
@@ -348,26 +388,3 @@ ${observacaoGeral}` : ''}
   window.open(urlWhatsApp, '_blank');
   limparTudoCarrinho();
 });
-
-// Quando não tiver mais o que fechar, volta direto ao início
-window.addEventListener('popstate', function() {
-  // Verifica se modal/carrinho estão fechados
-  const modalAberto = document.querySelector('.modal.aberto, #modal-carrinho.aberto');
-  if (!modalAberto && window.history.length <= 2) {
-    window.location.href = '#inicio'; // ou a âncora do topo
-    // Se quiser recarregar limpo: window.location.reload();
-  }
-});
-
-// Opcional: botão "Voltar ao Início" visível no topo
-function adicionarBotaoInicio() {
-  if (!document.getElementById('btn-inicio-fixo')) {
-    const btn = document.createElement('button');
-    btn.id = 'btn-inicio-fixo';
-    btn.innerHTML = '🏠 Início';
-    btn.style.cssText = `position:fixed;top:10px;left:10px;z-index:9999;padding:6px 12px;background:#22c55e;color:white;border:none;border-radius:6px;font-size:14px;`;
-    btn.onclick = () => window.scrollTo({top:0,behavior:'smooth'});
-    document.body.appendChild(btn);
-  }
-}
-window.addEventListener('load', adicionarBotaoInicio);
