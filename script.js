@@ -62,7 +62,7 @@ const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
 
 // ==============================================
-// 📱 NAVEGAÇÃO BOTÃO VOLTAR - SEM TEXTO EXTRA
+// 📱 NAVEGAÇÃO BOTÃO VOLTAR
 // ==============================================
 window.addEventListener('load', () => {
   history.replaceState({}, '');
@@ -80,24 +80,19 @@ function fecharCarrinho() {
 window.addEventListener('popstate', (e) => {
   e.preventDefault();
   
-  // Se produto aberto → volta para lista
   if (modalProduto && !modalProduto.classList.contains('oculto')) {
     fecharModalProduto();
     return;
   }
   
-  // Se carrinho aberto → volta para cardápio
   if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
     fecharCarrinho();
     return;
   }
 
-  // Se tudo fechado → sobe ao topo, NÃO SAI DO SITE
   window.scrollTo({ top: 0, behavior: 'smooth' });
   history.pushState({}, '');
 });
-// ==============================================
-// FIM - NENHUM TEXTO ADICIONADO
 // ==============================================
 
 // Status da loja
@@ -214,6 +209,7 @@ function atualizarTotalDetalhe() {
   btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
+// ✅ ALTERAÇÃO PRINCIPAL: Adiciona ao carrinho mas NÃO FECHA a janela
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
   observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
@@ -226,7 +222,9 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
     observacao: observacaoProdutoAtual
   });
   atualizarCarrinho();
-  fecharModalProduto();
+  
+  // 👇 AQUI ESTÁ A MUDANÇA: Removi o fecharModalProduto() daqui
+  // Agora só fecha se você clicar no botão voltar ou no botão voltar do celular
 });
 
 function atualizarCarrinho() {
