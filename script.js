@@ -348,3 +348,26 @@ ${observacaoGeral}` : ''}
   window.open(urlWhatsApp, '_blank');
   limparTudoCarrinho();
 });
+
+// Quando não tiver mais o que fechar, volta direto ao início
+window.addEventListener('popstate', function() {
+  // Verifica se modal/carrinho estão fechados
+  const modalAberto = document.querySelector('.modal.aberto, #modal-carrinho.aberto');
+  if (!modalAberto && window.history.length <= 2) {
+    window.location.href = '#inicio'; // ou a âncora do topo
+    // Se quiser recarregar limpo: window.location.reload();
+  }
+});
+
+// Opcional: botão "Voltar ao Início" visível no topo
+function adicionarBotaoInicio() {
+  if (!document.getElementById('btn-inicio-fixo')) {
+    const btn = document.createElement('button');
+    btn.id = 'btn-inicio-fixo';
+    btn.innerHTML = '🏠 Início';
+    btn.style.cssText = `position:fixed;top:10px;left:10px;z-index:9999;padding:6px 12px;background:#22c55e;color:white;border:none;border-radius:6px;font-size:14px;`;
+    btn.onclick = () => window.scrollTo({top:0,behavior:'smooth'});
+    document.body.appendChild(btn);
+  }
+}
+window.addEventListener('load', adicionarBotaoInicio);
