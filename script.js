@@ -1,98 +1,19 @@
-// ==============================================
-// 🚀 CARREGAMENTO AUTOMÁTICO — NÃO EDITE AQUI!
-// Edite sempre pelo Painel Administrativo (admin.html)
-// ==============================================
-
-// DADOS PADRÃO — Serão substituídos automaticamente pelo Painel
-let CONFIG = {
+const CONFIG = {
   horaAbertura: 0,
   horaFechamento: 24,
-  textoStatusAberto: "ABERTO",
-  textoStatusFechado: "FECHADO",
+  textoStatusAberto: "ABERTO ",
+  textoStatusFechado: "FECHADO ",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
   numeroWhatsApp: "5519989021323",
   nomeLoja: "Alison Burger",
   taxaEntregaFixa: 8.00
 };
-
-let ADICIONAIS_PADRAO = [
-  { nome: "Bacon Suculento", preco: 10.90 },
-  { nome: "Queijo Extra", preco: 2.50 },
-  { nome: "Catupiry", preco: 2.00 },
-  { nome: "Ovo", preco: 1.50 }
-];
-
-let PRODUTOS_HTML = "";
-
-// ==============================================
-// 🔄 CARREGAR DADOS SALVOS DO PAINEL
-// ==============================================
-function carregarDadosDoPainel() {
-  const salvos = localStorage.getItem('dadosLoja');
-  if (!salvos) return;
-
-  const DADOS = JSON.parse(salvos);
-  
-  // Atualizar Configurações
-  CONFIG = {
-    horaAbertura: DADOS.config.horaAbertura,
-    horaFechamento: DADOS.config.horaFechamento,
-    textoStatusAberto: DADOS.config.textoAberto,
-    textoStatusFechado: DADOS.config.textoFechado,
-    corStatusAberto: DADOS.config.corAberto,
-    corStatusFechado: DADOS.config.corFechado,
-    numeroWhatsApp: DADOS.config.whatsapp,
-    nomeLoja: DADOS.config.nomeLoja,
-    taxaEntregaFixa: DADOS.config.taxaEntrega
-  };
-
-  // Atualizar Adicionais
-  ADICIONAIS_PADRAO = DADOS.adicionais;
-
-  // Atualizar Produtos no HTML
-  PRODUTOS_HTML = "";
-  DADOS.produtos.forEach(p => {
-    PRODUTOS_HTML += `
-    <div class="produto" data-categoria="${p.categoria}" data-nome="${p.nome}" data-preco="${p.preco.toFixed(2)}" data-tem-adicionais="${p.temAdicionais}" data-descricao="${p.descricao}" data-imagem="${p.imagem}">
-        <div class="produto-imagem"><img src="${p.imagem}" alt="${p.nome}"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">${p.nome}</h3>
-            <p class="produto-descricao">${p.descricao}</p>
-        </div>
-        <p class="produto-preco">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
-    </div>`;
-  });
-
-  // Atualizar nome da loja na página
-  const nomeLojaEl = document.querySelector('.nome-loja');
-  if (nomeLojaEl) nomeLojaEl.textContent = CONFIG.nomeLoja;
-
-  // Substituir lista de produtos
-  const listaProdutosEl = document.querySelector('.lista-produtos');
-  if (listaProdutosEl && PRODUTOS_HTML) {
-    listaProdutosEl.innerHTML = PRODUTOS_HTML;
-    // Reaplicar eventos nos produtos recém-carregados
-    vincularEventosProdutos();
-  }
-
-  // Atualizar link do WhatsApp
-  const linkWpp = document.querySelector('a[href*="wa.me"]');
-  if (linkWpp) linkWpp.href = `https://wa.me/${CONFIG.numeroWhatsApp}`;
-
-  // Atualizar status da loja
-  verificarStatusLoja();
-}
-
-// ==============================================
-// RESTANTE DO SITE — TUDO FUNCIONA AUTOMATICAMENTE
-// ==============================================
 const carrinho = [];
 let produtoAtual = null;
 let quantidadeAtual = 1;
 let adicionaisSelecionados = [];
 let observacaoProdutoAtual = "";
-
 // Elementos
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
@@ -137,31 +58,35 @@ const aumentarQtdBtn = document.getElementById('aumentar-qtd');
 const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
-
 // ==============================================
-// NAVEGAÇÃO
+// NAVEGAÇÃO - NÃO SAI DO SITE
 // ==============================================
 window.addEventListener('load', () => {
-  carregarDadosDoPainel(); // ← Carrega tudo automaticamente!
   history.pushState({fixo: true}, '');
   history.pushState({fixo: true}, '');
 });
 window.addEventListener('popstate', (e) => {
-  e.preventDefault(); e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
+  
   if (modalProduto && !modalProduto.classList.contains('oculto')) {
-    modalProduto.classList.add('oculto'); document.body.style.overflow = 'auto';
-    history.pushState({fixo: true}, ''); return;
+    modalProduto.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+    history.pushState({fixo: true}, '');
+    return;
   }
+  
   if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
-    modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
-    history.pushState({fixo: true}, ''); return;
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+    history.pushState({fixo: true}, '');
+    return;
   }
-  window.scrollTo({top:0}); history.pushState({fixo: true}, '');
+  window.scrollTo({top:0});
+  history.pushState({fixo: true}, '');
 });
-
 // ==============================================
-// STATUS DA LOJA
-// ==============================================
+// Status da loja
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
   const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
@@ -172,61 +97,78 @@ function verificarStatusLoja(mostrarAviso = false) {
   if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
   return lojaAberta;
 }
+verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 btnEntendi?.addEventListener('click', () => alertaFechado.classList.add("oculto"));
-
-// ==============================================
-// VINCULAR EVENTOS NOS PRODUTOS
-// ==============================================
-function vincularEventosProdutos() {
-  document.querySelectorAll('.produto').forEach(produto => {
-    produto.removeEventListener('click', abrirProdutoModal);
-    produto.addEventListener('click', abrirProdutoModal);
-  });
+// Limpar carrinho
+function limparTudoCarrinho() {
+  carrinho.length = 0; listaItensCarrinho.innerHTML = '';
+  subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
+  badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
+  carrinhoContainer.classList.remove('ativo'); 
+  nomeEl.value = '';
+  tipoAtendimentoEl.value = 'retirada'; pagamentoEl.value = 'Dinheiro';
+  observacaoGeralEl.value = ''; avisoGeral.classList.add('oculto');
+  campoTaxaEntregaEl.classList.add('oculto'); blocoEnderecoEl.classList.add('oculto');
+  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
 }
-
-// ==============================================
-// ABRIR PRODUTO — USA ADICIONAIS DO PAINEL
-// ==============================================
-function abrirProdutoModal(e) {
-  const produto = e.currentTarget;
-  if (!verificarStatusLoja(true)) return;
-  const temAdicionais = (produto.dataset.temAdicionais || 'sim').toLowerCase() === 'sim';
-  produtoAtual = {
-    nome: produto.dataset.nome,
-    preco: parseFloat(produto.dataset.preco),
-    descricao: produto.dataset.descricao || 'Sem descrição.',
-    imagem: produto.dataset.imagem || '',
-    adicionais: temAdicionais ? [...ADICIONAIS_PADRAO] : []
-  };
-  quantidadeAtual = 1; adicionaisSelecionados = []; observacaoProdutoAtual = "";
-  qtdAtualEl.textContent = quantidadeAtual; observacaoItemEl.value = "";
-  imgDetalhe.src = produtoAtual.imagem;
-  nomeDetalhe.textContent = produtoAtual.nome;
-  descricaoDetalhe.textContent = produtoAtual.descricao;
-  precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
-  precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
-  atualizarTotalDetalhe();
-  blocoAdicionaisEl.classList.toggle('oculto', !temAdicionais);
-  listaAdicionaisEl.innerHTML = '';
-  produtoAtual.adicionais.forEach((add, idx) => {
-    const addEl = document.createElement('div');
-    addEl.className = 'adicional-item';
-    addEl.innerHTML = `
-      <div><div class="adicional-nome">${add.nome}</div><div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div></div>
-      <button class="btn-add-adicional" data-idx="${idx}">+</button>
-    `;
-    listaAdicionaisEl.appendChild(addEl);
+btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
+// Tipo de atendimento
+tipoAtendimentoEl?.addEventListener('change', () => {
+  if (tipoAtendimentoEl.value === 'entrega') {
+    campoTaxaEntregaEl.classList.remove('oculto');
+    blocoEnderecoEl.classList.remove('oculto');
+    taxaEntregaEl.value = CONFIG.taxaEntregaFixa.toFixed(2).replace('.', ',');
+  } else {
+    campoTaxaEntregaEl.classList.add('oculto');
+    blocoEnderecoEl.classList.add('oculto');
+  }
+  atualizarCarrinho();
+});
+// Abrir produto
+document.querySelectorAll('.produto').forEach(produto => {
+  produto.addEventListener('click', () => {
+    if (!verificarStatusLoja(true)) return;
+    const temAdicionais = (produto.dataset.temAdicionais || 'sim').toLowerCase() === 'sim';
+    produtoAtual = {
+      nome: produto.dataset.nome,
+      preco: parseFloat(produto.dataset.preco),
+      descricao: produto.dataset.descricao || 'Sem descrição.',
+      imagem: produto.dataset.imagem || '',
+      adicionais: temAdicionais ? [
+        { nome: 'Bacon Suculento', preco: 2.90 },
+        { nome: 'Queijo Extra', preco: 2.50 },
+        { nome: 'Catupiry', preco: 2.00 },
+        { nome: 'Ovo', preco: 1.50 }
+      ] : []
+    };
+    quantidadeAtual = 1; adicionaisSelecionados = []; observacaoProdutoAtual = "";
+    qtdAtualEl.textContent = quantidadeAtual; observacaoItemEl.value = "";
+    imgDetalhe.src = produtoAtual.imagem;
+    nomeDetalhe.textContent = produtoAtual.nome;
+    descricaoDetalhe.textContent = produtoAtual.descricao;
+    precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
+    precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
+    atualizarTotalDetalhe();
+    blocoAdicionaisEl.classList.toggle('oculto', !temAdicionais);
+    listaAdicionaisEl.innerHTML = '';
+    produtoAtual.adicionais.forEach((add, idx) => {
+      const addEl = document.createElement('div');
+      addEl.className = 'adicional-item';
+      addEl.innerHTML = `
+        <div><div class="adicional-nome">${add.nome}</div><div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div></div>
+        <button class="btn-add-adicional" data-idx="${idx}">+</button>
+      `;
+      listaAdicionaisEl.appendChild(addEl);
+    });
+    modalProduto.classList.remove('oculto'); 
+    document.body.style.overflow = 'hidden';
+    history.pushState({fixo: true}, '');
   });
-  modalProduto.classList.remove('oculto'); document.body.style.overflow = 'hidden';
-  history.pushState({fixo: true}, '');
-}
-
-// ==============================================
-// RESTANTE DAS FUNÇÕES
-// ==============================================
+});
 btnVoltarLista?.addEventListener('click', () => {
-  modalProduto.classList.add('oculto'); document.body.style.overflow = 'auto';
+  modalProduto.classList.add('oculto');
+  document.body.style.overflow = 'auto';
 });
 diminuirQtdBtn?.addEventListener('click', () => {
   if (quantidadeAtual > 1) { quantidadeAtual--; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe(); }
@@ -255,53 +197,52 @@ function atualizarTotalDetalhe() {
 }
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
+  
   observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
-  const nomeCompleto = adicionaisSelecionados.length ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})` : produtoAtual.nome;
+  const nomeCompleto = adicionaisSelecionados.length 
+    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
+    : produtoAtual.nome;
   const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
-  carrinho.push({ nome: nomeCompleto, preco: precoTotal, quantidade: quantidadeAtual, observacao: observacaoProdutoAtual });
+  
+  carrinho.push({ 
+    nome: nomeCompleto, 
+    preco: precoTotal, 
+    quantidade: quantidadeAtual,
+    observacao: observacaoProdutoAtual
+  });
+  
   atualizarCarrinho();
+  
   const aviso = document.createElement('div');
   aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
   aviso.textContent = '✅ Adicionado!';
   document.body.appendChild(aviso);
   setTimeout(() => aviso.remove(), 1500);
-  quantidadeAtual = 1; adicionaisSelecionados = []; observacaoProdutoAtual = "";
-  qtdAtualEl.textContent = "1"; if(observacaoItemEl) observacaoItemEl.value = "";
-  document.querySelectorAll('.btn-add-adicional').forEach(b => { b.textContent = '+'; b.classList.remove('selecionado'); });
+  
+  quantidadeAtual = 1;
+  adicionaisSelecionados = [];
+  observacaoProdutoAtual = "";
+  qtdAtualEl.textContent = "1";
+  if(observacaoItemEl) observacaoItemEl.value = "";
+  document.querySelectorAll('.btn-add-adicional').forEach(botao => {
+    botao.textContent = '+';
+    botao.classList.remove('selecionado');
+  });
   atualizarTotalDetalhe();
-});
-function limparTudoCarrinho() {
-  carrinho.length = 0; listaItensCarrinho.innerHTML = '';
-  subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
-  badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
-  carrinhoContainer.classList.remove('ativo'); nomeEl.value = '';
-  tipoAtendimentoEl.value = 'retirada'; pagamentoEl.value = 'Dinheiro';
-  observacaoGeralEl.value = ''; avisoGeral.classList.add('oculto');
-  campoTaxaEntregaEl.classList.add('oculto'); blocoEnderecoEl.classList.add('oculto');
-  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
-}
-btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
-tipoAtendimentoEl?.addEventListener('change', () => {
-  if (tipoAtendimentoEl.value === 'entrega') {
-    campoTaxaEntregaEl.classList.remove('oculto');
-    blocoEnderecoEl.classList.remove('oculto');
-    taxaEntregaEl.value = CONFIG.taxaEntregaFixa.toFixed(2).replace('.', ',');
-  } else {
-    campoTaxaEntregaEl.classList.add('oculto');
-    blocoEnderecoEl.classList.add('oculto');
-  }
-  atualizarCarrinho();
 });
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
   let totalItens = 0; let qtdTotal = 0;
   const usaTaxaEntrega = tipoAtendimentoEl.value === 'entrega';
   const taxa = usaTaxaEntrega ? CONFIG.taxaEntregaFixa : 0;
+  
   if (carrinho.length === 0) {
     subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
     badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
-    carrinhoContainer.classList.remove('ativo'); return;
+    carrinhoContainer.classList.remove('ativo');
+    return;
   }
+  
   carrinhoContainer.classList.add('ativo');
   carrinho.forEach((item, index) => {
     const totalItem = item.preco * item.quantidade;
@@ -331,25 +272,28 @@ function atualizarCarrinho() {
   adicionarEventosCarrinho();
 }
 function adicionarEventosCarrinho() {
-  document.querySelectorAll('.aumentar-item').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.aumentar-item').forEach(b => b.addEventListener('click', () => {
     const idx = parseInt(b.dataset.index); carrinho[idx].quantidade++; atualizarCarrinho();
-  });
-  document.querySelectorAll('.diminuir-item').forEach(b => b.onclick = () => {
+  }));
+  document.querySelectorAll('.diminuir-item').forEach(b => b.addEventListener('click', () => {
     const idx = parseInt(b.dataset.index);
     if (carrinho[idx].quantidade > 1) carrinho[idx].quantidade--;
     else carrinho.splice(idx, 1);
     atualizarCarrinho();
-  });
+  }));
 }
 abrirCarrinhoBtn?.addEventListener('click', () => {
   if (carrinho.length === 0) return;
   if (!verificarStatusLoja(true)) return;
-  atualizarCarrinho(); modalCarrinho.classList.remove('oculto');
-  document.body.style.overflow = 'hidden'; avisoGeral.classList.add('oculto');
+  atualizarCarrinho(); 
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden'; 
+  avisoGeral.classList.add('oculto');
   history.pushState({fixo: true}, '');
 });
 fecharModalBtn?.addEventListener('click', () => {
-  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
 });
 document.querySelectorAll('.categoria-btn').forEach(botao => {
   botao.addEventListener('click', () => {
@@ -396,7 +340,7 @@ document.getElementById('btn-finalizar')?.addEventListener('click', () => {
     enderecoCompleto += `\n  CEP: ${cepEl.value}`;
   }
   let mensagem = `=====================================
-      ${CONFIG.nomeLoja}
+            ALISON BURGER
 =====================================
 PEDIDO Nº: ${numeroPedido}
 EMITIDO EM: ${dataPedido}
@@ -436,28 +380,48 @@ ${observacaoGeral}` : ''}
   limparTudoCarrinho();
 });
 
-// BUSCA CEP
+// ==============================================
+// ✅ BUSCA AUTOMÁTICA DE CEP (ViaCEP) — ADICIONADO
+// ==============================================
 cepEl?.addEventListener('blur', buscarCEP);
 cepEl?.addEventListener('input', function() {
   if (this.value.replace(/\D/g, '').length < 8) {
-    ruaEl.value = ''; bairroEl.value = ''; cidadeUfEl.value = '';
+    ruaEl.value = '';
+    bairroEl.value = '';
+    cidadeUfEl.value = '';
   }
 });
+
 async function buscarCEP() {
   let cep = cepEl.value.replace(/\D/g, '');
-  if (cep.length !== 8) { avisoGeral.textContent = 'Digite um CEP com 8 dígitos!'; avisoGeral.classList.remove('oculto'); return; }
+  
+  if (cep.length !== 8) {
+    avisoGeral.textContent = 'Digite um CEP com 8 dígitos!';
+    avisoGeral.classList.remove('oculto');
+    return;
+  }
+
   try {
     const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
     const dados = await resposta.json();
+
     if (dados.erro) {
-      avisoGeral.textContent = 'CEP não encontrado!'; avisoGeral.classList.remove('oculto');
-      ruaEl.value = ''; bairroEl.value = ''; cidadeUfEl.value = ''; return;
+      avisoGeral.textContent = 'CEP não encontrado! Verifique o número.';
+      avisoGeral.classList.remove('oculto');
+      ruaEl.value = '';
+      bairroEl.value = '';
+      cidadeUfEl.value = '';
+      return;
     }
+
     ruaEl.value = dados.logradouro || '';
     bairroEl.value = dados.bairro || '';
     cidadeUfEl.value = `${dados.localidade}/${dados.uf}`;
     avisoGeral.classList.add('oculto');
-  } catch {
-    avisoGeral.textContent = 'Erro ao buscar CEP!'; avisoGeral.classList.remove('oculto');
+
+  } catch (erro) {
+    avisoGeral.textContent = 'Erro ao buscar CEP. Tente novamente!';
+    avisoGeral.classList.remove('oculto');
+    console.error('Erro na busca do CEP:', erro);
   }
 }
