@@ -3,145 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Automático — Alison Burger</title>
+  <title>Painel — Alison Burger</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     :root { --primaria: #d32f2f; --escuro: #1a1a1a; --verde: #22c55e; --vermelho: #dc2626; --azul: #2563eb; }
     body { background: #f0f2f5; color: #333; padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    header { background: var(--escuro); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-    h1 { font-size: 1.5rem; }
-    .senha-area { display: flex; gap: 10px; }
-    input, button { padding: 10px 14px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    header { background: var(--escuro); color: white; padding: 18px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    h1 { font-size: 1.3rem; }
+    input, button, select { padding: 10px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; }
     button { cursor: pointer; font-weight: 600; border: none; transition: 0.2s; }
     button:hover { filter: brightness(0.92); }
     .btn-verde { background: var(--verde); color: white; }
     .btn-vermelho { background: var(--vermelho); color: white; }
     .btn-azul { background: var(--azul); color: white; }
-    .btn-primario { background: var(--primaria); color: white; }
-    .card { background: white; padding: 22px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
-    .card h2 { font-size: 1.1rem; margin-bottom: 18px; padding-bottom: 8px; border-bottom: 2px solid #eee; color: #444; }
-    .grupo { margin-bottom: 14px; }
-    label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem; }
+    .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 18px; }
+    .card h2 { font-size: 1rem; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #eee; color: #444; }
+    .grupo { margin-bottom: 12px; }
+    label { display: block; margin-bottom: 4px; font-weight: 500; font-size: 0.88rem; }
     .linha { display: flex; gap: 10px; flex-wrap: wrap; }
-    .linha input { flex: 1; min-width: 120px; }
+    .linha input { flex: 1; min-width: 110px; }
     .item-produto, .item-adicional { border: 1px solid #e0e0e0; padding: 12px; border-radius: 8px; margin-bottom: 10px; }
     .oculto { display: none !important; }
-    .aviso { padding: 12px; border-radius: 6px; margin-bottom: 15px; font-weight: 500; }
+    .aviso { padding: 12px; border-radius: 6px; margin-bottom: 12px; font-weight: 500; }
     .sucesso { background: #dcfce7; color: #166534; }
     .erro { background: #fee2e2; color: #991b1b; }
-    .senha-protegida { filter: blur(6px); pointer-events: none; transition: 0.3s; }
+    .senha-protegida { filter: blur(5px); pointer-events: none; }
     .desbloqueado { filter: none; pointer-events: auto; }
-    .campo-cor { width: 80px; height: 40px; padding: 2px; cursor: pointer; }
-    .dica { font-size: 0.85rem; color: #666; margin-top: 5px; }
+    .campo-cor { width: 70px; height: 38px; padding: 2px; cursor: pointer; }
+    .salvo-info { font-size: 0.85rem; color: #555; margin-top: 8px; }
   </style>
 </head>
 <body>
 
 <div class="container">
   <header>
-    <h1>🍔 Painel Automático — Alison Burger</h1>
-    <div class="senha-area">
-      <input type="password" id="senhaAdmin" placeholder="Senha">
-      <button onclick="desbloquear()">🔑 Entrar</button>
+    <h1>🍔 Painel — Alison Burger</h1>
+    <div>
+      <input type="password" id="senha" placeholder="Senha">
+      <button onclick="entrar()">🔑 Entrar</button>
     </div>
   </header>
 
   <div id="painel" class="senha-protegida">
-    <div id="mensagem" class="aviso oculto"></div>
+    <div id="msg" class="aviso oculto"></div>
 
-    <!-- DADOS DA LOJA -->
     <section class="card">
       <h2>🏪 Dados da Loja</h2>
       <div class="linha">
-        <div class="grupo">
-          <label>Nome da Loja</label>
-          <input type="text" id="nomeLoja">
-        </div>
-        <div class="grupo">
-          <label>WhatsApp (só números)</label>
-          <input type="text" id="whatsapp">
-        </div>
+        <div class="grupo"><label>Nome da Loja</label><input type="text" id="nomeLoja"></div>
+        <div class="grupo"><label>WhatsApp</label><input type="text" id="wpp"></div>
       </div>
-      <div class="grupo">
-        <label>Taxa de Entrega R$</label>
-        <input type="number" step="0.01" id="taxaEntrega">
-      </div>
+      <div class="grupo"><label>Taxa de Entrega R$</label><input type="number" step="0.01" id="taxa"></div>
     </section>
 
-    <!-- HORÁRIO E STATUS -->
     <section class="card">
       <h2>⏰ Horário e Status</h2>
       <div class="linha">
-        <div class="grupo">
-          <label>Abertura (0-23)</label>
-          <input type="number" min="0" max="23" id="horaAbertura">
-        </div>
-        <div class="grupo">
-          <label>Fechamento (1-24)</label>
-          <input type="number" min="1" max="24" id="horaFechamento">
-        </div>
+        <div class="grupo"><label>Abertura</label><input type="number" id="abertura"></div>
+        <div class="grupo"><label>Fechamento</label><input type="number" id="fechamento"></div>
       </div>
       <div class="linha">
-        <div class="grupo">
-          <label>Texto Aberto</label>
-          <input type="text" id="textoAberto">
-        </div>
-        <div class="grupo">
-          <label>Cor Aberto</label>
-          <input type="color" class="campo-cor" id="corAberto">
-        </div>
+        <div class="grupo"><label>Texto Aberto</label><input type="text" id="txtAberto"></div>
+        <div class="grupo"><label>Cor Aberto</label><input type="color" class="campo-cor" id="corAberto"></div>
       </div>
       <div class="linha">
-        <div class="grupo">
-          <label>Texto Fechado</label>
-          <input type="text" id="textoFechado">
-        </div>
-        <div class="grupo">
-          <label>Cor Fechado</label>
-          <input type="color" class="campo-cor" id="corFechado">
-        </div>
+        <div class="grupo"><label>Texto Fechado</label><input type="text" id="txtFechado"></div>
+        <div class="grupo"><label>Cor Fechado</label><input type="color" class="campo-cor" id="corFechado"></div>
       </div>
     </section>
 
-    <!-- ADICIONAIS -->
     <section class="card">
-      <h2>➕ Adicionais Padrão</h2>
-      <div id="listaAdicionais"></div>
-      <button class="btn-azul" onclick="adicionarAdicional()">+ Adicionar</button>
+      <h2>➕ Adicionais</h2>
+      <div id="adicionais"></div>
+      <button class="btn-azul" onclick="addAdicional()">+ Adicionar</button>
     </section>
 
-    <!-- PRODUTOS -->
     <section class="card">
       <h2>🍔 Produtos</h2>
-      <div id="listaProdutos"></div>
-      <button class="btn-azul" onclick="adicionarProduto()">+ Novo Produto</button>
+      <div id="produtos"></div>
+      <button class="btn-azul" onclick="addProduto()">+ Novo Produto</button>
     </section>
 
-    <!-- BOTÃO SALVAR -->
     <section class="card">
-      <button class="btn-verde" style="width:100%; font-size:1.1rem; padding:14px;" onclick="salvarTudo()">💾 SALVAR ALTERAÇÕES</button>
-      <p class="dica">✅ Ao clicar, todas as alterações vão direto para o site — sem copiar e colar!</p>
+      <button class="btn-verde" style="width:100%; padding:14px; font-size:1.05rem;" onclick="salvar()">💾 SALVAR ALTERAÇÕES</button>
+      <p class="salvo-info">✅ Salve e atualize o site para ver as mudanças automaticamente!</p>
     </section>
   </div>
 </div>
 
 <script>
-// 🔒 SENHA
-const SENHA = "admin123"; // Altere a senha aqui!
+// 🔒 SENHA — ALTERE AQUI SE QUISER!
+const SENHA = "admin123";
 
-// DADOS PADRÃO (igual ao seu site)
+// DADOS PADRÃO — IGUAL AO SEU SITE
 let DADOS = {
   config: {
-    horaAbertura: 0,
-    horaFechamento: 24,
-    textoAberto: "ABERTO",
-    textoFechado: "FECHADO",
-    corAberto: "#22c55e",
-    corFechado: "#dc2626",
-    whatsapp: "5519989021323",
-    nomeLoja: "Alison Burger",
-    taxaEntrega: 8.00
+    abertura: 0, fechamento: 24,
+    txtAberto: "ABERTO", txtFechado: "FECHADO",
+    corAberto: "#22c55e", corFechado: "#dc2626",
+    wpp: "5519989021323", nomeLoja: "Alison Burger", taxa: 8.00
   },
   adicionais: [
     { nome: "Bacon Suculento", preco: 10.90 },
@@ -150,127 +111,101 @@ let DADOS = {
     { nome: "Ovo", preco: 1.50 }
   ],
   produtos: [
-    { id:1, nome:"Hambúrguer Simples", preco:10.00, descricao:"Pão, carne, queijo, alface e tomate fresquinhos.", categoria:"hamburgueres", temAdicionais:"sim", imagem:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" },
-    { id:2, nome:"Hambúrguer Duplo", preco:14.00, descricao:"Duas carnes suculentas, queijo e molho especial da casa.", categoria:"hamburgueres", temAdicionais:"sim", imagem:"https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80" },
-    { id:3, nome:"Bacon Burger", preco:16.00, descricao:"Carne, queijo, bacon crocante e molho de alho.", categoria:"hamburgueres", temAdicionais:"sim", imagem:"https://images.unsplash.com/photo-1594212357290-571c2da90d5d?w=400&q=80" },
-    { id:4, nome:"Alison Burger Especial", preco:22.00, descricao:"Três carnes, queijo prato e mussarela, bacon, ovo e molho secreto.", categoria:"hamburgueres", temAdicionais:"sim", imagem:"https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&q=80" },
-    { id:5, nome:"Combo Simples", preco:18.00, descricao:"1 Hambúrguer Simples + Batata Frita Pequena + Refrigerante Lata.", categoria:"combos", temAdicionais:"sim", imagem:"https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80" },
-    { id:6, nome:"Combo Duplo", preco:25.00, descricao:"1 Hambúrguer Duplo + Batata Frita Grande + Refrigerante 1L.", categoria:"combos", temAdicionais:"sim", imagem:"https://images.unsplash.com/photo-1606755888529-85a65a7d15e0?w=400&q=80" },
-    { id:7, nome:"Coca-Cola Lata 350ml", preco:5.00, descricao:"Lata gelada de Coca-Cola.", categoria:"bebidas", temAdicionais:"nao", imagem:"https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" }
+    { id:1, nome:"Hambúrguer Simples", preco:10.00, desc:"Pão, carne, queijo, alface e tomate fresquinhos.", cat:"hamburgueres", add:"sim", img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" },
+    { id:2, nome:"Hambúrguer Duplo", preco:14.00, desc:"Duas carnes suculentas, queijo e molho especial da casa.", cat:"hamburgueres", add:"sim", img:"https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80" },
+    { id:3, nome:"Bacon Burger", preco:16.00, desc:"Carne, queijo, bacon crocante e molho de alho.", cat:"hamburgueres", add:"sim", img:"https://images.unsplash.com/photo-1594212357290-571c2da90d5d?w=400&q=80" },
+    { id:4, nome:"Alison Burger Especial", preco:22.00, desc:"Três carnes, queijo prato e mussarela, bacon, ovo e molho secreto.", cat:"hamburgueres", add:"sim", img:"https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&q=80" },
+    { id:5, nome:"Combo Simples", preco:18.00, desc:"1 Hambúrguer Simples + Batata Frita Pequena + Refrigerante Lata.", cat:"combos", add:"sim", img:"https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80" },
+    { id:6, nome:"Combo Duplo", preco:25.00, desc:"1 Hambúrguer Duplo + Batata Frita Grande + Refrigerante 1L.", cat:"combos", add:"sim", img:"https://images.unsplash.com/photo-1606755888529-85a65a7d15e0?w=400&q=80" },
+    { id:7, nome:"Coca-Cola Lata 350ml", preco:5.00, desc:"Lata gelada de Coca-Cola.", cat:"bebidas", add:"nao", img:"https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" }
   ]
 };
 
-// DESBLOQUEAR PAINEL
-function desbloquear() {
-  if(document.getElementById('senhaAdmin').value === SENHA) {
-    carregarDados();
+function entrar() {
+  if(document.getElementById('senha').value === SENHA) {
+    carregar();
     document.getElementById('painel').classList.remove('senha-protegida');
     document.getElementById('painel').classList.add('desbloqueado');
-    mostrarMsg("✅ Painel desbloqueado! Edite e clique em SALVAR.", "sucesso");
-  } else {
-    mostrarMsg("❌ Senha incorreta!", "erro");
-  }
+    msg("✅ Bem-vindo! Edite e clique em SALVAR.");
+  } else { alert("❌ Senha incorreta!"); }
 }
 
-// MOSTRAR MENSAGEM
-function mostrarMsg(texto, tipo) {
-  const m = document.getElementById('mensagem');
-  m.textContent = texto;
-  m.className = `aviso ${tipo}`;
-  setTimeout(() => m.classList.add('oculto'), 6000);
+function msg(texto) {
+  const m = document.getElementById('msg');
+  m.textContent = texto; m.className = "aviso sucesso";
+  setTimeout(() => m.classList.add('oculto'), 5000);
 }
 
-// CARREGAR DADOS NOS CAMPOS
-function carregarDados() {
+function carregar() {
   const salvo = localStorage.getItem('dadosLoja');
   if(salvo) DADOS = JSON.parse(salvo);
 
   document.getElementById('nomeLoja').value = DADOS.config.nomeLoja;
-  document.getElementById('whatsapp').value = DADOS.config.whatsapp;
-  document.getElementById('taxaEntrega').value = DADOS.config.taxaEntrega;
-  document.getElementById('horaAbertura').value = DADOS.config.horaAbertura;
-  document.getElementById('horaFechamento').value = DADOS.config.horaFechamento;
-  document.getElementById('textoAberto').value = DADOS.config.textoAberto;
+  document.getElementById('wpp').value = DADOS.config.wpp;
+  document.getElementById('taxa').value = DADOS.config.taxa;
+  document.getElementById('abertura').value = DADOS.config.abertura;
+  document.getElementById('fechamento').value = DADOS.config.fechamento;
+  document.getElementById('txtAberto').value = DADOS.config.txtAberto;
   document.getElementById('corAberto').value = DADOS.config.corAberto;
-  document.getElementById('textoFechado').value = DADOS.config.textoFechado;
+  document.getElementById('txtFechado').value = DADOS.config.txtFechado;
   document.getElementById('corFechado').value = DADOS.config.corFechado;
 
-  renderizarAdicionais();
-  renderizarProdutos();
+  renderAdicionais();
+  renderProdutos();
 }
 
-// ADICIONAIS
-function renderizarAdicionais() {
-  const container = document.getElementById('listaAdicionais');
-  container.innerHTML = '';
-  DADOS.adicionais.forEach((a, i) => {
-    container.innerHTML += `
-      <div class="item-adicional linha">
-        <div class="grupo"><label>Nome</label><input type="text" value="${a.nome}" oninput="DADOS.adicionais[${i}].nome=this.value"></div>
-        <div class="grupo"><label>Preço R$</label><input type="number" step="0.01" value="${a.preco}" oninput="DADOS.adicionais[${i}].preco=parseFloat(this.value)||0"></div>
-        <button class="btn-vermelho" onclick="removerAdicional(${i})" style="margin-top:24px">🗑️</button>
-      </div>`;
+function renderAdicionais() {
+  const c = document.getElementById('adicionais'); c.innerHTML = '';
+  DADOS.adicionais.forEach((a,i) => {
+    c.innerHTML += `<div class="item-adicional linha">
+      <div class="grupo"><label>Nome</label><input type="text" value="${a.nome}" oninput="DADOS.adicionais[${i}].nome=this.value"></div>
+      <div class="grupo"><label>Preço</label><input type="number" step="0.01" value="${a.preco}" oninput="DADOS.adicionais[${i}].preco=parseFloat(this.value)||0"></div>
+      <button class="btn-vermelho" onclick="remAdd(${i})" style="margin-top:22px">🗑️</button>
+    </div>`;
   });
 }
-function adicionarAdicional() {
-  DADOS.adicionais.push({nome:"Novo", preco:0.00});
-  renderizarAdicionais();
-}
-function removerAdicional(i) {
-  if(confirm("Remover?")) { DADOS.adicionais.splice(i,1); renderizarAdicionais(); }
-}
+function addAdicional() { DADOS.adicionais.push({nome:"Novo",preco:0}); renderAdicionais(); }
+function remAdd(i) { if(confirm("Remover?")){DADOS.adicionais.splice(i,1);renderAdicionais();} }
 
-// PRODUTOS
-function renderizarProdutos() {
-  const container = document.getElementById('listaProdutos');
-  container.innerHTML = '';
-  DADOS.produtos.forEach((p, i) => {
-    container.innerHTML += `
-      <div class="item-produto">
-        <div class="linha">
-          <div class="grupo" style="flex:2;"><label>Nome</label><input type="text" value="${p.nome}" oninput="DADOS.produtos[${i}].nome=this.value"></div>
-          <div class="grupo" style="flex:1;"><label>Preço R$</label><input type="number" step="0.01" value="${p.preco}" oninput="DADOS.produtos[${i}].preco=parseFloat(this.value)||0"></div>
+function renderProdutos() {
+  const c = document.getElementById('produtos'); c.innerHTML = '';
+  DADOS.produtos.forEach((p,i) => {
+    c.innerHTML += `<div class="item-produto">
+      <div class="linha">
+        <div class="grupo" style="flex:2;"><label>Nome</label><input type="text" value="${p.nome}" oninput="DADOS.produtos[${i}].nome=this.value"></div>
+        <div class="grupo" style="flex:1;"><label>Preço</label><input type="number" step="0.01" value="${p.preco}" oninput="DADOS.produtos[${i}].preco=parseFloat(this.value)||0"></div>
+      </div>
+      <div class="grupo"><label>Descrição</label><input type="text" value="${p.desc}" oninput="DADOS.produtos[${i}].desc=this.value"></div>
+      <div class="linha">
+        <div class="grupo"><label>Categoria</label><input type="text" value="${p.cat}" oninput="DADOS.produtos[${i}].cat=this.value"></div>
+        <div class="grupo"><label>Adicionais?</label>
+          <select oninput="DADOS.produtos[${i}].add=this.value">
+            <option value="sim" ${p.add==='sim'?'selected':''}>Sim</option>
+            <option value="nao" ${p.add==='nao'?'selected':''}>Não</option>
+          </select>
         </div>
-        <div class="grupo"><label>Descrição</label><input type="text" value="${p.descricao}" oninput="DADOS.produtos[${i}].descricao=this.value"></div>
-        <div class="linha">
-          <div class="grupo"><label>Categoria</label><input type="text" value="${p.categoria}" oninput="DADOS.produtos[${i}].categoria=this.value"></div>
-          <div class="grupo"><label>Tem Adicionais?</label>
-            <select oninput="DADOS.produtos[${i}].temAdicionais=this.value">
-              <option value="sim" ${p.temAdicionais==='sim'?'selected':''}>Sim</option>
-              <option value="nao" ${p.temAdicionais==='nao'?'selected':''}>Não</option>
-            </select>
-          </div>
-        </div>
-        <div class="grupo"><label>URL da Imagem</label><input type="text" value="${p.imagem}" oninput="DADOS.produtos[${i}].imagem=this.value"></div>
-        <button class="btn-vermelho" onclick="removerProduto(${i})">🗑️ Remover Produto</button>
-      </div>`;
+      </div>
+      <div class="grupo"><label>URL da Imagem</label><input type="text" value="${p.img}" oninput="DADOS.produtos[${i}].img=this.value"></div>
+      <button class="btn-vermelho" onclick="remProd(${i})">🗑️ Remover</button>
+    </div>`;
   });
 }
-function adicionarProduto() {
-  DADOS.produtos.push({id:Date.now(), nome:"Novo Produto", preco:0.00, descricao:"Descrição", categoria:"hamburgueres", temAdicionais:"sim", imagem:""});
-  renderizarProdutos();
-}
-function removerProduto(i) {
-  if(confirm("Remover este produto?")) { DADOS.produtos.splice(i,1); renderizarProdutos(); }
-}
+function addProduto() { DADOS.produtos.push({id:Date.now(),nome:"Novo",preco:0,desc:"Descrição",cat:"hamburgueres",add:"sim",img:""}); renderProdutos(); }
+function remProd(i) { if(confirm("Remover?")){DADOS.produtos.splice(i,1);renderProdutos();} }
 
-// 💾 SALVAR TUDO
-function salvarTudo() {
-  // Atualizar valores do formulário
+function salvar() {
   DADOS.config.nomeLoja = document.getElementById('nomeLoja').value.trim();
-  DADOS.config.whatsapp = document.getElementById('whatsapp').value.replace(/\D/g,'');
-  DADOS.config.taxaEntrega = parseFloat(document.getElementById('taxaEntrega').value) || 0;
-  DADOS.config.horaAbertura = parseInt(document.getElementById('horaAbertura').value) || 0;
-  DADOS.config.horaFechamento = parseInt(document.getElementById('horaFechamento').value) || 24;
-  DADOS.config.textoAberto = document.getElementById('textoAberto').value.trim();
+  DADOS.config.wpp = document.getElementById('wpp').value.replace(/\D/g,'');
+  DADOS.config.taxa = parseFloat(document.getElementById('taxa').value) || 0;
+  DADOS.config.abertura = parseInt(document.getElementById('abertura').value) || 0;
+  DADOS.config.fechamento = parseInt(document.getElementById('fechamento').value) || 24;
+  DADOS.config.txtAberto = document.getElementById('txtAberto').value.trim();
   DADOS.config.corAberto = document.getElementById('corAberto').value;
-  DADOS.config.textoFechado = document.getElementById('textoFechado').value.trim();
+  DADOS.config.txtFechado = document.getElementById('txtFechado').value.trim();
   DADOS.config.corFechado = document.getElementById('corFechado').value;
 
-  // Salvar no navegador — o site lê daqui automaticamente!
   localStorage.setItem('dadosLoja', JSON.stringify(DADOS));
-  
-  mostrarMsg("✅ SALVO COM SUCESSO! ✅ Atualize o site para ver as mudanças.", "sucesso");
+  msg("✅ SALVO! Atualize o site para ver as mudanças!");
 }
 </script>
 </body>
