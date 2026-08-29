@@ -1,0 +1,197 @@
+const CONFIG = {
+  horaAbertura: 0,
+  horaFechamento: 24,
+  textoStatusAberto: "ABERTO",
+  textoStatusFechado: "FECHADO",
+  corStatusAberto: "#22c55e",
+  corStatusFechado: "#dc2626",
+  numeroWhatsApp: "5519989021323",
+  nomeLoja: "Alison Burger",
+  taxaEntregaFixa: 8.00
+};
+
+const carrinho = [];
+let produtoAtual = null;
+let quantidadeAtual = 1;
+let adicionaisSelecionados = [];
+let observacaoProdutoAtual = "";
+
+// Elementos
+const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
+const modalCarrinho = document.getElementById('modal-carrinho');
+const modalProduto = document.getElementById('modal-produto');
+const listaProdutosEl = document.getElementById('lista-produtos');
+const qtdCarrinhoEl = document.getElementById('qtd-carrinho');
+const valorTotalEl = document.getElementById('valor-total');
+const itensCarrinhoEl = document.getElementById('itens-carrinho');
+const statusLojaEl = document.getElementById('status-loja');
+const textoStatusEl = document.getElementById('texto-status');
+const fecharModais = document.querySelectorAll('.fechar-modal');
+const btnVerPedidos = document.getElementById('ver-pedidos');
+
+// Base de produtos de exemplo
+const produtos = [
+    { id:1, categoria:"Lanches", nome:"X-Burger", descricao:"Pão, carne, queijo, alface", preco:18.90, temAdicionais:true },
+    { id:2, categoria:"Lanches", nome:"X-Bacon", descricao:"Pão, carne, queijo, bacon", preco:22.00, temAdicionais:true },
+    { id:3, categoria:"Bebidas", nome:"Coca-Cola Lata", descricao:"350ml", preco:6.00, temAdicionais:false },
+    { id:4, categoria:"Bebidas", nome:"Guaraná Lata", descricao:"350ml", preco:5.50, temAdicionais:false },
+    { id:5, categoria:"Porções", nome:"Anel de Cebola", descricao:"Porção média", preco:14.00, temAdicionais:false }
+];
+
+// ===== STATUS DA LOJA =====
+function verificarStatus() {
+    const agora = new Date();
+    const hora = agora.getHours();
+    const aberto = hora >= CONFIG.horaAbertura && hora < CONFIG.horaFechamento;
+    textoStatusEl.textContent = aberto ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
+    statusLojaEl.className = `status-loja ${aberto ? 'status-aberto' : 'status-fechado'}`;
+}
+
+// ===== RENDERIZAR PRODUTOS =====
+function renderizarProdutos() {
+    listaProdutosEl.innerHTML = "";
+    produtos.forEach(prod => {
+        const el = document.createElement('div');
+        el.className = 'produto';
+        el.innerHTML = `
+            <div class="info-produto">
+                <h3>${prod.nome}</h3>
+                <p>${prod.descricao}</p>
+                <span class="preco-produto">R$ ${prod.preco.toFixed(2).replace('.',',')}</span>
+            </div>
+        `;
+        el.addEventListener('click', () => abrirModalProduto(prod));
+        listaProdutosEl.appendChild(el);
+    });
+}
+
+// ===== ABRIR MODAL PRODUTO =====
+function abrirModalProduto(produto) {
+    produtoAtual = produto;
+    quantidadeAtual = 1;
+    observacaoProdutoAtual = "";
+    adicionaisSelecionados = [];
+
+    document.getElementById('nome-produto-modal').textContent = produto.nome;
+    document.getElementById('descricao-produto-modal').textContent = produto.descricao;
+    document.getElementById('quantidade-atual').textContent = quantidadeAtual;
+    document.getElementById('observacao-produto').value = "";
+
+    const areaAdicionais = document.getElementById('area-adicionais');
+    if (produto.temAdicionais) {
+        areaAdicionais.innerHTML = `<h4>Adicionais:</h4>
+        <label class="adicional"><input type="checkbox" data-nome="Bacon" data-valor="3.50"> Bacon + R$ 3,50</label>
+        <label class="adicional"><input type="checkbox" data-nome="Ovo" data-valor="2.00"> Ovo + R$ 2,00</label>`;
+        areaAdicionais.style.display = 'block';
+    } else {
+        areaAdicionais.innerHTML = "";
+        areaAdicionais.style.display = 'none';
+    }
+
+    modalProduto.classList.remove('oculto');
+}
+
+// ===== ADICIONAR AO CARRINHO =====
+document.getElementById('adicionar-carrinho').addEventListener('click', () => {
+    const observacao = document.getElementById('observacao-produto').value.trim();
+    const itensAdicionais = [];
+    document.querySelectorAll('#area-adicionais input:checked').forEach(i => {
+        itensAdicionais.push({ nome:i.dataset.nome, valor:parseFloat(i.dataset.valor) });
+    });
+
+    let valorUnitario = produtoAtual.preco;
+    itensAdicionais.forEach(a => valorUnitario += a.valor);
+
+    carrinho.push({
+        ...produtoAtual,
+        quantidade: quantidadeAtual,
+        observacao: observacao,
+        adicionais: itensAdicionais,
+        valorUnitario
+    });
+
+    atualizarCarrinho();
+    modalProduto.classList.add('oculto');
+    alert(`✅ ${produtoAtual.nome} adicionado!`);
+});
+
+// ===== ATUALIZAR CARRINHO =====
+function atualizarCarrinho() {
+    qtdCarrinhoEl.textContent = carrinho.reduce((s,i)=>s+i.quantidade,0);
+    let total = CONFIG.taxaEntregaFixa;
+    itensCarrinhoEl.innerHTML = "";
+
+    carrinho.forEach((item, idx) => {
+        total += item.valorUnitario * item.quantidade;
+        const det = document.createElement('div');
+        det.className = 'item-carrinho';
+        det.innerHTML = `
+            <div class="nome-item">${item.quantidade}x ${item.nome}</div>
+            ${item.adicionais.length ? `<div class="detalhe-item">Adicionais: ${item.adicionais.map(a=>a.nome).join(', ')}</div>` : ''}
+            ${item.observacao ? `<div class="detalhe-item">Obs: ${item.observacao}</div>` : ''}
+            <div class="detalhe-item">R$ ${(item.valorUnitario*item.quantidade).toFixed(2).replace('.',',')}</div>
+        `;
+        itensCarrinhoEl.appendChild(det);
+    });
+
+    valorTotalEl.textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+}
+
+// ===== FINALIZAR PEDIDO =====
+document.getElementById('finalizar-pedido').addEventListener('click', () => {
+    if (!carrinho.length) return alert('Carrinho vazio!');
+    let texto = `📋 *PEDIDO — ${CONFIG.nomeLoja}*\n`;
+    texto += `━━━━━━━━━━━━━━━━━\n`;
+    carrinho.forEach(i => {
+        texto += `${i.quantidade}x ${i.nome}\n`;
+        if(i.adicionais.length) texto += `Adicionais: ${i.adicionais.map(a=>a.nome).join(', ')}\n`;
+        if(i.observacao) texto += `Obs: ${i.observacao}\n`;
+        texto += `Subtotal: R$ ${(i.valorUnitario*i.quantidade).toFixed(2).replace('.',',')}\n\n`;
+    });
+    texto += `━━━━━━━━━━━━━━━━━\n`;
+    texto += `🚚 Taxa de entrega: R$ ${CONFIG.taxaEntregaFixa.toFixed(2).replace('.',',')}\n`;
+    texto += `💰 TOTAL: ${valorTotalEl.textContent}\n`;
+
+    window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(texto)}`);
+});
+
+// ===== BOTÃO MEUS PEDIDOS =====
+btnVerPedidos.addEventListener('click', () => {
+    alert('📋 Histórico de pedidos\nEm desenvolvimento! ✅');
+});
+
+// ===== CONTROLE DE QUANTIDADE =====
+document.getElementById('menos-qtd').addEventListener('click', () => {
+    if(quantidadeAtual > 1) {
+        quantidadeAtual--;
+        document.getElementById('quantidade-atual').textContent = quantidadeAtual;
+    }
+});
+document.getElementById('mais-qtd').addEventListener('click', () => {
+    quantidadeAtual++;
+    document.getElementById('quantidade-atual').textContent = quantidadeAtual;
+});
+
+// ===== FECHAR MODAIS =====
+fecharModais.forEach(btn => btn.addEventListener('click', () => {
+    modalCarrinho.classList.add('oculto');
+    modalProduto.classList.add('oculto');
+}));
+abrirCarrinhoBtn.addEventListener('click', () => {
+    atualizarCarrinho();
+    modalCarrinho.classList.remove('oculto');
+});
+
+// ===== VOLTAR COM BOTÃO DO CELULAR =====
+window.addEventListener('popstate', () => {
+    if (!modalCarrinho.classList.contains('oculto') || !modalProduto.classList.contains('oculto')) {
+        modalCarrinho.classList.add('oculto');
+        modalProduto.classList.add('oculto');
+        history.pushState({}, '');
+    }
+});
+history.pushState({}, '');
+
+// ===== INICIAR =====
+verificarStatus();
+renderizarProdutos();
