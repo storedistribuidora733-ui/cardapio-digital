@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alison Burger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<!-- ===== CABEÇALHO ===== -->
+<header class="cabecalho-loja">
+    <div class="status-loja" id="status-loja">
+        <span id="texto-status"></span>
+    </div>
+    <h1 class="nome-loja">Alison Burger</h1>
+    <button id="ver-pedidos" class="btn-ver-pedidos">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Meus Pedidos</span>
+    </button>
+</header>
+
+<!-- ===== CONTEÚDO DO CARDÁPIO ===== -->
+<main>
+    <section class="categorias">
+        <h2>Categorias</h2>
+        <div class="lista-categorias">
+            <button class="btn-categoria ativo">Lanches</button>
+            <button class="btn-categoria">Bebidas</button>
+            <button class="btn-categoria">Porções</button>
+        </div>
+    </section>
+
+    <section class="produtos" id="lista-produtos">
+        <!-- Produtos carregados pelo JS -->
+    </section>
+</main>
+
+<!-- ===== BOTÕES FIXOS INFERIORES ===== -->
+<button id="abrir-carrinho" class="btn-carrinho">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="qtd-carrinho">0</span>
+</button>
+
+<a href="https://wa.me/5519989021323?text=Olá! Vim pelo cardápio online" target="_blank" class="btn-whatsapp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- ===== MODAL CARRINHO ===== -->
+<div id="modal-carrinho" class="modal oculto">
+    <div class="conteudo-modal">
+        <div class="cabecalho-modal">
+            <h2>Meu Carrinho</h2>
+            <button class="fechar-modal">&times;</button>
+        </div>
+        <div id="itens-carrinho"></div>
+        <div class="total-carrinho">
+            <span>Total:</span>
+            <span id="valor-total">R$ 0,00</span>
+        </div>
+        <button id="finalizar-pedido" class="btn-finalizar">Finalizar Pedido</button>
+    </div>
+</div>
+
+<!-- ===== MODAL PRODUTO ===== -->
+<div id="modal-produto" class="modal oculto">
+    <div class="conteudo-modal">
+        <div class="cabecalho-modal">
+            <h2 id="nome-produto-modal"></h2>
+            <button class="fechar-modal">&times;</button>
+        </div>
+        <p id="descricao-produto-modal"></p>
+        <div id="area-adicionais"></div>
+        <div class="campo-observacao">
+            <label>Observação:</label>
+            <textarea id="observacao-produto" placeholder="Ex: Sem sal, sem alface..."></textarea>
+        </div>
+        <div class="quantidade-produto">
+            <button id="menos-qtd">-</button>
+            <span id="quantidade-atual">1</span>
+            <button id="mais-qtd">+</button>
+        </div>
+        <button id="adicionar-carrinho" class="btn-adicionar">Adicionar ao Carrinho</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
