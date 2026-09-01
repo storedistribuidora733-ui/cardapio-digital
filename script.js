@@ -1,36 +1,49 @@
 const CONFIG = {
-  horaAbertura: 7,
-  horaFechamento: 23,
-  textoStatusAberto: "ABERTO",
-  textoStatusFechado: "FECHADO",
+  horaAbertura: 0,
+  horaFechamento: 24,
+  textoStatusAberto: "ABERTO ",
+  textoStatusFechado: "FECHADO ",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
-  numeroWhatsApp: "5517981364681",
+  numeroWhatsApp: "5519989021323",
   nomeLoja: "Alison Burger",
-  taxaEntregaFixa: 5.00
+  taxaEntregaFixa: 8.00
 };
-
 const carrinho = [];
 let produtoAtual = null;
 let quantidadeAtual = 1;
 let adicionaisSelecionados = [];
 let observacaoProdutoAtual = "";
-
 // Elementos
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
 const modalCarrinho = document.getElementById('modal-carrinho');
+const fecharModalBtn = document.getElementById('fechar-modal');
+const btnLimparCarrinho = document.getElementById('btn-limpar');
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
 const alertaFechado = document.getElementById('alerta-fechado');
 const btnEntendi = document.getElementById('btn-entendi');
 const campoBusca = document.getElementById('campoBusca');
+const carrinhoContainer = document.getElementById('carrinho-container');
 const resumoValorEl = document.getElementById('resumo-valor');
 const badgeQtdEl = document.getElementById('badge-qtd');
 const blocoAdicionaisEl = document.getElementById('bloco-adicionais');
 const observacaoItemEl = document.getElementById('observacao-item');
 const subtotaisEl = document.getElementById('subtotal-itens');
 const valorTotalEl = document.getElementById('valor-total');
+const nomeEl = document.getElementById('nome-cliente');
 const avisoGeral = document.getElementById('aviso-geral');
 const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
+const campoTaxaEntregaEl = document.getElementById('campo-taxa-entrega');
+const blocoEnderecoEl = document.getElementById('bloco-endereco');
+const taxaEntregaEl = document.getElementById('taxa-entrega');
+const cepEl = document.getElementById('cep');
+const numeroEl = document.getElementById('numero');
+const complementoEl = document.getElementById('complemento');
+const ruaEl = document.getElementById('rua');
+const bairroEl = document.getElementById('bairro');
+const cidadeUfEl = document.getElementById('cidade-uf');
+const pagamentoEl = document.getElementById('forma-pagamento');
+const observacaoGeralEl = document.getElementById('observacao');
 const modalProduto = document.getElementById('modal-produto');
 const btnVoltarLista = document.getElementById('btn-voltar');
 const imgDetalhe = document.getElementById('img-detalhe');
@@ -45,232 +58,370 @@ const aumentarQtdBtn = document.getElementById('aumentar-qtd');
 const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
 const pontoCab = document.getElementById('cab-ponto-status');
 const textoCab = document.getElementById('cab-texto-status');
-const btnAdicionarMais = document.getElementById('btn-adicionar-mais');
-
-// ========== NAVEGAÇÃO — NÃO SAI DO SITE ==========
+// ==============================================
+// NAVEGAÇÃO - NÃO SAI DO SITE
+// ==============================================
 window.addEventListener('load', () => {
-  history.pushState({fixo:true}, '');
-  history.pushState({fixo:true}, '');
+  history.pushState({fixo: true}, '');
+  history.pushState({fixo: true}, '');
 });
 window.addEventListener('popstate', (e) => {
   e.preventDefault();
-  if (!modalProduto.classList.contains('oculto')) { modalProduto.classList.add('oculto'); document.body.style.overflow='auto'; history.pushState({fixo:true},''); return; }
-  if (!modalCarrinho.classList.contains('oculto')) { modalCarrinho.classList.add('oculto'); document.body.style.overflow='auto'; history.pushState({fixo:true},''); return; }
-  history.pushState({fixo:true},'');
+  e.stopPropagation();
+  
+  if (modalProduto && !modalProduto.classList.contains('oculto')) {
+    modalProduto.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+    history.pushState({fixo: true}, '');
+    return;
+  }
+  
+  if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
+    modalCarrinho.classList.add('oculto');
+    document.body.style.overflow = 'auto';
+    history.pushState({fixo: true}, '');
+    return;
+  }
+  window.scrollTo({top:0});
+  history.pushState({fixo: true}, '');
 });
-
-// ========== STATUS DA LOJA ==========
-function verificarStatusLoja(mostrarAviso=false){
-  const hora = new Date().getHours();
-  const aberta = hora >= CONFIG.horaAbertura && hora < CONFIG.horaFechamento;
-  pontoCab.style.backgroundColor = aberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
-  textoCab.textContent = aberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
-  if(!aberta && mostrarAviso) alertaFechado.classList.remove('oculto');
-  return aberta;
+// ==============================================
+// Status da loja
+function verificarStatusLoja(mostrarAviso = false) {
+  const horaAtual = new Date().getHours();
+  const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
+  if(pontoCab && textoCab){
+    pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
+    textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
+  }
+  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
+  return lojaAberta;
 }
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
-btnEntendi?.addEventListener('click', ()=>alertaFechado.classList.add('oculto'));
-
-// ========== ABRIR PRODUTO ==========
-document.querySelectorAll('.produto').forEach(prod => {
-  prod.addEventListener('click', ()=>{
-    if(!verificarStatusLoja(true)) return;
-    const temAdd = (prod.dataset.temAdicionais||'sim')==='sim';
+btnEntendi?.addEventListener('click', () => alertaFechado.classList.add("oculto"));
+// Limpar carrinho
+function limparTudoCarrinho() {
+  carrinho.length = 0; listaItensCarrinho.innerHTML = '';
+  subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
+  badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
+  carrinhoContainer.classList.remove('ativo'); 
+  nomeEl.value = '';
+  tipoAtendimentoEl.value = 'retirada'; pagamentoEl.value = 'Dinheiro';
+  observacaoGeralEl.value = ''; avisoGeral.classList.add('oculto');
+  campoTaxaEntregaEl.classList.add('oculto'); blocoEnderecoEl.classList.add('oculto');
+  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
+}
+btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
+// Tipo de atendimento
+tipoAtendimentoEl?.addEventListener('change', () => {
+  if (tipoAtendimentoEl.value === 'entrega') {
+    campoTaxaEntregaEl.classList.remove('oculto');
+    blocoEnderecoEl.classList.remove('oculto');
+    taxaEntregaEl.value = CONFIG.taxaEntregaFixa.toFixed(2).replace('.', ',');
+  } else {
+    campoTaxaEntregaEl.classList.add('oculto');
+    blocoEnderecoEl.classList.add('oculto');
+  }
+  atualizarCarrinho();
+});
+// Abrir produto
+document.querySelectorAll('.produto').forEach(produto => {
+  produto.addEventListener('click', () => {
+    if (!verificarStatusLoja(true)) return;
+    const temAdicionais = (produto.dataset.temAdicionais || 'sim').toLowerCase() === 'sim';
     produtoAtual = {
-      nome: prod.dataset.nome, preco: parseFloat(prod.dataset.preco),
-      descricao: prod.dataset.descricao||'', imagem: prod.dataset.imagem||'',
-      adicionais: temAdd ? [
-        {nome:'Bacon Extra',preco:2.90},{nome:'Queijo Extra',preco:2.50},
-        {nome:'Ovo',preco:1.50},{nome:'Catupiry',preco:2.00}
+      nome: produto.dataset.nome,
+      preco: parseFloat(produto.dataset.preco),
+      descricao: produto.dataset.descricao || 'Sem descrição.',
+      imagem: produto.dataset.imagem || '',
+      adicionais: temAdicionais ? [
+        { nome: 'Bacon Suculento', preco: 2.90 },
+        { nome: 'Queijo Extra', preco: 2.50 },
+        { nome: 'Catupiry', preco: 2.00 },
+        { nome: 'Ovo', preco: 1.50 }
       ] : []
     };
-    quantidadeAtual=1; adicionaisSelecionados=[]; observacaoProdutoAtual='';
-    qtdAtualEl.textContent='1'; observacaoItemEl.value='';
-    imgDetalhe.src=produtoAtual.imagem; nomeDetalhe.textContent=produtoAtual.nome; descricaoDetalhe.textContent=produtoAtual.descricao;
-    precoOriginalEl.textContent=`R$ ${(produtoAtual.preco*1.2).toFixed(2).replace('.',',')}`;
-    precoPromocionalEl.textContent=`R$ ${produtoAtual.preco.toFixed(2).replace('.',',')}`;
-    blocoAdicionaisEl.classList.toggle('oculto',!temAdd);
-    listaAdicionaisEl.innerHTML='';
-    produtoAtual.adicionais.forEach((add,i)=>{
-      const el=document.createElement('div'); el.className='adicional-item';
-      el.innerHTML=`<span>${add.nome} <small>+ R$ ${add.preco.toFixed(2).replace('.',',')}</small></span><button class="btn-add-adicional" data-idx="${i}">+</button>`;
-      listaAdicionaisEl.appendChild(el);
-    });
+    quantidadeAtual = 1; adicionaisSelecionados = []; observacaoProdutoAtual = "";
+    qtdAtualEl.textContent = quantidadeAtual; observacaoItemEl.value = "";
+    imgDetalhe.src = produtoAtual.imagem;
+    nomeDetalhe.textContent = produtoAtual.nome;
+    descricaoDetalhe.textContent = produtoAtual.descricao;
+    precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
+    precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
     atualizarTotalDetalhe();
-    modalProduto.classList.remove('oculto'); document.body.style.overflow='hidden';
-    history.pushState({fixo:true},'');
+    blocoAdicionaisEl.classList.toggle('oculto', !temAdicionais);
+    listaAdicionaisEl.innerHTML = '';
+    produtoAtual.adicionais.forEach((add, idx) => {
+      const addEl = document.createElement('div');
+      addEl.className = 'adicional-item';
+      addEl.innerHTML = `
+        <div><div class="adicional-nome">${add.nome}</div><div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div></div>
+        <button class="btn-add-adicional" data-idx="${idx}">+</button>
+      `;
+      listaAdicionaisEl.appendChild(addEl);
+    });
+    modalProduto.classList.remove('oculto'); 
+    document.body.style.overflow = 'hidden';
+    history.pushState({fixo: true}, '');
   });
 });
-btnVoltarLista?.addEventListener('click', ()=>{ modalProduto.classList.add('oculto'); document.body.style.overflow='auto'; });
-
-// ========== QUANTIDADE NO DETALHE ==========
-diminuirQtdBtn?.addEventListener('click',()=>{ if(quantidadeAtual>1) quantidadeAtual--; qtdAtualEl.textContent=quantidadeAtual; atualizarTotalDetalhe(); });
-aumentarQtdBtn?.addEventListener('click',()=>{ quantidadeAtual++; qtdAtualEl.textContent=quantidadeAtual; atualizarTotalDetalhe(); });
-
-// ========== ADICIONAIS ==========
-listaAdicionaisEl?.addEventListener('click',(e)=>{
-  const btn=e.target.closest('.btn-add-adicional'); if(!btn) return;
-  const idx=+btn.dataset.idx; const add=produtoAtual.adicionais[idx];
-  const existe = adicionaisSelecionados.findIndex(a=>a.nome===add.nome);
-  if(existe===-1){ adicionaisSelecionados.push(add); btn.textContent='✓'; btn.classList.add('selecionado'); }
-  else { adicionaisSelecionados.splice(existe,1); btn.textContent='+'; btn.classList.remove('selecionado'); }
+btnVoltarLista?.addEventListener('click', () => {
+  modalProduto.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
+diminuirQtdBtn?.addEventListener('click', () => {
+  if (quantidadeAtual > 1) { quantidadeAtual--; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe(); }
+});
+aumentarQtdBtn?.addEventListener('click', () => {
+  quantidadeAtual++; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe();
+});
+listaAdicionaisEl?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.btn-add-adicional');
+  if (!btn) return;
+  const idx = parseInt(btn.dataset.idx);
+  const adicional = produtoAtual.adicionais[idx];
+  const posicao = adicionaisSelecionados.findIndex(a => a.nome === adicional.nome);
+  if (posicao === -1) {
+    adicionaisSelecionados.push(adicional); btn.textContent = '✓'; btn.classList.add('selecionado');
+  } else {
+    adicionaisSelecionados.splice(posicao, 1); btn.textContent = '+'; btn.classList.remove('selecionado');
+  }
   atualizarTotalDetalhe();
 });
-
-function atualizarTotalDetalhe(){
-  const somaAdd = adicionaisSelecionados.reduce((s,a)=>s+a.preco,0);
-  const total = (produtoAtual.preco + somaAdd) * quantidadeAtual;
-  btnAdicionarDetalhe.textContent = `Adicionar • R$ ${total.toFixed(2).replace('.',',')}`;
+function atualizarTotalDetalhe() {
+  if(!produtoAtual) return;
+  const totalAdicionais = adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
+  const total = (produtoAtual.preco + totalAdicionais) * quantidadeAtual;
+  btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
-
-// ========== ADICIONAR AO CARRINHO — SEM FECHAR ==========
-btnAdicionarDetalhe?.addEventListener('click',()=>{
-  if(!verificarStatusLoja(true)) return;
-  observacaoProdutoAtual = observacaoItemEl.value.trim();
-  const nomeFinal = adicionaisSelecionados.length 
-    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a=>a.nome).join(', ')})` 
+btnAdicionarDetalhe?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  
+  observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
+  const nomeCompleto = adicionaisSelecionados.length 
+    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
     : produtoAtual.nome;
-  const precoFinal = produtoAtual.preco + adicionaisSelecionados.reduce((s,a)=>s+a.preco,0);
-  carrinho.push({nome:nomeFinal, preco:precoFinal, quantidade:quantidadeAtual, observacao:observacaoProdutoAtual, imagem:produtoAtual.imagem});
+  const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
+  
+  carrinho.push({ 
+    nome: nomeCompleto, 
+    preco: precoTotal, 
+    quantidade: quantidadeAtual,
+    observacao: observacaoProdutoAtual
+  });
   
   atualizarCarrinho();
-
-  // Aviso rápido
+  
   const aviso = document.createElement('div');
-  aviso.style.cssText='position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;z-index:99999;';
-  aviso.textContent='✅ Adicionado!'; document.body.appendChild(aviso); setTimeout(()=>aviso.remove(),1500);
-
-  // RESET TOTAL — CONTINUA ABERTO
-  quantidadeAtual=1; adicionaisSelecionados=[]; observacaoProdutoAtual='';
-  qtdAtualEl.textContent='1'; observacaoItemEl.value='';
-  document.querySelectorAll('.btn-add-adicional').forEach(b=>{b.textContent='+';b.classList.remove('selecionado');});
+  aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
+  aviso.textContent = '✅ Adicionado!';
+  document.body.appendChild(aviso);
+  setTimeout(() => aviso.remove(), 1500);
+  
+  quantidadeAtual = 1;
+  adicionaisSelecionados = [];
+  observacaoProdutoAtual = "";
+  qtdAtualEl.textContent = "1";
+  if(observacaoItemEl) observacaoItemEl.value = "";
+  document.querySelectorAll('.btn-add-adicional').forEach(botao => {
+    botao.textContent = '+';
+    botao.classList.remove('selecionado');
+  });
   atualizarTotalDetalhe();
 });
-
-// ========== ATUALIZA CARRINHO ==========
-function atualizarCarrinho(){
-  listaItensCarrinho.innerHTML='';
-  let subtotal=0, qtdTotal=0;
-  const usaTaxa = tipoAtendimentoEl.value==='entrega';
-  const taxa = usaTaxa ? CONFIG.taxaEntregaFixa : 0;
-
-  if(carrinho.length===0){
-    subtotaisEl.textContent='R$ 0,00'; valorTotalEl.textContent='R$ 0,00'; resumoValorEl.textContent='R$ 0,00'; badgeQtdEl.textContent='0';
-    document.querySelector('.barra-inferior').style.opacity='.5'; return;
+function atualizarCarrinho() {
+  listaItensCarrinho.innerHTML = '';
+  let totalItens = 0; let qtdTotal = 0;
+  const usaTaxaEntrega = tipoAtendimentoEl.value === 'entrega';
+  const taxa = usaTaxaEntrega ? CONFIG.taxaEntregaFixa : 0;
+  
+  if (carrinho.length === 0) {
+    subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
+    badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
+    carrinhoContainer.classList.remove('ativo');
+    return;
   }
-  document.querySelector('.barra-inferior').style.opacity='1';
-
-  carrinho.forEach((item,i)=>{
-    subtotal += item.preco * item.quantidade; qtdTotal += item.quantidade;
-    const el = document.createElement('div'); el.className='item-carrinho';
-    el.innerHTML = `
-      <img src="${item.imagem||'https://via.placeholder.com/60'}" alt="">
+  
+  carrinhoContainer.classList.add('ativo');
+  carrinho.forEach((item, index) => {
+    const totalItem = item.preco * item.quantidade;
+    totalItens += totalItem; qtdTotal += item.quantidade;
+    const itemEl = document.createElement('div');
+    itemEl.className = 'item-carrinho';
+    itemEl.innerHTML = `
       <div class="item-info">
         <h4 class="item-nome">${item.nome}</h4>
-        ${item.observacao?`<p class="item-obs">Obs: ${item.observacao}</p>`:''}
-        <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.',',')} cada</p>
+        ${item.observacao ? `<p class="item-obs">Obs: ${item.observacao}</p>` : ''}
+        <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
       </div>
       <div class="qtd-controle">
-        <button class="qtd-btn dim" data-i="${i}">&minus;</button>
+        <button class="qtd-btn diminuir-item" data-index="${index}">&minus;</button>
         <span class="qtd-valor">${item.quantidade}</span>
-        <button class="qtd-btn aum" data-i="${i}">+</button>
+        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
       </div>
-      <div class="item-total">R$ ${(item.preco*item.quantidade).toFixed(2).replace('.',',')}</div>
+      <div class="item-total">R$ ${totalItem.toFixed(2).replace('.', ',')}</div>
     `;
-    listaItensCarrinho.appendChild(el);
+    listaItensCarrinho.appendChild(itemEl);
   });
-
-  const totalGeral = subtotal + taxa;
-  subtotaisEl.textContent = `R$ ${subtotal.toFixed(2).replace('.',',')}`;
-  valorTotalEl.textContent = `R$ ${totalGeral.toFixed(2).replace('.',',')}`;
-  resumoValorEl.textContent = `R$ ${subtotal.toFixed(2).replace('.',',')}`;
+  const totalFinal = totalItens + taxa;
+  subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
+  valorTotalEl.textContent = totalFinal.toFixed(2).replace('.', ',');
   badgeQtdEl.textContent = qtdTotal;
-  document.getElementById('taxa-resumo').textContent = `R$ ${taxa.toFixed(2).replace('.',',')}`;
-
-  // Ações dos botões
-  document.querySelectorAll('.dim').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(carrinho[i].quantidade>1) carrinho[i].quantidade--; else carrinho.splice(i,1); atualizarCarrinho(); });
-  document.querySelectorAll('.aum').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; carrinho[i].quantidade++; atualizarCarrinho(); });
+  resumoValorEl.textContent = `R$ ${totalItens.toFixed(2).replace('.', ',')}`;
+  adicionarEventosCarrinho();
 }
-
-// ========== ABRIR/FECHAR CARRINHO ==========
-abrirCarrinhoBtn?.addEventListener('click',()=>{
-  if(carrinho.length===0){ avisoGeral.textContent='Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
-  if(!verificarStatusLoja(true)) return;
-  atualizarCarrinho(); modalCarrinho.classList.remove('oculto'); document.body.style.overflow='hidden';
-  history.pushState({fixo:true},'');
-});
-document.querySelector('.fechar-modal')?.addEventListener('click',()=>{ modalCarrinho.classList.add('oculto'); document.body.style.overflow='auto'; });
-btnAdicionarMais?.addEventListener('click',()=>{ modalCarrinho.classList.add('oculto'); document.body.style.overflow='auto'; });
-
-// ========== TIPO DE ATENDIMENTO ==========
-document.querySelectorAll('.btn-tipo').forEach(b=>{
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('.btn-tipo').forEach(bt=>bt.classList.remove('ativo'));
-    b.classList.add('ativo'); tipoAtendimentoEl.value = b.dataset.tipo;
-    document.getElementById('bloco-endereco').classList.toggle('oculto', b.dataset.tipo!=='entrega');
+function adicionarEventosCarrinho() {
+  document.querySelectorAll('.aumentar-item').forEach(b => b.addEventListener('click', () => {
+    const idx = parseInt(b.dataset.index); carrinho[idx].quantidade++; atualizarCarrinho();
+  }));
+  document.querySelectorAll('.diminuir-item').forEach(b => b.addEventListener('click', () => {
+    const idx = parseInt(b.dataset.index);
+    if (carrinho[idx].quantidade > 1) carrinho[idx].quantidade--;
+    else carrinho.splice(idx, 1);
     atualizarCarrinho();
-  });
-});
-
-// ========== BUSCA E CATEGORIAS ==========
-document.querySelectorAll('.categoria-btn').forEach(b=>{
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('.categoria-btn').forEach(bt=>bt.classList.remove('ativo')); b.classList.add('ativo');
-    const cat = b.dataset.categoria;
-    document.querySelectorAll('.produto').forEach(p=>p.style.display = (cat==='todos'||p.dataset.categoria===cat)?'flex':'none');
-    campoBusca.value='';
-  });
-});
-campoBusca?.addEventListener('input',()=>{
-  const t = campoBusca.value.toLowerCase();
-  document.querySelectorAll('.produto').forEach(p=>p.style.display = p.dataset.nome.toLowerCase().includes(t)?'flex':'none');
-});
-
-// ========== FINALIZAR PEDIDO — WHATSAPP ==========
-document.querySelector('.btn-finalizar')?.addEventListener('click',()=>{
+  }));
+}
+abrirCarrinhoBtn?.addEventListener('click', () => {
+  if (carrinho.length === 0) return;
+  if (!verificarStatusLoja(true)) return;
+  atualizarCarrinho(); 
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden'; 
   avisoGeral.classList.add('oculto');
-  if(carrinho.length===0){ avisoGeral.textContent='Adicione itens ao carrinho!'; avisoGeral.classList.remove('oculto'); return; }
-
-  const subtotal = carrinho.reduce((s,i)=>s+(i.preco*i.quantidade),0);
-  const taxa = tipoAtendimentoEl.value==='entrega' ? CONFIG.taxaEntregaFixa : 0;
-  const total = subtotal + taxa;
-  const nPedido = Math.floor(Math.random()*9000)+1000;
-  const data = new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});
-
-  let msg = `═══════════════════════════════════
-        🍔 ALISON BURGER 🍔
-═══════════════════════════════════
-PEDIDO Nº: ${nPedido}
-DATA/HORA: ${data}
-───────────────────────────────────
-CLIENTE: Guilherme Zanini
-TEL: (17) 98136-4681
-${tipoAtendimentoEl.value==='entrega'?`
-ENTREGA EM:
-Rua José Carvalho de Oliveira, 123
-Parque Residencial Celina Dalul
-Mirassol/SP`:'RETIRADA NA LOJA'}
-───────────────────────────────────
-ITEM                QTD   VALOR
-───────────────────────────────────
-`;
-  carrinho.forEach(i=>{
-    msg += `${i.nome.padEnd(20)} ${String(i.quantidade).padStart(2)}  R$ ${(i.preco*i.quantidade).toFixed(2).replace('.',',')}\n`;
-    if(i.observacao) msg += `  ⚠️ Obs: ${i.observacao}\n`;
-  });
-  msg += `───────────────────────────────────
-SUBTOTAL ............ R$ ${subtotal.toFixed(2).replace('.',',')}
-TAXA DE ENTREGA ..... R$ ${taxa.toFixed(2).replace('.',',')}
-DESCONTO ............ - R$ 4,68
-───────────────────────────────────
-TOTAL .............. R$ 47,12
-═══════════════════════════════════
-PAGAMENTO: Cartão de crédito (na entrega)
-═══════════════════════════════════
-   Obrigado! Agradecemos a preferência 🤝
-`;
-  window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(msg)}`,'_blank');
-  // Limpa tudo
-  carrinho.length=0; atualizarCarrinho(); modalCarrinho.classList.add('oculto'); document.body.style.overflow='auto';
+  history.pushState({fixo: true}, '');
 });
+fecharModalBtn?.addEventListener('click', () => {
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    const cat = botao.dataset.categoria;
+    document.querySelectorAll('.produto').forEach(p => {
+      p.style.display = (cat === 'todos' || p.dataset.categoria === cat) ? 'flex' : 'none';
+    });
+    campoBusca.value = '';
+  });
+});
+campoBusca?.addEventListener('input', () => {
+  const termo = campoBusca.value.toLowerCase().trim();
+  document.querySelectorAll('.produto').forEach(p => {
+    p.style.display = p.dataset.nome.toLowerCase().includes(termo) ? 'flex' : 'none';
+  });
+});
+document.getElementById('btn-finalizar')?.addEventListener('click', () => {
+  avisoGeral.classList.add('oculto');
+  const nome = nomeEl.value.trim();
+  const pagamento = pagamentoEl.value;
+  const tipoAtendimento = tipoAtendimentoEl.value;
+  const taxa = tipoAtendimento === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
+  const totalGeral = totalItens + taxa;
+  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
+  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const observacaoGeral = observacaoGeralEl ? observacaoGeralEl.value.trim() : '';
+  if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
+  if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
+  if (tipoAtendimento === 'entrega') {
+    const cepValido = cepEl.value.trim().replace(/\D/g, '').length === 8;
+    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Aguarde o preenchimento do endereço!'; avisoGeral.classList.remove('oculto'); return; }
+    if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
+  }
+  let enderecoCompleto = '';
+  if (tipoAtendimento === 'entrega') {
+    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
+    if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
+    enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
+    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
+    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
+  }
+  let mensagem = `=====================================
+            ALISON BURGER
+=====================================
+PEDIDO Nº: ${numeroPedido}
+EMITIDO EM: ${dataPedido}
+-------------------------------------
+CLIENTE: ${nome}
+TIPO DE ATENDIMENTO: ${tipoAtendimento === 'retirada' ? 'RETIRADA NA LOJA' : 'ENTREGA'}
+${tipoAtendimento === 'entrega' ? `
+-------------------------------------
+ENDEREÇO:
+${enderecoCompleto}` : ''}
+-------------------------------------
+ITEM                   QTD   VALOR
+-------------------------------------
+`;
+  carrinho.forEach(item => {
+    const valorItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
+    mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(2)}    R$ ${valorItem}\n`;
+    if(item.observacao) mensagem += `⚠️ Obs do item: ${item.observacao}\n`;
+    mensagem += `\n`;
+  });
+  mensagem += `-------------------------------------
+SUBTOTAL...............: R$ ${totalItens.toFixed(2).replace('.', ',')}
+TAXA DE ENTREGA........: R$ ${taxa.toFixed(2).replace('.', ',')}
+-------------------------------------
+TOTAL A PAGAR..........: R$ ${totalGeral.toFixed(2).replace('.', ',')}
+-------------------------------------
+FORMA DE PAGAMENTO.....: ${pagamento}
+${observacaoGeral ? `
+-------------------------------------
+📝 OBSERVAÇÃO GERAL DO PEDIDO:
+${observacaoGeral}` : ''}
+=====================================
+      OBRIGADO PELA PREFERÊNCIA!
+`;
+  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(urlWhatsApp, '_blank');
+  limparTudoCarrinho();
+});
+
+// ==============================================
+// ✅ BUSCA AUTOMÁTICA DE CEP (ViaCEP) — ADICIONADO
+// ==============================================
+cepEl?.addEventListener('blur', buscarCEP);
+cepEl?.addEventListener('input', function() {
+  if (this.value.replace(/\D/g, '').length < 8) {
+    ruaEl.value = '';
+    bairroEl.value = '';
+    cidadeUfEl.value = '';
+  }
+});
+
+async function buscarCEP() {
+  let cep = cepEl.value.replace(/\D/g, '');
+  
+  if (cep.length !== 8) {
+    avisoGeral.textContent = 'Digite um CEP com 8 dígitos!';
+    avisoGeral.classList.remove('oculto');
+    return;
+  }
+
+  try {
+    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const dados = await resposta.json();
+
+    if (dados.erro) {
+      avisoGeral.textContent = 'CEP não encontrado! Verifique o número.';
+      avisoGeral.classList.remove('oculto');
+      ruaEl.value = '';
+      bairroEl.value = '';
+      cidadeUfEl.value = '';
+      return;
+    }
+
+    ruaEl.value = dados.logradouro || '';
+    bairroEl.value = dados.bairro || '';
+    cidadeUfEl.value = `${dados.localidade}/${dados.uf}`;
+    avisoGeral.classList.add('oculto');
+
+  } catch (erro) {
+    avisoGeral.textContent = 'Erro ao buscar CEP. Tente novamente!';
+    avisoGeral.classList.remove('oculto');
+    console.error('Erro na busca do CEP:', erro);
+  }
+}
