@@ -12,81 +12,241 @@
 </head>
 <body>
 
-<!-- ===== CABEÇALHO ===== -->
-<header class="cabecalho-loja">
-    <div class="status-loja" id="status-loja">
-        <span id="texto-status"></span>
+<div class="cabecalho-loja">
+    <div class="logo-redonda">
+        <i class="fas fa-hamburger"></i>
     </div>
-    <h1 class="nome-loja">Alison Burger</h1>
-    <button id="ver-pedidos" class="btn-ver-pedidos">
-        <i class="fas fa-clipboard-list"></i>
-        <span>Meus Pedidos</span>
-    </button>
-</header>
+    <h1 class="nome-loja">ALISON BURGER</h1>
+    <div class="linha-status">
+        <span class="ponto-status" id="cab-ponto-status"></span>
+        <span id="cab-texto-status" class="texto-status"></span>
+    </div>
+</div>
 
-<!-- ===== CONTEÚDO DO CARDÁPIO ===== -->
-<main>
-    <section class="categorias">
-        <h2>Categorias</h2>
-        <div class="lista-categorias">
-            <button class="btn-categoria ativo">Lanches</button>
-            <button class="btn-categoria">Bebidas</button>
-            <button class="btn-categoria">Porções</button>
+<div class="categorias">
+    <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
+    <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
+    <button class="categoria-btn" data-categoria="combos"><i class="fa fa-star"></i> Combos</button>
+    <button class="categoria-btn" data-categoria="bebidas"><i class="fa fa-glass-water"></i> Bebidas</button>
+    <button class="categoria-btn" data-categoria="acompanhamentos"><i class="fa fa-french-fries"></i> Acompanhamentos</button>
+</div>
+
+<div class="busca">
+    <i class="fa fa-search"></i>
+    <input type="text" id="campoBusca" placeholder="Buscar produtos...">
+</div>
+
+<div class="lista-produtos">
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Simples" data-preco="10.00" data-tem-adicionais="sim" data-descricao="Pão, carne, queijo, alface e tomate fresquinhos." data-imagem="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" alt="Hambúrguer Simples"></div>
+        <div class="produto-info">
+            <h2 class="produto-nome">Hambúrguer Simples</h2>
+            <p class="produto-descricao">Pão, carne, queijo, alface e tomate.</p>
         </div>
-    </section>
+        <p class="produto-preco">R$ 10,00</p>
+    </div>
+    
+    <div class="produto" data-categoria="hamburgueres" data-nome="Hambúrguer Duplo" data-preco="14.00" data-tem-adicionais="sim" data-descricao="Duas carnes suculentas, queijo e molho especial da casa." data-imagem="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1550547660-d9450d859349?w=400&q=80" alt="Hambúrguer Duplo"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Hambúrguer Duplo</h3>
+            <p class="produto-descricao">Duas carnes, queijo e molho da casa.</p>
+        </div>
+        <p class="produto-preco">R$ 14,00</p>
+    </div>
+    
+    <div class="produto" data-categoria="hamburgueres" data-nome="Bacon Burger" data-preco="16.00" data-tem-adicionais="sim" data-descricao="Carne, queijo, bacon crocante e molho de alho." data-imagem="https://images.unsplash.com/photo-1594212357290-571c2da90d5d?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594212357290-571c2da90d5d?w=400&q=80" alt="Bacon Burger"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Bacon Burger</h3>
+            <p class="produto-descricao">Com bacon crocante e molho de alho.</p>
+        </div>
+        <p class="produto-preco">R$ 16,00</p>
+    </div>
+    
+    <div class="produto" data-categoria="hamburgueres" data-nome="Alison Burger Especial" data-preco="22.00" data-tem-adicionais="sim" data-descricao="Três carnes, queijo prato e mussarela, bacon, ovo e molho secreto." data-imagem="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&q=80" alt="Alison Burger Especial"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Alison Burger Especial</h3>
+            <p class="produto-descricao">O mais pedido da casa!</p>
+        </div>
+        <p class="produto-preco">R$ 22,00</p>
+    </div>
 
-    <section class="produtos" id="lista-produtos">
-        <!-- Produtos carregados pelo JS -->
-    </section>
-</main>
+    <div class="produto" data-categoria="combos" data-nome="Combo Simples" data-preco="18.00" data-tem-adicionais="sim" data-descricao="1 Hambúrguer Simples + Batata Frita Pequena + Refrigerante Lata." data-imagem="https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1590087765004-8ac4e1c0e8b6?w=400&q=80" alt="Combo Simples"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Simples</h3>
+            <p class="produto-descricao">Lanches + Batata + Refrigerante.</p>
+        </div>
+        <p class="produto-preco">R$ 18,00</p>
+    </div>
+    
+    <div class="produto" data-categoria="combos" data-nome="Combo Duplo" data-preco="25.00" data-tem-adicionais="sim" data-descricao="1 Hambúrguer Duplo + Batata Frita Grande + Refrigerante 1L." data-imagem="https://images.unsplash.com/photo-1606755888529-85a65a7d15e0?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1606755888529-85a65a7d15e0?w=400&q=80" alt="Combo Duplo"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Combo Duplo</h3>
+            <p class="produto-descricao">Mais porções para você!</p>
+        </div>
+        <p class="produto-preco">R$ 25,00</p>
+    </div>
+    
+    <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola Lata 350ml" data-preco="5.00" data-tem-adicionais="nao" data-descricao="Lata gelada de Coca-Cola." data-imagem="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80">
+        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1554866531-0e5684a20d22?w=400&q=80" alt="Coca Lata"></div>
+        <div class="produto-info">
+            <h3 class="produto-nome">Coca-Cola Lata</h3>
+            <p class="produto-descricao">350ml bem gelada.</p>
+        </div>
+        <p class="produto-preco">R$ 5,00</p>
+    </div>
+</div>
 
-<!-- ===== BOTÕES FIXOS INFERIORES ===== -->
-<button id="abrir-carrinho" class="btn-carrinho">
-    <i class="fas fa-shopping-cart"></i>
-    <span id="qtd-carrinho">0</span>
-</button>
+<div id="modal-produto" class="oculto">
+    <div class="cabecalho-detalhe">
+        <button id="btn-voltar">&larr;</button>
+        <img id="img-detalhe" alt="">
+    </div>
+    <div class="conteudo-detalhe">
+        <h2 id="nome-detalhe"></h2>
+        <p id="descricao-detalhe"></p>
+        <div class="precos">
+            <span id="preco-original" style="color:#999; text-decoration:line-through; margin-right:8px;"></span>
+            <span class="preco-promocional" id="preco-promocional"></span>
+        </div>
+        <div id="bloco-adicionais" class="bloco-adicionais">
+            <h3 style="font-size:1rem; margin-bottom:8px;">Adicionais</h3>
+            <div id="lista-adicionais"></div>
+        </div>
+        <div class="bloco-observacao-item">
+            <label>Observação deste produto:</label>
+            <textarea id="observacao-item" placeholder="Ex: Sem cebola, bem passado, sem gelo..." rows="2"></textarea>
+        </div>
+    </div>
+    <div class="rodape-detalhe">
+        <div class="qtd-detalhe">
+            <button id="diminuir-qtd">&minus;</button>
+            <span id="qtd-atual">1</span>
+            <button id="aumentar-qtd">+</button>
+        </div>
+        <button id="btn-adicionar-detalhe">Adicionar R$ 0,00</button>
+    </div>
+</div>
 
-<a href="https://wa.me/5519989021323?text=Olá! Vim pelo cardápio online" target="_blank" class="btn-whatsapp">
+<div id="modal-carrinho" class="oculto">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h3>Meu Carrinho</h3>
+            <button id="fechar-modal" class="fechar-modal">&times;</button>
+        </div>
+        <div id="aviso-geral" class="oculto"></div>
+        <div id="lista-itens-carrinho"></div>
+
+        <div class="resumo-valores">
+            <div class="linha-valor">
+                <span>Subtotal dos itens</span>
+                <span>R$ <span id="subtotal-itens">0,00</span></span>
+            </div>
+            <div class="linha-valor">
+                <span>Taxa de entrega</span>
+                <span>R$ <span id="valor-taxa-fixa">8,00</span></span>
+            </div>
+            <div class="linha-valor total">
+                <strong>Total do pedido</strong>
+                <strong>R$ <span id="valor-total">0,00</span></strong>
+            </div>
+        </div>
+
+        <div class="form-grupo">
+            <label>Nome completo *</label>
+            <input type="text" id="nome-cliente" placeholder="Seu nome">
+        </div>
+        <div class="form-grupo">
+            <label>Tipo de atendimento</label>
+            <select id="tipo-atendimento">
+                <option value="retirada">Retirada na loja</option>
+                <option value="entrega">Entrega</option>
+            </select>
+        </div>
+
+        <div id="campo-taxa-entrega" class="oculto form-grupo">
+            <label>Taxa de entrega (R$)</label>
+            <input type="text" id="taxa-entrega" value="8,00" class="input-desativado" readonly>
+        </div>
+
+        <div id="bloco-endereco" class="oculto">
+            <div class="form-grupo">
+                <label>CEP</label>
+                <input type="text" id="cep" placeholder="00000-000">
+            </div>
+            <div class="form-duplo form-grupo">
+                <div>
+                    <label>Número *</label>
+                    <input type="text" id="numero" placeholder="Nº">
+                </div>
+                <div>
+                    <label>Complemento</label>
+                    <input type="text" id="complemento" placeholder="Apto/Casa">
+                </div>
+            </div>
+            <div class="form-grupo">
+                <label>Rua</label>
+                <input type="text" id="rua" readonly>
+            </div>
+            <div class="form-duplo form-grupo">
+                <div>
+                    <label>Bairro</label>
+                    <input type="text" id="bairro" readonly>
+                </div>
+                <div>
+                    <label>Cidade/UF</label>
+                    <input type="text" id="cidade-uf" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="form-grupo">
+            <label>Forma de pagamento</label>
+            <select id="forma-pagamento">
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+            </select>
+        </div>
+        <div class="form-grupo">
+            <label>Observação geral do pedido</label>
+            <input type="text" id="observacao" placeholder="Ex: Entregar até às 19h...">
+        </div>
+        <div class="botoes-modal">
+            <button id="btn-limpar" class="btn-fechar">Limpar Carrinho</button>
+            <button id="btn-finalizar" class="btn-finalizar">Enviar Pedido</button>
+        </div>
+    </div>
+</div>
+
+<div id="alerta-fechado" class="oculto">
+    <div class="alerta-caixa">
+        <h2>LOJA FECHADA</h2>
+        <p>Aberto das 07:00 às 23:00</p>
+        <button id="btn-entendi" class="btn-entendi">Entendi</button>
+    </div>
+</div>
+
+<!-- ✅ CARRINHO COM ÍCONE NO LUGAR DA BOLA -->
+<div class="carrinho-fixo" id="carrinho-container">
+    <div class="carrinho-conteudo">
+        <div class="grupo-qtd-valor">
+            <div class="icone-carrinho-badge">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge-qtd" id="badge-qtd">0</span>
+            </div>
+            <span class="texto-valor" id="resumo-valor">R$ 0,00</span>
+        </div>
+        <button class="btn-ver-carrinho" id="abrir-carrinho">Ver Carrinho</button>
+    </div>
+</div>
+
+<a href="https://wa.me/5519989021323" target="_blank" rel="noopener" class="botao-whatsapp" title="Fale conosco">
     <i class="fab fa-whatsapp"></i>
 </a>
-
-<!-- ===== MODAL CARRINHO ===== -->
-<div id="modal-carrinho" class="modal oculto">
-    <div class="conteudo-modal">
-        <div class="cabecalho-modal">
-            <h2>Meu Carrinho</h2>
-            <button class="fechar-modal">&times;</button>
-        </div>
-        <div id="itens-carrinho"></div>
-        <div class="total-carrinho">
-            <span>Total:</span>
-            <span id="valor-total">R$ 0,00</span>
-        </div>
-        <button id="finalizar-pedido" class="btn-finalizar">Finalizar Pedido</button>
-    </div>
-</div>
-
-<!-- ===== MODAL PRODUTO ===== -->
-<div id="modal-produto" class="modal oculto">
-    <div class="conteudo-modal">
-        <div class="cabecalho-modal">
-            <h2 id="nome-produto-modal"></h2>
-            <button class="fechar-modal">&times;</button>
-        </div>
-        <p id="descricao-produto-modal"></p>
-        <div id="area-adicionais"></div>
-        <div class="campo-observacao">
-            <label>Observação:</label>
-            <textarea id="observacao-produto" placeholder="Ex: Sem sal, sem alface..."></textarea>
-        </div>
-        <div class="quantidade-produto">
-            <button id="menos-qtd">-</button>
-            <span id="quantidade-atual">1</span>
-            <button id="mais-qtd">+</button>
-        </div>
-        <button id="adicionar-carrinho" class="btn-adicionar">Adicionar ao Carrinho</button>
-    </div>
-</div>
 
 <script src="script.js"></script>
 </body>
