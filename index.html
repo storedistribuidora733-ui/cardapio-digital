@@ -12,16 +12,14 @@
 </head>
 <body>
 
-<!-- ✅ CABEÇALHO FINAL — EXATAMENTE COMO PEDIU -->
+<!-- ✅ CABEÇALHO AJUSTADO EXATAMENTE COMO PEDIU -->
 <div class="cabecalho-loja">
     <div class="linha-status">
-        <span class="ponto-status aberto" id="cab-ponto-status"></span>
-        <span class="texto-status" id="cab-texto-status">ABERTO</span>
+        <span class="ponto-status" id="ponto-status"></span>
+        <span class="texto-status" id="texto-status">ABERTO</span>
     </div>
     <h1 class="nome-loja">ALISON BURGER</h1>
-    <button class="btn-meus-pedidos" id="btn-meus-pedidos">
-        Meus Pedidos
-    </button>
+    <button class="btn-meus-pedidos" id="btn-meus-pedidos">Meus Pedidos</button>
 </div>
 
 <div class="categorias">
@@ -54,30 +52,6 @@
             <p class="produto-preco">R$ 14,00</p>
         </div>
     </div>
-    <div class="produto" data-categoria="hamburgueres" data-nome="Bacon Burger" data-preco="16.00" data-descricao="Com bacon crocante e molho de alho." data-imagem="https://images.unsplash.com/photo-1594210499827-908738339427?w=200&h=150&fit=crop" data-tem-adicionais="sim">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1594210499827-908738339427?w=200&h=150&fit=crop" alt="Bacon Burger"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Bacon Burger</h3>
-            <p class="produto-descricao">Com bacon crocante e molho de alho.</p>
-            <p class="produto-preco">R$ 16,00</p>
-        </div>
-    </div>
-    <div class="produto" data-categoria="hamburgueres" data-nome="Alison Burger Especial" data-preco="22.00" data-descricao="O mais pedido da casa!" data-imagem="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=200&h=150&fit=crop" data-tem-adicionais="sim">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=200&h=150&fit=crop" alt="Alison Burger Especial"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Alison Burger Especial</h3>
-            <p class="produto-descricao">O mais pedido da casa!</p>
-            <p class="produto-preco">R$ 22,00</p>
-        </div>
-    </div>
-    <div class="produto" data-categoria="combos" data-nome="Combo Simples" data-preco="18.00" data-descricao="Lanche + Batata + Refrigerante." data-imagem="https://images.unsplash.com/photo-1571091718754-512f2343f203?w=200&h=150&fit=crop" data-tem-adicionais="nao">
-        <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1571091718754-512f2343f203?w=200&h=150&fit=crop" alt="Combo Simples"></div>
-        <div class="produto-info">
-            <h3 class="produto-nome">Combo Simples</h3>
-            <p class="produto-descricao">Lanche + Batata + Refrigerante.</p>
-            <p class="produto-preco">R$ 18,00</p>
-        </div>
-    </div>
     <div class="produto" data-categoria="bebidas" data-nome="Coca-Cola Lata" data-preco="7.90" data-descricao="350ml Gelada" data-imagem="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=150&fit=crop" data-tem-adicionais="nao">
         <div class="produto-imagem"><img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=150&fit=crop" alt="Coca-Cola Lata"></div>
         <div class="produto-info">
@@ -88,10 +62,8 @@
     </div>
 </div>
 
-<!-- Botão WhatsApp Flutuante -->
 <a href="https://wa.me/5519989021323" target="_blank" class="botao-whatsapp"><i class="fab fa-whatsapp"></i></a>
 
-<!-- Barra Inferior Carrinho -->
 <div class="carrinho-fixo" id="carrinho-container">
     <div class="carrinho-conteudo">
         <div class="grupo-qtd-valor">
@@ -105,7 +77,6 @@
     </div>
 </div>
 
-<!-- Modal Produto -->
 <div class="modal oculto" id="modal-produto">
     <div class="cabecalho-detalhe">
         <button id="btn-voltar"><i class="fas fa-arrow-left"></i></button>
@@ -123,7 +94,7 @@
             <div id="lista-adicionais"></div>
         </div>
         <div class="bloco-observacao-item">
-            <label>Observação (ex: sem alface, sem tomate)</label>
+            <label>Observação</label>
             <textarea id="observacao-item" rows="2" placeholder="Digite aqui..."></textarea>
         </div>
     </div>
@@ -137,8 +108,7 @@
     </div>
 </div>
 
-<!-- Modal Carrinho -->
-<div class="modal oculto" id="carrinho-modal">
+<div class="modal oculto" id="modal-carrinho">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
             <h3>Meu Carrinho</h3>
@@ -212,7 +182,6 @@
     </div>
 </div>
 
-<!-- Aviso Loja Fechada -->
 <div class="modal oculto" id="alerta-fechado">
     <div class="alerta-caixa">
         <h3>Loja Fechada!</h3>
