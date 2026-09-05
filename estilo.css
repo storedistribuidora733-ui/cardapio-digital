@@ -12,118 +12,38 @@ body {
     body { max-width: 620px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
 }
 
-/* ✅ CABEÇALHO — EXATAMENTE IGUAL A IMAGEM */
+/* ✅ CABEÇALHO — EXATAMENTE COMO PEDIU */
 .cabecalho-loja {
-    width: 100%; 
-    padding: 12px 15px; 
-    background: #fff; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    border-bottom: 1px solid #eee; 
-    position: sticky; 
-    top:0; 
-    z-index:101;
-    gap: 8px;
+    width: 100%; padding: 12px 15px; background: #fff; 
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #eee; position: sticky; top:0; z-index:101;
 }
 
-/* Lado Esquerdo: Logo + Nome + Status */
-.cabecalho-esquerda {
-    display: flex; 
-    align-items: center; 
-    gap: 10px;
-    flex: 1;
+/* Status à esquerda: bolinha + texto juntinhos */
+.linha-status { 
+    display: flex; align-items: center; gap: 6px; 
+    font-size: 0.95rem; font-weight: 500; color: #222;
+}
+.ponto-status { width: 10px; height: 10px; border-radius: 50%; }
+.ponto-status.aberto { background: #22c55e; }
+.ponto-status.fechado { background: #dc2626; }
+
+/* Nome centralizado */
+.nome-loja { 
+    font-size: 1.35rem; font-weight: 800; color: #1f2937; 
+    text-align: center; flex: 1; margin: 0 10px;
 }
 
-.logo-circulo {
-    width: 40px;
-    height: 40px;
-    background: #f5a623;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-.dados-empresa {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.nome-estabelecimento {
-    font-size: 15px;
-    font-weight: 700;
-    color: #1f2937;
-    line-height: 1.2;
-}
-
-.linha-status {
-    display: flex; 
-    align-items: center; 
-    gap: 4px; 
-    font-size: 12px; 
-    font-weight: 500; 
-    color: #22c55e;
-}
-.bolinha-verde { 
-    width: 8px; 
-    height: 8px; 
-    border-radius: 50%; 
-    background: #22c55e; 
-}
-
-/* Meio: Etiqueta Mesa */
-.cabecalho-centro {
-    flex-shrink: 0;
-}
-.etiqueta-mesa {
-    background: #eef2ff;
-    color: #4f46e5;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 20px;
+/* Botão Meus Pedidos — limpo, sem nada extra */
+.btn-meus-pedidos {
+    background: #dc2626; color: #fff; border: none; 
+    padding: 8px 18px; border-radius: 20px; font-weight: 600;
+    cursor: pointer; font-size: 0.9rem; transition: background .2s;
     white-space: nowrap;
 }
+.btn-meus-pedidos:hover { background: #b91c1c; }
 
-/* Lado Direito: Ícones */
-.cabecalho-direita {
-    display: flex; 
-    align-items: center; 
-    gap: 12px;
-    flex-shrink: 0;
-}
-
-.botao-icone {
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #333;
-    cursor: pointer;
-    position: relative;
-}
-
-.contador-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: #dc2626;
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ✅ TODO O RESTO DO SEU CSS — EXATAMENTE IGUAL, SEM ALTERAÇÕES */
+/* Categorias */
 .categorias {
     width:100%; padding:8px 10px; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
     background:#F5F7FA; border-bottom:1px solid #eee; position:sticky; top:52px; z-index:99;
@@ -224,7 +144,7 @@ body {
 #btn-adicionar-detalhe { flex:1; padding:10px; border:none; border-radius:8px; background:#dc2626; color:#fff; font-size:1rem; cursor:pointer; }
 
 /* Modal Carrinho */
-#modal-carrinho { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:10002; padding:10px; }
+#carrinho-modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:10002; padding:10px; }
 .modal-conteudo { background:#fff; width:100%; max-width:500px; max-height:90vh; border-radius:12px; padding:20px; overflow-y:auto; }
 .modal-cabecalho { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid #eee; }
 .modal-cabecalho h3 { font-size:1.25rem; font-weight:700; color:#222; }
