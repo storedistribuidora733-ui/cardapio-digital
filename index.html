@@ -12,37 +12,18 @@
 </head>
 <body>
 
-<!-- ✅ NOVO CABEÇALHO — IGUALZINHO A IMAGEM QUE VOCÊ MANDOU -->
+<!-- ✅ CABEÇALHO FINAL — EXATAMENTE COMO PEDIU -->
 <div class="cabecalho-loja">
-    <div class="cabecalho-esquerda">
-        <div class="logo-circulo">
-            <i class="fas fa-hamburger"></i>
-        </div>
-        <div class="dados-empresa">
-            <h2 class="nome-estabelecimento">ALISON BURGER</h2>
-            <div class="linha-status">
-                <span class="bolinha-verde"></span>
-                <span class="texto-status">ABERTO AGORA</span>
-            </div>
-        </div>
+    <div class="linha-status">
+        <span class="ponto-status aberto" id="cab-ponto-status"></span>
+        <span class="texto-status" id="cab-texto-status">ABERTO</span>
     </div>
-
-    <div class="cabecalho-centro">
-        <span class="etiqueta-mesa">Mesa 14</span>
-    </div>
-
-    <div class="cabecalho-direita">
-        <button class="botao-icone" id="abrir-carrinho">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="contador-badge oculto">0</span>
-        </button>
-        <button class="botao-icone">
-            <i class="fas fa-globe-americas"></i>
-        </button>
-    </div>
+    <h1 class="nome-loja">ALISON BURGER</h1>
+    <button class="btn-meus-pedidos" id="btn-meus-pedidos">
+        Meus Pedidos
+    </button>
 </div>
 
-<!-- ✅ TODO O RESTO DO SEU CÓDIGO CONTINUA EXATAMENTE IGUAL -->
 <div class="categorias">
     <button class="categoria-btn ativo" data-categoria="todos"><i class="fa fa-th-large"></i> Todos</button>
     <button class="categoria-btn" data-categoria="hamburgueres"><i class="fa fa-burger"></i> Hambúrgueres</button>
@@ -157,7 +138,7 @@
 </div>
 
 <!-- Modal Carrinho -->
-<div class="modal oculto" id="modal-carrinho">
+<div class="modal oculto" id="carrinho-modal">
     <div class="modal-conteudo">
         <div class="modal-cabecalho">
             <h3>Meu Carrinho</h3>
