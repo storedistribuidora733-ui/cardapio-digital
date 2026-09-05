@@ -16,9 +16,9 @@ let quantidadeAtual = 1;
 let adicionaisSelecionados = [];
 let observacaoProdutoAtual = "";
 
-// Elementos — AJUSTADOS PARA O NOVO CABEÇALHO
+// Elementos
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
-const carrinhoModal = document.getElementById('carrinho-modal');
+const modalCarrinho = document.getElementById('modal-carrinho');
 const fecharModalBtn = document.getElementById('fechar-modal');
 const btnLimparCarrinho = document.getElementById('btn-limpar');
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
@@ -58,13 +58,11 @@ const qtdAtualEl = document.getElementById('qtd-atual');
 const diminuirQtdBtn = document.getElementById('diminuir-qtd');
 const aumentarQtdBtn = document.getElementById('aumentar-qtd');
 const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
-const pontoCab = document.getElementById('cab-ponto-status');
-const textoCab = document.getElementById('cab-texto-status');
+const pontoStatusEl = document.getElementById('ponto-status');
+const textoStatusEl = document.getElementById('texto-status');
 const btnMeusPedidos = document.getElementById('btn-meus-pedidos');
 
-// ==============================================
-// NAVEGAÇÃO — NÃO SAI DO SITE
-// ==============================================
+// Navegação — não sai do site ao voltar
 window.addEventListener('load', () => {
   history.pushState({fixo: true}, '');
   history.pushState({fixo: true}, '');
@@ -72,33 +70,29 @@ window.addEventListener('load', () => {
 window.addEventListener('popstate', (e) => {
   e.preventDefault();
   e.stopPropagation();
-  
   if (modalProduto && !modalProduto.classList.contains('oculto')) {
     modalProduto.classList.add('oculto');
     document.body.style.overflow = 'auto';
     history.pushState({fixo: true}, '');
     return;
   }
-  
-  if (carrinhoModal && !carrinhoModal.classList.contains('oculto')) {
-    carrinhoModal.classList.add('oculto');
+  if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
+    modalCarrinho.classList.add('oculto');
     document.body.style.overflow = 'auto';
     history.pushState({fixo: true}, '');
     return;
   }
-  window.scrollTo({top:0});
   history.pushState({fixo: true}, '');
 });
 
-// ==============================================
-// Status da Loja
-// ==============================================
+// Verificar status da loja
 function verificarStatusLoja(mostrarAviso = false) {
   const horaAtual = new Date().getHours();
   const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
-  if(pontoCab && textoCab){
-    pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
-    textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
+  if(pontoStatusEl && textoStatusEl){
+    pontoStatusEl.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
+    textoStatusEl.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
+    pontoStatusEl.classList.toggle('fechado', !lojaAberta);
   }
   if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
   return lojaAberta;
@@ -112,9 +106,7 @@ btnMeusPedidos?.addEventListener('click', () => {
   alert('Em breve: acompanhe seus pedidos aqui! 🚀');
 });
 
-// ==============================================
-// Funções Auxiliares
-// ==============================================
+// Limpar carrinho
 function limparTudoCarrinho() {
   carrinho.length = 0; listaItensCarrinho.innerHTML = '';
   subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
@@ -126,11 +118,11 @@ function limparTudoCarrinho() {
   campoTaxaEntregaEl.classList.add('oculto'); blocoEnderecoEl.classList.add('oculto');
   cepEl.value = ''; numeroEl.value = ''; complementoEl.value = '';
   ruaEl.value = ''; bairroEl.value = ''; cidadeUfEl.value = '';
-  carrinhoModal.classList.add('oculto'); document.body.style.overflow = 'auto';
+  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
 }
 btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
 
-// Tipo de Atendimento
+// Tipo de atendimento
 tipoAtendimentoEl?.addEventListener('change', () => {
   if (tipoAtendimentoEl.value === 'entrega') {
     campoTaxaEntregaEl.classList.remove('oculto');
@@ -143,9 +135,7 @@ tipoAtendimentoEl?.addEventListener('change', () => {
   atualizarCarrinho();
 });
 
-// ==============================================
-// Abrir Produto no Detalhe
-// ==============================================
+// Abrir produto
 document.querySelectorAll('.produto').forEach(produto => {
   produto.addEventListener('click', () => {
     if (!verificarStatusLoja(true)) return;
@@ -195,7 +185,7 @@ btnVoltarLista?.addEventListener('click', () => {
   document.body.style.overflow = 'auto';
 });
 
-// Quantidade no Detalhe
+// Quantidade
 diminuirQtdBtn?.addEventListener('click', () => {
   if (quantidadeAtual > 1) { quantidadeAtual--; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe(); }
 });
@@ -225,9 +215,7 @@ function atualizarTotalDetalhe() {
   btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-// ==============================================
-// Adicionar ao Carrinho — RESET TOTAL APÓS
-// ==============================================
+// Adicionar ao carrinho e RESET
 btnAdicionarDetalhe?.addEventListener('click', () => {
   if (!verificarStatusLoja(true)) return;
   
@@ -246,14 +234,14 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   
   atualizarCarrinho();
   
-  // Aviso rápido
+  // Aviso
   const aviso = document.createElement('div');
   aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
   aviso.textContent = '✅ Adicionado!';
   document.body.appendChild(aviso);
   setTimeout(() => aviso.remove(), 1500);
   
-  // RESET COMPLETO — sem fechar a tela
+  // RESET COMPLETO
   quantidadeAtual = 1;
   adicionaisSelecionados = [];
   observacaoProdutoAtual = "";
@@ -266,9 +254,7 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   atualizarTotalDetalhe();
 });
 
-// ==============================================
-// Atualizar Carrinho
-// ==============================================
+// Atualizar carrinho visual
 function atualizarCarrinho() {
   listaItensCarrinho.innerHTML = '';
   let totalItens = 0; let qtdTotal = 0;
@@ -294,9 +280,134 @@ function atualizarCarrinho() {
     const itemEl = document.createElement('div');
     itemEl.className = 'item-carrinho';
     itemEl.innerHTML = `
-      <div class="item-info">
+      <div>
         <h4 class="item-nome">${item.nome}</h4>
         ${item.observacao ? `<p class="item-obs">Obs: ${item.observacao}</p>` : ''}
-        <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
+        <p>R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
       </div>
       <div class="qtd-controle">
+        <button class="qtd-btn diminuir-item" data-index="${index}">&minus;</button>
+        <span>${item.quantidade}</span>
+        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
+      </div>
+      <div class="item-total">R$ ${totalItem.toFixed(2).replace('.', ',')}</div>
+    `;
+    listaItensCarrinho.appendChild(itemEl);
+  });
+  
+  const totalGeral = totalItens + taxa;
+  subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
+  valorTotalEl.textContent = totalGeral.toFixed(2).replace('.', ',');
+  badgeQtdEl.textContent = qtdTotal;
+  resumoValorEl.textContent = `R$ ${totalItens.toFixed(2).replace('.', ',')}`;
+}
+
+// Alterar quantidade no carrinho
+listaItensCarrinho?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.qtd-btn');
+  if (!btn) return;
+  const idx = parseInt(btn.dataset.index);
+  if (btn.classList.contains('aumentar-item')) {
+    carrinho[idx].quantidade++;
+  } else {
+    if (carrinho[idx].quantidade === 1) {
+      carrinho.splice(idx, 1);
+      atualizarCarrinho();
+      return;
+    }
+    carrinho[idx].quantidade--;
+  }
+  atualizarCarrinho();
+});
+
+// Abrir e fechar carrinho
+abrirCarrinhoBtn?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  if (carrinho.length === 0) {
+    avisoGeral.textContent = '🛒 Seu carrinho está vazio! Adicione produtos primeiro.';
+    avisoGeral.classList.remove('oculto');
+    setTimeout(() => avisoGeral.classList.add('oculto'), 2500);
+    return;
+  }
+  avisoGeral.classList.add('oculto');
+  modalCarrinho.classList.remove('oculto');
+  document.body.style.overflow = 'hidden';
+  history.pushState({fixo: true}, '');
+});
+
+fecharModalBtn?.addEventListener('click', () => {
+  modalCarrinho.classList.add('oculto');
+  document.body.style.overflow = 'auto';
+});
+
+// Finalizar pedido
+document.getElementById('btn-finalizar')?.addEventListener('click', () => {
+  if (!verificarStatusLoja(true)) return;
+  
+  if (!nomeEl.value.trim()) {
+    avisoGeral.textContent = '⚠️ Digite seu nome completo!';
+    avisoGeral.classList.remove('oculto');
+    return;
+  }
+  
+  if (tipoAtendimentoEl.value === 'entrega') {
+    if (!cepEl.value.trim() || !numeroEl.value.trim()) {
+      avisoGeral.textContent = '⚠️ Preencha CEP e Número da entrega!';
+      avisoGeral.classList.remove('oculto');
+      return;
+    }
+  }
+  avisoGeral.classList.add('oculto');
+  
+  let mensagem = `🛒 *NOVO PEDIDO — ${CONFIG.nomeLoja}*\n\n`;
+  mensagem += `👤 Cliente: ${nomeEl.value.trim()}\n`;
+  mensagem += `📦 Tipo: ${tipoAtendimentoEl.value === 'entrega' ? '🚚 Entrega' : '🏪 Retirada'}\n`;
+  
+  if (tipoAtendimentoEl.value === 'entrega') {
+    mensagem += `📍 Endereço: ${ruaEl.value}, ${numeroEl.value} — ${bairroEl.value}\n`;
+    mensagem += `   ${complementoEl.value ? `Compl: ${complementoEl.value} — ` : ''}${cidadeUfEl.value}\n`;
+  }
+  
+  mensagem += `\n📋 Itens:\n`;
+  carrinho.forEach(item => {
+    mensagem += `• ${item.quantidade}x ${item.nome} — R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+    if(item.observacao) mensagem += `  ⤷ Obs: ${item.observacao}\n`;
+  });
+  
+  const subtotal = carrinho.reduce((s,i)=>s+i.preco*i.quantidade,0);
+  const taxaEnt = tipoAtendimentoEl.value === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
+  const totalFinal = subtotal + taxaEnt;
+  
+  mensagem += `\n💰 Subtotal: R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+  if(taxaEnt>0) mensagem += `🚚 Taxa: R$ ${taxaEnt.toFixed(2).replace('.', ',')}\n`;
+  mensagem += `✅ TOTAL: R$ ${totalFinal.toFixed(2).replace('.', ',')}\n`;
+  mensagem += `💳 Pagamento: ${pagamentoEl.value}\n`;
+  if(observacaoGeralEl.value.trim()) mensagem += `📝 Obs: ${observacaoGeralEl.value.trim()}\n`;
+  
+  const url = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, '_blank');
+  
+  setTimeout(limparTudoCarrinho, 600);
+});
+
+// Busca
+campoBusca?.addEventListener('input', (e) => {
+  const termo = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.produto').forEach(prod => {
+    const texto = `${prod.dataset.nome} ${prod.dataset.descricao}`.toLowerCase();
+    prod.style.display = !termo || texto.includes(termo) ? 'flex' : 'none';
+  });
+});
+
+// Filtro categorias
+document.querySelectorAll('.categoria-btn').forEach(botao => {
+  botao.addEventListener('click', () => {
+    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
+    botao.classList.add('ativo');
+    const cat = botao.dataset.categoria;
+    document.querySelectorAll('.produto').forEach(prod => {
+      prod.style.display = cat === 'todos' || prod.dataset.categoria === cat ? 'flex' : 'none';
+    });
+    window.scrollTo({top:0});
+  });
+});
