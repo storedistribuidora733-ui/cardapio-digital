@@ -1,7 +1,7 @@
 const CONFIG = {
   horaAbertura: 0,
   horaFechamento: 24,
-  textoStatusAberto: "ABERTO AGORA",
+  textoStatusAberto: "ABERTO",
   textoStatusFechado: "FECHADO",
   corStatusAberto: "#22c55e",
   corStatusFechado: "#dc2626",
@@ -16,10 +16,9 @@ let quantidadeAtual = 1;
 let adicionaisSelecionados = [];
 let observacaoProdutoAtual = "";
 
-// ✅ Elementos — ATUALIZADO PARA O NOVO CABEÇALHO
+// Elementos — AJUSTADOS PARA O NOVO CABEÇALHO
 const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
-const contadorCarrinhoEl = document.querySelector('.contador-badge');
-const modalCarrinho = document.getElementById('modal-carrinho');
+const carrinhoModal = document.getElementById('carrinho-modal');
 const fecharModalBtn = document.getElementById('fechar-modal');
 const btnLimparCarrinho = document.getElementById('btn-limpar');
 const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
@@ -59,8 +58,9 @@ const qtdAtualEl = document.getElementById('qtd-atual');
 const diminuirQtdBtn = document.getElementById('diminuir-qtd');
 const aumentarQtdBtn = document.getElementById('aumentar-qtd');
 const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
-const pontoCab = document.querySelector('.bolinha-verde');
-const textoCab = document.querySelector('.texto-status');
+const pontoCab = document.getElementById('cab-ponto-status');
+const textoCab = document.getElementById('cab-texto-status');
+const btnMeusPedidos = document.getElementById('btn-meus-pedidos');
 
 // ==============================================
 // NAVEGAÇÃO — NÃO SAI DO SITE
@@ -80,8 +80,8 @@ window.addEventListener('popstate', (e) => {
     return;
   }
   
-  if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
-    modalCarrinho.classList.add('oculto');
+  if (carrinhoModal && !carrinhoModal.classList.contains('oculto')) {
+    carrinhoModal.classList.add('oculto');
     document.body.style.overflow = 'auto';
     history.pushState({fixo: true}, '');
     return;
@@ -100,29 +100,21 @@ function verificarStatusLoja(mostrarAviso = false) {
     pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
     textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
   }
-  if (!lojaAberta && mostrarAviso) alertaFechado.classList.add("oculto");
+  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
   return lojaAberta;
 }
 verificarStatusLoja();
 setInterval(verificarStatusLoja, 60000);
 btnEntendi?.addEventListener('click', () => alertaFechado.classList.add("oculto"));
 
+// Botão Meus Pedidos
+btnMeusPedidos?.addEventListener('click', () => {
+  alert('Em breve: acompanhe seus pedidos aqui! 🚀');
+});
+
 // ==============================================
 // Funções Auxiliares
 // ==============================================
-function atualizarContadorCarrinho() {
-    const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
-    contadorCarrinhoEl.textContent = totalItens;
-    badgeQtdEl.textContent = totalItens;
-    if (totalItens > 0) {
-        contadorCarrinhoEl.classList.remove('oculto');
-        carrinhoContainer.classList.add('ativo');
-    } else {
-        contadorCarrinhoEl.classList.add('oculto');
-        carrinhoContainer.classList.remove('ativo');
-    }
-}
-
 function limparTudoCarrinho() {
   carrinho.length = 0; listaItensCarrinho.innerHTML = '';
   subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
@@ -134,8 +126,7 @@ function limparTudoCarrinho() {
   campoTaxaEntregaEl.classList.add('oculto'); blocoEnderecoEl.classList.add('oculto');
   cepEl.value = ''; numeroEl.value = ''; complementoEl.value = '';
   ruaEl.value = ''; bairroEl.value = ''; cidadeUfEl.value = '';
-  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
-  atualizarContadorCarrinho();
+  carrinhoModal.classList.add('oculto'); document.body.style.overflow = 'auto';
 }
 btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
 
@@ -242,4 +233,70 @@ btnAdicionarDetalhe?.addEventListener('click', () => {
   
   observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
   const nomeCompleto = adicionaisSelecionados.length 
-    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')
+    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
+    : produtoAtual.nome;
+  const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
+  
+  carrinho.push({ 
+    nome: nomeCompleto, 
+    preco: precoTotal, 
+    quantidade: quantidadeAtual,
+    observacao: observacaoProdutoAtual
+  });
+  
+  atualizarCarrinho();
+  
+  // Aviso rápido
+  const aviso = document.createElement('div');
+  aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
+  aviso.textContent = '✅ Adicionado!';
+  document.body.appendChild(aviso);
+  setTimeout(() => aviso.remove(), 1500);
+  
+  // RESET COMPLETO — sem fechar a tela
+  quantidadeAtual = 1;
+  adicionaisSelecionados = [];
+  observacaoProdutoAtual = "";
+  qtdAtualEl.textContent = "1";
+  if(observacaoItemEl) observacaoItemEl.value = "";
+  document.querySelectorAll('.btn-add-adicional').forEach(botao => {
+    botao.textContent = '+';
+    botao.classList.remove('selecionado');
+  });
+  atualizarTotalDetalhe();
+});
+
+// ==============================================
+// Atualizar Carrinho
+// ==============================================
+function atualizarCarrinho() {
+  listaItensCarrinho.innerHTML = '';
+  let totalItens = 0; let qtdTotal = 0;
+  const usaTaxaEntrega = tipoAtendimentoEl.value === 'entrega';
+  const taxa = usaTaxaEntrega ? CONFIG.taxaEntregaFixa : 0;
+  
+  if (carrinho.length === 0) {
+    subtotaisEl.textContent = '0,00'; 
+    valorTotalEl.textContent = '0,00';
+    badgeQtdEl.textContent = '0'; 
+    resumoValorEl.textContent = 'R$ 0,00';
+    carrinhoContainer.classList.remove('ativo');
+    return;
+  }
+  
+  carrinhoContainer.classList.add('ativo');
+  
+  carrinho.forEach((item, index) => {
+    const totalItem = item.preco * item.quantidade;
+    totalItens += totalItem; 
+    qtdTotal += item.quantidade;
+    
+    const itemEl = document.createElement('div');
+    itemEl.className = 'item-carrinho';
+    itemEl.innerHTML = `
+      <div class="item-info">
+        <h4 class="item-nome">${item.nome}</h4>
+        ${item.observacao ? `<p class="item-obs">Obs: ${item.observacao}</p>` : ''}
+        <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
+      </div>
+      <div class="qtd-controle">
