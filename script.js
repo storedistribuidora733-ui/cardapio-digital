@@ -1,427 +1,556 @@
-const CONFIG = {
-  horaAbertura: 0,
-  horaFechamento: 24,
-  textoStatusAberto: "ABERTO ",
-  textoStatusFechado: "FECHADO ",
-  corStatusAberto: "#22c55e",
-  corStatusFechado: "#dc2626",
-  numeroWhatsApp: "5519989021323",
-  nomeLoja: "Alison Burger",
-  taxaEntregaFixa: 8.00
-};
-const carrinho = [];
-let produtoAtual = null;
-let quantidadeAtual = 1;
-let adicionaisSelecionados = [];
-let observacaoProdutoAtual = "";
-// Elementos
-const abrirCarrinhoBtn = document.getElementById('abrir-carrinho');
-const modalCarrinho = document.getElementById('modal-carrinho');
-const fecharModalBtn = document.getElementById('fechar-modal');
-const btnLimparCarrinho = document.getElementById('btn-limpar');
-const listaItensCarrinho = document.getElementById('lista-itens-carrinho');
-const alertaFechado = document.getElementById('alerta-fechado');
-const btnEntendi = document.getElementById('btn-entendi');
-const campoBusca = document.getElementById('campoBusca');
-const carrinhoContainer = document.getElementById('carrinho-container');
-const resumoValorEl = document.getElementById('resumo-valor');
-const badgeQtdEl = document.getElementById('badge-qtd');
-const blocoAdicionaisEl = document.getElementById('bloco-adicionais');
-const observacaoItemEl = document.getElementById('observacao-item');
-const subtotaisEl = document.getElementById('subtotal-itens');
-const valorTotalEl = document.getElementById('valor-total');
-const nomeEl = document.getElementById('nome-cliente');
-const avisoGeral = document.getElementById('aviso-geral');
-const tipoAtendimentoEl = document.getElementById('tipo-atendimento');
-const campoTaxaEntregaEl = document.getElementById('campo-taxa-entrega');
-const blocoEnderecoEl = document.getElementById('bloco-endereco');
-const taxaEntregaEl = document.getElementById('taxa-entrega');
-const cepEl = document.getElementById('cep');
-const numeroEl = document.getElementById('numero');
-const complementoEl = document.getElementById('complemento');
-const ruaEl = document.getElementById('rua');
-const bairroEl = document.getElementById('bairro');
-const cidadeUfEl = document.getElementById('cidade-uf');
-const pagamentoEl = document.getElementById('forma-pagamento');
-const observacaoGeralEl = document.getElementById('observacao');
+// ==========================================
+// HOMEM & ESTILO — Moda Masculina Premium
+// Código Completo e Funcional
+// ==========================================
+
+const produtos = [
+    {
+        id: 1,
+        nome: "Camisa Social Branca Premium",
+        categoria: "sociais",
+        preco: 129.90,
+        precoAntigo: 169.90,
+        imagem: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop",
+        avaliacao: 5,
+        tamanhos: ["PP", "P", "M", "G", "GG"],
+        cores: ["Branco"],
+        descricao: "Camisa social 100% algodão egípcio. Tecido de alta qualidade que não amassa fácil. Caimento perfeito e elegante para qualquer ocasião.",
+        destaque: true,
+        lancamento: false
+    },
+    {
+        id: 2,
+        nome: "Calça Jeans Slim Fit Premium",
+        categoria: "casuais",
+        preco: 149.90,
+        precoAntigo: 199.90,
+        imagem: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=500&fit=crop",
+        avaliacao: 4.8,
+        tamanhos: ["38", "40", "42", "44", "46"],
+        cores: ["Azul"],
+        descricao: "Calça jeans com modelagem slim moderna. Com elastano para conforto e mobilidade. Lavagem escura sofisticada que combina com tudo.",
+        destaque: true,
+        lancamento: false
+    },
+    {
+        id: 3,
+        nome: "Blazer Preto Alfaiataria",
+        categoria: "sociais",
+        preco: 299.90,
+        precoAntigo: 399.90,
+        imagem: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop",
+        avaliacao: 5,
+        tamanhos: ["P", "M", "G", "GG"],
+        cores: ["Preto"],
+        descricao: "Blazer estruturado em tecido premium. Corte clássico e elegante. Perfeito para eventos, trabalho e ocasiões especiais.",
+        destaque: true,
+        lancamento: true
+    },
+    {
+        id: 4,
+        nome: "Camiseta Básica Algodão Penteado",
+        categoria: "casuais",
+        preco: 59.90,
+        precoAntigo: 79.90,
+        imagem: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop",
+        avaliacao: 4.9,
+        tamanhos: ["PP", "P", "M", "G", "GG", "XG"],
+        cores: ["Branco", "Preto", "Cinza"],
+        descricao: "Camiseta básica confeccionada em algodão penteado de alta densidade. Macia, durável e com caimento perfeito.",
+        destaque: true,
+        lancamento: true
+    },
+    {
+        id: 5,
+        nome: "Calça Chino Bege Elegante",
+        categoria: "casuais",
+        preco: 139.90,
+        precoAntigo: 179.90,
+        imagem: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=500&fit=crop",
+        avaliacao: 4.7,
+        tamanhos: ["38", "40", "42", "44"],
+        cores: ["Marrom", "Cinza"],
+        descricao: "Calça chino em tecido leve e confortável. Versátil, do esporte ao social. Cor bege clássica que nunca sai de moda.",
+        destaque: true,
+        lancamento: false
+    },
+    {
+        id: 6,
+        nome: "Polo Masculina Premium",
+        categoria: "casuais",
+        preco: 89.90,
+        precoAntigo: 119.90,
+        imagem: "https://images.unsplash.com/photo-1625910514582-25c3e8232a71?w=400&h=500&fit=crop",
+        avaliacao: 4.8,
+        tamanhos: ["PP", "P", "M", "G", "GG"],
+        cores: ["Azul", "Branco", "Preto"],
+        descricao: "Polo em piquet de algodão premium. Gola e punhos reforçados. Elegante e confortável para o dia a dia.",
+        destaque: true,
+        lancamento: true
+    },
+    {
+        id: 7,
+        nome: "Jaqueta de Couro Sintético",
+        categoria: "casuais",
+        preco: 259.90,
+        precoAntigo: 349.90,
+        imagem: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=500&fit=crop",
+        avaliacao: 4.9,
+        tamanhos: ["P", "M", "G", "GG"],
+        cores: ["Preto", "Marrom"],
+        descricao: "Jaqueta com acabamento premium e forro interno. Estilo clássico que valoriza qualquer produção.",
+        destaque: true,
+        lancamento: false
+    },
+    {
+        id: 8,
+        nome: "Calça Social Cinza",
+        categoria: "sociais",
+        preco: 159.90,
+        precoAntigo: 199.90,
+        imagem: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop",
+        avaliacao: 4.7,
+        tamanhos: ["38", "40", "42", "44"],
+        cores: ["Cinza"],
+        descricao: "Calça social em tecido de alfaiataria. Caimento reto e elegante. Combina com camisas e blazers.",
+        destaque: true,
+        lancamento: false
+    },
+    {
+        id: 9,
+        nome: "Bermuda Linho Bege",
+        categoria: "esportivos",
+        preco: 99.90,
+        precoAntigo: 129.90,
+        imagem: "https://images.unsplash.com/photo-1591195850943-493c40e53678?w=400&h=500&fit=crop",
+        avaliacao: 4.6,
+        tamanhos: ["P", "M", "G", "GG"],
+        cores: ["Bege", "Azul"],
+        descricao: "Bermuda em tecido de linho leve. Confortável e estilosa para dias quentes.",
+        destaque: true,
+        lancamento: true
+    },
+    {
+        id: 10,
+        nome: "Relógio Analógico Clássico",
+        categoria: "acessorios",
+        preco: 189.90,
+        precoAntigo: 249.90,
+        imagem: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=500&fit=crop",
+        avaliacao: 5,
+        tamanhos: ["Único"],
+        cores: ["Marrom", "Preto", "Dourado"],
+        descricao: "Relógio com pulseira de couro e mostrador clássico. O acessório essencial do homem elegante.",
+        destaque: true,
+        lancamento: false
+    },
+    {
+        id: 11,
+        nome: "Tênis Casual Branco",
+        categoria: "esportivos",
+        preco: 179.90,
+        precoAntigo: 229.90,
+        imagem: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop",
+        avaliacao: 4.8,
+        tamanhos: ["39", "40", "41", "42", "43", "44"],
+        cores: ["Branco", "Preto"],
+        descricao: "Tênis versátil e confortável. Solado em borracha antiderrapante. Perfeito para o dia a dia.",
+        destaque: true,
+        lancamento: true
+    },
+    {
+        id: 12,
+        nome: "Cinto de Couro Preto",
+        categoria: "acessorios",
+        preco: 79.90,
+        precoAntigo: 99.90,
+        imagem: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=400&h=500&fit=crop",
+        avaliacao: 4.9,
+        tamanhos: ["M", "G", "GG"],
+        cores: ["Preto", "Marrom"],
+        descricao: "Cinto em couro legítimo com fivela clássica. Durabilidade e estilo para sempre.",
+        destaque: true,
+        lancamento: false
+    }
+];
+
+// Estado da Aplicação
+let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+let categoriaAtiva = 'todos';
+let produtoSelecionado = null;
+let tamanhoSelecionado = null;
+
+// Elementos do DOM
+const listaProdutos = document.getElementById('lista-produtos');
+const tituloCategoria = document.getElementById('titulo-categoria');
+const qtdProdutos = document.getElementById('qtd-produtos');
+const botoesCategoria = document.querySelectorAll('.menu-item');
+const botaoCarrinho = document.getElementById('botao-carrinho');
+const painelCarrinho = document.getElementById('painel-carrinho');
+const fecharCarrinho = document.getElementById('fechar-carrinho');
+const fundoOpaco = document.getElementById('fundo-opaco');
+const itensCarrinho = document.getElementById('itens-carrinho');
+const contadorCarrinho = document.querySelector('.contador-carrinho');
+const subtotalValor = document.getElementById('subtotal-valor');
+const totalValor = document.getElementById('total-valor');
+const btnFinalizar = document.getElementById('btn-finalizar');
 const modalProduto = document.getElementById('modal-produto');
-const btnVoltarLista = document.getElementById('btn-voltar');
-const imgDetalhe = document.getElementById('img-detalhe');
-const nomeDetalhe = document.getElementById('nome-detalhe');
-const descricaoDetalhe = document.getElementById('descricao-detalhe');
-const precoOriginalEl = document.getElementById('preco-original');
-const precoPromocionalEl = document.getElementById('preco-promocional');
-const listaAdicionaisEl = document.getElementById('lista-adicionais');
-const qtdAtualEl = document.getElementById('qtd-atual');
-const diminuirQtdBtn = document.getElementById('diminuir-qtd');
-const aumentarQtdBtn = document.getElementById('aumentar-qtd');
-const btnAdicionarDetalhe = document.getElementById('btn-adicionar-detalhe');
-const pontoCab = document.getElementById('cab-ponto-status');
-const textoCab = document.getElementById('cab-texto-status');
-// ==============================================
-// NAVEGAÇÃO - NÃO SAI DO SITE
-// ==============================================
-window.addEventListener('load', () => {
-  history.pushState({fixo: true}, '');
-  history.pushState({fixo: true}, '');
-});
-window.addEventListener('popstate', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  
-  if (modalProduto && !modalProduto.classList.contains('oculto')) {
-    modalProduto.classList.add('oculto');
-    document.body.style.overflow = 'auto';
-    history.pushState({fixo: true}, '');
-    return;
-  }
-  
-  if (modalCarrinho && !modalCarrinho.classList.contains('oculto')) {
-    modalCarrinho.classList.add('oculto');
-    document.body.style.overflow = 'auto';
-    history.pushState({fixo: true}, '');
-    return;
-  }
-  window.scrollTo({top:0});
-  history.pushState({fixo: true}, '');
-});
-// ==============================================
-// Status da loja
-function verificarStatusLoja(mostrarAviso = false) {
-  const horaAtual = new Date().getHours();
-  const lojaAberta = horaAtual >= CONFIG.horaAbertura && horaAtual < CONFIG.horaFechamento;
-  if(pontoCab && textoCab){
-    pontoCab.style.backgroundColor = lojaAberta ? CONFIG.corStatusAberto : CONFIG.corStatusFechado;
-    textoCab.textContent = lojaAberta ? CONFIG.textoStatusAberto : CONFIG.textoStatusFechado;
-  }
-  if (!lojaAberta && mostrarAviso) alertaFechado.classList.remove("oculto");
-  return lojaAberta;
-}
-verificarStatusLoja();
-setInterval(verificarStatusLoja, 60000);
-btnEntendi?.addEventListener('click', () => alertaFechado.classList.add("oculto"));
-// Limpar carrinho
-function limparTudoCarrinho() {
-  carrinho.length = 0; listaItensCarrinho.innerHTML = '';
-  subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
-  badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
-  carrinhoContainer.classList.remove('ativo'); 
-  nomeEl.value = '';
-  tipoAtendimentoEl.value = 'retirada'; pagamentoEl.value = 'Dinheiro';
-  observacaoGeralEl.value = ''; avisoGeral.classList.add('oculto');
-  campoTaxaEntregaEl.classList.add('oculto'); blocoEnderecoEl.classList.add('oculto');
-  modalCarrinho.classList.add('oculto'); document.body.style.overflow = 'auto';
-}
-btnLimparCarrinho?.addEventListener('click', limparTudoCarrinho);
-// Tipo de atendimento
-tipoAtendimentoEl?.addEventListener('change', () => {
-  if (tipoAtendimentoEl.value === 'entrega') {
-    campoTaxaEntregaEl.classList.remove('oculto');
-    blocoEnderecoEl.classList.remove('oculto');
-    taxaEntregaEl.value = CONFIG.taxaEntregaFixa.toFixed(2).replace('.', ',');
-  } else {
-    campoTaxaEntregaEl.classList.add('oculto');
-    blocoEnderecoEl.classList.add('oculto');
-  }
-  atualizarCarrinho();
-});
-// Abrir produto
-document.querySelectorAll('.produto').forEach(produto => {
-  produto.addEventListener('click', () => {
-    if (!verificarStatusLoja(true)) return;
-    const temAdicionais = (produto.dataset.temAdicionais || 'sim').toLowerCase() === 'sim';
-    produtoAtual = {
-      nome: produto.dataset.nome,
-      preco: parseFloat(produto.dataset.preco),
-      descricao: produto.dataset.descricao || 'Sem descrição.',
-      imagem: produto.dataset.imagem || '',
-      adicionais: temAdicionais ? [
-        { nome: 'Bacon Suculento', preco: 2.90 },
-        { nome: 'Queijo Extra', preco: 2.50 },
-        { nome: 'Catupiry', preco: 2.00 },
-        { nome: 'Ovo', preco: 1.50 }
-      ] : []
-    };
-    quantidadeAtual = 1; adicionaisSelecionados = []; observacaoProdutoAtual = "";
-    qtdAtualEl.textContent = quantidadeAtual; observacaoItemEl.value = "";
-    imgDetalhe.src = produtoAtual.imagem;
-    nomeDetalhe.textContent = produtoAtual.nome;
-    descricaoDetalhe.textContent = produtoAtual.descricao;
-    precoOriginalEl.textContent = `R$ ${(produtoAtual.preco * 1.2).toFixed(2).replace('.', ',')}`;
-    precoPromocionalEl.textContent = `R$ ${produtoAtual.preco.toFixed(2).replace('.', ',')}`;
-    atualizarTotalDetalhe();
-    blocoAdicionaisEl.classList.toggle('oculto', !temAdicionais);
-    listaAdicionaisEl.innerHTML = '';
-    produtoAtual.adicionais.forEach((add, idx) => {
-      const addEl = document.createElement('div');
-      addEl.className = 'adicional-item';
-      addEl.innerHTML = `
-        <div><div class="adicional-nome">${add.nome}</div><div class="adicional-preco">+ R$ ${add.preco.toFixed(2).replace('.', ',')}</div></div>
-        <button class="btn-add-adicional" data-idx="${idx}">+</button>
-      `;
-      listaAdicionaisEl.appendChild(addEl);
-    });
-    modalProduto.classList.remove('oculto'); 
-    document.body.style.overflow = 'hidden';
-    history.pushState({fixo: true}, '');
-  });
-});
-btnVoltarLista?.addEventListener('click', () => {
-  modalProduto.classList.add('oculto');
-  document.body.style.overflow = 'auto';
-});
-diminuirQtdBtn?.addEventListener('click', () => {
-  if (quantidadeAtual > 1) { quantidadeAtual--; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe(); }
-});
-aumentarQtdBtn?.addEventListener('click', () => {
-  quantidadeAtual++; qtdAtualEl.textContent = quantidadeAtual; atualizarTotalDetalhe();
-});
-listaAdicionaisEl?.addEventListener('click', (e) => {
-  const btn = e.target.closest('.btn-add-adicional');
-  if (!btn) return;
-  const idx = parseInt(btn.dataset.idx);
-  const adicional = produtoAtual.adicionais[idx];
-  const posicao = adicionaisSelecionados.findIndex(a => a.nome === adicional.nome);
-  if (posicao === -1) {
-    adicionaisSelecionados.push(adicional); btn.textContent = '✓'; btn.classList.add('selecionado');
-  } else {
-    adicionaisSelecionados.splice(posicao, 1); btn.textContent = '+'; btn.classList.remove('selecionado');
-  }
-  atualizarTotalDetalhe();
-});
-function atualizarTotalDetalhe() {
-  if(!produtoAtual) return;
-  const totalAdicionais = adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
-  const total = (produtoAtual.preco + totalAdicionais) * quantidadeAtual;
-  btnAdicionarDetalhe.textContent = `Adicionar R$ ${total.toFixed(2).replace('.', ',')}`;
-}
-btnAdicionarDetalhe?.addEventListener('click', () => {
-  if (!verificarStatusLoja(true)) return;
-  
-  observacaoProdutoAtual = observacaoItemEl ? observacaoItemEl.value.trim() : "";
-  const nomeCompleto = adicionaisSelecionados.length 
-    ? `${produtoAtual.nome} (${adicionaisSelecionados.map(a => a.nome).join(', ')})`
-    : produtoAtual.nome;
-  const precoTotal = produtoAtual.preco + adicionaisSelecionados.reduce((soma, a) => soma + a.preco, 0);
-  
-  carrinho.push({ 
-    nome: nomeCompleto, 
-    preco: precoTotal, 
-    quantidade: quantidadeAtual,
-    observacao: observacaoProdutoAtual
-  });
-  
-  atualizarCarrinho();
-  
-  const aviso = document.createElement('div');
-  aviso.style.cssText = 'position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:99999;';
-  aviso.textContent = '✅ Adicionado!';
-  document.body.appendChild(aviso);
-  setTimeout(() => aviso.remove(), 1500);
-  
-  quantidadeAtual = 1;
-  adicionaisSelecionados = [];
-  observacaoProdutoAtual = "";
-  qtdAtualEl.textContent = "1";
-  if(observacaoItemEl) observacaoItemEl.value = "";
-  document.querySelectorAll('.btn-add-adicional').forEach(botao => {
-    botao.textContent = '+';
-    botao.classList.remove('selecionado');
-  });
-  atualizarTotalDetalhe();
-});
-function atualizarCarrinho() {
-  listaItensCarrinho.innerHTML = '';
-  let totalItens = 0; let qtdTotal = 0;
-  const usaTaxaEntrega = tipoAtendimentoEl.value === 'entrega';
-  const taxa = usaTaxaEntrega ? CONFIG.taxaEntregaFixa : 0;
-  
-  if (carrinho.length === 0) {
-    subtotaisEl.textContent = '0,00'; valorTotalEl.textContent = '0,00';
-    badgeQtdEl.textContent = '0'; resumoValorEl.textContent = 'R$ 0,00';
-    carrinhoContainer.classList.remove('ativo');
-    return;
-  }
-  
-  carrinhoContainer.classList.add('ativo');
-  carrinho.forEach((item, index) => {
-    const totalItem = item.preco * item.quantidade;
-    totalItens += totalItem; qtdTotal += item.quantidade;
-    const itemEl = document.createElement('div');
-    itemEl.className = 'item-carrinho';
-    itemEl.innerHTML = `
-      <div class="item-info">
-        <h4 class="item-nome">${item.nome}</h4>
-        ${item.observacao ? `<p class="item-obs">Obs: ${item.observacao}</p>` : ''}
-        <p class="item-preco-unit">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</p>
-      </div>
-      <div class="qtd-controle">
-        <button class="qtd-btn diminuir-item" data-index="${index}">&minus;</button>
-        <span class="qtd-valor">${item.quantidade}</span>
-        <button class="qtd-btn aumentar-item" data-index="${index}">+</button>
-      </div>
-      <div class="item-total">R$ ${totalItem.toFixed(2).replace('.', ',')}</div>
-    `;
-    listaItensCarrinho.appendChild(itemEl);
-  });
-  const totalFinal = totalItens + taxa;
-  subtotaisEl.textContent = totalItens.toFixed(2).replace('.', ',');
-  valorTotalEl.textContent = totalFinal.toFixed(2).replace('.', ',');
-  badgeQtdEl.textContent = qtdTotal;
-  resumoValorEl.textContent = `R$ ${totalItens.toFixed(2).replace('.', ',')}`;
-  adicionarEventosCarrinho();
-}
-function adicionarEventosCarrinho() {
-  document.querySelectorAll('.aumentar-item').forEach(b => b.addEventListener('click', () => {
-    const idx = parseInt(b.dataset.index); carrinho[idx].quantidade++; atualizarCarrinho();
-  }));
-  document.querySelectorAll('.diminuir-item').forEach(b => b.addEventListener('click', () => {
-    const idx = parseInt(b.dataset.index);
-    if (carrinho[idx].quantidade > 1) carrinho[idx].quantidade--;
-    else carrinho.splice(idx, 1);
+const fecharModal = document.getElementById('fechar-modal');
+const btnAplicarFiltro = document.getElementById('btn-aplicar-filtro');
+const campoBusca = document.getElementById('campo-busca');
+const btnBusca = document.getElementById('btn-busca');
+const formNewsletter = document.getElementById('form-newsletter');
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarProdutos();
     atualizarCarrinho();
-  }));
-}
-abrirCarrinhoBtn?.addEventListener('click', () => {
-  if (carrinho.length === 0) return;
-  if (!verificarStatusLoja(true)) return;
-  atualizarCarrinho(); 
-  modalCarrinho.classList.remove('oculto');
-  document.body.style.overflow = 'hidden'; 
-  avisoGeral.classList.add('oculto');
-  history.pushState({fixo: true}, '');
+    configurarEventos();
 });
-fecharModalBtn?.addEventListener('click', () => {
-  modalCarrinho.classList.add('oculto');
-  document.body.style.overflow = 'auto';
-});
-document.querySelectorAll('.categoria-btn').forEach(botao => {
-  botao.addEventListener('click', () => {
-    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('ativo'));
-    botao.classList.add('ativo');
-    const cat = botao.dataset.categoria;
-    document.querySelectorAll('.produto').forEach(p => {
-      p.style.display = (cat === 'todos' || p.dataset.categoria === cat) ? 'flex' : 'none';
+
+// Configurar Eventos
+function configurarEventos() {
+    // Navegação por Categorias
+    botoesCategoria.forEach(botao => {
+        botao.addEventListener('click', (e) => {
+            e.preventDefault();
+            categoriaAtiva = botao.dataset.categoria;
+            botoesCategoria.forEach(b => b.classList.remove('ativo'));
+            botao.classList.add('ativo');
+            renderizarProdutos();
+        });
     });
-    campoBusca.value = '';
-  });
-});
-campoBusca?.addEventListener('input', () => {
-  const termo = campoBusca.value.toLowerCase().trim();
-  document.querySelectorAll('.produto').forEach(p => {
-    p.style.display = p.dataset.nome.toLowerCase().includes(termo) ? 'flex' : 'none';
-  });
-});
-document.getElementById('btn-finalizar')?.addEventListener('click', () => {
-  avisoGeral.classList.add('oculto');
-  const nome = nomeEl.value.trim();
-  const pagamento = pagamentoEl.value;
-  const tipoAtendimento = tipoAtendimentoEl.value;
-  const taxa = tipoAtendimento === 'entrega' ? CONFIG.taxaEntregaFixa : 0;
-  const totalItens = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
-  const totalGeral = totalItens + taxa;
-  const numeroPedido = Math.floor(Math.random() * 9000) + 1000;
-  const dataPedido = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-  const observacaoGeral = observacaoGeralEl ? observacaoGeralEl.value.trim() : '';
-  if (carrinho.length === 0) { avisoGeral.textContent = 'Adicione pelo menos um produto!'; avisoGeral.classList.remove('oculto'); return; }
-  if (!nome) { avisoGeral.textContent = 'Informe seu nome completo!'; avisoGeral.classList.remove('oculto'); return; }
-  if (tipoAtendimento === 'entrega') {
-    const cepValido = cepEl.value.trim().replace(/\D/g, '').length === 8;
-    if (!cepValido) { avisoGeral.textContent = 'Informe um CEP válido!'; avisoGeral.classList.remove('oculto'); return; }
-    if (!ruaEl.value.trim()) { avisoGeral.textContent = 'Aguarde o preenchimento do endereço!'; avisoGeral.classList.remove('oculto'); return; }
-    if (!numeroEl.value.trim()) { avisoGeral.textContent = 'Informe o número da residência!'; avisoGeral.classList.remove('oculto'); return; }
-  }
-  let enderecoCompleto = '';
-  if (tipoAtendimento === 'entrega') {
-    enderecoCompleto = `${ruaEl.value}, Nº ${numeroEl.value}`;
-    if (complementoEl.value.trim()) enderecoCompleto += `\n  Complemento: ${complementoEl.value.trim()}`;
-    enderecoCompleto += `\n  Bairro: ${bairroEl.value}`;
-    enderecoCompleto += `\n  Cidade/UF: ${cidadeUfEl.value}`;
-    enderecoCompleto += `\n  CEP: ${cepEl.value}`;
-  }
-  let mensagem = `=====================================
-            ALISON BURGER
-=====================================
-PEDIDO Nº: ${numeroPedido}
-EMITIDO EM: ${dataPedido}
--------------------------------------
-CLIENTE: ${nome}
-TIPO DE ATENDIMENTO: ${tipoAtendimento === 'retirada' ? 'RETIRADA NA LOJA' : 'ENTREGA'}
-${tipoAtendimento === 'entrega' ? `
--------------------------------------
-ENDEREÇO:
-${enderecoCompleto}` : ''}
--------------------------------------
-ITEM                   QTD   VALOR
--------------------------------------
-`;
-  carrinho.forEach(item => {
-    const valorItem = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
-    mensagem += `${item.nome.padEnd(22)} ${String(item.quantidade).padStart(2)}    R$ ${valorItem}\n`;
-    if(item.observacao) mensagem += `⚠️ Obs do item: ${item.observacao}\n`;
-    mensagem += `\n`;
-  });
-  mensagem += `-------------------------------------
-SUBTOTAL...............: R$ ${totalItens.toFixed(2).replace('.', ',')}
-TAXA DE ENTREGA........: R$ ${taxa.toFixed(2).replace('.', ',')}
--------------------------------------
-TOTAL A PAGAR..........: R$ ${totalGeral.toFixed(2).replace('.', ',')}
--------------------------------------
-FORMA DE PAGAMENTO.....: ${pagamento}
-${observacaoGeral ? `
--------------------------------------
-📝 OBSERVAÇÃO GERAL DO PEDIDO:
-${observacaoGeral}` : ''}
-=====================================
-      OBRIGADO PELA PREFERÊNCIA!
-`;
-  const urlWhatsApp = `https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-  window.open(urlWhatsApp, '_blank');
-  limparTudoCarrinho();
-});
 
-// ==============================================
-// ✅ BUSCA AUTOMÁTICA DE CEP (ViaCEP) — ADICIONADO
-// ==============================================
-cepEl?.addEventListener('blur', buscarCEP);
-cepEl?.addEventListener('input', function() {
-  if (this.value.replace(/\D/g, '').length < 8) {
-    ruaEl.value = '';
-    bairroEl.value = '';
-    cidadeUfEl.value = '';
-  }
-});
+    // Carrinho
+    botaoCarrinho.addEventListener('click', abrirCarrinho);
+    fecharCarrinho.addEventListener('click', fecharCarrinhoPainel);
+    fundoOpaco.addEventListener('click', fecharCarrinhoPainel);
+    btnFinalizar.addEventListener('click', finalizarCompra);
 
-async function buscarCEP() {
-  let cep = cepEl.value.replace(/\D/g, '');
-  
-  if (cep.length !== 8) {
-    avisoGeral.textContent = 'Digite um CEP com 8 dígitos!';
-    avisoGeral.classList.remove('oculto');
-    return;
-  }
+    // Modal
+    fecharModal.addEventListener('click', fecharModalProduto);
+    modalProduto.addEventListener('click', (e) => {
+        if (e.target === modalProduto) fecharModalProduto();
+    });
+    document.getElementById('modal-adicionar').addEventListener('click', adicionarAoCarrinhoDoModal);
 
-  try {
-    const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const dados = await resposta.json();
+    // Filtros
+    btnAplicarFiltro.addEventListener('click', renderizarProdutos);
 
-    if (dados.erro) {
-      avisoGeral.textContent = 'CEP não encontrado! Verifique o número.';
-      avisoGeral.classList.remove('oculto');
-      ruaEl.value = '';
-      bairroEl.value = '';
-      cidadeUfEl.value = '';
-      return;
+    // Busca
+    btnBusca.addEventListener('click', (e) => {
+        e.preventDefault();
+        renderizarProdutos();
+    });
+    campoBusca.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') renderizarProdutos();
+    });
+
+    // Newsletter
+    formNewsletter.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('✅ Obrigado! Você receberá o desconto por e-mail em instantes.');
+        formNewsletter.reset();
+    });
+
+    // Botão "Ver Coleção"
+    document.getElementById('ver-colecao').addEventListener('click', () => {
+        document.querySelector('.produtos').scrollIntoView({ behavior: 'smooth' });
+    });
+}
+
+// Filtrar Produtos
+function filtrarProdutos() {
+    const termoBusca = campoBusca.value.toLowerCase().trim();
+    const filtroTamanho = document.getElementById('filtro-tamanho').value;
+    const filtroCor = document.getElementById('filtro-cor').value;
+    const filtroPreco = document.getElementById('filtro-preco').value;
+
+    return produtos.filter(produto => {
+        // Categoria
+        let validaCategoria = true;
+        if (categoriaAtiva !== 'todos') {
+            if (categoriaAtiva === 'promocoes') {
+                validaCategoria = produto.preco < produto.precoAntigo;
+            } else {
+                validaCategoria = produto.categoria === categoriaAtiva;
+            }
+        }
+
+        // Busca
+        const validaBusca = termoBusca === '' || 
+            produto.nome.toLowerCase().includes(termoBusca) ||
+            produto.descricao.toLowerCase().includes(termoBusca);
+
+        // Tamanho
+        const validaTamanho = filtroTamanho === 'todos' || produto.tamanhos.includes(filtroTamanho);
+
+        // Cor
+        const validaCor = filtroCor === 'todas' || produto.cores.includes(filtroCor);
+
+        // Preço
+        let validaPreco = true;
+        if (filtroPreco !== 'todos') {
+            const [min, max] = filtroPreco.split('-').map(v => v === '+' ? Infinity : parseFloat(v));
+            validaPreco = produto.preco >= (min || 0) && produto.preco <= (max || Infinity);
+        }
+
+        return validaCategoria && validaBusca && validaTamanho && validaCor && validaPreco;
+    });
+}
+
+// Renderizar Produtos
+function renderizarProdutos() {
+    const produtosFiltrados = filtrarProdutos();
+
+    // Atualizar Título
+    const nomesCategorias = {
+        todos: 'Todos os Produtos',
+        casuais: 'Roupas Casuais',
+        sociais: 'Roupas Sociais',
+        esportivos: 'Esportivos',
+        acessorios: 'Acessórios',
+        promocoes: '⚡ Promoções'
+    };
+    tituloCategoria.textContent = nomesCategorias[categoriaAtiva] || 'Produtos em Destaque';
+    qtdProdutos.textContent = `Exibindo ${produtosFiltrados.length} produto${produtosFiltrados.length !== 1 ? 's' : ''}`;
+
+    // Limpar e Preencher
+    listaProdutos.innerHTML = '';
+
+    if (produtosFiltrados.length === 0) {
+        listaProdutos.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--cinza-medio);">
+                <i class="fas fa-search" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+                <h3>Nenhum produto encontrado</h3>
+                <p>Tente ajustar os filtros ou termos de busca</p>
+            </div>
+        `;
+        return;
     }
 
-    ruaEl.value = dados.logradouro || '';
-    bairroEl.value = dados.bairro || '';
-    cidadeUfEl.value = `${dados.localidade}/${dados.uf}`;
-    avisoGeral.classList.add('oculto');
+    produtosFiltrados.forEach(produto => {
+        const card = document.createElement('div');
+        card.className = 'produto-card';
+        card.innerHTML = `
+            <div class="produto-imagem">
+                ${produto.preco < produto.precoAntigo ? 
+                    `<span class="etiqueta-desconto">-${Math.round((1 - produto.preco / produto.precoAntigo) * 100)}%</span>` : 
+                    (produto.lancamento ? '<span class="etiqueta-novo">NOVO</span>' : '')}
+                <img src="${produto.imagem}" alt="${produto.nome}" loading="lazy">
+                <div class="produto-acoes">
+                    <button class="acao-btn" title="Ver Produto" data-id="${produto.id}">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="acao-btn" title="Adicionar ao Carrinho" data-id="${produto.id}" data-tamanho="${produto.tamanhos[0]}">
+                        <i class="fas fa-shopping-bag"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="produto-info">
+                <span class="produto-categoria">${produto.categoria.charAt(0).toUpperCase() + produto.categoria.slice(1)}</span>
+                <h3 class="produto-nome">${produto.nome}</h3>
+                <div class="produto-avaliacao">
+                    ${'★'.repeat(Math.floor(produto.avaliacao))}${produto.avaliacao % 1 >= 0.5 ? '½' : ''}
+                    <span>(${produto.avaliacao})</span>
+                </div>
+                <div class="produto-preco">
+                    ${produto.preco < produto.precoAntigo ? `<span class="preco-antigo">R$ ${produto.precoAntigo.toFixed(2)}</span>` : ''}
+                    <span class="preco-atual">R$ ${produto.preco.toFixed(2)}</span>
+                </div>
+            </div>
+        `;
+        listaProdutos.appendChild(card);
+    });
 
-  } catch (erro) {
-    avisoGeral.textContent = 'Erro ao buscar CEP. Tente novamente!';
-    avisoGeral.classList.remove('oculto');
-    console.error('Erro na busca do CEP:', erro);
-  }
+    // Adicionar Eventos aos Botões
+    document.querySelectorAll('.acao-btn[data-id]').forEach(botao => {
+        botao.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseInt(botao.dataset.id);
+            const produto = produtos.find(p => p.id === id);
+            
+            if (botao.querySelector('.fa-eye')) {
+                abrirModalProduto(produto);
+            } else {
+                const tamanho = botao.dataset.tamanho;
+                adicionarProdutoAoCarrinho(produto, tamanho);
+            }
+        });
+    });
+}
+
+// Modal de Produto
+function abrirModalProduto(produto) {
+    produtoSelecionado = produto;
+    tamanhoSelecionado = null;
+
+    document.getElementById('modal-img').src = produto.imagem;
+    document.getElementById('modal-img').alt = produto.nome;
+    document.getElementById('modal-cat').textContent = produto.categoria.toUpperCase();
+    document.getElementById('modal-nome').textContent = produto.nome;
+    document.getElementById('modal-avaliacao').textContent = `(${produto.avaliacao})`;
+    document.getElementById('modal-preco').textContent = `R$ ${produto.preco.toFixed(2)}`;
+    document.getElementById('modal-preco-antigo').textContent = 
+        produto.preco < produto.precoAntigo ? `De R$ ${produto.precoAntigo.toFixed(2)}` : '';
+    document.getElementById('modal-desc').textContent = produto.descricao;
+
+    // Tamanhos
+    const containerTamanhos = document.getElementById('modal-tamanhos');
+    containerTamanhos.innerHTML = '';
+    produto.tamanhos.forEach(tam => {
+        const btn = document.createElement('button');
+        btn.className = 'tamanho-btn';
+        btn.textContent = tam;
+        btn.addEventListener('click', () => {
+            containerTamanhos.querySelectorAll('.tamanho-btn').forEach(b => b.classList.remove('selecionado'));
+            btn.classList.add('selecionado');
+            tamanhoSelecionado = tam;
+        });
+        containerTamanhos.appendChild(btn);
+    });
+
+    modalProduto.classList.add('ativo');
+    document.body.style.overflow = 'hidden';
+}
+
+function fecharModalProduto() {
+    modalProduto.classList.remove('ativo');
+    document.body.style.overflow = '';
+    produtoSelecionado = null;
+    tamanhoSelecionado = null;
+}
+
+function adicionarAoCarrinhoDoModal() {
+    if (!produtoSelecionado) return;
+    
+    if (!tamanhoSelecionado) {
+        alert('⚠️ Por favor, selecione um tamanho!');
+        return;
+    }
+
+    adicionarProdutoAoCarrinho(produtoSelecionado, tamanhoSelecionado);
+    fecharModalProduto();
+    abrirCarrinho();
+}
+
+// Carrinho
+function adicionarProdutoAoCarrinho(produto, tamanho) {
+    const itemExistente = carrinho.find(
+        item => item.id === produto.id && item.tamanho === tamanho
+    );
+
+    if (itemExistente) {
+        itemExistente.quantidade++;
+    } else {
+        carrinho.push({
+            id: produto.id,
+            nome: produto.nome,
+            preco: produto.preco,
+            imagem: produto.imagem,
+            tamanho: tamanho,
+            quantidade: 1
+        });
+    }
+
+    salvarCarrinho();
+    atualizarCarrinho();
+}
+
+function removerDoCarrinho(index) {
+    carrinho.splice(index, 1);
+    salvarCarrinho();
+    atualizarCarrinho();
+}
+
+function salvarCarrinho() {
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+}
+
+function atualizarCarrinho() {
+    // Contador
+    const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+    contadorCarrinho.textContent = totalItens;
+
+    // Itens
+    if (carrinho.length === 0) {
+        itensCarrinho.innerHTML = `
+            <div class="carrinho-vazio">
+                <i class="fas fa-shopping-bag" style="font-size: 48px; margin-bottom: 16px; opacity: 0.2;"></i>
+                <h4>Seu carrinho está vazio</h4>
+                <p>Adicione produtos para continuar</p>
+            </div>
+        `;
+    } else {
+        itensCarrinho.innerHTML = carrinho.map((item, index) => `
+            <div class="item-carrinho">
+                <div class="item-carrinho-img">
+                    <img src="${item.imagem}" alt="${item.nome}">
+                </div>
+                <div class="item-carrinho-info">
+                    <h4 class="item-carrinho-nome">${item.nome}</h4>
+                    <p class="item-carrinho-detalhe">Tamanho: ${item.tamanho} | Qtd: ${item.quantidade}</p>
+                    <p class="item-carrinho-preco">R$ ${(item.preco * item.quantidade).toFixed(2)}</p>
+                </div>
+                <button class="item-carrinho-remover" data-index="${index}">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        `).join('');
+
+        // Eventos de remoção
+        document.querySelectorAll('.item-carrinho-remover').forEach(botao => {
+            botao.addEventListener('click', () => {
+                removerDoCarrinho(parseInt(botao.dataset.index));
+            });
+        });
+    }
+
+    // Valores
+    const subtotal = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
+    subtotalValor.textContent = `R$ ${subtotal.toFixed(2)}`;
+    totalValor.textContent = `R$ ${subtotal.toFixed(2)}`;
+}
+
+function abrirCarrinho() {
+    painelCarrinho.classList.add('aberto');
+    fundoOpaco.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function fecharCarrinhoPainel() {
+    painelCarrinho.classList.remove('aberto');
+    fundoOpaco.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function finalizarCompra() {
+    if (carrinho.length === 0) {
+        alert('⚠️ Seu carrinho está vazio!');
+        return;
+    }
+
+    const subtotal = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
+    
+    let mensagem = `🛒 *PEDIDO — HOMEM & ESTILO*\n\n`;
+    mensagem += `Itens do pedido:\n`;
+    
+    carrinho.forEach(item => {
+        mensagem += `• ${item.nome} — Tamanho: ${item.tamanho} — Qtd: ${item.quantidade} — R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
+    });
+    
+    mensagem += `\n💰 *Subtotal: R$ ${subtotal.toFixed(2)}*\n`;
+    mensagem += `🚚 Frete calculado após confirmação do endereço.\n\n`;
+    mensagem += `Aguarde nosso retorno com o valor total e dados de pagamento. Obrigado! 👔`;
+
+    const numeroWhatsApp = '5519999999999'; // Substitua pelo número real
+    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    
+    window.open(url, '_blank');
+    
+    // Limpar carrinho após envio
+    carrinho = [];
+    salvarCarrinho();
+    atualizarCarrinho();
+    fecharCarrinhoPainel();
 }
