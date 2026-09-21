@@ -1,556 +1,569 @@
-// ==========================================
-// HOMEM & ESTILO — Moda Masculina Premium
-// Código Completo e Funcional
-// ==========================================
-
-const produtos = [
+// Cardápio Completo
+const menuData = [
     {
         id: 1,
-        nome: "Camisa Social Branca Premium",
-        categoria: "sociais",
-        preco: 129.90,
-        precoAntigo: 169.90,
-        imagem: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop",
-        avaliacao: 5,
-        tamanhos: ["PP", "P", "M", "G", "GG"],
-        cores: ["Branco"],
-        descricao: "Camisa social 100% algodão egípcio. Tecido de alta qualidade que não amassa fácil. Caimento perfeito e elegante para qualquer ocasião.",
-        destaque: true,
-        lancamento: false
+        name: "Pizza de Mussarela",
+        category: "pizzas",
+        price: 45.90,
+        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80",
+        description: "Molho de tomate, mussarela, orégano e azeitonas",
+        options: [
+            { id: "size", title: "Tamanho", required: true, items: [
+                { label: "Broto", price: 0 },
+                { label: "Média", price: 5 },
+                { label: "Grande", price: 10 }
+            ]},
+            { id: "border", title: "Borda", required: false, items: [
+                { label: "Sem recheio", price: 0 },
+                { label: "Recheada de queijo", price: 5 }
+            ]}
+        ]
     },
     {
         id: 2,
-        nome: "Calça Jeans Slim Fit Premium",
-        categoria: "casuais",
-        preco: 149.90,
-        precoAntigo: 199.90,
-        imagem: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=500&fit=crop",
-        avaliacao: 4.8,
-        tamanhos: ["38", "40", "42", "44", "46"],
-        cores: ["Azul"],
-        descricao: "Calça jeans com modelagem slim moderna. Com elastano para conforto e mobilidade. Lavagem escura sofisticada que combina com tudo.",
-        destaque: true,
-        lancamento: false
+        name: "Pizza Calabresa",
+        category: "pizzas",
+        price: 52.90,
+        image: "https://images.unsplash.com/photo-1593584708970-1c565c0b7c60?w=400&q=80",
+        description: "Calabresa fatiada, cebola, mussarela e molho",
+        options: [
+            { id: "size", title: "Tamanho", required: true, items: [
+                { label: "Broto", price: 0 },
+                { label: "Média", price: 6 },
+                { label: "Grande", price: 12 }
+            ]},
+            { id: "border", title: "Borda", required: false, items: [
+                { label: "Sem recheio", price: 0 },
+                { label: "Recheada de queijo", price: 5 }
+            ]}
+        ]
     },
     {
         id: 3,
-        nome: "Blazer Preto Alfaiataria",
-        categoria: "sociais",
-        preco: 299.90,
-        precoAntigo: 399.90,
-        imagem: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop",
-        avaliacao: 5,
-        tamanhos: ["P", "M", "G", "GG"],
-        cores: ["Preto"],
-        descricao: "Blazer estruturado em tecido premium. Corte clássico e elegante. Perfeito para eventos, trabalho e ocasiões especiais.",
-        destaque: true,
-        lancamento: true
+        name: "Pizza Portuguesa",
+        category: "pizzas",
+        price: 58.90,
+        image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=400&q=80",
+        description: "Presunto, ovos, cebola, ervilha, palmito e mussarela",
+        options: [
+            { id: "size", title: "Tamanho", required: true, items: [
+                { label: "Broto", price: 0 },
+                { label: "Média", price: 7 },
+                { label: "Grande", price: 14 }
+            ]},
+            { id: "border", title: "Borda", required: false, items: [
+                { label: "Sem recheio", price: 0 },
+                { label: "Recheada de queijo", price: 5 }
+            ]}
+        ]
     },
     {
         id: 4,
-        nome: "Camiseta Básica Algodão Penteado",
-        categoria: "casuais",
-        preco: 59.90,
-        precoAntigo: 79.90,
-        imagem: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop",
-        avaliacao: 4.9,
-        tamanhos: ["PP", "P", "M", "G", "GG", "XG"],
-        cores: ["Branco", "Preto", "Cinza"],
-        descricao: "Camiseta básica confeccionada em algodão penteado de alta densidade. Macia, durável e com caimento perfeito.",
-        destaque: true,
-        lancamento: true
+        name: "Lasanha Bolonhesa",
+        category: "meals",
+        price: 38.90,
+        image: "https://images.unsplash.com/photo-1619895092538-128836cb4945?w=400&q=80",
+        description: "Massa fresca, carne moída, molho branco e queijo gratinado",
+        options: [
+            { id: "portion", title: "Tamanho da porção", required: true, items: [
+                { label: "Individual", price: 0 },
+                { label: "Família", price: 15 }
+            ]}
+        ]
     },
     {
         id: 5,
-        nome: "Calça Chino Bege Elegante",
-        categoria: "casuais",
-        preco: 139.90,
-        precoAntigo: 179.90,
-        imagem: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=500&fit=crop",
-        avaliacao: 4.7,
-        tamanhos: ["38", "40", "42", "44"],
-        cores: ["Marrom", "Cinza"],
-        descricao: "Calça chino em tecido leve e confortável. Versátil, do esporte ao social. Cor bege clássica que nunca sai de moda.",
-        destaque: true,
-        lancamento: false
+        name: "Macarrão Carbonara",
+        category: "meals",
+        price: 42.00,
+        image: "https://images.unsplash.com/photo-1612874742237-652622158bd3?w=400&q=80",
+        description: "Espaguete, bacon, ovos e queijo parmesão",
+        options: [
+            { id: "doneness", title: "Ponto da massa", required: false, items: [
+                { label: "Ao dente", price: 0 },
+                { label: "Bem cozida", price: 0 }
+            ]}
+        ]
     },
     {
         id: 6,
-        nome: "Polo Masculina Premium",
-        categoria: "casuais",
-        preco: 89.90,
-        precoAntigo: 119.90,
-        imagem: "https://images.unsplash.com/photo-1625910514582-25c3e8232a71?w=400&h=500&fit=crop",
-        avaliacao: 4.8,
-        tamanhos: ["PP", "P", "M", "G", "GG"],
-        cores: ["Azul", "Branco", "Preto"],
-        descricao: "Polo em piquet de algodão premium. Gola e punhos reforçados. Elegante e confortável para o dia a dia.",
-        destaque: true,
-        lancamento: true
+        name: "Refrigerante Lata",
+        category: "drinks",
+        price: 6.00,
+        image: "https://images.unsplash.com/photo-1625772230130-8c7110d83e92?w=400&q=80",
+        description: "350ml — gelado",
+        options: [
+            { id: "flavor", title: "Sabor", required: true, items: [
+                { label: "Coca-Cola", price: 0 },
+                { label: "Guaraná Antarctica", price: 0 },
+                { label: "Fanta Laranja", price: 0 },
+                { label: "Fanta Uva", price: 0 }
+            ]}
+        ]
     },
     {
         id: 7,
-        nome: "Jaqueta de Couro Sintético",
-        categoria: "casuais",
-        preco: 259.90,
-        precoAntigo: 349.90,
-        imagem: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=500&fit=crop",
-        avaliacao: 4.9,
-        tamanhos: ["P", "M", "G", "GG"],
-        cores: ["Preto", "Marrom"],
-        descricao: "Jaqueta com acabamento premium e forro interno. Estilo clássico que valoriza qualquer produção.",
-        destaque: true,
-        lancamento: false
+        name: "Suco Natural",
+        category: "drinks",
+        price: 12.00,
+        image: "https://images.unsplash.com/photo-1590369387948-9954c9c1361c?w=400&q=80",
+        description: "400ml — frutas frescas",
+        options: [
+            { id: "flavor", title: "Sabor", required: true, items: [
+                { label: "Laranja", price: 0 },
+                { label: "Maracujá", price: 0 },
+                { label: "Limão", price: 0 },
+                { label: "Abacaxi", price: 0 }
+            ]}
+        ]
     },
     {
         id: 8,
-        nome: "Calça Social Cinza",
-        categoria: "sociais",
-        preco: 159.90,
-        precoAntigo: 199.90,
-        imagem: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop",
-        avaliacao: 4.7,
-        tamanhos: ["38", "40", "42", "44"],
-        cores: ["Cinza"],
-        descricao: "Calça social em tecido de alfaiataria. Caimento reto e elegante. Combina com camisas e blazers.",
-        destaque: true,
-        lancamento: false
+        name: "Cerveja Garrafa",
+        category: "drinks",
+        price: 18.00,
+        image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80",
+        description: "600ml",
+        options: [
+            { id: "brand", title: "Marca", required: true, items: [
+                { label: "Skol", price: 0 },
+                { label: "Brahma", price: 0 },
+                { label: "Antarctica", price: 0 }
+            ]}
+        ]
     },
     {
         id: 9,
-        nome: "Bermuda Linho Bege",
-        categoria: "esportivos",
-        preco: 99.90,
-        precoAntigo: 129.90,
-        imagem: "https://images.unsplash.com/photo-1591195850943-493c40e53678?w=400&h=500&fit=crop",
-        avaliacao: 4.6,
-        tamanhos: ["P", "M", "G", "GG"],
-        cores: ["Bege", "Azul"],
-        descricao: "Bermuda em tecido de linho leve. Confortável e estilosa para dias quentes.",
-        destaque: true,
-        lancamento: true
+        name: "Pudim",
+        category: "desserts",
+        price: 15.00,
+        image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&q=80",
+        description: "Leite condensado com calda de caramelo",
+        options: []
     },
     {
         id: 10,
-        nome: "Relógio Analógico Clássico",
-        categoria: "acessorios",
-        preco: 189.90,
-        precoAntigo: 249.90,
-        imagem: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=500&fit=crop",
-        avaliacao: 5,
-        tamanhos: ["Único"],
-        cores: ["Marrom", "Preto", "Dourado"],
-        descricao: "Relógio com pulseira de couro e mostrador clássico. O acessório essencial do homem elegante.",
-        destaque: true,
-        lancamento: false
-    },
-    {
-        id: 11,
-        nome: "Tênis Casual Branco",
-        categoria: "esportivos",
-        preco: 179.90,
-        precoAntigo: 229.90,
-        imagem: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop",
-        avaliacao: 4.8,
-        tamanhos: ["39", "40", "41", "42", "43", "44"],
-        cores: ["Branco", "Preto"],
-        descricao: "Tênis versátil e confortável. Solado em borracha antiderrapante. Perfeito para o dia a dia.",
-        destaque: true,
-        lancamento: true
-    },
-    {
-        id: 12,
-        nome: "Cinto de Couro Preto",
-        categoria: "acessorios",
-        preco: 79.90,
-        precoAntigo: 99.90,
-        imagem: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=400&h=500&fit=crop",
-        avaliacao: 4.9,
-        tamanhos: ["M", "G", "GG"],
-        cores: ["Preto", "Marrom"],
-        descricao: "Cinto em couro legítimo com fivela clássica. Durabilidade e estilo para sempre.",
-        destaque: true,
-        lancamento: false
+        name: "Sorvete 3 Sabores",
+        category: "desserts",
+        price: 22.00,
+        image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&q=80",
+        description: "Bola de 150ml cada",
+        options: [
+            { id: "flavor1", title: "1º Sabor", required: true, items: [
+                { label: "Chocolate", price: 0 },
+                { label: "Morango", price: 0 },
+                { label: "Coco", price: 0 },
+                { label: "Baunilha", price: 0 }
+            ]},
+            { id: "flavor2", title: "2º Sabor", required: true, items: [
+                { label: "Chocolate", price: 0 },
+                { label: "Morango", price: 0 },
+                { label: "Coco", price: 0 },
+                { label: "Baunilha", price: 0 }
+            ]},
+            { id: "flavor3", title: "3º Sabor", required: true, items: [
+                { label: "Chocolate", price: 0 },
+                { label: "Morango", price: 0 },
+                { label: "Coco", price: 0 },
+                { label: "Baunilha", price: 0 }
+            ]}
+        ]
     }
 ];
 
-// Estado da Aplicação
-let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-let categoriaAtiva = 'todos';
-let produtoSelecionado = null;
-let tamanhoSelecionado = null;
+// Estado
+let tableNumber = null;
+let cart = [];
+let currentProduct = null;
+let quantity = 1;
+let selectedOptions = {};
 
-// Elementos do DOM
-const listaProdutos = document.getElementById('lista-produtos');
-const tituloCategoria = document.getElementById('titulo-categoria');
-const qtdProdutos = document.getElementById('qtd-produtos');
-const botoesCategoria = document.querySelectorAll('.menu-item');
-const botaoCarrinho = document.getElementById('botao-carrinho');
-const painelCarrinho = document.getElementById('painel-carrinho');
-const fecharCarrinho = document.getElementById('fechar-carrinho');
-const fundoOpaco = document.getElementById('fundo-opaco');
-const itensCarrinho = document.getElementById('itens-carrinho');
-const contadorCarrinho = document.querySelector('.contador-carrinho');
-const subtotalValor = document.getElementById('subtotal-valor');
-const totalValor = document.getElementById('total-valor');
-const btnFinalizar = document.getElementById('btn-finalizar');
-const modalProduto = document.getElementById('modal-produto');
-const fecharModal = document.getElementById('fechar-modal');
-const btnAplicarFiltro = document.getElementById('btn-aplicar-filtro');
-const campoBusca = document.getElementById('campo-busca');
-const btnBusca = document.getElementById('btn-busca');
-const formNewsletter = document.getElementById('form-newsletter');
+// Elementos das Telas
+const screens = {
+    entry: document.getElementById('screenEntry'),
+    menu: document.getElementById('screenMenu'),
+    cart: document.getElementById('screenCart'),
+    success: document.getElementById('screenSuccess')
+};
 
-// Inicializar
+// Inicialização
 document.addEventListener('DOMContentLoaded', () => {
-    renderizarProdutos();
-    atualizarCarrinho();
-    configurarEventos();
+    renderProducts(menuData);
+    setupEventListeners();
 });
 
-// Configurar Eventos
-function configurarEventos() {
-    // Navegação por Categorias
-    botoesCategoria.forEach(botao => {
-        botao.addEventListener('click', (e) => {
-            e.preventDefault();
-            categoriaAtiva = botao.dataset.categoria;
-            botoesCategoria.forEach(b => b.classList.remove('ativo'));
-            botao.classList.add('ativo');
-            renderizarProdutos();
-        });
-    });
-
-    // Carrinho
-    botaoCarrinho.addEventListener('click', abrirCarrinho);
-    fecharCarrinho.addEventListener('click', fecharCarrinhoPainel);
-    fundoOpaco.addEventListener('click', fecharCarrinhoPainel);
-    btnFinalizar.addEventListener('click', finalizarCompra);
-
-    // Modal
-    fecharModal.addEventListener('click', fecharModalProduto);
-    modalProduto.addEventListener('click', (e) => {
-        if (e.target === modalProduto) fecharModalProduto();
-    });
-    document.getElementById('modal-adicionar').addEventListener('click', adicionarAoCarrinhoDoModal);
-
-    // Filtros
-    btnAplicarFiltro.addEventListener('click', renderizarProdutos);
-
-    // Busca
-    btnBusca.addEventListener('click', (e) => {
-        e.preventDefault();
-        renderizarProdutos();
-    });
-    campoBusca.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') renderizarProdutos();
-    });
-
-    // Newsletter
-    formNewsletter.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('✅ Obrigado! Você receberá o desconto por e-mail em instantes.');
-        formNewsletter.reset();
-    });
-
-    // Botão "Ver Coleção"
-    document.getElementById('ver-colecao').addEventListener('click', () => {
-        document.querySelector('.produtos').scrollIntoView({ behavior: 'smooth' });
-    });
-}
-
-// Filtrar Produtos
-function filtrarProdutos() {
-    const termoBusca = campoBusca.value.toLowerCase().trim();
-    const filtroTamanho = document.getElementById('filtro-tamanho').value;
-    const filtroCor = document.getElementById('filtro-cor').value;
-    const filtroPreco = document.getElementById('filtro-preco').value;
-
-    return produtos.filter(produto => {
-        // Categoria
-        let validaCategoria = true;
-        if (categoriaAtiva !== 'todos') {
-            if (categoriaAtiva === 'promocoes') {
-                validaCategoria = produto.preco < produto.precoAntigo;
-            } else {
-                validaCategoria = produto.categoria === categoriaAtiva;
-            }
-        }
-
-        // Busca
-        const validaBusca = termoBusca === '' || 
-            produto.nome.toLowerCase().includes(termoBusca) ||
-            produto.descricao.toLowerCase().includes(termoBusca);
-
-        // Tamanho
-        const validaTamanho = filtroTamanho === 'todos' || produto.tamanhos.includes(filtroTamanho);
-
-        // Cor
-        const validaCor = filtroCor === 'todas' || produto.cores.includes(filtroCor);
-
-        // Preço
-        let validaPreco = true;
-        if (filtroPreco !== 'todos') {
-            const [min, max] = filtroPreco.split('-').map(v => v === '+' ? Infinity : parseFloat(v));
-            validaPreco = produto.preco >= (min || 0) && produto.preco <= (max || Infinity);
-        }
-
-        return validaCategoria && validaBusca && validaTamanho && validaCor && validaPreco;
-    });
+// Trocar Tela
+function switchScreen(name) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    window.scrollTo(0, 0);
 }
 
 // Renderizar Produtos
-function renderizarProdutos() {
-    const produtosFiltrados = filtrarProdutos();
-
-    // Atualizar Título
-    const nomesCategorias = {
-        todos: 'Todos os Produtos',
-        casuais: 'Roupas Casuais',
-        sociais: 'Roupas Sociais',
-        esportivos: 'Esportivos',
-        acessorios: 'Acessórios',
-        promocoes: '⚡ Promoções'
-    };
-    tituloCategoria.textContent = nomesCategorias[categoriaAtiva] || 'Produtos em Destaque';
-    qtdProdutos.textContent = `Exibindo ${produtosFiltrados.length} produto${produtosFiltrados.length !== 1 ? 's' : ''}`;
-
-    // Limpar e Preencher
-    listaProdutos.innerHTML = '';
-
-    if (produtosFiltrados.length === 0) {
-        listaProdutos.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--cinza-medio);">
-                <i class="fas fa-search" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
-                <h3>Nenhum produto encontrado</h3>
-                <p>Tente ajustar os filtros ou termos de busca</p>
-            </div>
-        `;
-        return;
-    }
-
-    produtosFiltrados.forEach(produto => {
+function renderProducts(list) {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = '';
+    
+    list.forEach(product => {
         const card = document.createElement('div');
-        card.className = 'produto-card';
+        card.className = 'product-card';
+        card.dataset.category = product.category;
         card.innerHTML = `
-            <div class="produto-imagem">
-                ${produto.preco < produto.precoAntigo ? 
-                    `<span class="etiqueta-desconto">-${Math.round((1 - produto.preco / produto.precoAntigo) * 100)}%</span>` : 
-                    (produto.lancamento ? '<span class="etiqueta-novo">NOVO</span>' : '')}
-                <img src="${produto.imagem}" alt="${produto.nome}" loading="lazy">
-                <div class="produto-acoes">
-                    <button class="acao-btn" title="Ver Produto" data-id="${produto.id}">
-                        <i class="fas fa-eye"></i>
+            <img src="${product.image}" alt="${product.name}" class="product-img" loading="lazy">
+            <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <p class="product-desc">${product.description}</p>
+                <div class="product-bottom">
+                    <span class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                    <button class="add-btn" data-id="${product.id}">
+                        <i class="fas fa-plus"></i>
                     </button>
-                    <button class="acao-btn" title="Adicionar ao Carrinho" data-id="${produto.id}" data-tamanho="${produto.tamanhos[0]}">
-                        <i class="fas fa-shopping-bag"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="produto-info">
-                <span class="produto-categoria">${produto.categoria.charAt(0).toUpperCase() + produto.categoria.slice(1)}</span>
-                <h3 class="produto-nome">${produto.nome}</h3>
-                <div class="produto-avaliacao">
-                    ${'★'.repeat(Math.floor(produto.avaliacao))}${produto.avaliacao % 1 >= 0.5 ? '½' : ''}
-                    <span>(${produto.avaliacao})</span>
-                </div>
-                <div class="produto-preco">
-                    ${produto.preco < produto.precoAntigo ? `<span class="preco-antigo">R$ ${produto.precoAntigo.toFixed(2)}</span>` : ''}
-                    <span class="preco-atual">R$ ${produto.preco.toFixed(2)}</span>
                 </div>
             </div>
         `;
-        listaProdutos.appendChild(card);
+        grid.appendChild(card);
     });
 
-    // Adicionar Eventos aos Botões
-    document.querySelectorAll('.acao-btn[data-id]').forEach(botao => {
-        botao.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const id = parseInt(botao.dataset.id);
-            const produto = produtos.find(p => p.id === id);
-            
-            if (botao.querySelector('.fa-eye')) {
-                abrirModalProduto(produto);
-            } else {
-                const tamanho = botao.dataset.tamanho;
-                adicionarProdutoAoCarrinho(produto, tamanho);
-            }
-        });
+    // Delegar cliques
+    grid.addEventListener('click', (e) => {
+        const btn = e.target.closest('.add-btn');
+        if (btn) {
+            openProductModal(parseInt(btn.dataset.id));
+        }
+        const card = e.target.closest('.product-card');
+        if (card && !e.target.closest('.add-btn')) {
+            const id = parseInt(card.querySelector('.add-btn').dataset.id);
+            openProductModal(id);
+        }
     });
 }
 
-// Modal de Produto
-function abrirModalProduto(produto) {
-    produtoSelecionado = produto;
-    tamanhoSelecionado = null;
-
-    document.getElementById('modal-img').src = produto.imagem;
-    document.getElementById('modal-img').alt = produto.nome;
-    document.getElementById('modal-cat').textContent = produto.categoria.toUpperCase();
-    document.getElementById('modal-nome').textContent = produto.nome;
-    document.getElementById('modal-avaliacao').textContent = `(${produto.avaliacao})`;
-    document.getElementById('modal-preco').textContent = `R$ ${produto.preco.toFixed(2)}`;
-    document.getElementById('modal-preco-antigo').textContent = 
-        produto.preco < produto.precoAntigo ? `De R$ ${produto.precoAntigo.toFixed(2)}` : '';
-    document.getElementById('modal-desc').textContent = produto.descricao;
-
-    // Tamanhos
-    const containerTamanhos = document.getElementById('modal-tamanhos');
-    containerTamanhos.innerHTML = '';
-    produto.tamanhos.forEach(tam => {
-        const btn = document.createElement('button');
-        btn.className = 'tamanho-btn';
-        btn.textContent = tam;
-        btn.addEventListener('click', () => {
-            containerTamanhos.querySelectorAll('.tamanho-btn').forEach(b => b.classList.remove('selecionado'));
-            btn.classList.add('selecionado');
-            tamanhoSelecionado = tam;
-        });
-        containerTamanhos.appendChild(btn);
+// Configurar Eventos
+function setupEventListeners() {
+    // Entrada
+    document.getElementById('startBtn').addEventListener('click', () => {
+        const input = document.getElementById('tableNumber');
+        const val = parseInt(input.value.trim());
+        if (!val || val < 1) {
+            input.style.borderColor = '#e63946';
+            input.focus();
+            return;
+        }
+        tableNumber = val;
+        document.getElementById('currentTable').textContent = tableNumber;
+        switchScreen('menu');
     });
 
-    modalProduto.classList.add('ativo');
+    // Categorias
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const cat = tab.dataset.cat;
+            const filtered = cat === 'all' ? menuData : menuData.filter(p => p.category === cat);
+            renderProducts(filtered);
+        });
+    });
+
+    // Navegação
+    document.getElementById('cartBtn').addEventListener('click', () => {
+        updateCartScreen();
+        switchScreen('cart');
+    });
+    document.getElementById('backToMenu').addEventListener('click', () => switchScreen('menu'));
+    document.getElementById('goToMenuBtn').addEventListener('click', () => switchScreen('menu'));
+
+    // Modal
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('modalBackdrop').addEventListener('click', closeModal);
+    document.getElementById('qtyMinus').addEventListener('click', () => {
+        if (quantity > 1) {
+            quantity--;
+            document.getElementById('qtyValue').textContent = quantity;
+            updateModalTotal();
+        }
+    });
+    document.getElementById('qtyPlus').addEventListener('click', () => {
+        quantity++;
+        document.getElementById('qtyValue').textContent = quantity;
+        updateModalTotal();
+    });
+    document.getElementById('addToCartBtn').addEventListener('click', addToCart);
+
+    // Enviar Pedido
+    document.getElementById('submitOrderBtn').addEventListener('click', submitOrder);
+
+    // Novo Pedido
+    document.getElementById('newOrderBtn').addEventListener('click', () => {
+        cart = [];
+        updateCartBadge();
+        switchScreen('menu');
+    });
+}
+
+// Abrir Modal
+function openProductModal(id) {
+    currentProduct = menuData.find(p => p.id === id);
+    if (!currentProduct) return;
+
+    quantity = 1;
+    selectedOptions = {};
+
+    // Preencher dados
+    document.getElementById('modalImg').src = currentProduct.image;
+    document.getElementById('modalName').textContent = currentProduct.name;
+    document.getElementById('modalDesc').textContent = currentProduct.description;
+    document.getElementById('modalPrice').textContent = `R$ ${currentProduct.price.toFixed(2).replace('.', ',')}`;
+    document.getElementById('qtyValue').textContent = '1';
+    document.getElementById('noteInput').value = '';
+
+    // Montar opções
+    const optionsContainer = document.getElementById('optionsSection');
+    optionsContainer.innerHTML = '';
+    
+    if (currentProduct.options.length === 0) {
+        optionsContainer.innerHTML = '<p style="color:#9ca3af;font-size:14px;">Sem opções adicionais</p>';
+    } else {
+        currentProduct.options.forEach(optionGroup => {
+            const groupEl = document.createElement('div');
+            groupEl.className = 'option-group';
+            groupEl.innerHTML = `
+                <h4>${optionGroup.title}${optionGroup.required ? ' *' : ''}</h4>
+                <div class="option-buttons" data-group="${optionGroup.id}">
+                    ${optionGroup.items.map((item, idx) => `
+                        <button class="option-btn" data-group="${optionGroup.id}" data-index="${idx}" data-price="${item.price}">
+                            ${item.label}${item.price > 0 ? ` (+R$ ${item.price.toFixed(2).replace('.', ',')})` : ''}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            optionsContainer.appendChild(groupEl);
+
+            // Selecionar primeira opção automaticamente se obrigatória
+            setTimeout(() => {
+                const buttons = groupEl.querySelectorAll('.option-btn');
+                if (optionGroup.required && buttons.length > 0) {
+                    buttons[0].classList.add('selected');
+                    selectedOptions[optionGroup.id] = {
+                        label: optionGroup.items[0].label,
+                        price: optionGroup.items[0].price
+                    };
+                    updateModalTotal();
+                }
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        buttons.forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        const idx = parseInt(btn.dataset.index);
+                        selectedOptions[optionGroup.id] = {
+                            label: optionGroup.items[idx].label,
+                            price: optionGroup.items[idx].price
+                        };
+                        updateModalTotal();
+                    });
+                });
+            }, 0);
+        });
+    }
+
+    updateModalTotal();
+
+    // Mostrar modal
+    document.getElementById('modalBackdrop').classList.add('active');
+    document.getElementById('productModal').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-function fecharModalProduto() {
-    modalProduto.classList.remove('ativo');
+// Fechar Modal
+function closeModal() {
+    document.getElementById('modalBackdrop').classList.remove('active');
+    document.getElementById('productModal').classList.remove('active');
     document.body.style.overflow = '';
-    produtoSelecionado = null;
-    tamanhoSelecionado = null;
+    currentProduct = null;
+    selectedOptions = {};
 }
 
-function adicionarAoCarrinhoDoModal() {
-    if (!produtoSelecionado) return;
+// Atualizar Total no Modal
+function updateModalTotal() {
+    if (!currentProduct) return;
     
-    if (!tamanhoSelecionado) {
-        alert('⚠️ Por favor, selecione um tamanho!');
+    let extras = 0;
+    Object.values(selectedOptions).forEach(opt => {
+        if (opt.price) extras += opt.price;
+    });
+    
+    const unitPrice = currentProduct.price + extras;
+    const total = unitPrice * quantity;
+    document.getElementById('addTotal').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+}
+
+// Adicionar ao Carrinho
+function addToCart() {
+    if (!currentProduct) return;
+
+    // Validar opções obrigatórias
+    const missingRequired = currentProduct.options.filter(g => 
+        g.required && !selectedOptions[g.id]
+    );
+    if (missingRequired.length > 0) {
+        alert(`Escolha: ${missingRequired.map(g => g.title).join(', ')}`);
         return;
     }
 
-    adicionarProdutoAoCarrinho(produtoSelecionado, tamanhoSelecionado);
-    fecharModalProduto();
-    abrirCarrinho();
-}
+    // Montar detalhes
+    let details = '';
+    let extraSum = 0;
+    for (const key in selectedOptions) {
+        const opt = selectedOptions[key];
+        if (details) details += ' • ';
+        details += opt.label;
+        if (opt.price) extraSum += opt.price;
+    }
 
-// Carrinho
-function adicionarProdutoAoCarrinho(produto, tamanho) {
-    const itemExistente = carrinho.find(
-        item => item.id === produto.id && item.tamanho === tamanho
-    );
+    const note = document.getElementById('noteInput').value.trim();
+    if (note) {
+        details += (details ? ' • ' : '') + `Obs: ${note}`;
+    }
 
-    if (itemExistente) {
-        itemExistente.quantidade++;
+    const unitPrice = currentProduct.price + extraSum;
+
+    // Verificar se já existe mesmo item
+    const itemId = `${currentProduct.id}-${btoa(details).slice(0, 20)}`;
+    const existingIndex = cart.findIndex(i => i.uid === itemId);
+
+    if (existingIndex > -1) {
+        cart[existingIndex].quantity += quantity;
     } else {
-        carrinho.push({
-            id: produto.id,
-            nome: produto.nome,
-            preco: produto.preco,
-            imagem: produto.imagem,
-            tamanho: tamanho,
-            quantidade: 1
+        cart.push({
+            uid: itemId,
+            id: currentProduct.id,
+            name: currentProduct.name,
+            basePrice: currentProduct.price,
+            extraPrice: extraSum,
+            unitPrice: unitPrice,
+            quantity: quantity,
+            details: details,
+            image: currentProduct.image
         });
     }
 
-    salvarCarrinho();
-    atualizarCarrinho();
+    updateCartBadge();
+    closeModal();
+
+    // Feedback visual
+    const btn = document.getElementById('addToCartBtn');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+    btn.style.background = '#22c55e';
+    setTimeout(() => {
+        btn.innerHTML = original;
+        btn.style.background = '';
+    }, 1500);
 }
 
-function removerDoCarrinho(index) {
-    carrinho.splice(index, 1);
-    salvarCarrinho();
-    atualizarCarrinho();
+// Atualizar Contador do Carrinho
+function updateCartBadge() {
+    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cartBadge').textContent = total;
 }
 
-function salvarCarrinho() {
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-}
+// Atualizar Tela do Carrinho
+function updateCartScreen() {
+    const emptyState = document.getElementById('emptyCart');
+    const itemsList = document.getElementById('cartItemsList');
+    const footer = document.getElementById('cartFooter');
 
-function atualizarCarrinho() {
-    // Contador
-    const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
-    contadorCarrinho.textContent = totalItens;
+    if (cart.length === 0) {
+        emptyState.style.display = 'block';
+        itemsList.innerHTML = '';
+        footer.style.display = 'none';
+        return;
+    }
 
-    // Itens
-    if (carrinho.length === 0) {
-        itensCarrinho.innerHTML = `
-            <div class="carrinho-vazio">
-                <i class="fas fa-shopping-bag" style="font-size: 48px; margin-bottom: 16px; opacity: 0.2;"></i>
-                <h4>Seu carrinho está vazio</h4>
-                <p>Adicione produtos para continuar</p>
-            </div>
-        `;
-    } else {
-        itensCarrinho.innerHTML = carrinho.map((item, index) => `
-            <div class="item-carrinho">
-                <div class="item-carrinho-img">
-                    <img src="${item.imagem}" alt="${item.nome}">
-                </div>
-                <div class="item-carrinho-info">
-                    <h4 class="item-carrinho-nome">${item.nome}</h4>
-                    <p class="item-carrinho-detalhe">Tamanho: ${item.tamanho} | Qtd: ${item.quantidade}</p>
-                    <p class="item-carrinho-preco">R$ ${(item.preco * item.quantidade).toFixed(2)}</p>
-                </div>
-                <button class="item-carrinho-remover" data-index="${index}">
+    emptyState.style.display = 'none';
+    footer.style.display = 'block';
+
+    itemsList.innerHTML = cart.map((item, index) => `
+        <div class="cart-item">
+            <div class="cart-item-top">
+                <span class="cart-item-name">${item.name}</span>
+                <button class="cart-item-remove" data-index="${index}">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </div>
-        `).join('');
+            ${item.details ? `<p class="cart-item-details">${item.details}</p>` : ''}
+            <div class="cart-item-bottom">
+                <div class="cart-item-qty">
+                    <button class="cart-qty-btn" data-action="minus" data-index="${index}">−</button>
+                    <span>${item.quantity}</span>
+                    <button class="cart-qty-btn" data-action="plus" data-index="${index}">+</button>
+                </div>
+                <span class="cart-item-price">R$ ${(item.unitPrice * item.quantity).toFixed(2).replace('.', ',')}</span>
+            </div>
+        </div>
+    `).join('');
 
-        // Eventos de remoção
-        document.querySelectorAll('.item-carrinho-remover').forEach(botao => {
-            botao.addEventListener('click', () => {
-                removerDoCarrinho(parseInt(botao.dataset.index));
-            });
+    // Eventos
+    itemsList.querySelectorAll('.cart-qty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.index);
+            if (btn.dataset.action === 'minus') {
+                cart[idx].quantity--;
+                if (cart[idx].quantity <= 0) cart.splice(idx, 1);
+            } else {
+                cart[idx].quantity++;
+            }
+            updateCartScreen();
+            updateCartBadge();
         });
-    }
+    });
 
-    // Valores
-    const subtotal = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
-    subtotalValor.textContent = `R$ ${subtotal.toFixed(2)}`;
-    totalValor.textContent = `R$ ${subtotal.toFixed(2)}`;
+    itemsList.querySelectorAll('.cart-item-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+            cart.splice(parseInt(btn.dataset.index), 1);
+            updateCartScreen();
+            updateCartBadge();
+        });
+    });
+
+    // Total
+    const total = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+    document.getElementById('subtotalValue').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-function abrirCarrinho() {
-    painelCarrinho.classList.add('aberto');
-    fundoOpaco.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
-
-function fecharCarrinhoPainel() {
-    painelCarrinho.classList.remove('aberto');
-    fundoOpaco.style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-function finalizarCompra() {
-    if (carrinho.length === 0) {
-        alert('⚠️ Seu carrinho está vazio!');
+// Enviar Pedido
+function submitOrder() {
+    if (cart.length === 0) {
+        alert('Adicione itens ao pedido!');
         return;
     }
 
-    const subtotal = carrinho.reduce((soma, item) => soma + (item.preco * item.quantidade), 0);
+    const total = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
     
-    let mensagem = `🛒 *PEDIDO — HOMEM & ESTILO*\n\n`;
-    mensagem += `Itens do pedido:\n`;
-    
-    carrinho.forEach(item => {
-        mensagem += `• ${item.nome} — Tamanho: ${item.tamanho} — Qtd: ${item.quantidade} — R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
-    });
-    
-    mensagem += `\n💰 *Subtotal: R$ ${subtotal.toFixed(2)}*\n`;
-    mensagem += `🚚 Frete calculado após confirmação do endereço.\n\n`;
-    mensagem += `Aguarde nosso retorno com o valor total e dados de pagamento. Obrigado! 👔`;
+    // Criar objeto do pedido
+    const pedido = {
+        mesa: tableNumber,
+        data: new Date().toLocaleString('pt-BR'),
+        itens: cart.map(item => ({
+            nome: item.name,
+            detalhes: item.details,
+            quantidade: item.quantity,
+            precoUnitario: item.unitPrice.toFixed(2),
+            subtotal: (item.unitPrice * item.quantity).toFixed(2)
+        })),
+        total: total.toFixed(2)
+    };
 
-    const numeroWhatsApp = '5519999999999'; // Substitua pelo número real
-    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-    
-    window.open(url, '_blank');
-    
-    // Limpar carrinho após envio
-    carrinho = [];
-    salvarCarrinho();
-    atualizarCarrinho();
-    fecharCarrinhoPainel();
+    // Salvar no localStorage
+    const pedidosSalvos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    pedidosSalvos.push(pedido);
+    localStorage.setItem('pedidos', JSON.stringify(pedidosSalvos));
+
+    console.log('✅ PEDIDO ENVIADO:', JSON.stringify(pedido, null, 2));
+
+    // Limpar e mostrar confirmação
+    cart = [];
+    updateCartBadge();
+    document.getElementById('confirmedTable').textContent = tableNumber;
+    switchScreen('success');
 }
