@@ -2,276 +2,150 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homem & Estilo | Moda Masculina Premium</title>
-    <link rel="stylesheet" href="estilo.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cardápio Digital | Pedido na Mesa</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <!-- Barra Superior -->
-    <div class="barra-superior">
-        <div class="container">
-            <p><i class="fas fa-truck"></i> Frete Grátis acima de R$ 199 | <i class="fas fa-undo"></i> Troca em até 7 dias | <i class="fas fa-shield-alt"></i> Compra 100% Segura</p>
-        </div>
-    </div>
-
-    <!-- Cabeçalho -->
-    <header class="cabecalho">
-        <div class="container">
-            <a href="#" class="logo">Homem & Estilo</a>
-            
-            <div class="busca">
-                <input type="text" id="campo-busca" placeholder="Buscar produtos...">
-                <button id="btn-busca"><i class="fas fa-search"></i></button>
+    <!-- Tela de Entrada -->
+    <div class="screen active" id="screenEntry">
+        <div class="entry-container">
+            <div class="brand">
+                <div class="logo-icon"><i class="fas fa-utensils"></i></div>
+                <h1>SABOR & ARTE</h1>
+                <p>Faça seu pedido direto pelo celular</p>
             </div>
-
-            <div class="icones">
-                <a href="#" class="icone-link"><i class="fas fa-user"></i><span>Conta</span></a>
-                <a href="#" class="icone-link"><i class="fas fa-heart"></i><span>Favoritos</span></a>
-                <button class="icone-link" id="botao-carrinho">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Carrinho</span>
-                    <span class="contador-carrinho">0</span>
+            <div class="entry-card">
+                <label for="tableNumber">Número da Mesa</label>
+                <input type="number" id="tableNumber" placeholder="Ex: 12" min="1" autocomplete="off">
+                <button class="btn primary-btn" id="startBtn">
+                    <i class="fas fa-arrow-right"></i> Iniciar Pedido
                 </button>
             </div>
         </div>
+    </div>
 
-        <nav class="menu-principal">
-            <div class="container">
-                <a href="#" class="menu-item ativo" data-categoria="todos">Todos</a>
-                <a href="#" class="menu-item" data-categoria="casuais">Casuais</a>
-                <a href="#" class="menu-item" data-categoria="sociais">Sociais</a>
-                <a href="#" class="menu-item" data-categoria="esportivos">Esportivos</a>
-                <a href="#" class="menu-item" data-categoria="acessorios">Acessórios</a>
-                <a href="#" class="menu-item promocao" data-categoria="promocoes">⚡ PROMOÇÕES</a>
+    <!-- Tela do Cardápio -->
+    <div class="screen" id="screenMenu">
+        <header class="menu-header">
+            <div class="header-left">
+                <span class="table-badge">Mesa <strong id="currentTable">--</strong></span>
+            </div>
+            <div class="header-right">
+                <button class="cart-icon-btn" id="cartBtn">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Categorias Roláveis -->
+        <nav class="categories-nav">
+            <div class="categories-wrapper">
+                <button class="cat-tab active" data-cat="all">
+                    <i class="fas fa-th-large"></i> Todos
+                </button>
+                <button class="cat-tab" data-cat="pizzas">
+                    <i class="fas fa-pizza-slice"></i> Pizzas
+                </button>
+                <button class="cat-tab" data-cat="meals">
+                    <i class="fas fa-utensils"></i> Pratos
+                </button>
+                <button class="cat-tab" data-cat="drinks">
+                    <i class="fas fa-glass-water"></i> Bebidas
+                </button>
+                <button class="cat-tab" data-cat="desserts">
+                    <i class="fas fa-cake-candles"></i> Sobremesas
+                </button>
             </div>
         </nav>
-    </header>
 
-    <!-- Banner Principal -->
-    <section class="banner">
-        <div class="banner-conteudo container">
-            <span class="etiqueta">Nova Coleção 2026</span>
-            <h1>Estilo e Elegância para o Homem Moderno</h1>
-            <p>Peças selecionadas com os melhores tecidos e cortes perfeitos</p>
-            <button class="btn btn-destaque" id="ver-colecao">Ver Coleção <i class="fas fa-arrow-right"></i></button>
-        </div>
-    </section>
+        <!-- Lista de Produtos -->
+        <main class="products-container">
+            <div class="products-grid" id="productsGrid"></div>
+        </main>
+    </div>
 
-    <!-- Filtros -->
-    <section class="secao-filtros">
-        <div class="container">
-            <div class="filtros">
-                <div class="filtro-grupo">
-                    <label>Tamanho:</label>
-                    <select id="filtro-tamanho">
-                        <option value="todos">Todos</option>
-                        <option value="PP">PP</option>
-                        <option value="P">P</option>
-                        <option value="M">M</option>
-                        <option value="G">G</option>
-                        <option value="GG">GG</option>
-                        <option value="XG">XG</option>
-                    </select>
-                </div>
-                <div class="filtro-grupo">
-                    <label>Cor:</label>
-                    <select id="filtro-cor">
-                        <option value="todas">Todas</option>
-                        <option value="Preto">Preto</option>
-                        <option value="Branco">Branco</option>
-                        <option value="Azul">Azul</option>
-                        <option value="Cinza">Cinza</option>
-                        <option value="Marrom">Marrom</option>
-                    </select>
-                </div>
-                <div class="filtro-grupo">
-                    <label>Preço:</label>
-                    <select id="filtro-preco">
-                        <option value="todos">Todos</option>
-                        <option value="0-100">Até R$ 100</option>
-                        <option value="100-200">R$ 100 a R$ 200</option>
-                        <option value="200-350">R$ 200 a R$ 350</option>
-                        <option value="350+">Acima de R$ 350</option>
-                    </select>
-                </div>
-                <button class="btn btn-filtro" id="btn-aplicar-filtro">Aplicar</button>
+    <!-- Tela do Carrinho -->
+    <div class="screen" id="screenCart">
+        <header class="menu-header">
+            <button class="back-btn" id="backToMenu">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h2>Meu Pedido</h2>
+            <div style="width:40px;"></div>
+        </header>
+        <div class="cart-content">
+            <div class="empty-cart" id="emptyCart">
+                <i class="fas fa-shopping-basket"></i>
+                <p>Nenhum item adicionado</p>
+                <button class="btn primary-btn" id="goToMenuBtn">Ver Cardápio</button>
             </div>
+            <div class="cart-items-list" id="cartItemsList"></div>
         </div>
-    </section>
-
-    <!-- Produtos -->
-    <section class="produtos">
-        <div class="container">
-            <div class="cabecalho-produtos">
-                <h2 id="titulo-categoria">Produtos em Destaque</h2>
-                <p id="qtd-produtos">Exibindo 12 produtos</p>
-            </div>
-            <div class="grade-produtos" id="lista-produtos"></div>
-        </div>
-    </section>
-
-    <!-- Diferenciais -->
-    <section class="diferenciais">
-        <div class="container">
-            <div class="grade-diferenciais">
-                <div class="diferencial">
-                    <i class="fas fa-medal"></i>
-                    <h4>Qualidade Premium</h4>
-                    <p>Tecidos selecionados e durabilidade garantida</p>
-                </div>
-                <div class="diferencial">
-                    <i class="fas fa-truck-fast"></i>
-                    <h4>Entrega Rápida</h4>
-                    <p>Para todo o Brasil com rastreio</p>
-                </div>
-                <div class="diferencial">
-                    <i class="fas fa-credit-card"></i>
-                    <h4>Pagamento Facilitado</h4>
-                    <p>Cartão, Pix e Boleto</p>
-                </div>
-                <div class="diferencial">
-                    <i class="fas fa-headset"></i>
-                    <h4>Atendimento Exclusivo</h4>
-                    <p>Suporte dedicado para você</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Depoimentos -->
-    <section class="depoimentos">
-        <div class="container">
-            <h2>O que dizem nossos clientes</h2>
-            <div class="grade-depoimentos">
-                <div class="depoimento">
-                    <div class="estrelas">★★★★★</div>
-                    <p>"Qualidade impecável e caimento perfeito. Minha loja favorita!"</p>
-                    <div class="autor">— Ricardo Almeida</div>
-                </div>
-                <div class="depoimento">
-                    <div class="estrelas">★★★★★</div>
-                    <p>"Tecidos de primeira linha e entrega antes do prazo. Recomendo!"</p>
-                    <div class="autor">— Felipe Costa</div>
-                </div>
-                <div class="depoimento">
-                    <div class="estrelas">★★★★★</div>
-                    <p>"Atendimento de excelência e peças que elevam o estilo. Voltarei sempre."</p>
-                    <div class="autor">— Marcos Vinícius</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter -->
-    <section class="newsletter">
-        <div class="container">
-            <h3>Seja o primeiro a saber das novidades</h3>
-            <p>Cadastre-se e ganhe 10% de desconto na primeira compra</p>
-            <form class="form-newsletter" id="form-newsletter">
-                <input type="email" placeholder="Seu melhor e-mail" required>
-                <button type="submit" class="btn">Cadastrar</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Rodapé -->
-    <footer>
-        <div class="container">
-            <div class="grade-rodape">
-                <div class="rodape-coluna">
-                    <h4>Homem & Estilo</h4>
-                    <p>Referência em moda masculina com qualidade e estilo desde 2020.</p>
-                    <div class="redes-sociais">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                </div>
-                <div class="rodape-coluna">
-                    <h4>Links Rápidos</h4>
-                    <ul>
-                        <li><a href="#">Sobre Nós</a></li>
-                        <li><a href="#">Produtos</a></li>
-                        <li><a href="#">Promoções</a></li>
-                        <li><a href="#">Guia de Tamanhos</a></li>
-                    </ul>
-                </div>
-                <div class="rodape-coluna">
-                    <h4>Atendimento</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Mogi Mirim, SP</li>
-                        <li><i class="fas fa-phone"></i> (19) 99999-9999</li>
-                        <li><i class="fas fa-envelope"></i> contato@homemestilo.com.br</li>
-                        <li><i class="fas fa-clock"></i> Seg-Sáb: 9h às 18h</li>
-                    </ul>
-                </div>
-                <div class="rodape-coluna">
-                    <h4>Pagamento</h4>
-                    <div class="bandeiras">
-                        <i class="fab fa-cc-visa"></i>
-                        <i class="fab fa-cc-mastercard"></i>
-                        <i class="fab fa-cc-amex"></i>
-                        <i class="fas fa-barcode"></i>
-                        <i class="fab fa-pix"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="rodape-inferior">
-                <p>&copy; 2026 Homem & Estilo — Todos os direitos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Carrinho Lateral -->
-    <div class="painel-carrinho" id="painel-carrinho">
-        <div class="cabecalho-carrinho">
-            <h3>Meu Carrinho</h3>
-            <button id="fechar-carrinho" class="botao-icone"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="itens-carrinho" id="itens-carrinho"></div>
-        <div class="rodape-carrinho">
-            <div class="subtotal">
+        <div class="cart-footer" id="cartFooter" style="display:none;">
+            <div class="subtotal-row">
                 <span>Subtotal</span>
-                <span id="subtotal-valor">R$ 0,00</span>
+                <strong id="subtotalValue">R$ 0,00</strong>
             </div>
-            <div class="frete">
-                <span>Frete</span>
-                <span id="frete-valor">Calculado na entrega</span>
-            </div>
-            <div class="total">
-                <strong>Total</strong>
-                <strong id="total-valor">R$ 0,00</strong>
-            </div>
-            <button class="btn btn-finalizar" id="btn-finalizar">Finalizar Compra <i class="fas fa-whatsapp"></i></button>
-            <p class="seguranca"><i class="fas fa-lock"></i> Compra 100% segura</p>
+            <button class="btn confirm-btn" id="submitOrderBtn">
+                <i class="fas fa-check-circle"></i> Confirmar Pedido
+            </button>
         </div>
     </div>
-    <div class="fundo-opaco" id="fundo-opaco"></div>
 
-    <!-- Modal Produto -->
-    <div class="modal-produto" id="modal-produto">
-        <div class="modal-conteudo">
-            <button class="fechar-modal" id="fechar-modal">&times;</button>
-            <div class="modal-grid">
-                <div class="modal-imagem">
-                    <img id="modal-img" src="" alt="">
+    <!-- Tela de Confirmação -->
+    <div class="screen" id="screenSuccess">
+        <div class="success-container">
+            <div class="success-animation">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2>Pedido Enviado! 🎉</h2>
+            <p>Seu pedido da <strong>Mesa <span id="confirmedTable">--</span></strong> foi enviado para a cozinha.</p>
+            <p class="wait-note">Em breve chegará até você</p>
+            <button class="btn primary-btn" id="newOrderBtn">
+                <i class="fas fa-plus"></i> Fazer Outro Pedido
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Produto -->
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="product-modal" id="productModal">
+        <button class="modal-close-btn" id="modalCloseBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-body">
+            <img class="product-modal-img" id="modalImg" src="" alt="">
+            <div class="product-modal-info">
+                <h2 id="modalName"></h2>
+                <p class="modal-desc" id="modalDesc"></p>
+                <p class="modal-price" id="modalPrice"></p>
+
+                <!-- Opções -->
+                <div class="options-section" id="optionsSection"></div>
+
+                <!-- Observação -->
+                <div class="note-section">
+                    <label>Observações</label>
+                    <textarea id="noteInput" placeholder="Ex: sem cebola, bem quente..."></textarea>
                 </div>
-                <div class="modal-info">
-                    <span class="modal-categoria" id="modal-cat"></span>
-                    <h2 id="modal-nome"></h2>
-                    <div class="avaliacao">★★★★★ <span id="modal-avaliacao"></span></div>
-                    <p class="preco-antigo" id="modal-preco-antigo"></p>
-                    <p class="preco-atual" id="modal-preco"></p>
-                    <p class="descricao" id="modal-desc"></p>
-                    <div class="opcoes">
-                        <label>Tamanho:</label>
-                        <div class="tamanhos" id="modal-tamanhos"></div>
+
+                <!-- Quantidade -->
+                <div class="qty-section">
+                    <span>Quantidade</span>
+                    <div class="qty-control">
+                        <button class="qty-minus" id="qtyMinus"><i class="fas fa-minus"></i></button>
+                        <span id="qtyValue">1</span>
+                        <button class="qty-plus" id="qtyPlus"><i class="fas fa-plus"></i></button>
                     </div>
-                    <button class="btn btn-comprar" id="modal-adicionar">Adicionar ao Carrinho</button>
                 </div>
+
+                <button class="btn add-cart-btn" id="addToCartBtn">
+                    <i class="fas fa-cart-plus"></i> Adicionar — <span id="addTotal">R$ 0,00</span>
+                </button>
             </div>
         </div>
     </div>
