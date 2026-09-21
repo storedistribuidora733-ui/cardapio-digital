@@ -188,6 +188,9 @@ input, textarea {
 .table-badge {
     font-size: 14px;
     color: var(--gray-600);
+    background: var(--light);
+    padding: 6px 12px;
+    border-radius: 20px;
 }
 
 .table-badge strong {
@@ -441,6 +444,11 @@ input, textarea {
     padding: 20px;
     background: var(--white);
     border-top: 1px solid var(--gray-200);
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
 }
 
 .subtotal-row {
@@ -525,6 +533,7 @@ input, textarea {
     transform: translateY(100%);
     transition: transform 0.3s ease;
     max-height: 90vh;
+    min-height: 60vh;
     overflow-y: auto;
     padding-bottom: 30px;
 }
@@ -702,12 +711,14 @@ input, textarea {
         grid-template-columns: repeat(3, 1fr);
         gap: 20px;
     }
+
     .product-modal {
         max-width: 500px;
         left: 50%;
         transform: translate(-50%, 100%);
         border-radius: var(--radius-lg);
     }
+
     .product-modal.active {
         transform: translate(-50%, 0);
     }
